@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS paisareality CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE paisareality;
-
 CREATE TABLE cities (
     id INT AUTO_INCREMENT PRIMARY KEY,
     slug VARCHAR(100) UNIQUE NOT NULL,
