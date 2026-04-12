@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
-import Calculator, { CalcSlider, CalcSelect, CalcResult } from '@/components/Calculator';
+import Calculator, { CalcSlider, CalcSelect } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';

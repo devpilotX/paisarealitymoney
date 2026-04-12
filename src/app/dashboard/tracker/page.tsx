@@ -23,7 +23,7 @@ const STATUS_LABELS: Record<string, string> = {
 
 export default function TrackerPage(): React.ReactElement {
   const router = useRouter();
-  const [applications, setApplications] = useState<Application[]>([]);
+  const [applications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

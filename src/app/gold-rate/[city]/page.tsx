@@ -17,7 +17,7 @@ import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 
 interface PageProps {
-  params: { city: string };
+  params: Promise<{ city: string }>;
 }
 
 interface GoldHistoryRow extends RowDataPacket {
@@ -36,7 +36,8 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const city = getCityBySlug(params.city);
+  const { city: citySlug } = await params;
+  const city = getCityBySlug(citySlug);
   if (!city) return { title: 'City Not Found' };
   return {
     title: `Gold Rate in ${city.name} Today - 22K & 24K Price`,
@@ -48,7 +49,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export const revalidate = 900;
 
 export default async function GoldRateCityPage({ params }: PageProps): Promise<React.ReactElement> {
-  const city = getCityBySlug(params.city);
+  const { city: citySlug } = await params;
+  const city = getCityBySlug(citySlug);
   if (!city) notFound();
 
   let historyRows: GoldHistoryRow[] = [];

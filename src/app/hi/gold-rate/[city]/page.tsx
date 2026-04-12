@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { query } from '@/lib/db';
 import { RowDataPacket } from 'mysql2/promise';
 import { getCityBySlug, METRO_CITIES } from '@/lib/cities';
-import { formatINR, formatDate } from '@/lib/constants';
+import { formatDate } from '@/lib/constants';
 import PriceCard from '@/components/PriceCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 
-interface PageProps { params: { city: string }; }
+interface PageProps { params: Promise<{ city: string }>; }
 
 interface GoldRow extends RowDataPacket {
   price_date: string; gold_24k_per_gram: number; gold_22k_per_gram: number;
@@ -21,19 +21,21 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const city = getCityBySlug(params.city);
+  const { city: citySlug } = await params;
+  const city = getCityBySlug(citySlug);
   if (!city) return { title: 'शहर नहीं मिला' };
   return {
     title: `${city.nameHi} में आज सोने का भाव - 22K और 24K कीमत`,
     description: `${city.nameHi} में आज का सोने का रेट। 22 कैरेट और 24 कैरेट सोने की कीमत प्रति ग्राम। रोजाना अपडेट।`,
-    alternates: { canonical: `{{https://paisareality.com/hi/gold-rate/${params.city}}}`, languages: { 'en-IN': `{{https://paisareality.com/gold-rate/${params.city}}}` } },
+    alternates: { canonical: `https://paisareality.com/hi/gold-rate/${citySlug}`, languages: { 'en-IN': `https://paisareality.com/gold-rate/${citySlug}` } },
   };
 }
 
 export const revalidate = 900;
 
 export default async function HindiGoldCityPage({ params }: PageProps): Promise<React.ReactElement> {
-  const city = getCityBySlug(params.city);
+  const { city: citySlug } = await params;
+  const city = getCityBySlug(citySlug);
   if (!city) notFound();
 
   let today: GoldRow | undefined;

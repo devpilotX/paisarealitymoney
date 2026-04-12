@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifySignature } from '@/lib/razorpay';
 import { execute } from '@/lib/db';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {

@@ -7,14 +7,15 @@ import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 
-interface PageProps { params: { slug: string }; }
+interface PageProps { params: Promise<{ slug: string }>; }
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return getAllPosts().map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
   if (!post) return { title: 'Post Not Found' };
   return { title: post.title, description: post.description, openGraph: { type: 'article', publishedTime: post.date } };
 }
@@ -29,8 +30,9 @@ function mdToHtml(md: string): string {
     .replace(/\n\n/g, '</p><p class="text-body mb-4">');
 }
 
-export default function BlogPostPage({ params }: PageProps): React.ReactElement {
-  const post = getPostBySlug(params.slug);
+export default async function BlogPostPage({ params }: PageProps): Promise<React.ReactElement> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
   if (!post) notFound();
   const related = getAllPosts().filter((p) => p.slug !== post.slug).slice(0, 4);
 

@@ -3,7 +3,6 @@ import { query } from '@/lib/db';
 import { RowDataPacket } from 'mysql2/promise';
 import Breadcrumb from '@/components/Breadcrumb';
 import BankRateTable from '@/components/BankRateTable';
-import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';

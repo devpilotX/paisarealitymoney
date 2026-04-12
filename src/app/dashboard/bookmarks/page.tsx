@@ -12,7 +12,7 @@ interface BookmarkedScheme {
 
 export default function BookmarksPage(): React.ReactElement {
   const router = useRouter();
-  const [schemes, setSchemes] = useState<BookmarkedScheme[]>([]);
+  const [schemes] = useState<BookmarkedScheme[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

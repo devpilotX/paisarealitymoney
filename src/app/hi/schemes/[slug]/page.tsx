@@ -7,7 +7,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
 
-interface PageProps { params: { slug: string }; }
+interface PageProps { params: Promise<{ slug: string }>; }
 
 interface SchemeRow extends RowDataPacket {
   slug: string; name: string; name_hi: string | null; category: string;
@@ -18,14 +18,15 @@ interface SchemeRow extends RowDataPacket {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   try {
-    const rows = await query<SchemeRow[]>('SELECT name, name_hi, benefit_summary, slug FROM schemes WHERE slug = ? LIMIT 1', [params.slug]);
+    const rows = await query<SchemeRow[]>('SELECT name, name_hi, benefit_summary, slug FROM schemes WHERE slug = ? LIMIT 1', [slug]);
     const s = rows[0];
     if (!s) return { title: 'योजना नहीं मिली' };
     return {
       title: `${s.name_hi ?? s.name} - पात्रता, लाभ, आवेदन कैसे करें`,
       description: s.benefit_summary,
-      alternates: { canonical: `{{https://paisareality.com/hi/schemes/${s.slug}}}`, languages: { 'en-IN': `{{https://paisareality.com/schemes/${s.slug}}}` } },
+      alternates: { canonical: `https://paisareality.com/hi/schemes/${s.slug}`, languages: { 'en-IN': `https://paisareality.com/schemes/${s.slug}` } },
     };
   } catch { return { title: 'सरकारी योजना' }; }
 }
@@ -33,9 +34,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export const revalidate = 3600;
 
 export default async function HindiSchemeDetailPage({ params }: PageProps): Promise<React.ReactElement> {
+  const { slug } = await params;
   let scheme: SchemeRow | undefined;
   try {
-    const rows = await query<SchemeRow[]>('SELECT * FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1', [params.slug]);
+    const rows = await query<SchemeRow[]>('SELECT * FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1', [slug]);
     scheme = rows[0];
   } catch (error) { console.error('Hindi scheme error:', error); }
   if (!scheme) notFound();

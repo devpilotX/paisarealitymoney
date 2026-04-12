@@ -16,7 +16,7 @@ import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 
-interface PageProps { params: { city: string }; }
+interface PageProps { params: Promise<{ city: string }>; }
 
 interface FuelHistoryRow extends RowDataPacket {
   price_date: string; petrol_price: number; diesel_price: number;
@@ -28,19 +28,21 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const city = getCityBySlug(params.city);
+  const { city: citySlug } = await params;
+  const city = getCityBySlug(citySlug);
   if (!city) return { title: 'City Not Found' };
   return {
     title: `Diesel Price in ${city.name} Today - Per Litre Rate`,
     description: `Check today's diesel price in ${city.name}, ${city.state}. Current rate per litre with 7-day history and price trend chart.`,
-    alternates: { canonical: `{{https://paisareality.com/diesel-price/${city.slug}}}` },
+    alternates: { canonical: `https://paisareality.com/diesel-price/${city.slug}` },
   };
 }
 
 export const revalidate = 900;
 
 export default async function DieselPriceCityPage({ params }: PageProps): Promise<React.ReactElement> {
-  const city = getCityBySlug(params.city);
+  const { city: citySlug } = await params;
+  const city = getCityBySlug(citySlug);
   if (!city) notFound();
 
   let historyRows: FuelHistoryRow[] = [];

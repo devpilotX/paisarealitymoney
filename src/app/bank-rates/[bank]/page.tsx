@@ -10,7 +10,7 @@ import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 
-interface PageProps { params: { bank: string }; }
+interface PageProps { params: Promise<{ bank: string }>; }
 
 interface BankRow extends RowDataPacket {
   id: number; slug: string; name: string; type: string; website: string | null;
@@ -22,8 +22,9 @@ interface RateRow extends RowDataPacket {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { bank: bankSlug } = await params;
   try {
-    const rows = await query<BankRow[]>('SELECT name, slug FROM banks WHERE slug = ? LIMIT 1', [params.bank]);
+    const rows = await query<BankRow[]>('SELECT name, slug FROM banks WHERE slug = ? LIMIT 1', [bankSlug]);
     const bank = rows[0];
     if (!bank) return { title: 'Bank Not Found' };
     return {
@@ -37,11 +38,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export const revalidate = 3600;
 
 export default async function BankDetailPage({ params }: PageProps): Promise<React.ReactElement> {
+  const { bank: bankSlug } = await params;
   let bank: BankRow | undefined;
   let rates: RateRow[] = [];
 
   try {
-    const bankRows = await query<BankRow[]>('SELECT * FROM banks WHERE slug = ? LIMIT 1', [params.bank]);
+    const bankRows = await query<BankRow[]>('SELECT * FROM banks WHERE slug = ? LIMIT 1', [bankSlug]);
     bank = bankRows[0];
     if (bank) {
       rates = await query<RateRow[]>(

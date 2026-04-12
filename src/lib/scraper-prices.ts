@@ -21,33 +21,6 @@ interface GoldPriceData {
   changePercent: number;
 }
 
-interface SilverPriceData {
-  cityId: number;
-  priceDate: string;
-  silverPerGram: number;
-  silverPerKg: number;
-  changeAmount: number;
-  changePercent: number;
-}
-
-interface FuelPriceData {
-  cityId: number;
-  priceDate: string;
-  petrolPrice: number;
-  dieselPrice: number;
-  petrolChange: number;
-  dieselChange: number;
-}
-
-interface LpgPriceData {
-  state: string;
-  priceDate: string;
-  domestic14kg: number;
-  commercial19kg: number;
-  subsidyAmount: number;
-  changeAmount: number;
-}
-
 interface ScraperResult {
   success: boolean;
   message: string;

@@ -115,21 +115,21 @@ export default function SEOHead({
         <Script
           id="breadcrumb-schema"
           type="application/ld+json"
-          dangerouslySetInnerHTML= {{__html: JSON.stringify(breadcrumbSchema)}}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
       )}
       {faqSchema && (
         <Script
           id="faq-schema"
           type="application/ld+json"
-          dangerouslySetInnerHTML= {{__html: JSON.stringify(faqSchema)}}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       )}
       {articleSchema && (
         <Script
           id="article-schema"
           type="application/ld+json"
-          dangerouslySetInnerHTML= {{__html: JSON.stringify(articleSchema)}}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
         />
       )}
     </>

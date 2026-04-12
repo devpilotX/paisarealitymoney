@@ -5,12 +5,14 @@ interface CacheOptions {
   ttlMinutes?: number;
 }
 
+type CacheValue = NonNullable<unknown>;
+
 const DEFAULT_MAX_ITEMS = 500;
 const DEFAULT_TTL_MINUTES = 15;
 
-const caches = new Map<string, LRUCache<string, unknown>>();
+const caches = new Map<string, LRUCache<string, CacheValue>>();
 
-function getOrCreateCache(namespace: string, options?: CacheOptions): LRUCache<string, unknown> {
+function getOrCreateCache(namespace: string, options?: CacheOptions): LRUCache<string, CacheValue> {
   const existing = caches.get(namespace);
   if (existing) {
     return existing;
@@ -19,7 +21,7 @@ function getOrCreateCache(namespace: string, options?: CacheOptions): LRUCache<s
   const maxItems = options?.maxItems ?? DEFAULT_MAX_ITEMS;
   const ttlMinutes = options?.ttlMinutes ?? DEFAULT_TTL_MINUTES;
 
-  const cache = new LRUCache<string, unknown>({
+  const cache = new LRUCache<string, CacheValue>({
     max: maxItems,
     ttl: ttlMinutes * 60 * 1000,
     allowStale: false,
@@ -37,8 +39,7 @@ export function cacheGet<T>(namespace: string, key: string): T | undefined {
   if (value === undefined) {
     return undefined;
   }
-  if (value === undefined) return undefined;
-return value as T;
+  return value as T;
 }
 
 export function cacheSet<T>(
@@ -48,7 +49,7 @@ export function cacheSet<T>(
   options?: CacheOptions
 ): void {
   const cache = getOrCreateCache(namespace, options);
-  cache.set(key, value);
+  cache.set(key, value as CacheValue);
 }
 
 export function cacheDelete(namespace: string, key: string): void {

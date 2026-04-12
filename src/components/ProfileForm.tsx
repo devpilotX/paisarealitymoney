@@ -97,7 +97,7 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
     }
   }, [form, onResults, onLoading]);
 
-  const renderRadioGroup = (name: string, options: Array<{ value: string; label: string }>, selectedValue: string, onChange: (val: string) => void): React.ReactElement => (
+  const renderRadioGroup = (_name: string, options: Array<{ value: string; label: string }>, selectedValue: string, onChange: (val: string) => void): React.ReactElement => (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
       {options.map((opt) => (
         <button

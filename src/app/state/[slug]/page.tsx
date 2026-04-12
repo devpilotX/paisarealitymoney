@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getSchemesByState } from '@/lib/matcher';
+import type { MatchedScheme } from '@/lib/matcher';
 import { ALL_INDIAN_STATES } from '@/lib/cities';
 import Breadcrumb from '@/components/Breadcrumb';
 import SchemeCard from '@/components/SchemeCard';
@@ -9,7 +10,7 @@ import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 
-interface PageProps { params: { slug: string }; }
+interface PageProps { params: Promise<{ slug: string }>; }
 
 function stateSlugToName(slug: string): string | undefined {
   return ALL_INDIAN_STATES.find(
@@ -26,22 +27,24 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const stateName = stateSlugToName(params.slug);
+  const { slug } = await params;
+  const stateName = stateSlugToName(slug);
   if (!stateName) return { title: 'State Not Found' };
   return {
     title: `Government Schemes in ${stateName} - Complete List`,
     description: `Find all central and state government schemes available in ${stateName}. Check eligibility, benefits, and how to apply.`,
-    alternates: { canonical: `https://paisareality.com/state/${params.slug}` },
+    alternates: { canonical: `https://paisareality.com/state/${slug}` },
   };
 }
 
 export const revalidate = 3600;
 
 export default async function StateSchemesPage({ params }: PageProps): Promise<React.ReactElement> {
-  const stateName = stateSlugToName(params.slug);
+  const { slug } = await params;
+  const stateName = stateSlugToName(slug);
   if (!stateName) notFound();
 
-  let schemes = [];
+  let schemes: MatchedScheme[] = [];
   try {
     schemes = await getSchemesByState(stateName);
   } catch (error) { console.error('Failed to load state schemes:', error); }

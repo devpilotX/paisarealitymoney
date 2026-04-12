@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { query } from '@/lib/db';
 import { RowDataPacket } from 'mysql2/promise';
 import { formatNumber, formatDate } from '@/lib/constants';
@@ -11,7 +10,7 @@ import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 
-interface PageProps { params: { slug: string }; }
+interface PageProps { params: Promise<{ slug: string }>; }
 
 interface SchemeDetailRow extends RowDataPacket {
   id: number; slug: string; name: string; name_hi: string | null;
@@ -40,10 +39,11 @@ function parseJsonArray(str: string | null): string[] {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   try {
     const rows = await query<SchemeDetailRow[]>(
       'SELECT meta_title, meta_description, name, benefit_summary, slug FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1',
-      [params.slug]
+      [slug]
     );
     const scheme = rows[0];
     if (!scheme) return { title: 'Scheme Not Found' };
@@ -58,12 +58,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export const revalidate = 3600;
 
 export default async function SchemeDetailPage({ params }: PageProps): Promise<React.ReactElement> {
+  const { slug } = await params;
   let scheme: SchemeDetailRow | undefined;
   let relatedSchemes: RelatedSchemeRow[] = [];
 
   try {
     const rows = await query<SchemeDetailRow[]>(
-      `SELECT * FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1`, [params.slug]
+      `SELECT * FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1`, [slug]
     );
     scheme = rows[0];
 

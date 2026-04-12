@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getSchemesByCategory } from '@/lib/matcher';
+import type { MatchedScheme } from '@/lib/matcher';
 import { SCHEME_CATEGORIES } from '@/lib/constants';
 import Breadcrumb from '@/components/Breadcrumb';
 import SchemeCard from '@/components/SchemeCard';
@@ -9,14 +10,15 @@ import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 
-interface PageProps { params: { slug: string }; }
+interface PageProps { params: Promise<{ slug: string }>; }
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return SCHEME_CATEGORIES.map((cat) => ({ slug: cat.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const category = SCHEME_CATEGORIES.find((c) => c.slug === params.slug);
+  const { slug } = await params;
+  const category = SCHEME_CATEGORIES.find((c) => c.slug === slug);
   if (!category) return { title: 'Category Not Found' };
   return {
     title: `${category.label} Government Schemes in India`,
@@ -28,10 +30,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export const revalidate = 3600;
 
 export default async function CategoryPage({ params }: PageProps): Promise<React.ReactElement> {
-  const category = SCHEME_CATEGORIES.find((c) => c.slug === params.slug);
+  const { slug } = await params;
+  const category = SCHEME_CATEGORIES.find((c) => c.slug === slug);
   if (!category) notFound();
 
-  let schemes = [];
+  let schemes: MatchedScheme[] = [];
   try {
     schemes = await getSchemesByCategory(category.slug);
   } catch (error) { console.error('Failed to load category schemes:', error); }
