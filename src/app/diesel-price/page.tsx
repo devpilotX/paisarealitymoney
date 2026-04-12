@@ -14,7 +14,7 @@ import ShareButton from '@/components/ShareButton';
 
 export const metadata: Metadata = {
   title: 'Diesel Price Today in India - City-wise Rates',
-  description: 'Check today\'s diesel price in your city. Live diesel rates for 50+ Indian cities. Updated daily from oil marketing companies.',
+  description: 'Check the latest available diesel price in your city for 50+ Indian cities. Verify with oil company apps or fuel pumps before purchase.',
   alternates: { canonical: 'https://paisareality.com/diesel-price' },
 };
 
@@ -52,7 +52,7 @@ export default async function DieselPricePage(): Promise<React.ReactElement> {
     <div className="container-main py-6">
       <Breadcrumb items={[{ label: 'Diesel Price Today' }]} />
       <h1 className="heading-1 mb-2">Diesel Price Today in India</h1>
-      <p className="text-body mb-6">City-wise diesel rates for {priceDate}. Updated daily at 6 AM.</p>
+      <p className="text-body mb-6">City-wise diesel rates for {priceDate}. Verify with oil company apps or fuel pumps before purchase.</p>
       <AdBanner format="horizontal" />
       <div className="my-6"><CitySelector basePath="/diesel-price" placeholder="Search city for diesel price..." /></div>
 

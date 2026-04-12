@@ -1,6 +1,6 @@
 export const SITE_NAME = 'Paisa Reality';
 export const SITE_URL = 'https://paisareality.com';
-export const SITE_TAGLINE = "India's one-stop money hub. Live prices, government schemes, financial calculators, and bank rate comparisons.";
+export const SITE_TAGLINE = "India's one-stop money hub. Latest available prices, government schemes, financial calculators, and bank rate comparisons.";
 export const SITE_DESCRIPTION = 'Check today\'s gold rate, silver rate, petrol price, diesel price. Find government schemes you qualify for. Use free EMI, SIP, FD, and tax calculators. Compare bank rates across 50+ banks. All free. Updated daily.';
 
 export const GA_MEASUREMENT_ID = 'G-MT7980F7JH';

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!city) return { title: 'City Not Found' };
   return {
     title: `Diesel Price in ${city.name} Today - Per Litre Rate`,
-    description: `Check today's diesel price in ${city.name}, ${city.state}. Current rate per litre with 7-day history and price trend chart.`,
+    description: `Check the latest available diesel price in ${city.name}, ${city.state}. Current rate per litre with 7-day history and price trend chart.`,
     alternates: { canonical: `https://paisareality.com/diesel-price/${city.slug}` },
   };
 }

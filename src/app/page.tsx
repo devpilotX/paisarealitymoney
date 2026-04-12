@@ -8,7 +8,7 @@ import FAQ from '@/components/FAQ';
 export const metadata: Metadata = {
   title: 'Paisa Reality - Gold Rate, Silver Rate, Petrol Price, Government Schemes, Calculators',
   description:
-    'Check today\'s gold rate, silver rate, petrol price. Find 1000+ government schemes. Use free EMI, SIP, FD calculators. Compare bank rates. Updated daily.',
+    'Check latest available gold, silver, petrol, diesel, and LPG prices. Find government schemes. Use free EMI, SIP, FD calculators. Compare bank rates.',
   alternates: {
     canonical: 'https://paisareality.com',
   },
@@ -25,14 +25,14 @@ const PILLAR_CARDS: PillarCard[] = [
   {
     title: 'Daily Prices',
     description:
-      'Gold rate, silver rate, petrol price, diesel price, and LPG price. Updated every day for 50+ Indian cities.',
+      'Gold rate, silver rate, petrol price, diesel price, and LPG price for 50+ Indian cities.',
     href: '/gold-rate',
     icon: '📊',
   },
   {
     title: 'Government Schemes',
     description:
-      'Find schemes you qualify for. Fill a simple form and we match you with 1,000+ central and state government schemes.',
+      'Find schemes you may qualify for. Fill a simple form and we match you with active schemes in the database.',
     href: '/schemes',
     icon: '🏛️',
   },
@@ -104,7 +104,7 @@ const TRUST_ITEMS: TrustItem[] = [
   {
     icon: '✓',
     title: 'Data from Official Sources',
-    description: 'All prices and scheme details come from government websites and official publications.',
+    description: 'Information includes source links wherever available. Verify critical details with the original provider.',
   },
   {
     icon: '✓',
@@ -122,7 +122,7 @@ const HOME_FAQS = [
   {
     question: 'What is Paisa Reality?',
     answer:
-      'Paisa Reality is a free website where you can check daily gold, silver, petrol and diesel prices, find government schemes you qualify for, use financial calculators, and compare bank rates. All information comes from official sources and is updated regularly.',
+      'Paisa Reality is a free website where you can check latest available gold, silver, petrol and diesel prices, find government schemes you may qualify for, use financial calculators, and compare bank rates. Always verify critical information with official sources.',
   },
   {
     question: 'Is Paisa Reality free to use?',
@@ -137,7 +137,7 @@ const HOME_FAQS = [
   {
     question: 'How does the government scheme finder work?',
     answer:
-      'You fill a simple form with your basic details like age, state, income, and category. Our system checks your profile against 1,000+ central and state government schemes and shows you the ones you are eligible for.',
+      'You fill a simple form with your basic details like age, state, income, and category. Our system checks your profile against active schemes in the database and shows likely matches.',
   },
   {
     question: 'Is Paisa Reality a financial advisor?',
@@ -152,7 +152,7 @@ export default function HomePage(): React.ReactElement {
     '@type': 'WebSite',
     name: 'Paisa Reality',
     url: 'https://paisareality.com',
-    description: "India's one-stop money hub. Live prices, government schemes, financial calculators, and bank rate comparisons.",
+    description: "India's one-stop money hub. Latest available prices, government schemes, financial calculators, and bank rate comparisons.",
     potentialAction: {
       '@type': 'SearchAction',
       target: 'https://paisareality.com/schemes?q={search_term_string}',
@@ -189,7 +189,7 @@ export default function HomePage(): React.ReactElement {
             India's One-Stop Money Hub
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            Live prices, government schemes, financial calculators, and bank rate comparisons.
+            Latest available prices, government schemes, financial calculators, and bank rate comparisons.
             All free. All real. All in one place.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

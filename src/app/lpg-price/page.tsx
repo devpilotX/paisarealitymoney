@@ -11,7 +11,7 @@ import ShareButton from '@/components/ShareButton';
 
 export const metadata: Metadata = {
   title: 'LPG Price Today in India - State-wise Cylinder Rates',
-  description: 'Check today\'s LPG gas cylinder price. State-wise 14.2 kg domestic and 19 kg commercial cylinder rates. Updated monthly.',
+  description: 'Check the latest available LPG gas cylinder price. State-wise 14.2 kg domestic and 19 kg commercial cylinder rates.',
   alternates: { canonical: 'https://paisareality.com/lpg-price' },
 };
 

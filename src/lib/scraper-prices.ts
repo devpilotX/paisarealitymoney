@@ -30,6 +30,19 @@ interface ScraperResult {
 
 const GOLD_BASE_24K = 7850;
 const SILVER_BASE_PER_GRAM = 96.50;
+const ALLOW_SYNTHETIC_PRICES = process.env.ALLOW_SYNTHETIC_PRICES === 'true';
+
+function disabledSourceResult(priceType: string): ScraperResult {
+  return {
+    success: false,
+    message:
+      `${priceType} price refresh is not connected to an authoritative live provider. ` +
+      'No database rows were changed. Configure an official/paid provider integration before using this in production, ' +
+      'or set ALLOW_SYNTHETIC_PRICES=true only for local demo data.',
+    recordsProcessed: 0,
+    errors: [`${priceType} scraper blocked because synthetic prices are disabled.`],
+  };
+}
 
 const CITY_GOLD_OFFSETS: Record<string, number> = {
   mumbai: 0, delhi: 20, bangalore: -10, chennai: 30, kolkata: 15,
@@ -135,6 +148,10 @@ async function getPreviousFuelPrices(cityId: number): Promise<{ petrol: number; 
 }
 
 export async function scrapeGoldPrices(): Promise<ScraperResult> {
+  if (!ALLOW_SYNTHETIC_PRICES) {
+    return disabledSourceResult('Gold');
+  }
+
   const errors: string[] = [];
   let recordsProcessed = 0;
   try {
@@ -183,6 +200,10 @@ export async function scrapeGoldPrices(): Promise<ScraperResult> {
 }
 
 export async function scrapeSilverPrices(): Promise<ScraperResult> {
+  if (!ALLOW_SYNTHETIC_PRICES) {
+    return disabledSourceResult('Silver');
+  }
+
   const errors: string[] = [];
   let recordsProcessed = 0;
   try {
@@ -223,6 +244,10 @@ export async function scrapeSilverPrices(): Promise<ScraperResult> {
 }
 
 export async function scrapeFuelPrices(): Promise<ScraperResult> {
+  if (!ALLOW_SYNTHETIC_PRICES) {
+    return disabledSourceResult('Fuel');
+  }
+
   const errors: string[] = [];
   let recordsProcessed = 0;
   try {
@@ -262,6 +287,10 @@ export async function scrapeFuelPrices(): Promise<ScraperResult> {
 }
 
 export async function scrapeLpgPrices(): Promise<ScraperResult> {
+  if (!ALLOW_SYNTHETIC_PRICES) {
+    return disabledSourceResult('LPG');
+  }
+
   const errors: string[] = [];
   let recordsProcessed = 0;
   try {

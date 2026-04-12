@@ -5,6 +5,13 @@ import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit
 const VALID_TYPES = ['gold', 'silver', 'fuel', 'lpg', 'all'] as const;
 type PriceType = typeof VALID_TYPES[number];
 
+interface ScraperResult {
+  success: boolean;
+  message: string;
+  recordsProcessed: number;
+  errors: string[];
+}
+
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const rateCheck = checkRateLimit(request, 'scraper', RATE_LIMITS.scraper);
   if (!rateCheck.allowed) {
@@ -28,7 +35,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    const results: Record<string, unknown> = {};
+    const results: Record<string, ScraperResult> = {};
 
     if (type === 'gold' || type === 'all') {
       results.gold = await scrapeGoldPrices();
@@ -43,7 +50,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       results.lpg = await scrapeLpgPrices();
     }
 
-    return NextResponse.json({ success: true, results }, { status: 200 });
+    const success = Object.values(results).every((result) => result.success);
+    return NextResponse.json({ success, results }, { status: success ? 200 : 502 });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown scraper error';
     console.error('Scraper error:', message);

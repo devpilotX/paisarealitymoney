@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     siteName: 'Paisa Reality',
     title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
     description:
-      'India\'s one-stop money hub. Live prices, government schemes, financial calculators, and bank rate comparisons. All free.',
+      'India\'s one-stop money hub. Latest available prices, government schemes, financial calculators, and bank rate comparisons. All free.',
     images: [
       {
         url: '/og-image.png',
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
     description:
-      'India\'s one-stop money hub. Live prices, government schemes, financial calculators, and bank rate comparisons.',
+      'India\'s one-stop money hub. Latest available prices, government schemes, financial calculators, and bank rate comparisons.',
     images: ['/og-image.png'],
   },
   alternates: {

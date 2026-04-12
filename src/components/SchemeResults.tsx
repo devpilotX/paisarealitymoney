@@ -15,7 +15,7 @@ export default function SchemeResults({
     return (
       <div className="text-center py-16">
         <div className="inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-body mt-4">Checking your eligibility against 1,000+ schemes...</p>
+        <p className="text-body mt-4">Checking your eligibility against active schemes in the database...</p>
       </div>
     );
   }

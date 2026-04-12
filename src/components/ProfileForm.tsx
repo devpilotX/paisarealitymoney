@@ -247,7 +247,7 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
       {/* Step 6: Review and Submit */}
       {step === 6 && (
         <div>
-          <p className="text-body mb-4">We will now check your profile against 1,000+ government schemes and show you the ones you may be eligible for.</p>
+          <p className="text-body mb-4">We will now check your profile against active government schemes in the database and show you the ones you may be eligible for.</p>
           <div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
             {form.gender && <p><strong>Gender:</strong> {form.gender}</p>}
             {form.age && <p><strong>Age:</strong> {form.age}</p>}

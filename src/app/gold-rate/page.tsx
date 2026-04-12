@@ -13,9 +13,9 @@ import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 
 export const metadata: Metadata = {
-  title: 'Gold Rate Today in India - Live 22K & 24K Prices',
+  title: 'Gold Rate Today in India - Latest 22K & 24K Prices',
   description:
-    'Check today\'s gold rate in India. Live 22 Karat and 24 Karat gold prices per gram and per 10 grams for 50+ Indian cities. Updated daily.',
+    'Check the latest available gold rate in India. 22 Karat and 24 Karat gold prices per gram and per 10 grams for 50+ Indian cities.',
   alternates: { canonical: 'https://paisareality.com/gold-rate' },
 };
 
@@ -83,7 +83,7 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
       <Breadcrumb items={[{ label: 'Gold Rate Today' }]} />
 
       <h1 className="heading-1 mb-2">Gold Rate Today in India</h1>
-      <p className="text-body mb-6">Live 22K and 24K gold prices for {priceDate}. Updated daily from market sources.</p>
+      <p className="text-body mb-6">Latest available 22K and 24K gold prices for {priceDate}. Verify with your jeweller before buying.</p>
 
       <AdBanner format="horizontal" />
 

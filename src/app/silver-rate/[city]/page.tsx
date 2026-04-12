@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!city) return { title: 'City Not Found' };
   return {
     title: `Silver Rate in ${city.name} Today - Price per Gram & Kg`,
-    description: `Check today's silver rate in ${city.name}, ${city.state}. Live price per gram and per kg. 7-day history, 30-day chart. Updated daily.`,
+    description: `Check the latest available silver rate in ${city.name}, ${city.state}. Price per gram and per kg, 7-day history, and 30-day chart.`,
     alternates: { canonical: `https://paisareality.com/silver-rate/${city.slug}` },
   };
 }
@@ -70,7 +70,7 @@ export default async function SilverRateCityPage({ params }: PageProps): Promise
     <div className="container-main py-6">
       <Breadcrumb items={[{ label: 'Silver Rate', href: '/silver-rate' }, { label: city.name }]} />
       <h1 className="heading-1 mb-2">Silver Rate in {city.name} Today</h1>
-      <p className="text-body mb-6">Live silver prices in {city.name}, {city.state}.{today ? ` Updated: ${formatDate(today.price_date)}.` : ''}</p>
+      <p className="text-body mb-6">Latest available silver prices in {city.name}, {city.state}.{today ? ` Updated: ${formatDate(today.price_date)}.` : ''}</p>
       <AdBanner format="horizontal" />
 
       {today && (

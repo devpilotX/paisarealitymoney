@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!city) return { title: 'City Not Found' };
   return {
     title: `Gold Rate in ${city.name} Today - 22K & 24K Price`,
-    description: `Check today's gold rate in ${city.name}, ${city.state}. Live 22K and 24K gold price per gram. 7-day history, 30-day chart. Updated daily.`,
+    description: `Check the latest available gold rate in ${city.name}, ${city.state}. 22K and 24K gold price per gram, 7-day history, and 30-day chart.`,
     alternates: { canonical: `https://paisareality.com/gold-rate/${city.slug}` },
   };
 }
@@ -106,7 +106,7 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
 
       <h1 className="heading-1 mb-2">Gold Rate in {city.name} Today</h1>
       <p className="text-body mb-6">
-        Live 22K and 24K gold prices in {city.name}, {city.state}.
+        Latest available 22K and 24K gold prices in {city.name}, {city.state}.
         {today ? ` Last updated: ${formatDate(today.price_date)}.` : ''}
       </p>
 
@@ -164,7 +164,7 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
           For gold investment, you can buy gold coins or bars from banks and authorized dealers in {city.name}. You can also invest in Sovereign Gold Bonds (SGBs) issued by the Reserve Bank of India, which give you the benefit of gold price appreciation plus 2.5% annual interest.
         </p>
         <p className="text-body mb-4">
-          Gold prices in {city.name} are updated on this page every day. You can also check the <Link href="/silver-rate/{city.slug}" className="link-internal">silver rate in {city.name}</Link> and <Link href="/petrol-price/{city.slug}" className="link-internal">petrol price in {city.name}</Link>.
+          Gold prices in {city.name} are shown from the latest available database update. You can also check the <Link href={`/silver-rate/${city.slug}`} className="link-internal">silver rate in {city.name}</Link> and <Link href={`/petrol-price/${city.slug}`} className="link-internal">petrol price in {city.name}</Link>.
         </p>
       </article>
 

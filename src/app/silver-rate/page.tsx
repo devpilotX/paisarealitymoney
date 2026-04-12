@@ -13,8 +13,8 @@ import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 
 export const metadata: Metadata = {
-  title: 'Silver Rate Today in India - Live Price per Gram & Kg',
-  description: 'Check today\'s silver rate in India. Live silver prices per gram and per kg for 50+ cities. Updated daily from market sources.',
+  title: 'Silver Rate Today in India - Latest Price per Gram & Kg',
+  description: 'Check the latest available silver rate in India. Silver prices per gram and per kg for 50+ cities.',
   alternates: { canonical: 'https://paisareality.com/silver-rate' },
 };
 
@@ -52,7 +52,7 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
     <div className="container-main py-6">
       <Breadcrumb items={[{ label: 'Silver Rate Today' }]} />
       <h1 className="heading-1 mb-2">Silver Rate Today in India</h1>
-      <p className="text-body mb-6">Live silver prices per gram and per kg for {priceDate}. Updated daily.</p>
+      <p className="text-body mb-6">Latest available silver prices per gram and per kg for {priceDate}. Verify with your jeweller before buying.</p>
       <AdBanner format="horizontal" />
       <div className="my-6"><CitySelector basePath="/silver-rate" placeholder="Search city for silver rate..." /></div>
 

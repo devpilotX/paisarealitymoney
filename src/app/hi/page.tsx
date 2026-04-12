@@ -5,7 +5,7 @@ import FAQ from '@/components/FAQ';
 
 export const metadata: Metadata = {
   title: 'Paisa Reality - सोने का भाव, सरकारी योजनाएं, कैलकुलेटर, बैंक दरें',
-  description: 'आज का सोने का भाव, चांदी का रेट, पेट्रोल कीमत देखें। 1000+ सरकारी योजनाएं खोजें। मुफ्त EMI, SIP, FD कैलकुलेटर।',
+  description: 'सोने का भाव, चांदी का रेट, पेट्रोल कीमत देखें। सरकारी योजनाएं खोजें। मुफ्त EMI, SIP, FD कैलकुलेटर।',
   alternates: { canonical: 'https://paisareality.com/hi', languages: { 'en-IN': 'https://paisareality.com' } },
 };
 
@@ -17,7 +17,7 @@ const HI_FAQS = [
 
 const PILLARS = [
   { title: 'दैनिक कीमतें', desc: 'सोना, चांदी, पेट्रोल, डीजल, LPG - 50+ शहरों के लिए', href: '/gold-rate', icon: '📊' },
-  { title: 'सरकारी योजनाएं', desc: '1000+ केंद्र और राज्य सरकार की योजनाएं खोजें', href: '/schemes', icon: '🏛️' },
+  { title: 'सरकारी योजनाएं', desc: 'केंद्र और राज्य सरकार की योजनाएं खोजें', href: '/schemes', icon: '🏛️' },
   { title: 'वित्तीय कैलकुलेटर', desc: 'EMI, SIP, FD, PPF, आयकर, होम लोन कैलकुलेटर', href: '/calculators', icon: '🧮' },
   { title: 'बैंक दरें', desc: '50+ बैंकों की FD, सेविंग्स, लोन दरें की तुलना', href: '/bank-rates', icon: '🏦' },
 ];

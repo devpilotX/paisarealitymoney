@@ -71,7 +71,7 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<EmailR
         <p style="font-size: 16px; line-height: 1.6;">Thank you for creating your account on Paisa Reality. You now have access to:</p>
         <ul style="font-size: 16px; line-height: 1.8;">
           <li>Daily gold, silver, petrol, and diesel prices for your city</li>
-          <li>Government scheme finder to check your eligibility for 1,000+ schemes</li>
+          <li>Government scheme finder to check your eligibility against active schemes in the database</li>
           <li>Financial calculators for EMI, SIP, FD, tax, and more</li>
           <li>Bank rate comparison across 50+ Indian banks</li>
         </ul>
