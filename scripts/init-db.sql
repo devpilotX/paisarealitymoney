@@ -181,3 +181,26 @@ CREATE INDEX idx_schemes_category ON schemes(category);
 CREATE INDEX idx_schemes_level ON schemes(level);
 CREATE INDEX idx_schemes_active ON schemes(is_active);
 CREATE INDEX idx_rates_type ON bank_rates(rate_type);
+
+CREATE TABLE IF NOT EXISTS blog_posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(300) UNIQUE NOT NULL,
+    title VARCHAR(500) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    content LONGTEXT NOT NULL,
+    category VARCHAR(100) NOT NULL DEFAULT 'finance',
+    tags JSON,
+    cover_image VARCHAR(500),
+    author VARCHAR(100) NOT NULL DEFAULT 'Paisa Reality',
+    read_time VARCHAR(20) NOT NULL DEFAULT '5 min read',
+    is_published BOOLEAN DEFAULT FALSE,
+    meta_title VARCHAR(70),
+    meta_description VARCHAR(160),
+    published_at DATETIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_blog_published ON blog_posts(is_published, published_at DESC);
+CREATE INDEX idx_blog_category ON blog_posts(category);
+CREATE INDEX idx_blog_slug ON blog_posts(slug);

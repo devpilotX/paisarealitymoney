@@ -2,21 +2,22 @@
 
 import { useEffect, useRef } from 'react';
 
-interface InArticleAdProps {
-  className?: string;
-}
-
 declare global {
   interface Window {
     adsbygoogle: Array<Record<string, unknown>>;
   }
 }
 
-export default function InArticleAd({ className = '' }: InArticleAdProps): React.ReactElement {
-  const isAdLoaded = useRef<boolean>(false);
+export default function InArticleAd({
+  className = '',
+}: {
+  className?: string;
+}): React.ReactElement | null {
+  const isAdLoaded = useRef(false);
+  const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
 
   useEffect(() => {
-    if (isAdLoaded.current) {
+    if (isAdLoaded.current || !pubId) {
       return;
     }
 
@@ -28,19 +29,17 @@ export default function InArticleAd({ className = '' }: InArticleAdProps): React
     } catch (error) {
       console.error('In-article ad loading error:', error);
     }
-  }, []);
-
-  const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
+  }, [pubId]);
 
   if (!pubId) {
-    return <div className={className} />;
+    return null;
   }
 
   return (
-    <div className={`in-article-ad my-8 ${className}`}>
+    <div className={`overflow-hidden ${className}`} style={{ minHeight: 0 }}>
       <ins
         className="adsbygoogle"
-        style={{ display: 'block', textAlign: 'center' }} 
+        style={{ display: 'block', textAlign: 'center' }}
         data-ad-layout="in-article"
         data-ad-format="fluid"
         data-ad-client={`ca-${pubId}`}

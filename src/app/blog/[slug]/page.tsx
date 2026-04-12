@@ -1,68 +1,138 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getAllPosts, getPostBySlug } from '@/lib/blog';
-import { formatDate } from '@/lib/constants';
+import sanitizeHtml from 'sanitize-html';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShareButton from '@/components/ShareButton';
-import AdBanner from '@/components/AdBanner';
-import InArticleAd from '@/components/InArticleAd';
+import { getAllPostsAsync, getPostBySlugAsync } from '@/lib/blog';
+import { formatDate } from '@/lib/constants';
+import { marked } from 'marked';
 
-interface PageProps { params: Promise<{ slug: string }>; }
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export const revalidate = 300;
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
-  return getAllPosts().map((p) => ({ slug: p.slug }));
+  const posts = await getAllPostsAsync(true).catch(() => []);
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
-  if (!post) return { title: 'Post Not Found' };
-  return { title: post.title, description: post.description, openGraph: { type: 'article', publishedTime: post.date } };
+  const post = await getPostBySlugAsync(slug).catch(() => null);
+
+  if (!post) {
+    return { title: 'Post Not Found' };
+  }
+
+  return {
+    title: post.metaTitle || post.title,
+    description: post.metaDescription || post.description,
+    openGraph: {
+      type: 'article',
+      publishedTime: post.date,
+      title: post.title,
+      description: post.description,
+    },
+    alternates: { canonical: `https://paisareality.com/blog/${post.slug}` },
+  };
 }
 
-function mdToHtml(md: string): string {
-  return md
-    .replace(/^### (.*$)/gm, '<h3 class="heading-3 mt-6 mb-3">$1</h3>')
-    .replace(/^## (.*$)/gm, '<h2 class="heading-2 mt-8 mb-4">$1</h2>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/^- (.*$)/gm, '<li class="ml-4">$1</li>')
-    .replace(/\n\n/g, '</p><p class="text-body mb-4">');
+function sanitizeBlogHtml(html: string): string {
+  return sanitizeHtml(html, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+      'img',
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'table',
+      'thead',
+      'tbody',
+      'tr',
+      'th',
+      'td',
+    ]),
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      a: ['href', 'name', 'target', 'rel'],
+      img: ['src', 'alt', 'title', 'width', 'height', 'loading'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto'],
+    transformTags: {
+      a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }),
+    },
+  });
 }
 
 export default async function BlogPostPage({ params }: PageProps): Promise<React.ReactElement> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
-  if (!post) notFound();
-  const related = getAllPosts().filter((p) => p.slug !== post.slug).slice(0, 4);
+  const post = await getPostBySlugAsync(slug).catch(() => null);
+
+  if (!post) {
+    notFound();
+  }
+
+  const rawHtml = await marked.parse(post.content, { breaks: true, gfm: true });
+  const htmlContent = sanitizeBlogHtml(rawHtml);
+  const related = (await getAllPostsAsync(true).catch(() => []))
+    .filter((relatedPost) => relatedPost.slug !== post.slug)
+    .slice(0, 4);
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.description,
+    author: { '@type': 'Organization', name: post.author },
+    datePublished: post.date,
+    dateModified: post.updatedAt,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Paisa Reality',
+      url: 'https://paisareality.com',
+    },
+  };
 
   return (
-    <div className="container-main py-6">
+    <div className="container-main section-spacing">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <Breadcrumb items={[{ label: 'Blog', href: '/blog' }, { label: post.title }]} />
-      <article className="max-w-3xl">
-        <span className="text-xs font-medium text-primary bg-primary-50 px-2 py-1 rounded">{post.category}</span>
-        <h1 className="heading-1 mt-3 mb-3">{post.title}</h1>
-        <div className="flex items-center gap-3 text-sm text-gray-500 mb-6">
-          <span>{formatDate(post.date)}</span><span>{post.readTime}</span><span>By {post.author}</span>
+      <article className="max-w-3xl mx-auto">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-4">
+          {post.category}
+        </span>
+        <h1 className="heading-1 mb-4">{post.title}</h1>
+        <p className="text-sm text-gray-500 mb-8">
+          {formatDate(post.date)} - {post.readTime} - By {post.author}
+        </p>
+        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+        <div className="mt-8 pt-6 border-t">
+          <ShareButton url={`/blog/${post.slug}`} title={post.title} />
         </div>
-        <AdBanner format="horizontal" />
-        <div className="prose max-w-none my-8 text-body" dangerouslySetInnerHTML={{ __html: `<p class="text-body mb-4">${mdToHtml(post.content)}</p>` }} />
-        <InArticleAd />
-        <ShareButton url={`/blog/${post.slug}`} title={post.title} />
       </article>
+
       {related.length > 0 && (
-        <div className="my-8"><h2 className="heading-2 mb-4">More Articles</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {related.map((rp) => (
-              <a key={rp.slug} href={`/blog/${rp.slug}`} className="card no-underline group">
-                <h3 className="text-base font-semibold group-hover:text-primary transition-colors">{rp.title}</h3>
-                <p className="text-sm text-gray-500 mt-1">{formatDate(rp.date)}</p>
+        <div className="mt-12 max-w-3xl mx-auto">
+          <h2 className="heading-3 mb-6">More Articles</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {related.map((relatedPost) => (
+              <a key={relatedPost.slug} href={`/blog/${relatedPost.slug}`} className="card hover:shadow-md">
+                <h3 className="font-medium text-primary">{relatedPost.title}</h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  {formatDate(relatedPost.date)} - {relatedPost.readTime}
+                </p>
               </a>
             ))}
           </div>
         </div>
       )}
-      <AdBanner format="horizontal" className="mt-8" />
     </div>
   );
 }

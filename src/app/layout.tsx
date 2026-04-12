@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     siteName: 'Paisa Reality',
     title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
     description:
-      'India\'s one-stop money hub. Latest available prices, government schemes, financial calculators, and bank rate comparisons. All free.',
+      "India's one-stop money hub.",
     images: [
       {
         url: '/og-image.png',
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
     description:
-      'India\'s one-stop money hub. Latest available prices, government schemes, financial calculators, and bank rate comparisons.',
+      "India's one-stop money hub.",
     images: ['/og-image.png'],
   },
   alternates: {
@@ -82,10 +82,6 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   icons: {
     icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
-  },
-  verification: {
-    google: 'add-your-google-verification-code',
   },
 };
 
@@ -102,12 +98,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }): React.ReactElement {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="font-sans bg-white text-gray-900 antialiased">
+    <html lang="en" className={inter.variable} data-scroll-behavior="smooth">
+      <body className="font-sans bg-white text-gray-900 antialiased flex flex-col min-h-screen">
         <GoogleAnalytics />
         <AdSenseScript />
         <Header />
-        <main className="min-h-screen-minus-header">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <CookieConsent />
       </body>

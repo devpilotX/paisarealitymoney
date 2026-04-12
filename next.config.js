@@ -46,7 +46,7 @@ const nextConfig = {
     },
   ],
   experimental: {
-    optimizePackageImports: ['@react-pdf/renderer'],
+    optimizePackageImports: ['@react-pdf/renderer', 'marked'],
   },
 };
 

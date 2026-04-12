@@ -18,12 +18,13 @@ export default function AdBanner({
   slot = '',
   format = 'auto',
   className = '',
-}: AdBannerProps): React.ReactElement {
-  const adRef = useRef<HTMLDivElement>(null);
-  const isAdLoaded = useRef<boolean>(false);
+}: AdBannerProps): React.ReactElement | null {
+  const adRef = useRef<HTMLModElement>(null);
+  const isAdLoaded = useRef(false);
+  const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
 
   useEffect(() => {
-    if (isAdLoaded.current) {
+    if (isAdLoaded.current || !pubId) {
       return;
     }
 
@@ -35,19 +36,18 @@ export default function AdBanner({
     } catch (error) {
       console.error('AdSense loading error:', error);
     }
-  }, []);
-
-  const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
+  }, [pubId]);
 
   if (!pubId) {
-    return <div className={className} />;
+    return null;
   }
 
   return (
-    <div className={`ad-container my-4 text-center ${className}`} ref={adRef}>
+    <div className={`overflow-hidden ${className}`} style={{ minHeight: 0 }}>
       <ins
+        ref={adRef}
         className="adsbygoogle"
-        style={{ display: 'block' }} 
+        style={{ display: 'block' }}
         data-ad-client={`ca-${pubId}`}
         data-ad-slot={slot}
         data-ad-format={format}

@@ -11,9 +11,10 @@ export default function AdSenseScript(): React.ReactElement | null {
 
   return (
     <Script
+      async
       src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${ADSENSE_PUB_ID}`}
-      strategy="afterInteractive"
       crossOrigin="anonymous"
+      strategy="lazyOnload"
     />
   );
 }
