@@ -33,8 +33,8 @@ function getDatabaseConfig(): DatabaseConfig {
 const poolConfig: PoolOptions = {
   ...getDatabaseConfig(),
   waitForConnections: true,
-  connectionLimit: 10,
-  maxIdle: 5,
+  connectionLimit: 3,
+  maxIdle: 2,
   idleTimeout: 60000,
   queueLimit: 0,
   enableKeepAlive: true,
