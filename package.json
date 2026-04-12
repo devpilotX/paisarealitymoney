@@ -2,13 +2,12 @@
   "name": "paisareality",
   "version": "2.0.0",
   "private": true,
-  "description": "India's one-stop money hub. Real-time prices, government schemes, financial calculators, and bank rate comparisons.",
+  "description": "India's one-stop money hub.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit --pretty false",
-    "db:init": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/init-db.ts",
     "db:seed-cities": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-cities.ts",
     "db:seed-prices": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-prices.ts",
     "db:seed-schemes": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-schemes.ts",
@@ -17,11 +16,17 @@
   },
   "dependencies": {
     "@react-pdf/renderer": "^3.4.4",
-    "@types/node": "^25.6.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.14.9",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/sanitize-html": "^2.11.0",
     "autoprefixer": "^10.4.27",
     "bcrypt": "^6.0.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^10.2.0",
+    "eslint-config-next": "^16.2.3",
     "jsonwebtoken": "^9.0.2",
     "lru-cache": "^10.2.2",
     "marked": "^12.0.2",
@@ -33,16 +38,8 @@
     "react-dom": "^18.3.1",
     "resend": "^3.2.0",
     "sanitize-html": "^2.13.0",
-    "tailwindcss": "^4.2.2",
-    "typescript": "^6.0.2"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/sanitize-html": "^2.11.0",
-    "dotenv": "^16.4.5",
-    "eslint": "^10.2.0",
-    "eslint-config-next": "^16.2.3",
-    "ts-node": "^10.9.2"
+    "tailwindcss": "^3.4.19",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
   }
 }
