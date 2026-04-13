@@ -42,8 +42,8 @@ export default function BankRateTable({
       let valA: number | string = 0;
       let valB: number | string = 0;
       if (sortField === 'bankName') { valA = a.bankName; valB = b.bankName; }
-      else if (sortField === 'generalRate') { valA = a.generalRate; valB = b.generalRate; }
-      else if (sortField === 'seniorCitizenRate') { valA = a.seniorCitizenRate ?? 0; valB = b.seniorCitizenRate ?? 0; }
+      else if (sortField === 'generalRate') { valA = Number(a.generalRate); valB = Number(b.generalRate); }
+else if (sortField === 'seniorCitizenRate') { valA = Number(a.seniorCitizenRate ?? 0); valB = Number(b.seniorCitizenRate ?? 0); }
 
       if (typeof valA === 'string' && typeof valB === 'string') {
         return sortOrder === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
@@ -94,9 +94,9 @@ export default function BankRateTable({
               </td>
               <td className="py-3 px-4 text-sm text-gray-500">{bankTypeLabel(rate.bankType)}</td>
               {showTenure && <td className="py-3 px-4 text-sm text-gray-700">{rate.tenure ?? '-'}</td>}
-              <td className="py-3 px-4 text-right font-semibold text-gray-900">{rate.generalRate.toFixed(2)}%</td>
+              <td className="py-3 px-4 text-right font-semibold text-gray-900">{Number(rate.generalRate).toFixed(2)}%</td>
               <td className="py-3 px-4 text-right font-medium text-gray-700">
-                {rate.seniorCitizenRate ? `${rate.seniorCitizenRate.toFixed(2)}%` : '-'}
+                {rate.seniorCitizenRate ? `${Number(rate.seniorCitizenRate).toFixed(2)}%` : '-'}
               </td>
             </tr>
           ))}
