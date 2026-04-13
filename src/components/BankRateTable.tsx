@@ -43,7 +43,7 @@ export default function BankRateTable({
       let valB: number | string = 0;
       if (sortField === 'bankName') { valA = a.bankName; valB = b.bankName; }
       else if (sortField === 'generalRate') { valA = Number(a.generalRate); valB = Number(b.generalRate); }
-else if (sortField === 'seniorCitizenRate') { valA = Number(a.seniorCitizenRate ?? 0); valB = Number(b.seniorCitizenRate ?? 0); }
+      else if (sortField === 'seniorCitizenRate') { valA = Number(a.seniorCitizenRate ?? 0); valB = Number(b.seniorCitizenRate ?? 0); }
 
       if (typeof valA === 'string' && typeof valB === 'string') {
         return sortOrder === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
@@ -53,7 +53,7 @@ else if (sortField === 'seniorCitizenRate') { valA = Number(a.seniorCitizenRate 
   }, [rates, sortField, sortOrder]);
 
   const SortArrow = ({ field }: { field: SortField }): React.ReactElement => (
-    <span className="ml-1 text-xs">
+    <span className={`ml-1 text-xs ${sortField === field ? 'text-primary' : 'text-gray-400'}`}>
       {sortField === field ? (sortOrder === 'asc' ? '\u25B2' : '\u25BC') : '\u25BC'}
     </span>
   );
@@ -66,44 +66,46 @@ else if (sortField === 'seniorCitizenRate') { valA = Number(a.seniorCitizenRate 
   };
 
   return (
-    <div className="overflow-x-auto">
-      <h2 className="heading-2 mb-4">{title}</h2>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b-2 border-gray-200 bg-gray-50">
-            <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 cursor-pointer hover:text-primary" onClick={() => handleSort('bankName')}>
-              Bank <SortArrow field="bankName" />
-            </th>
-            <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Type</th>
-            {showTenure && <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Tenure</th>}
-            <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 cursor-pointer hover:text-primary" onClick={() => handleSort('generalRate')}>
-              {rateLabel} <SortArrow field="generalRate" />
-            </th>
-            <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 cursor-pointer hover:text-primary" onClick={() => handleSort('seniorCitizenRate')}>
-              Senior Citizen <SortArrow field="seniorCitizenRate" />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedRates.map((rate, index) => (
-            <tr key={`${rate.bankSlug}-${rate.tenure}-${index}`} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-              <td className="py-3 px-4">
-                <Link href={`/bank-rates/${rate.bankSlug}`} className="text-primary font-medium no-underline hover:underline">
-                  {rate.bankName}
-                </Link>
-              </td>
-              <td className="py-3 px-4 text-sm text-gray-500">{bankTypeLabel(rate.bankType)}</td>
-              {showTenure && <td className="py-3 px-4 text-sm text-gray-700">{rate.tenure ?? '-'}</td>}
-              <td className="py-3 px-4 text-right font-semibold text-gray-900">{Number(rate.generalRate).toFixed(2)}%</td>
-              <td className="py-3 px-4 text-right font-medium text-gray-700">
-                {rate.seniorCitizenRate ? `${Number(rate.seniorCitizenRate).toFixed(2)}%` : '-'}
-              </td>
+    <div className="mb-8">
+      <h2 className="heading-3 mb-4">{title}</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse bg-white rounded-lg border border-gray-200">
+          <thead>
+            <tr className="bg-gray-50 text-left text-sm font-semibold text-gray-700">
+              <th className="px-4 py-3 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('bankName')}>
+                Bank <SortArrow field="bankName" />
+              </th>
+              <th className="px-4 py-3">Type</th>
+              {showTenure && <th className="px-4 py-3">Tenure</th>}
+              <th className="px-4 py-3 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('generalRate')}>
+                {rateLabel} <SortArrow field="generalRate" />
+              </th>
+              <th className="px-4 py-3 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('seniorCitizenRate')}>
+                Senior Citizen <SortArrow field="seniorCitizenRate" />
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sortedRates.map((rate, index) => (
+              <tr key={`${rate.bankSlug}-${rate.tenure}-${index}`} className="border-t border-gray-100 hover:bg-gray-50 text-sm">
+                <td className="px-4 py-3">
+                  <Link href={`/bank-rates/${rate.bankSlug}`} className="text-primary hover:underline font-medium">
+                    {rate.bankName}
+                  </Link>
+                </td>
+                <td className="px-4 py-3 text-gray-600">{bankTypeLabel(rate.bankType)}</td>
+                {showTenure && <td className="px-4 py-3 text-gray-600">{rate.tenure ?? '-'}</td>}
+                <td className="px-4 py-3 font-semibold text-gray-900">{Number(rate.generalRate).toFixed(2)}%</td>
+                <td className="px-4 py-3 text-gray-700">
+                  {rate.seniorCitizenRate ? `${Number(rate.seniorCitizenRate).toFixed(2)}%` : '-'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {rates.length === 0 && (
-        <p className="text-center py-8 text-gray-500">No rates available yet.</p>
+        <p className="text-center text-gray-500 py-8">No rates available yet.</p>
       )}
     </div>
   );

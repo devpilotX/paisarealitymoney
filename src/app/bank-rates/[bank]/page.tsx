@@ -78,7 +78,7 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
   }));
 
   const faqs = [
-    { question: `What is ${bank.name} FD rate?`, answer: fdRates.length > 0 ? `${bank.name} offers FD rates from ${Math.min(...fdRates.map(r => r.generalRate)).toFixed(2)}% to ${Math.max(...fdRates.map(r => r.generalRate)).toFixed(2)}% depending on tenure. Senior citizens get additional 0.25% to 0.50%.` : `FD rates for ${bank.name} are being updated.` },
+    { question: `What is ${bank.name} FD rate?`, answer: fdRates.length > 0 ? `${bank.name} offers FD rates from ${Math.min(...fdRates.map(r => Number(r.generalRate))).toFixed(2)}% to ${Math.max(...fdRates.map(r => Number(r.generalRate))).toFixed(2)}% depending on tenure. Senior citizens get additional 0.25% to 0.50%.` : `FD rates for ${bank.name} are being updated.` },
     { question: `Is ${bank.name} safe for deposits?`, answer: `All bank deposits in India are insured by DICGC (Deposit Insurance and Credit Guarantee Corporation) up to Rs 5 lakh per depositor per bank. ${bank.name} is a ${typeLabel[bank.type] ?? bank.type} regulated by the Reserve Bank of India.` },
     { question: `How to open an account in ${bank.name}?`, answer: `You can open an account by visiting any ${bank.name} branch with your Aadhaar card, PAN card, and address proof. Many banks also offer online account opening through their website or mobile app.${bank.website ? ` Visit ${bank.website} for more details.` : ''}` },
   ];
