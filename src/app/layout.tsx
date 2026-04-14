@@ -80,9 +80,11 @@ export const metadata: Metadata = {
     },
   },
   manifest: '/manifest.json',
-  icons: {
-    icon: '/favicon.ico',
-  },
+  icons: { 
+  icon: [
+    { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+  ],
+},
 };
 
 export const viewport: Viewport = {

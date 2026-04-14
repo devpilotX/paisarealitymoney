@@ -34,13 +34,16 @@ export default function Header(): React.ReactElement {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
-            href="/"
-            className="flex items-center gap-2 no-underline"
-            onClick={closeMobileMenu}
-          >
-            <span className="text-xl font-bold text-primary">Paisa</span>
-            <span className="text-xl font-bold text-gray-900">Reality</span>
-          </Link>
+              href="/"
+              className="flex items-center gap-2 no-underline"
+              onClick={closeMobileMenu}
+>
+  <img 
+    src="/paisa_reality_logo.png" 
+    alt="Paisa Reality" 
+    className="h-8 w-auto"
+  />
+</Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
