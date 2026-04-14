@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -H 0.0.0.0 -p ${PORT:-3306}",
+    "start": "next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "tsc --noEmit --pretty false",
     "db:seed-cities": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-cities.ts",
     "db:seed-prices": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-prices.ts",
