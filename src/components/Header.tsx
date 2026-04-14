@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import Image from "next/image";
 
 interface NavItem {
   href: string;
@@ -34,22 +33,14 @@ export default function Header(): React.ReactElement {
       <div className="container-main">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          
-
-<Link
-  href="/"
-  className="flex items-center no-underline"
-  onClick={closeMobileMenu}
->
-  <Image
-    src="/paisa_reality_logo.png"
-    alt="Paisa Reality"
-    width={140}
-    height={40}
-    className="h-8 w-auto"
-    priority
-  />
-</Link>
+          <Link
+            href="/"
+            className="flex items-center gap-2 no-underline"
+            onClick={closeMobileMenu}
+          >
+            <span className="text-xl font-bold text-primary">Paisa</span>
+            <span className="text-xl font-bold text-gray-900">Reality</span>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
