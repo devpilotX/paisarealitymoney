@@ -81,8 +81,8 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.ico',
-  },
+  icon: '/favicon-32x32.png',
+},
 };
 
 export const viewport: Viewport = {
