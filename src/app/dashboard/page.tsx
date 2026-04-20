@@ -1,6 +1,4 @@
 'use client';
-// forcing cache clear on every load to ensure latest code is used, remove in production
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
