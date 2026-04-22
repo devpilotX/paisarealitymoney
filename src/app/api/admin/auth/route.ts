@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const rateCheck = checkRateLimit(request, 'admin-auth', RATE_LIMITS.auth);
+  if (!rateCheck.allowed) return rateLimitResponse(rateCheck.resetIn);
+
   try {
     const { email, password } = (await request.json()) as {
       email?: string;

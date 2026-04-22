@@ -30,23 +30,22 @@ function getDatabaseConfig(): DatabaseConfig {
   };
 }
 
-const poolConfig: PoolOptions = {
-  ...getDatabaseConfig(),
-  waitForConnections: true,
-  connectionLimit: 3,
-  maxIdle: 2,
-  idleTimeout: 60000,
-  queueLimit: 0,
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 10000,
-  charset: 'utf8mb4',
-  timezone: '+05:30',
-};
-
 let pool: Pool | null = null;
 
 export function getPool(): Pool {
   if (!pool) {
+    const poolConfig: PoolOptions = {
+      ...getDatabaseConfig(),
+      waitForConnections: true,
+      connectionLimit: 3,
+      maxIdle: 2,
+      idleTimeout: 60000,
+      queueLimit: 0,
+      enableKeepAlive: true,
+      keepAliveInitialDelay: 10000,
+      charset: 'utf8mb4',
+      timezone: '+05:30',
+    };
     pool = mysql.createPool(poolConfig);
   }
   return pool;

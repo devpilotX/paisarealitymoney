@@ -60,7 +60,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }, { ttlMinutes: 15 });
     return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    console.error('Petrol price API error:', error instanceof Error ? error.message : 'Unknown error');
+    return NextResponse.json(
+      { success: false, error: 'Price data is temporarily unavailable.' },
+      { status: 503 }
+    );
   }
 }

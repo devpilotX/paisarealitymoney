@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import AdBanner from '@/components/AdBanner';
+import PricingActions from '@/components/PricingActions';
 
 export const metadata: Metadata = {
   title: 'Pricing - Paisa Reality Premium',
@@ -52,7 +53,7 @@ export default function PricingPage(): React.ReactElement {
               <li key={f} className="flex items-start gap-2 text-sm"><span className="text-green-600 font-bold mt-0.5">\u2713</span>{f}</li>
             ))}
           </ul>
-          <Link href="/signup" className="btn-primary w-full no-underline text-center">Start Premium</Link>
+          <PricingActions />
           <p className="text-xs text-center text-gray-500 mt-2">Cancel anytime. 7-day money back guarantee.</p>
         </div>
       </div>

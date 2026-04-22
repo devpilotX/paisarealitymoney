@@ -22,9 +22,10 @@ export default function AdBanner({
   const adRef = useRef<HTMLModElement>(null);
   const isAdLoaded = useRef(false);
   const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
+  const adSlot = slot || process.env.NEXT_PUBLIC_ADSENSE_DEFAULT_SLOT || '';
 
   useEffect(() => {
-    if (isAdLoaded.current || !pubId) {
+    if (isAdLoaded.current || !pubId || !adSlot) {
       return;
     }
 
@@ -36,9 +37,9 @@ export default function AdBanner({
     } catch (error) {
       console.error('AdSense loading error:', error);
     }
-  }, [pubId]);
+  }, [pubId, adSlot]);
 
-  if (!pubId) {
+  if (!pubId || !adSlot) {
     return null;
   }
 
@@ -49,7 +50,7 @@ export default function AdBanner({
         className="adsbygoogle"
         style={{ display: 'block' }}
         data-ad-client={`ca-${pubId}`}
-        data-ad-slot={slot}
+        data-ad-slot={adSlot}
         data-ad-format={format}
         data-full-width-responsive="true"
       />

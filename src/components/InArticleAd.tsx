@@ -15,9 +15,12 @@ export default function InArticleAd({
 }): React.ReactElement | null {
   const isAdLoaded = useRef(false);
   const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
+  const adSlot = process.env.NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT
+    || process.env.NEXT_PUBLIC_ADSENSE_DEFAULT_SLOT
+    || '';
 
   useEffect(() => {
-    if (isAdLoaded.current || !pubId) {
+    if (isAdLoaded.current || !pubId || !adSlot) {
       return;
     }
 
@@ -29,9 +32,9 @@ export default function InArticleAd({
     } catch (error) {
       console.error('In-article ad loading error:', error);
     }
-  }, [pubId]);
+  }, [pubId, adSlot]);
 
-  if (!pubId) {
+  if (!pubId || !adSlot) {
     return null;
   }
 
@@ -43,7 +46,7 @@ export default function InArticleAd({
         data-ad-layout="in-article"
         data-ad-format="fluid"
         data-ad-client={`ca-${pubId}`}
-        data-ad-slot=""
+        data-ad-slot={adSlot}
       />
     </div>
   );

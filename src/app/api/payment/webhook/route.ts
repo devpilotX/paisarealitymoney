@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { execute } from '@/lib/db';
+import { verifyWebhookSignature } from '@/lib/razorpay';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const body = await request.json() as {
+    const signature = request.headers.get('x-razorpay-signature') ?? '';
+    const rawBody = await request.text();
+
+    if (!verifyWebhookSignature(rawBody, signature)) {
+      return NextResponse.json({ status: 'invalid_signature' }, { status: 400 });
+    }
+
+    const body = JSON.parse(rawBody) as {
       event?: string;
       payload?: {
         payment?: {
@@ -25,7 +33,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       const userId = payment.notes?.userId;
       const plan = payment.notes?.plan ?? 'monthly';
 
-      if (userId) {
+      if (userId && Number.isInteger(Number.parseInt(userId, 10))) {
         const expiresAt = new Date();
         if (plan === 'yearly') expiresAt.setFullYear(expiresAt.getFullYear() + 1);
         else expiresAt.setMonth(expiresAt.getMonth() + 1);

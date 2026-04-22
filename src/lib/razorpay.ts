@@ -1,3 +1,5 @@
+import { createHmac, timingSafeEqual } from 'crypto';
+
 interface RazorpayOrderOptions {
   amount: number;
   currency?: string;
@@ -64,14 +66,36 @@ export function verifySignature(orderId: string, paymentId: string, signature: s
   if (!config) return false;
 
   try {
-    const crypto = require('crypto') as typeof import('crypto');
-    const generated = crypto.createHmac('sha256', config.keySecret)
+    const generated = createHmac('sha256', config.keySecret)
       .update(`${orderId}|${paymentId}`)
       .digest('hex');
-    return generated === signature;
+    return safeCompare(generated, signature);
   } catch {
     return false;
   }
 }
 
-export default { createOrder, verifySignature };
+export function verifyWebhookSignature(body: string, signature: string): boolean {
+  const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+  if (!secret || !signature) return false;
+
+  try {
+    const generated = createHmac('sha256', secret).update(body).digest('hex');
+    return safeCompare(generated, signature);
+  } catch {
+    return false;
+  }
+}
+
+function safeCompare(expected: string, actual: string): boolean {
+  const expectedBuffer = Buffer.from(expected);
+  const actualBuffer = Buffer.from(actual);
+
+  if (expectedBuffer.length !== actualBuffer.length) {
+    return false;
+  }
+
+  return timingSafeEqual(expectedBuffer, actualBuffer);
+}
+
+export default { createOrder, verifySignature, verifyWebhookSignature };

@@ -9,6 +9,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json() as { plan?: string };
     const plan = body.plan ?? 'monthly';
+    if (plan !== 'monthly' && plan !== 'yearly') {
+      return NextResponse.json({ success: false, error: 'Invalid plan selected.' }, { status: 400 });
+    }
+
     const amount = plan === 'yearly' ? 999 : 99;
 
     const order = await createOrder({
