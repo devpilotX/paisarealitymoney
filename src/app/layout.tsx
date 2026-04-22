@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import CookieConsent from '@/components/CookieConsent';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import AdSenseScript from '@/components/AdSenseScript';
+import Script from 'next/script'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -100,6 +101,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} data-scroll-behavior="smooth">
       <body className="font-sans bg-white text-gray-900 antialiased flex flex-col min-h-screen">
+        <Script id="sw-killswitch" strategy="beforeInteractive">
+  {`if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));if(window.caches){caches.keys().then(k=>k.forEach(n=>caches.delete(n)))}}`}
+</Script>
         <GoogleAnalytics />
         <AdSenseScript />
         <Header />
