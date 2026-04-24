@@ -77,6 +77,7 @@ export default function SchemeCard({
 
       <Link
         href={`/schemes/${slug}`}
+        title={`${name} - Eligibility, Benefits and Apply Online`}
         className="inline-flex items-center text-sm font-medium text-primary no-underline
                    hover:underline transition-colors duration-200"
       >

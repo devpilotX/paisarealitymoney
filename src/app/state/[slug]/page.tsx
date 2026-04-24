@@ -34,6 +34,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `Government Schemes in ${stateName} - Complete List`,
     description: `Find all central and state government schemes available in ${stateName}. Check eligibility, benefits, and how to apply.`,
     alternates: { canonical: `https://paisareality.com/state/${slug}` },
+    keywords: [
+      `${stateName} government schemes`,
+      `${stateName} yojana list`,
+      `schemes in ${stateName}`,
+      'government schemes india',
+    ],
   };
 }
 

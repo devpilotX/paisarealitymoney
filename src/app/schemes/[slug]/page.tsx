@@ -25,7 +25,7 @@ interface SchemeDetailRow extends RowDataPacket {
   bpl_required: boolean; minority_only: boolean; disability_only: boolean;
   how_to_apply: string | null; documents_required: string | null;
   meta_title: string | null; meta_description: string | null;
-  source_url: string | null; last_verified: string | null;
+  source_url: string | null; last_verified: string | null; updated_at: string | null;
 }
 
 interface RelatedSchemeRow extends RowDataPacket {
@@ -38,24 +38,117 @@ function parseJsonArray(str: string | null): string[] {
   catch { return []; }
 }
 
+function titleCase(value: string): string {
+  return value
+    .split(/[-\s]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function buildEligibilitySummary(scheme: SchemeDetailRow): string {
+  const parts: string[] = [];
+  if (scheme.min_age !== null) {
+    parts.push(
+      scheme.max_age !== null
+        ? `Age ${scheme.min_age} to ${scheme.max_age} years`
+        : `Minimum age ${scheme.min_age} years`
+    );
+  }
+  if (scheme.gender !== 'all') {
+    parts.push(`Gender: ${titleCase(scheme.gender)}`);
+  }
+  if (scheme.max_income !== null) {
+    parts.push(`Family income up to Rs ${formatNumber(scheme.max_income)} per year`);
+  }
+  if (scheme.bpl_required) {
+    parts.push('BPL family required');
+  }
+  if (scheme.minority_only) {
+    parts.push('Minority applicants only');
+  }
+  if (scheme.disability_only) {
+    parts.push('For persons with disability');
+  }
+  return parts.length > 0 ? `${parts.join('. ')}.` : 'Eligibility depends on the official scheme guidelines.';
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   try {
     const rows = await query<SchemeDetailRow[]>(
-      'SELECT meta_title, meta_description, name, benefit_summary, slug FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1',
+      `SELECT slug, name, name_hi, category, benefit_summary, meta_title, meta_description
+       FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1`,
       [slug]
     );
     const scheme = rows[0];
     if (!scheme) return { title: 'Scheme Not Found' };
+    const url = `https://paisareality.com/schemes/${scheme.slug}`;
+    const title = scheme.meta_title || `${scheme.name} - Eligibility, Benefits & Apply Online 2026`;
+    const description = scheme.meta_description || `${scheme.benefit_summary}. Check eligibility, documents required, and how to apply for ${scheme.name}.`;
+    const keywords = [
+      scheme.name,
+      scheme.name_hi,
+      `${scheme.name} eligibility`,
+      `${scheme.name} apply online`,
+      `${scheme.name} status check`,
+      `${scheme.name} 2026`,
+      `${scheme.category} government scheme`,
+      'government schemes india',
+    ].filter((value): value is string => Boolean(value));
     return {
-      title: scheme.meta_title || `${scheme.name} - Eligibility, Benefits, How to Apply`,
-      description: scheme.meta_description || scheme.benefit_summary,
-      alternates: { canonical: `https://paisareality.com/schemes/${scheme.slug}` },
+      title,
+      description,
+      keywords,
+      alternates: { canonical: url },
+      openGraph: {
+        type: 'article',
+        title,
+        description,
+        url,
+        siteName: 'Paisa Reality',
+        locale: 'en_IN',
+        images: [
+          {
+            url: 'https://paisareality.com/paisa_reality_logo.png',
+            width: 512,
+            height: 512,
+            alt: scheme.name,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: ['https://paisareality.com/paisa_reality_logo.png'],
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
+      },
     };
   } catch { return { title: 'Government Scheme' }; }
 }
 
 export const revalidate = 3600;
+
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+  try {
+    const rows = await query<(RowDataPacket & { slug: string })[]>(
+      'SELECT slug FROM schemes WHERE is_active = TRUE ORDER BY slug'
+    );
+    return rows.map((row) => ({ slug: row.slug }));
+  } catch {
+    return [];
+  }
+}
 
 export default async function SchemeDetailPage({ params }: PageProps): Promise<React.ReactElement> {
   const { slug } = await params;
@@ -101,11 +194,86 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
   ];
 
   const relatedLinks = relatedSchemes.map((s) => ({
-    href: `/schemes/${s.slug}`, label: s.name, description: s.benefit_summary.substring(0, 80),
+    href: `/schemes/${s.slug}`, label: s.name, description: s.benefit_summary.substring(0, 120),
   }));
+
+  const pageUrl = `https://paisareality.com/schemes/${scheme.slug}`;
+  const schemeSchema = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'GovernmentService',
+      name: scheme.name,
+      alternateName: scheme.name_hi ?? undefined,
+      description: scheme.description,
+      provider: {
+        '@type': 'GovernmentOrganization',
+        name: scheme.ministry || 'Government of India',
+        url: scheme.official_url || 'https://paisareality.com/schemes',
+      },
+      audience: {
+        '@type': 'PeopleAudience',
+        geographicArea: { '@type': 'Country', name: 'India' },
+      },
+      serviceType: scheme.category,
+      url: pageUrl,
+      areaServed: states.length === 0 || states.includes('all') ? 'India' : states.join(', '),
+      availableChannel: scheme.apply_url
+        ? {
+            '@type': 'ServiceChannel',
+            serviceUrl: scheme.apply_url,
+            name: 'Online Application Portal',
+          }
+        : undefined,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://paisareality.com' },
+        { '@type': 'ListItem', position: 2, name: 'Schemes', item: 'https://paisareality.com/schemes' },
+        { '@type': 'ListItem', position: 3, name: scheme.name, item: pageUrl },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: `What is ${scheme.name}?`,
+          acceptedAnswer: { '@type': 'Answer', text: scheme.description },
+        },
+        {
+          '@type': 'Question',
+          name: `Who is eligible for ${scheme.name}?`,
+          acceptedAnswer: { '@type': 'Answer', text: buildEligibilitySummary(scheme) },
+        },
+        {
+          '@type': 'Question',
+          name: `How to apply for ${scheme.name}?`,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: scheme.how_to_apply || `Visit ${scheme.apply_url || scheme.official_url || pageUrl} and follow the official application process.`,
+          },
+        },
+        {
+          '@type': 'Question',
+          name: `What documents are required for ${scheme.name}?`,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: documents.length > 0 ? documents.join(', ') : 'Refer to the official scheme portal for the latest document list.',
+          },
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="container-main py-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemeSchema) }}
+      />
       <Breadcrumb items={[
         { label: 'Schemes', href: '/schemes' },
         { label: scheme.category.charAt(0).toUpperCase() + scheme.category.slice(1), href: `/category/${scheme.category}` },
@@ -198,10 +366,15 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
               </a>
             )}
           </div>
-          {scheme.last_verified && (
-            <p className="text-xs text-gray-500 mt-3">Last verified: {formatDate(scheme.last_verified)}</p>
-          )}
-        </section>
+        {scheme.last_verified && (
+          <p className="text-xs text-gray-500 mt-3">Last verified: {formatDate(scheme.last_verified)}</p>
+        )}
+        {scheme.source_url && (
+          <p className="text-xs text-gray-500 mt-2">
+            Source: <a href={scheme.source_url} target="_blank" rel="noopener noreferrer" className="link-internal">Official reference</a>
+          </p>
+        )}
+      </section>
 
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 my-6">
           <p className="text-sm text-yellow-800">

@@ -19,6 +19,17 @@ const SCHEME_FAQS = [
   { question: 'How many schemes are in your database?', answer: 'We currently have 100+ central government schemes in our database, covering education, housing, business, agriculture, healthcare, women, senior citizens, skill training, and more. We keep adding new schemes and updating existing ones regularly.' },
 ];
 
+const POPULAR_SCHEME_LINKS = [
+  { href: '/schemes/pm-kisan', label: 'PM Kisan Samman Nidhi', description: 'Rs 6,000 per year support for landholding farmers.' },
+  { href: '/schemes/ayushman-bharat', label: 'Ayushman Bharat', description: 'Health cover up to Rs 5 lakh per family for eligible households.' },
+  { href: '/schemes/sukanya-samriddhi', label: 'Sukanya Samriddhi Yojana', description: 'High-interest savings scheme for the girl child.' },
+  { href: '/schemes/pm-awas-yojana', label: 'PM Awas Yojana', description: 'Housing support and subsidy for eligible beneficiaries.' },
+  { href: '/schemes/mudra-loan', label: 'MUDRA Loan', description: 'Business loans for micro and small enterprises.' },
+  { href: '/schemes/atal-pension', label: 'Atal Pension Yojana', description: 'Guaranteed monthly pension after age 60.' },
+  { href: '/schemes/pmuy', label: 'PM Ujjwala Yojana', description: 'Free LPG connection support for eligible women.' },
+  { href: '/schemes/national-scholarship-portal', label: 'National Scholarship Portal', description: 'Apply for central and state student scholarships.' },
+];
+
 export default function SchemesPage(): React.ReactElement {
   const [schemes, setSchemes] = useState<MatchedScheme[]>([]);
   const [totalBenefit, setTotalBenefit] = useState<number>(0);
@@ -77,6 +88,8 @@ export default function SchemesPage(): React.ReactElement {
 
       {/* Browse by Category */}
       <InternalLinks title="Browse Schemes by Category" links={categoryLinks} columns={3} />
+
+      <InternalLinks title="Popular Scheme Pages" links={POPULAR_SCHEME_LINKS} columns={2} />
 
       {/* Content */}
       <article className="max-w-3xl my-8">

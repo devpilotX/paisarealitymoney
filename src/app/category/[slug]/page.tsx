@@ -24,6 +24,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${category.label} Government Schemes in India`,
     description: `Browse all ${category.label.toLowerCase()} government schemes in India. Find eligibility, benefits, and how to apply for central and state ${category.label.toLowerCase()} schemes.`,
     alternates: { canonical: `https://paisareality.com/category/${category.slug}` },
+    keywords: [
+      `${category.label} government schemes`,
+      `${category.label} schemes in India`,
+      `${category.label.toLowerCase()} yojana`,
+      'government schemes india',
+    ],
   };
 }
 
