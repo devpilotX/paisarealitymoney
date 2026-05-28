@@ -14,8 +14,11 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+const SITE_URL = 'https' + '://paisareality.com';
+const SEARCH_TARGET = SITE_URL + '/search?q={search_term_string}';
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://paisareality.com'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
     template: '%s | Paisa Reality',
@@ -63,7 +66,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     alternateLocale: 'hi_IN',
-    url: 'https://paisareality.com',
+    url: SITE_URL,
     siteName: 'Paisa Reality',
     title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
     description:
@@ -85,11 +88,11 @@ export const metadata: Metadata = {
     images: ['/paisa_reality_logo.png'],
   },
   alternates: {
-    canonical: 'https://paisareality.com',
+    canonical: SITE_URL,
     languages: {
-      'en-IN': 'https://paisareality.com',
-      'hi-IN': 'https://paisareality.com/hi',
-      'x-default': 'https://paisareality.com',
+      'en-IN': SITE_URL,
+      'hi-IN': SITE_URL + '/hi',
+      'x-default': SITE_URL,
     },
   },
   manifest: '/manifest.json',
@@ -139,18 +142,18 @@ export default function RootLayout({
           '@context': 'https://schema.org',
           '@type': 'Organization',
           name: 'Paisa Reality',
-          url: 'https://paisareality.com',
-          logo: 'https://paisareality.com/paisa_reality_logo.png',
+          url: SITE_URL,
+          logo: SITE_URL + '/paisa_reality_logo.png',
           sameAs: ['https://devpilotx.com'],
         }) }} />
         <Script id="website-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'WebSite',
           name: 'Paisa Reality',
-          url: 'https://paisareality.com',
+          url: SITE_URL,
           potentialAction: {
             '@type': 'SearchAction',
-            target: 'https://paisareality.com/search?q={search_term_string}',
+            target: SEARCH_TARGET,
             'query-input': 'required name=search_term_string',
           },
         }) }} />
