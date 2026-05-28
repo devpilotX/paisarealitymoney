@@ -128,6 +128,11 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <CookieConsent />
+        <Script
+          src="https://api.devpilotx.com/widget.js"
+          data-assistant="yojana-mitra"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
