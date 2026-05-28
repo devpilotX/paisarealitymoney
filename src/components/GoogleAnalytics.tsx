@@ -2,7 +2,7 @@
 
 import Script from 'next/script';
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID ?? '';
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-MT7980F7JH';
 
 export default function GoogleAnalytics(): React.ReactElement | null {
   if (!GA_MEASUREMENT_ID) {

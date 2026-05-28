@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    google: 'UKt2p3p1YlGr_1Tk84QZ8UGMaIGeiPMArUEJqGCD0lU',
   },
   robots: {
     index: true,
@@ -113,6 +113,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} data-scroll-behavior="smooth">
       <head>
+        <meta name="google-site-verification" content="UKt2p3p1YlGr_1Tk84QZ8UGMaIGeiPMArUEJqGCD0lU" />
+        <meta name="google-adsense-account" content="ca-pub-6484525483464374" />
         <meta name="geo.region" content="IN" />
         <meta name="geo.country" content="India" />
         <meta name="language" content="English,Hindi" />
