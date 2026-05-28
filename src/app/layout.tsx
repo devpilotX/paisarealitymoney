@@ -133,6 +133,26 @@ export default function RootLayout({
           data-assistant="yojana-mitra"
           strategy="afterInteractive"
         />
+        <Script id="organization-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: 'Paisa Reality',
+          url: 'https://paisareality.com',
+          logo: 'https://paisareality.com/paisa_reality_logo.png',
+          sameAs: ['https://devpilotx.com'],
+        }) }} />
+        <Script id="website-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'Paisa Reality',
+          url: 'https://paisareality.com',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: 'https://paisareality.com/search?q={search_term_string}',
+            'query-input': 'required name=search_term_string',
+          },
+        }) }} />
+        <Script src="https://api.devpilotx.com/v2/widget.js" strategy="afterInteractive" />
       </body>
     </html>
   );

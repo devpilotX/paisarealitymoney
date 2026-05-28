@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import AdBanner from '@/components/AdBanner';
+import ContactForm from '@/components/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact Paisa Reality - Get in Touch',
@@ -44,6 +45,11 @@ export default function ContactPage(): React.ReactElement {
           <p className="text-body mb-6">
             We would love to hear from you. Whether you have a question about the website, found an error in our data, or want to suggest a new feature, please reach out to us.
           </p>
+
+          <div className="card mb-8">
+            <h2 className="heading-3 mb-4">Send us a message</h2>
+            <ContactForm />
+          </div>
 
           <div className="card mb-8">
             <h2 className="heading-3 mb-4">How to Reach Us</h2>
