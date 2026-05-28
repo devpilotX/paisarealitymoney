@@ -2,17 +2,13 @@
 
 import Script from 'next/script';
 
-const ADSENSE_PUB_ID = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
+const ADSENSE_CLIENT = 'ca-pub-6484525483464374';
 
 export default function AdSenseScript(): React.ReactElement | null {
-  if (!ADSENSE_PUB_ID) {
-    return null;
-  }
-
   return (
     <Script
       async
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${ADSENSE_PUB_ID}`}
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
       crossOrigin="anonymous"
       strategy="lazyOnload"
     />
