@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcSelect, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -36,9 +36,10 @@ export default function FDCalculatorPage(): React.ReactElement {
     const maturity = P * Math.pow(1 + r / n, n * t);
     const interest = maturity - P;
 
-    trackCalculatorUse('fd');
     return { maturity, interest };
   }, [principal, interestRate, tenure, compounding]);
+
+  useEffect(() => { trackCalculatorUse('fd'); }, []);
 
   const calcLinks = [
     { href: '/calculators/ppf', label: 'PPF Calculator' },

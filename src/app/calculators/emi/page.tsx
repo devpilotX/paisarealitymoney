@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -48,9 +48,10 @@ export default function EMICalculatorPage(): React.ReactElement {
       schedule.push({ year, principal: yearPrincipal, interest: yearInterest, balance: Math.max(0, balance) });
     }
 
-    trackCalculatorUse('emi');
     return { emi, totalInterest, totalPayment, schedule };
   }, [loanAmount, interestRate, tenure]);
+
+  useEffect(() => { trackCalculatorUse('emi'); }, []);
 
   const calcLinks = [
     { href: '/calculators/home-loan', label: 'Home Loan Calculator' },

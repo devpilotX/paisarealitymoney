@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -33,9 +33,10 @@ export default function SIPCalculatorPage(): React.ReactElement {
     const totalInvested = P * n;
     const totalReturns = futureValue - totalInvested;
 
-    trackCalculatorUse('sip');
     return { futureValue, totalInvested, totalReturns };
   }, [monthlyInvestment, expectedReturn, timePeriod]);
+
+  useEffect(() => { trackCalculatorUse('sip'); }, []);
 
   const calcLinks = [
     { href: '/calculators/fd', label: 'FD Calculator' },

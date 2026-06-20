@@ -1,5 +1,3 @@
-// forcing cache clear on every load to ensure latest code is used, remove in production
-export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';

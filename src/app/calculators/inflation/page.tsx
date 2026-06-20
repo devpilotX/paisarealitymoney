@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -28,7 +28,6 @@ export default function InflationCalculatorPage(): React.ReactElement {
     const totalIncrease = futureCost - currentCost;
     const percentIncrease = ((futureCost / currentCost) - 1) * 100;
 
-    trackCalculatorUse('inflation');
     return {
       futureCost: Math.round(futureCost),
       purchasingPower: Math.round(purchasingPower),
@@ -36,6 +35,8 @@ export default function InflationCalculatorPage(): React.ReactElement {
       percentIncrease: Math.round(percentIncrease),
     };
   }, [currentCost, inflationRate, years]);
+
+  useEffect(() => { trackCalculatorUse('inflation'); }, []);
 
   const calcLinks = [
     { href: '/calculators/sip', label: 'SIP Calculator' },

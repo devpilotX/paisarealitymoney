@@ -37,8 +37,8 @@ export function getPool(): Pool {
     const poolConfig: PoolOptions = {
       ...getDatabaseConfig(),
       waitForConnections: true,
-      connectionLimit: 3,
-      maxIdle: 2,
+      connectionLimit: 10,
+      maxIdle: 5,
       idleTimeout: 60000,
       queueLimit: 0,
       enableKeepAlive: true,

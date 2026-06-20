@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -36,9 +36,10 @@ export default function NPSCalculatorPage(): React.ReactElement {
     const annuityCorpus = corpus * 0.4;
     const monthlyPension = (annuityCorpus * annuityRate / 100) / 12;
 
-    trackCalculatorUse('nps');
     return { corpus: Math.round(corpus), lumpSum: Math.round(lumpSum), annuityCorpus: Math.round(annuityCorpus), monthlyPension: Math.round(monthlyPension), totalInvested };
   }, [currentAge, monthlyContribution, expectedReturn, annuityRate]);
+
+  useEffect(() => { trackCalculatorUse('nps'); }, []);
 
   const calcLinks = [
     { href: '/calculators/ppf', label: 'PPF Calculator' },

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 interface CalcCard { title: string; description: string; href: string; icon: string; }
 
 const CALCULATORS: CalcCard[] = [
+  { title: 'Salary Structure Optimizer', description: 'Find the optimal CTC breakup to minimize your income tax. Tests all valid combinations across old and new regime.', href: '/calculators/salary-optimizer', icon: '\ud83d\udcbc' },
   { title: 'EMI Calculator', description: 'Calculate your monthly EMI for home loan, car loan, or personal loan. See total interest and amortization schedule.', href: '/calculators/emi', icon: '\ud83c\udfe0' },
   { title: 'SIP Calculator', description: 'Calculate returns on your monthly SIP investment in mutual funds. See how your money grows over time.', href: '/calculators/sip', icon: '\ud83d\udcc8' },
   { title: 'FD Calculator', description: 'Calculate maturity amount for your Fixed Deposit. Compare simple and compound interest.', href: '/calculators/fd', icon: '\ud83c\udfe6' },

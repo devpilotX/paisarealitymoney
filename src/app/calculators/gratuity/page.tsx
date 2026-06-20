@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcSelect, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -30,9 +30,10 @@ export default function GratuityCalculatorPage(): React.ReactElement {
     const taxExempt = Math.min(gratuity, 2000000);
     const taxable = Math.max(0, gratuity - 2000000);
 
-    trackCalculatorUse('gratuity');
     return { gratuity: Math.round(gratuity), taxExempt: Math.round(taxExempt), taxable: Math.round(taxable) };
   }, [monthlySalary, yearsOfService, employeeType]);
+
+  useEffect(() => { trackCalculatorUse('gratuity'); }, []);
 
   const calcLinks = [
     { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
