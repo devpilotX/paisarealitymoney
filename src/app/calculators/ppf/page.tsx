@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -39,9 +39,10 @@ export default function PPFCalculatorPage(): React.ReactElement {
       schedule.push({ year, deposit: totalDeposit, interest: Math.round(interest), balance: Math.round(balance) });
     }
 
-    trackCalculatorUse('ppf');
     return { maturityAmount: Math.round(balance), totalDeposit, totalInterest: Math.round(totalInterest), schedule };
   }, [yearlyDeposit]);
+
+  useEffect(() => { trackCalculatorUse('ppf'); }, []);
 
   const calcLinks = [
     { href: '/calculators/fd', label: 'FD Calculator' },

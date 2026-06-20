@@ -19,6 +19,7 @@ export const NAV_LINKS = [
 ] as const;
 
 export const CALCULATOR_LINKS = [
+  { href: '/calculators/salary-optimizer', label: 'Salary Optimizer', labelHi: 'सैलरी ऑप्टिमाइज़र' },
   { href: '/calculators/emi', label: 'EMI Calculator', labelHi: 'EMI कैलकुलेटर' },
   { href: '/calculators/sip', label: 'SIP Calculator', labelHi: 'SIP कैलकुलेटर' },
   { href: '/calculators/fd', label: 'FD Calculator', labelHi: 'FD कैलकुलेटर' },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcSelect, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -37,12 +37,13 @@ export default function HRACalculatorPage(): React.ReactElement {
     const hraExemption = Math.min(exemption1, exemption2, exemption3);
     const taxableHRA = annualHRA - hraExemption;
 
-    trackCalculatorUse('hra');
     return {
       annualHRA, hraExemption: Math.round(hraExemption), taxableHRA: Math.round(taxableHRA),
       exemption1: Math.round(exemption1), exemption2: Math.round(exemption2), exemption3: Math.round(exemption3),
     };
   }, [basicSalary, da, hraReceived, rentPaid, city]);
+
+  useEffect(() => { trackCalculatorUse('hra'); }, []);
 
   const calcLinks = [
     { href: '/calculators/income-tax', label: 'Income Tax Calculator' },

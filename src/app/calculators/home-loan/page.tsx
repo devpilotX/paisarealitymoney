@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcResult } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -39,9 +39,10 @@ export default function HomeLoanCalculatorPage(): React.ReactElement {
     const emiToIncomeRatio = (emi / monthlyIncome) * 100;
     const affordable = emiToIncomeRatio <= 50;
 
-    trackCalculatorUse('home-loan');
     return { emi, loanAmount, dpAmount, totalInterest, totalCost, affordable, emiToIncomeRatio };
   }, [propertyValue, downPayment, interestRate, tenure, monthlyIncome]);
+
+  useEffect(() => { trackCalculatorUse('home-loan'); }, []);
 
   const calcLinks = [
     { href: '/calculators/emi', label: 'EMI Calculator' },

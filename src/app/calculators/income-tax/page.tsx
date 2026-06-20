@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Calculator, { CalcSlider, CalcSelect } from '@/components/Calculator';
 import FAQ from '@/components/FAQ';
@@ -90,15 +90,16 @@ export default function IncomeTaxCalculatorPage(): React.ReactElement {
     const newTax = calcNewRegimeTax(grossIncome);
     const oldTax = calcOldRegimeTax(grossIncome, deductions80C, deductions80D, hra, otherDeductions, ageGroup);
     const savings = oldTax - newTax;
-    trackCalculatorUse('income-tax');
     return { newTax, oldTax, savings, betterRegime: newTax <= oldTax ? 'New Regime' : 'Old Regime' };
   }, [grossIncome, ageGroup, deductions80C, deductions80D, hra, otherDeductions]);
 
+  useEffect(() => { trackCalculatorUse('income-tax'); }, []);
+
   const calcLinks = [
+    { href: '/calculators/salary-optimizer', label: 'Salary Structure Optimizer' },
     { href: '/calculators/hra', label: 'HRA Calculator' },
     { href: '/calculators/ppf', label: 'PPF Calculator' },
     { href: '/calculators/nps', label: 'NPS Calculator' },
-    { href: '/calculators/emi', label: 'EMI Calculator' },
   ];
 
   return (
