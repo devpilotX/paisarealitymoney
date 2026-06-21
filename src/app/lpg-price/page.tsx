@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { formatINR, formatDate } from '@/lib/constants';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://paisareality.com/lpg-price' },
 };
 
-interface LpgRow extends RowDataPacket {
+interface LpgRow extends QueryResultRow {
   state: string; domestic_14kg: number; commercial_19kg: number;
   subsidy_amount: number; change_amount: number; price_date: string;
 }
@@ -33,8 +34,7 @@ export default async function LpgPricePage(): Promise<React.ReactElement> {
   let prices: LpgRow[] = [];
   let priceDate = '';
   try {
-    prices = await query<LpgRow[]>(
-      `SELECT state, domestic_14kg, commercial_19kg, subsidy_amount, change_amount, price_date
+    prices = await query<LpgRow>(`SELECT state, domestic_14kg, commercial_19kg, subsidy_amount, change_amount, price_date
        FROM lpg_prices
        WHERE price_date = (SELECT MAX(price_date) FROM lpg_prices)
        ORDER BY state`

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { formatNumber } from '@/lib/constants';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
@@ -9,7 +10,7 @@ import ShareButton from '@/components/ShareButton';
 
 interface PageProps { params: Promise<{ slug: string }>; }
 
-interface SchemeRow extends RowDataPacket {
+interface SchemeRow extends QueryResultRow {
   slug: string; name: string; name_hi: string | null; category: string;
   ministry: string | null; description: string; description_hi: string | null;
   benefit_summary: string; benefit_amount_max: number | null;
@@ -20,7 +21,7 @@ interface SchemeRow extends RowDataPacket {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const rows = await query<SchemeRow[]>('SELECT name, name_hi, benefit_summary, slug FROM schemes WHERE slug = ? LIMIT 1', [slug]);
+    const rows = await query<SchemeRow>('SELECT name, name_hi, benefit_summary, slug FROM schemes WHERE slug = $1 LIMIT 1', [slug]);
     const s = rows[0];
     if (!s) return { title: 'योजना नहीं मिली' };
     return {
@@ -37,7 +38,7 @@ export default async function HindiSchemeDetailPage({ params }: PageProps): Prom
   const { slug } = await params;
   let scheme: SchemeRow | undefined;
   try {
-    const rows = await query<SchemeRow[]>('SELECT * FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1', [slug]);
+    const rows = await query<SchemeRow>('SELECT * FROM schemes WHERE slug = $1 AND is_active = TRUE LIMIT 1', [slug]);
     scheme = rows[0];
   } catch (error) { console.error('Hindi scheme error:', error); }
   if (!scheme) notFound();

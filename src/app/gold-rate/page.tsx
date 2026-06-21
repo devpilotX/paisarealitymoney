@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://paisareality.com/gold-rate' },
 };
 
-interface GoldRow extends RowDataPacket {
+interface GoldRow extends QueryResultRow {
   city_name: string;
   city_slug: string;
   state: string;
@@ -57,8 +58,7 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
   let priceDate = '';
 
   try {
-    prices = await query<GoldRow[]>(
-      `SELECT c.name AS city_name, c.slug AS city_slug, c.state,
+    prices = await query<GoldRow>(`SELECT c.name AS city_name, c.slug AS city_slug, c.state,
               gp.gold_24k_per_gram, gp.gold_22k_per_gram, gp.gold_24k_per_10gram,
               gp.change_amount, gp.change_percent, gp.price_date
        FROM gold_prices gp

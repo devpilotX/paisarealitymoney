@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { getCityBySlug, getRelatedCities, CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
 import PriceCard from '@/components/PriceCard';
@@ -20,7 +21,7 @@ interface PageProps {
   params: Promise<{ city: string }>;
 }
 
-interface GoldHistoryRow extends RowDataPacket {
+interface GoldHistoryRow extends QueryResultRow {
   price_date: string;
   gold_24k_per_gram: number;
   gold_22k_per_gram: number;
@@ -55,12 +56,11 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
 
   let historyRows: GoldHistoryRow[] = [];
   try {
-    historyRows = await query<GoldHistoryRow[]>(
-      `SELECT gp.price_date, gp.gold_24k_per_gram, gp.gold_22k_per_gram, gp.gold_18k_per_gram,
+    historyRows = await query<GoldHistoryRow>(`SELECT gp.price_date, gp.gold_24k_per_gram, gp.gold_22k_per_gram, gp.gold_18k_per_gram,
               gp.gold_24k_per_10gram, gp.gold_22k_per_10gram, gp.change_amount, gp.change_percent
        FROM gold_prices gp
        JOIN cities c ON gp.city_id = c.id
-       WHERE c.slug = ?
+       WHERE c.slug = $1
        ORDER BY gp.price_date DESC
        LIMIT 30`,
       [city.slug]

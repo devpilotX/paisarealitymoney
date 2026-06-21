@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { getCityBySlug, getRelatedCities, CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
 import PriceCard from '@/components/PriceCard';
@@ -18,7 +19,7 @@ import InArticleAd from '@/components/InArticleAd';
 
 interface PageProps { params: Promise<{ city: string }>; }
 
-interface FuelHistoryRow extends RowDataPacket {
+interface FuelHistoryRow extends QueryResultRow {
   price_date: string; petrol_price: number; diesel_price: number;
   petrol_change: number; diesel_change: number;
 }
@@ -47,10 +48,9 @@ export default async function DieselPriceCityPage({ params }: PageProps): Promis
 
   let historyRows: FuelHistoryRow[] = [];
   try {
-    historyRows = await query<FuelHistoryRow[]>(
-      `SELECT fp.price_date, fp.petrol_price, fp.diesel_price, fp.petrol_change, fp.diesel_change
+    historyRows = await query<FuelHistoryRow>(`SELECT fp.price_date, fp.petrol_price, fp.diesel_price, fp.petrol_change, fp.diesel_change
        FROM fuel_prices fp JOIN cities c ON fp.city_id = c.id
-       WHERE c.slug = ? ORDER BY fp.price_date DESC LIMIT 30`, [city.slug]
+       WHERE c.slug = $1 ORDER BY fp.price_date DESC LIMIT 30`, [city.slug]
     );
   } catch (error) { console.error('Failed to fetch fuel history:', error); }
 

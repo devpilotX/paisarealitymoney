@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://paisareality.com/silver-rate' },
 };
 
-interface SilverRow extends RowDataPacket {
+interface SilverRow extends QueryResultRow {
   city_name: string; city_slug: string; state: string;
   silver_per_gram: number; silver_per_kg: number;
   change_amount: number; change_percent: number; price_date: string;
@@ -36,8 +37,7 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
   let prices: SilverRow[] = [];
   let priceDate = '';
   try {
-    prices = await query<SilverRow[]>(
-      `SELECT c.name AS city_name, c.slug AS city_slug, c.state,
+    prices = await query<SilverRow>(`SELECT c.name AS city_name, c.slug AS city_slug, c.state,
               sp.silver_per_gram, sp.silver_per_kg, sp.change_amount, sp.change_percent, sp.price_date
        FROM silver_prices sp JOIN cities c ON sp.city_id = c.id
        WHERE sp.price_date = (SELECT MAX(price_date) FROM silver_prices)

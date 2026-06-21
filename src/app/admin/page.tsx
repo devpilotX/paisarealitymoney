@@ -312,7 +312,7 @@ export default function AdminPage(): React.ReactElement {
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-gray-500">Database</p>
-                  <p className="font-medium">MySQL + PostgreSQL</p>
+                  <p className="font-medium">PostgreSQL</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-gray-500">Smart Tools</p>

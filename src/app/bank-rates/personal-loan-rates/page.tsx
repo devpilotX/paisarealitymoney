@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import Breadcrumb from '@/components/Breadcrumb';
 import BankRateTable from '@/components/BankRateTable';
 import InternalLinks from '@/components/InternalLinks';
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://paisareality.com/bank-rates/personal-loan-rates' },
 };
 
-interface LoanRateRow extends RowDataPacket {
+interface LoanRateRow extends QueryResultRow {
   bank_name: string; bank_slug: string; bank_type: string;
   tenure: string | null; general_rate: number; senior_citizen_rate: number | null;
 }
@@ -23,8 +24,7 @@ export const revalidate = 3600;
 export default async function PersonalLoanRatesPage(): Promise<React.ReactElement> {
   let rates: LoanRateRow[] = [];
   try {
-    rates = await query<LoanRateRow[]>(
-      `SELECT b.name as bank_name, b.slug as bank_slug, b.type as bank_type,
+    rates = await query<LoanRateRow>(`SELECT b.name as bank_name, b.slug as bank_slug, b.type as bank_type,
               br.tenure, br.general_rate, br.senior_citizen_rate
        FROM bank_rates br JOIN banks b ON br.bank_id = b.id
        WHERE br.rate_type = 'personal_loan'

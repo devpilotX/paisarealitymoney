@@ -13,17 +13,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const body = JSON.parse(rawBody) as {
       event?: string;
-      payload?: {
-        payment?: {
-          entity?: {
-            id?: string;
-            order_id?: string;
-            amount?: number;
-            status?: string;
-            notes?: { userId?: string; plan?: string };
-          };
-        };
-      };
+      payload?: { payment?: { entity?: { id?: string; order_id?: string; amount?: number; status?: string; notes?: { userId?: string; plan?: string } } } };
     };
 
     if (body.event === 'payment.captured') {
@@ -39,8 +29,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         else expiresAt.setMonth(expiresAt.getMonth() + 1);
 
         await execute(
-          'UPDATE users SET plan = ?, plan_expires_at = ?, razorpay_customer_id = ? WHERE id = ?',
-          ['premium', expiresAt, payment.id ?? '', parseInt(userId, 10)]
+          'UPDATE users SET plan = $1, plan_expires_at = $2, razorpay_customer_id = $3 WHERE id = $4',
+          ['premium', expiresAt.toISOString(), payment.id ?? '', parseInt(userId, 10)]
         );
       }
     }

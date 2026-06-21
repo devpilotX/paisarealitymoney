@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import Breadcrumb from '@/components/Breadcrumb';
 import BankRateTable from '@/components/BankRateTable';
 import FAQ from '@/components/FAQ';
@@ -12,11 +13,11 @@ import InArticleAd from '@/components/InArticleAd';
 
 interface PageProps { params: Promise<{ bank: string }>; }
 
-interface BankRow extends RowDataPacket {
+interface BankRow extends QueryResultRow {
   id: number; slug: string; name: string; type: string; website: string | null;
 }
 
-interface RateRow extends RowDataPacket {
+interface RateRow extends QueryResultRow {
   rate_type: string; tenure: string | null; general_rate: number;
   senior_citizen_rate: number | null; effective_date: string | null;
 }
@@ -24,7 +25,7 @@ interface RateRow extends RowDataPacket {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { bank: bankSlug } = await params;
   try {
-    const rows = await query<BankRow[]>('SELECT name, slug FROM banks WHERE slug = ? LIMIT 1', [bankSlug]);
+    const rows = await query<BankRow>('SELECT name, slug FROM banks WHERE slug = $1 LIMIT 1', [bankSlug]);
     const bank = rows[0];
     if (!bank) return { title: 'Bank Not Found' };
     return {
@@ -43,11 +44,10 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
   let rates: RateRow[] = [];
 
   try {
-    const bankRows = await query<BankRow[]>('SELECT * FROM banks WHERE slug = ? LIMIT 1', [bankSlug]);
+    const bankRows = await query<BankRow>('SELECT * FROM banks WHERE slug = $1 LIMIT 1', [bankSlug]);
     bank = bankRows[0];
     if (bank) {
-      rates = await query<RateRow[]>(
-        'SELECT rate_type, tenure, general_rate, senior_citizen_rate, effective_date FROM bank_rates WHERE bank_id = ? ORDER BY rate_type, general_rate DESC',
+      rates = await query<RateRow>('SELECT rate_type, tenure, general_rate, senior_citizen_rate, effective_date FROM bank_rates WHERE bank_id = $1 ORDER BY rate_type, general_rate DESC',
         [bank.id]
       );
     }
