@@ -1,14 +1,10 @@
 import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
-import AdBanner from '@/components/AdBanner';
 
 export const metadata: Metadata = {
   title: 'Terms of Service - Paisa Reality',
-  description:
-    'Read the terms of service for using Paisa Reality. By accessing our website, you agree to these terms.',
-  alternates: {
-    canonical: 'https://paisareality.com/terms',
-  },
+  description: 'Terms of service for using Paisa Reality. By using our website you agree to these terms.',
+  alternates: { canonical: 'https://paisareality.com/terms' },
 };
 
 export default function TermsPage(): React.ReactElement {
@@ -17,112 +13,82 @@ export default function TermsPage(): React.ReactElement {
       <Breadcrumb items={[{ label: 'Terms of Service' }]} />
 
       <article className="max-w-3xl">
-        <h1 className="heading-1 mb-6">Terms of Service</h1>
-        <p className="text-sm text-gray-500 mb-6">Last updated: April 2026</p>
+        <h1 className="heading-1 mb-2">Terms of Service</h1>
+        <p className="text-sm text-gray-500 mb-8">Effective date: 1 January 2025. Last updated: 21 June 2026.</p>
 
-        <AdBanner format="horizontal" />
-
-        <div className="prose max-w-none space-y-6">
+        <div className="space-y-8">
           <section>
-            <h2 className="heading-2 mt-8 mb-3">1. Acceptance of Terms</h2>
-            <p className="text-body">
-              By accessing and using Paisa Reality (paisareality.com), you agree to these terms of service. If you do not agree with any part of these terms, please do not use the website.
-            </p>
+            <h2 className="heading-2 mb-2">1. Agreement</h2>
+            <p className="text-body">By using Paisa Reality (paisareality.com), you agree to these terms. If you do not agree, do not use the website.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">2. What This Website Does</h2>
-            <p className="text-body">
-              Paisa Reality is an informational website that provides daily commodity prices (gold, silver, petrol, diesel, LPG), government scheme information, financial calculators, and bank rate comparisons. All content is for informational purposes only.
-            </p>
+            <h2 className="heading-2 mb-2">2. What this website is</h2>
+            <p className="text-body">Paisa Reality is a free informational website. We provide daily commodity prices, government scheme information, financial calculators, and bank rate comparisons. All content is for informational purposes only.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">3. Not Financial Advice</h2>
-            <p className="text-body">
-              The information on this website does not constitute financial, investment, tax, or legal advice. Paisa Reality is not a registered financial advisor. Do not make financial decisions based solely on information from this website. Always consult a qualified financial professional and verify data with official sources.
-            </p>
+            <h2 className="heading-2 mb-2">3. Not financial advice</h2>
+            <p className="text-body">Nothing on this website is financial, investment, tax, or legal advice. We are not registered with SEBI or any regulatory body. Do not make financial decisions based only on information from this website. Always consult a qualified professional.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">4. Accuracy of Information</h2>
-            <p className="text-body">
-              We make every effort to provide accurate and up-to-date information. However, we cannot guarantee that all prices, rates, scheme details, or calculator results are 100% accurate at all times. Data may be delayed, incomplete, or may have changed since the last update. Prices shown are indicative and may differ from actual market prices.
-            </p>
+            <h2 className="heading-2 mb-2">4. Accuracy</h2>
+            <p className="text-body">We try to keep everything accurate and up to date. However, prices can be delayed, scheme rules can change, and calculator results are estimates. We do not guarantee 100% accuracy at all times. Always verify with official sources.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">5. User Accounts</h2>
-            <p className="text-body">
-              If you create an account on Paisa Reality, you are responsible for keeping your login details safe. You must provide accurate information when signing up. We reserve the right to suspend or delete accounts that violate these terms or are used for fraudulent purposes.
-            </p>
+            <h2 className="heading-2 mb-2">5. User accounts</h2>
+            <p className="text-body">If you create an account, keep your login details safe. Give accurate information when signing up. We can suspend or delete accounts that violate these terms.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">6. Acceptable Use</h2>
-            <p className="text-body">You agree not to:</p>
-            <ul className="list-disc list-inside space-y-1 text-body mt-2">
-              <li>Use automated tools to scrape or download large amounts of data from the website without permission.</li>
-              <li>Attempt to hack, disrupt, or overload the website or its servers.</li>
-              <li>Use the website for any illegal purpose.</li>
-              <li>Copy, reproduce, or redistribute our content without attribution.</li>
-              <li>Create fake accounts or misrepresent your identity.</li>
+            <h2 className="heading-2 mb-2">6. Things you must not do</h2>
+            <ul className="list-disc list-inside space-y-1 text-body">
+              <li>Scrape or bulk-download data without written permission.</li>
+              <li>Try to hack, overload, or disrupt the website.</li>
+              <li>Use the website for anything illegal.</li>
+              <li>Copy entire pages without attribution.</li>
+              <li>Create fake accounts.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">7. Intellectual Property</h2>
-            <p className="text-body">
-              All original content on Paisa Reality, including text, design, code, and graphics, is owned by Paisa Reality. You may share links to our pages and quote small portions of our content with proper attribution. You may not copy entire pages or large sections without written permission.
-            </p>
+            <h2 className="heading-2 mb-2">7. Our content</h2>
+            <p className="text-body">All original content on Paisa Reality (text, design, code, graphics) is owned by us. You can share links and quote small parts with attribution. You cannot copy large sections without written permission.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">8. Third-Party Links</h2>
-            <p className="text-body">
-              Our website may contain links to official government websites, bank websites, and other external sites. We are not responsible for the content, accuracy, or privacy practices of these external websites.
-            </p>
+            <h2 className="heading-2 mb-2">8. External links</h2>
+            <p className="text-body">We link to government websites, banks, and other external sites. We are not responsible for their content, accuracy, or privacy practices.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">9. Advertisements</h2>
-            <p className="text-body">
-              Paisa Reality displays advertisements through Google AdSense. These ads are served by Google and are subject to Google's advertising policies. We do not control which specific ads are shown. The presence of an ad does not mean we endorse the advertised product or service.
-            </p>
+            <h2 className="heading-2 mb-2">9. Advertisements</h2>
+            <p className="text-body">We show ads through Google AdSense. These are served by Google and subject to Google's policies. An ad appearing on our site does not mean we endorse that product or service.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">10. Limitation of Liability</h2>
-            <p className="text-body">
-              Paisa Reality and its team shall not be held liable for any losses, damages, or expenses that arise from using this website or relying on information provided here. This includes but is not limited to financial losses from investment decisions, missed scheme deadlines, or incorrect calculator results.
-            </p>
+            <h2 className="heading-2 mb-2">10. Limitation of liability</h2>
+            <p className="text-body">Paisa Reality is not liable for any losses or damages from using this website. This includes financial losses from investment decisions, missed scheme deadlines, or incorrect calculator results. Use at your own risk.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">11. Changes to Terms</h2>
-            <p className="text-body">
-              We may update these terms from time to time. Changes will be posted on this page with an updated date. Continued use of the website after changes means you accept the new terms.
-            </p>
+            <h2 className="heading-2 mb-2">11. Changes</h2>
+            <p className="text-body">We may update these terms. Changes will be posted here with an updated date. Continuing to use the website after a change means you accept the new terms.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">12. Governing Law</h2>
-            <p className="text-body">
-              These terms are governed by the laws of India. Any disputes shall be subject to the jurisdiction of courts in India.
-            </p>
+            <h2 className="heading-2 mb-2">12. Governing law</h2>
+            <p className="text-body">These terms are governed by the laws of India. Disputes are subject to the jurisdiction of Indian courts.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mt-8 mb-3">13. Contact</h2>
-            <p className="text-body">
-              If you have questions about these terms, email us at{' '}
-              <a href="mailto:contact@paisareality.com" className="link-internal">contact@paisareality.com</a>.
-            </p>
+            <h2 className="heading-2 mb-2">13. Contact</h2>
+            <p className="text-body">Questions about these terms? Email <a href="mailto:connect@paisareality.com" className="text-primary hover:underline">connect@paisareality.com</a>.</p>
           </section>
         </div>
       </article>
-
-      <AdBanner format="horizontal" className="mt-8" />
     </div>
   );
 }

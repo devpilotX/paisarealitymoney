@@ -1,116 +1,109 @@
-# 💸 Paisa Reality — paisareality.com
+# Paisa Reality — paisareality.com
 
-> India's one-stop money hub. Daily prices, government schemes, financial calculators, and bank rate comparisons — all free.
+Free financial information platform for India. Daily prices, government schemes, financial calculators, Smart Tools, bank rate comparisons, and a Money Health Score.
 
-🔗 **Live:** [paisareality.com](https://paisareality.com) · 🇮🇳 Hindi mirror at `/hi`
+**Live:** [paisareality.com](https://paisareality.com)
 
 ---
 
-## 🧭 What it is
+## What it does
 
-Free, ad-supported financial information platform for India. Four pillars:
+- **Daily Prices** — Gold, silver, petrol, diesel, LPG across 50+ Indian cities. Updated every day.
+- **Smart Tools** — 9 advanced financial calculators (retirement optimizer, prepay vs invest, debt optimizer, tax regime optimizer, budget optimizer, tax harvesting, gold planner, scheme maximizer, salary optimizer). Run Monte Carlo simulation and optimization in the browser.
+- **Basic Calculators** — EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA, inflation.
+- **Government Schemes** — Profile-based matcher. Fill a form, get matched with eligible central and state schemes.
+- **Bank Rate Comparison** — FD, savings, home loan, personal loan rates across 50+ banks.
+- **Money Health Score** — One number out of 900 across 8 financial pillars. Like a CIBIL score for your whole financial life.
+- **Admin Dashboard** — Blog management, price controls, site actions. Protected with JWT auth.
 
-- 📊 **Daily Prices** — gold, silver, petrol, diesel, LPG across 50+ Indian cities
-- 🏛️ **Government Schemes** — profile-based matcher (form → eligible active schemes)
-- 🧮 **Financial Calculators** — EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA, inflation
-- 🏦 **Bank Rate Comparison** — FD, savings, home loan, personal loan rates across 50+ banks
-
-Plus: bilingual content (English + Hindi), markdown blog, admin CMS, paid pricing tier via Razorpay, user dashboard, PDF reports for schemes & calculator outputs.
-
-## 🧱 Tech stack
+## Tech stack
 
 | Layer | Choice |
 |-------|--------|
-| Framework | **Next.js 16** (App Router, RSC) + React 18 |
+| Framework | Next.js 16 (App Router, Turbopack) + React 18 |
 | Language | TypeScript 5 (strict) |
-| Styling | Tailwind CSS 3 + custom design tokens |
-| Database | MySQL (`mysql2`) |
-| Auth | `jsonwebtoken` (JWT) + `bcrypt` |
-| Payments | **Razorpay** (Indian PG) |
-| Email | **Resend** (transactional) |
-| PDF | `@react-pdf/renderer` (scheme + calculator reports) |
-| Content | `marked` + `sanitize-html` (markdown blog) |
-| Caching | `lru-cache` (price + scheme caches) |
-| SEO | Dynamic `sitemap.ts` + `robots.ts` + JSON-LD WebSite/Organization |
-| Monetization | Google AdSense via `<AdBanner />` / `<InArticleAd />` |
+| Styling | Tailwind CSS 3 |
+| Database | MySQL (prices, schemes, banks, users) + PostgreSQL (health score) |
+| Auth | JWT + bcrypt |
+| Payments | Razorpay |
+| Email | Resend |
+| PDF | @react-pdf/renderer |
+| Content | marked + sanitize-html (blog) |
+| Caching | lru-cache |
+| Ads | Google AdSense |
 
-## 🚀 Quickstart
+## Getting started
 
 ```bash
 git clone https://github.com/devpilotX/paisarealitymoney.git
 cd paisarealitymoney
 npm install
-cp .env.example .env       # MySQL DB_*, JWT_SECRET, RAZORPAY_*, RESEND_API_KEY, SITE_URL, …
-npm run db:seed-all        # cities, prices, schemes, banks
-npm run dev                # http://localhost:3000
+cp .env.example .env    # fill in your DB credentials, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+npm run dev             # http://localhost:3000
 ```
 
-**Other scripts:** `npm run typecheck` (strict tsc), `npm run build && npm start`, individual seeds (`db:seed-cities`, `db:seed-prices`, `db:seed-schemes`, `db:seed-banks`).
+## Scripts
 
-## 🗂️ Project layout
+| Command | What it does |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run typecheck` | TypeScript strict check |
+| `npm run db:seed-all` | Seed MySQL (cities, prices, schemes, banks) |
+| `npm run db:migrate-pg` | Create PostgreSQL tables for Health Score |
+
+## Project structure
 
 ```
 src/
-├── app/                          # Next.js App Router
-│   ├── page.tsx                  # Homepage (4 pillars + popular schemes + FAQ)
-│   ├── layout.tsx, globals.css, error.tsx, not-found.tsx
-│   ├── sitemap.ts, robots.ts     # Dynamic SEO
-│   ├── gold-rate, silver-rate, petrol-price, diesel-price, lpg-price/
-│   ├── schemes/                  # Listing, finder form, detail pages
-│   ├── calculators/              # EMI, SIP, FD, PPF, IT, home loan, …
-│   ├── bank-rates/               # FD/savings/loan comparison
-│   ├── blog/                     # Markdown-authored articles
-│   ├── category/, state/         # SEO landing pages
-│   ├── dashboard/                # Authed user dashboard
-│   ├── admin/                    # CMS
-│   ├── login/, signup/, pricing/, contact/, about/
-│   ├── privacy/, terms/, disclaimer/
-│   ├── hi/                       # Hindi mirror
-│   └── api/
-│       ├── auth/, prices/, match/, payment/, admin/, scraper/, cron/
-├── components/                   # AdBanner, FAQ, calculators, forms, charts
-└── lib/
-    ├── db.ts                     # MySQL pool
-    ├── auth.ts, admin-auth.ts    # JWT + admin guard
-    ├── matcher.ts                # Scheme eligibility engine
-    ├── price-providers.ts        # External price source adapters
-    ├── razorpay.ts, email.ts     # Razorpay + Resend wrappers
-    ├── blog.ts                   # Markdown render + sanitize
-    ├── cache.ts                  # LRU caches
-    ├── cities.ts, constants.ts
-    ├── rate-limit.ts, sanitize.ts, analytics.ts, scraper-prices.ts
-scripts/                          # ts-node seeds: cities, prices, schemes, banks
+├── app/
+│   ├── page.tsx                  # Homepage
+│   ├── smart-tools/              # Smart Tools hub
+│   ├── score/                    # Money Health Score
+│   ├── calculators/              # Basic + Smart Tool pages
+│   ├── gold-rate/, silver-rate/, petrol-price/, diesel-price/, lpg-price/
+│   ├── schemes/                  # Scheme finder
+│   ├── bank-rates/               # Rate comparison
+│   ├── blog/                     # Markdown blog
+│   ├── admin/                    # Admin dashboard
+│   ├── about/, contact/, terms/, privacy/, disclaimer/
+│   └── api/                      # API routes
+├── components/                   # Shared UI components
+├── lib/                          # Business logic, DB, engines
+middleware.ts                     # Subdomain routing (admin.paisareality.com)
+scripts/                          # DB seeds and migrations
 ```
 
-## 🔒 Hardening
+## Admin dashboard
 
-- JWT auth with bcrypt-hashed credentials + separate admin guard
-- Per-IP rate limiting on auth/match/payment/scraper routes
-- `sanitize-html` on all user/admin-authored markdown
-- Razorpay signature verification on payment callback
-- `force-dynamic` on price-sensitive pages
-- Structured metadata, JSON-LD WebSite + Organization, dynamic sitemap
+Access at `/admin` (or `admin.paisareality.com` when DNS is configured).
 
-## 🛣️ Roadmap
+Set in `.env`:
+```
+ADMIN_EMAIL=admin@paisareality.com
+ADMIN_PASSWORD=your-password
+JWT_SECRET=your-secret
+```
 
-- [ ] Price alerts (email + push)
-- [ ] User-favourited schemes + Resend digests
-- [ ] More regional mirrors (Tamil, Telugu, Marathi)
-- [ ] OpenAPI public endpoints for prices
+Features: blog CRUD, price refresh trigger, site overview stats.
 
-## 📜 Disclaimer
+## SEO
 
-Paisa Reality is an **informational site**, not a financial advisor. Verify with official sources before acting.
+- Dynamic sitemap.xml (all pages, auto-updates)
+- robots.txt
+- Per-page metadata (title, description, canonical, OG, Twitter cards)
+- JSON-LD (WebSite, Organization, FAQPage, BreadcrumbList)
+- FAQ sections with structured data on all tool and calculator pages
 
----
+## Disclaimer
 
-## 👤 Author
+Paisa Reality is an informational website, not a financial advisor. Verify with official sources before making financial decisions.
 
-**Dipanshu Kumar** — independent AI engineer.
-📧 [connect.dipanshukumar@gmail.com](mailto:connect.dipanshukumar@gmail.com)
-🌐 [paisareality.com](https://paisareality.com) · [value.codes](https://value.codes) · [algo.devpilotx.com](https://algo.devpilotx.com)
-🐙 [@devpilotX](https://github.com/devpilotX)
+## Author
 
-## 📄 License
+Dipanshu Kumar — [paisareality.com](https://paisareality.com) — [github.com/devpilotX](https://github.com/devpilotX)
 
-Proprietary — all rights reserved.
+## License
+
+Proprietary. All rights reserved.

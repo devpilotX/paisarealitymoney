@@ -13,11 +13,11 @@ import { trackCalculatorUse } from '@/lib/analytics';
 import { optimizeSalaryStructure, type OptimizerInputs, type OptimizationResult } from '@/lib/salary-optimizer';
 
 const OPTIMIZER_FAQS = [
-  { question: 'What is salary structure optimization?', answer: 'Salary structure optimization means finding the best allocation of your CTC across components (Basic, HRA, Special Allowance, NPS, Food Coupons, LTA, etc.) to legally minimize your income tax. The optimal split depends on your rent, city, investments, and tax regime — it\'s different for every person.' },
+  { question: 'What is salary structure optimization?', answer: 'Salary structure optimization means finding the best allocation of your CTC across components (Basic, HRA, Special Allowance, NPS, Food Coupons, LTA, etc.) to legally minimize your income tax. The optimal split depends on your rent, city, investments, and tax regime. it\'s different for every person.' },
   { question: 'How much can I save by restructuring my salary?', answer: 'Depending on your CTC level and personal situation, optimizing your salary structure can save ₹30,000 to ₹1,00,000+ per year in taxes. The savings are highest for CTCs between ₹10-25 LPA where deductions under the old regime can significantly reduce tax liability.' },
   { question: 'Is this legal?', answer: 'Absolutely. Salary structuring is a legitimate tax planning method recognized by the Income Tax Act. Every component referenced here (HRA under Section 10(13A), NPS under 80CCD(2), LTA under Section 10(5), food coupons under Section 17(2)) has explicit provisions in the Act. You\'re simply choosing how your compensation is split.' },
   { question: 'How do I implement this?', answer: 'Most companies with flexi-benefit plans send a "declaration form" once a year (usually in March/April) where you choose your salary components. Take the optimal structure from this tool and enter those values in your company\'s form. If unsure, share the results with your HR team.' },
-  { question: 'Does this account for EPF?', answer: 'Yes. EPF employer contribution (12% of Basic, capped at ₹15,000/month wage) is factored in. Lowering Basic reduces your EPF contribution and employer match — the optimizer balances this trade-off against tax savings.' },
+  { question: 'Does this account for EPF?', answer: 'Yes. EPF employer contribution (12% of Basic, capped at ₹15,000/month wage) is factored in. Lowering Basic reduces your EPF contribution and employer match. the optimizer balances this trade-off against tax savings.' },
 ];
 
 function StructureTable({ label, structure, highlight }: { label: string; structure: { basic: number; hra: number; specialAllowance: number; lta: number; foodCoupons: number; npsEmployer: number; vehicleAllowance: number; phoneAllowance: number; epfEmployer: number }; highlight?: boolean }): React.ReactElement {
@@ -100,7 +100,7 @@ export default function SalaryOptimizerPage(): React.ReactElement {
 
       {/* Inputs */}
       <div className="my-8">
-        <Calculator title="Your Details" description="Enter your CTC and personal details. All computation happens in your browser — nothing is sent to any server.">
+        <Calculator title="Your Details" description="Enter your CTC and personal details. All computation happens in your browser. nothing is sent to any server.">
           <CalcSlider id="ctc" label="Annual CTC" value={ctc} onChange={setCtc} min={300000} max={50000000} step={50000} prefix="₹ " />
           <CalcSelect id="city" label="City Type" value={isMetro} onChange={setIsMetro} options={[{ value: 'metro', label: 'Metro (Delhi, Mumbai, Kolkata, Chennai)' }, { value: 'non-metro', label: 'Non-Metro' }]} />
           <CalcSlider id="rent" label="Monthly Rent Paid" value={monthlyRent} onChange={setMonthlyRent} min={0} max={200000} step={1000} prefix="₹ " />
@@ -162,9 +162,9 @@ export default function SalaryOptimizerPage(): React.ReactElement {
               {result.oldRegimeResult.deductions.standardDeduction > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Standard Deduction</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.standardDeduction)}</span></div>}
               {result.oldRegimeResult.deductions.hraExemption > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">HRA Exemption (Sec 10(13A))</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.hraExemption)}</span></div>}
               {result.oldRegimeResult.deductions.section80C > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 80C</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80C)}</span></div>}
-              {result.oldRegimeResult.deductions.section80CCD2 > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 80CCD(2) — NPS</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80CCD2)}</span></div>}
-              {result.oldRegimeResult.deductions.section80D > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 80D — Health Insurance</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80D)}</span></div>}
-              {result.oldRegimeResult.deductions.section24b > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 24(b) — Home Loan Interest</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section24b)}</span></div>}
+              {result.oldRegimeResult.deductions.section80CCD2 > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 80CCD(2). NPS</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80CCD2)}</span></div>}
+              {result.oldRegimeResult.deductions.section80D > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 80D. Health Insurance</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80D)}</span></div>}
+              {result.oldRegimeResult.deductions.section24b > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 24(b). Home Loan Interest</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section24b)}</span></div>}
               {result.oldRegimeResult.deductions.ltaExemption > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">LTA Exemption (Sec 10(5))</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.ltaExemption)}</span></div>}
             </div>
           </div>

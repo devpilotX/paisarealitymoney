@@ -12,6 +12,8 @@ const ABOUT_LINKS: FooterLink[] = [
 ];
 
 const QUICK_LINKS: FooterLink[] = [
+  { href: '/score', label: 'Money Health Score' },
+  { href: '/smart-tools', label: 'Smart Tools' },
   { href: '/gold-rate', label: 'Gold Rate Today' },
   { href: '/silver-rate', label: 'Silver Rate Today' },
   { href: '/petrol-price', label: 'Petrol Price Today' },
@@ -47,8 +49,7 @@ function FooterColumn({ title, links }: { title: string; links: FooterLink[] }):
           <li key={link.href}>
             <Link
               href={link.href}
-              className="text-sm text-gray-600 no-underline transition-colors duration-200 ease-in-out
-                         hover:text-primary"
+              className="text-sm text-gray-600 no-underline transition-colors duration-200 hover:text-primary"
             >
               {link.label}
             </Link>
@@ -65,7 +66,6 @@ export default function Footer(): React.ReactElement {
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
       <div className="container-main py-12">
-        {/* Footer columns */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <FooterColumn title="About" links={ABOUT_LINKS} />
           <FooterColumn title="Quick Links" links={QUICK_LINKS} />
@@ -73,7 +73,6 @@ export default function Footer(): React.ReactElement {
           <FooterColumn title="Legal" links={LEGAL_LINKS} />
         </div>
 
-        {/* Disclaimer */}
         <div className="mt-10 pt-6 border-t border-gray-200">
           <p className="text-xs text-gray-500 leading-relaxed">
             Disclaimer: Paisa Reality is an informational website. We are not financial advisors.
@@ -83,7 +82,6 @@ export default function Footer(): React.ReactElement {
           </p>
         </div>
 
-        {/* Copyright */}
         <div className="mt-6 pt-6 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="text-lg font-bold text-primary">Paisa</span>
