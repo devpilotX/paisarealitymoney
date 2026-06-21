@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
 import ProfileForm from '@/components/ProfileForm';
 import SchemeResults from '@/components/SchemeResults';
@@ -71,6 +72,21 @@ export default function SchemesPage(): React.ReactElement {
       </div>
 
       <AdBanner format="horizontal" />
+
+      {/* Cross-link to the advanced quantified Smart Tool */}
+      <Link href="/calculators/scheme-maximizer" className="block no-underline my-6">
+        <div className="rounded-xl border-2 border-primary bg-primary-50/50 p-5 transition-shadow hover:shadow-md">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-semibold bg-primary text-white px-2.5 py-1 rounded-full">★ New Smart Tool</span>
+            <span className="text-xs text-gray-500">Quantified · Conflict-resolved</span>
+          </div>
+          <h2 className="text-lg font-semibold text-gray-900">Want the total ₹ you can actually claim?</h2>
+          <p className="text-sm text-gray-600 mt-1">
+            The new <strong>Scheme Benefit Maximizer</strong> doesn&apos;t just list schemes. it quantifies the rupee benefit of each,
+            resolves overlaps into your optimal set, and totals your annual + one-time benefit. <span className="text-primary font-medium">Try it →</span>
+          </p>
+        </div>
+      </Link>
 
       {/* Profile Form */}
       <div className="my-8">

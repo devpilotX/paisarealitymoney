@@ -19,7 +19,7 @@ const PILLARS = [
   { title: 'दैनिक कीमतें', desc: 'सोना, चांदी, पेट्रोल, डीजल, LPG - 50+ शहरों के लिए', href: '/gold-rate', icon: '📊' },
   { title: 'सरकारी योजनाएं', desc: 'केंद्र और राज्य सरकार की योजनाएं खोजें', href: '/schemes', icon: '🏛️' },
   { title: 'वित्तीय कैलकुलेटर', desc: 'EMI, SIP, FD, PPF, आयकर, होम लोन कैलकुलेटर', href: '/calculators', icon: '🧮' },
-  { title: 'बैंक दरें', desc: '50+ बैंकों की FD, सेविंग्स, लोन दरें की तुलना', href: '/bank-rates', icon: '🏦' },
+  { title: 'बैंक दरें', desc: '50+ बैंकों की FD, सेविं, ्स, लोन दरें की तुलना', href: '/bank-rates', icon: '🏦' },
 ];
 
 export default function HindiHomePage(): React.ReactElement {
@@ -28,7 +28,7 @@ export default function HindiHomePage(): React.ReactElement {
       <section className="bg-white py-12 sm:py-16">
         <div className="container-main text-center">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">भारत का नंबर 1 मनी हब</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">लाइव कीमतें, सरकारी योजनाएं, वित्तीय कैलकुलेटर, और बैंक दर तुलना। सब मुफ्त। सब सही। सब एक जगह।</p>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">लाइव कीमतें, सरकारी योजनाएं, वित्तीय कैलकुलेटर, और बैंक दर तुलना। सब मुफ्त। सब सही। सब एक ज, ह।</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/schemes" className="btn-primary no-underline">सरकारी योजनाएं खोजें</Link>
             <Link href="/gold-rate" className="btn-secondary no-underline">आज की कीमतें देखें</Link>

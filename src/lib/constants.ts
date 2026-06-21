@@ -9,6 +9,7 @@ export const ADSENSE_PUB_ID = 'pub-6484525483464374';
 export const ACCENT_COLOR = '#007A78';
 
 export const NAV_LINKS = [
+  { href: '/score', label: 'Money Health Score', labelHi: 'वित्तीय सेहत स्कोर' },
   { href: '/gold-rate', label: 'Gold Rate', labelHi: 'सोने का भाव' },
   { href: '/silver-rate', label: 'Silver Rate', labelHi: 'चांदी का भाव' },
   { href: '/petrol-price', label: 'Petrol Price', labelHi: 'पेट्रोल कीमत' },
@@ -19,6 +20,14 @@ export const NAV_LINKS = [
 ] as const;
 
 export const CALCULATOR_LINKS = [
+  { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer', labelHi: 'रिटायरमेंट ऑप्टिमाइज़र' },
+  { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest', labelHi: 'प्रीपे बनाम निवेश' },
+  { href: '/calculators/debt-optimizer', label: 'Debt Optimizer', labelHi: 'ऋण ऑप्टिमाइज़र' },
+  { href: '/calculators/lifecycle-tax-optimizer', label: 'Lifecycle Tax Optimizer', labelHi: 'लाइफसाइकल टैक्स ऑप्टिमाइज़र' },
+  { href: '/calculators/budget-optimizer', label: 'Budget Optimizer', labelHi: 'बजट ऑप्टिमाइज़र' },
+  { href: '/calculators/tax-harvesting', label: 'Tax-Loss Harvesting', labelHi: 'टैक्स हार्वेस्टिंग' },
+  { href: '/calculators/gold-planner', label: 'Gold Planner', labelHi: 'गोल्ड प्लानर' },
+  { href: '/calculators/scheme-maximizer', label: 'Scheme Benefit Maximizer', labelHi: 'योजना लाभ मैक्सिमाइज़र' },
   { href: '/calculators/salary-optimizer', label: 'Salary Optimizer', labelHi: 'सैलरी ऑप्टिमाइज़र' },
   { href: '/calculators/emi', label: 'EMI Calculator', labelHi: 'EMI कैलकुलेटर' },
   { href: '/calculators/sip', label: 'SIP Calculator', labelHi: 'SIP कैलकुलेटर' },
@@ -63,6 +72,19 @@ export function formatINR(amount: number): string {
 
 export function formatNumber(num: number): string {
   return new Intl.NumberFormat('en-IN').format(num);
+}
+
+/**
+ * Compact Indian-format currency for charts / summary cards.
+ * Examples: 152000000 -> "₹15.2 Cr", 4500000 -> "₹45.0 L", 80000 -> "₹80,000", 0 -> "₹0".
+ */
+export function formatCompactINR(amount: number): string {
+  const sign = amount < 0 ? '-' : '';
+  const abs = Math.abs(amount);
+  if (abs >= 10000000) return `${sign}\u20B9${(abs / 10000000).toFixed(2)} Cr`;
+  if (abs >= 100000) return `${sign}\u20B9${(abs / 100000).toFixed(2)} L`;
+  if (abs >= 1000) return `${sign}\u20B9${Math.round(abs).toLocaleString('en-IN')}`;
+  return `${sign}\u20B9${Math.round(abs)}`;
 }
 
 export function formatDate(date: Date | string): string {

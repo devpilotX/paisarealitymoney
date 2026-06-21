@@ -1,5 +1,5 @@
 /**
- * Salary Structure Optimizer — Constrained optimization engine
+ * Salary Structure Optimizer. Constrained optimization engine
  * Minimizes net tax liability across old/new regime by optimally allocating CTC components.
  * References: IT Act Sections 10(13A), 10(5), 80C, 80CCD(2), 80D, 24(b)
  */
@@ -109,7 +109,7 @@ function buildStructure(inputs: OptimizerInputs, basicPct: number): SalaryStruct
   const epfBase = Math.min(annualBasic, 180000);
   const epfEmployer = Math.round(epfBase * 0.12);
 
-  // HRA: min of (metro_factor * Basic) — this is the max company can give
+  // HRA: min of (metro_factor * Basic). this is the max company can give
   const metroFactor = inputs.isMetro ? 0.50 : 0.40;
   const hra = Math.round(annualBasic * metroFactor);
 

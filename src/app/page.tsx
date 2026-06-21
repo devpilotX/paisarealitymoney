@@ -6,11 +6,21 @@ import InArticleAd from '@/components/InArticleAd';
 import FAQ from '@/components/FAQ';
 
 export const metadata: Metadata = {
-  title: 'Paisa Reality - Gold Rate, Silver Rate, Petrol Price, Government Schemes, Calculators',
+  title: 'Paisa Reality - Gold Rate Today, Silver Price, Petrol Diesel Price, Government Schemes, Free Calculators',
   description:
-    'Check latest available gold, silver, petrol, diesel, and LPG prices. Find government schemes. Use free EMI, SIP, FD calculators. Compare bank rates.',
-  alternates: {
-    canonical: 'https://paisareality.com',
+    'Check today gold rate, silver rate, petrol price, diesel price and LPG price in India. Find government schemes you qualify for. Use free EMI, SIP, FD, PPF calculators. Compare bank rates across 50+ banks.',
+  alternates: { canonical: 'https://paisareality.com' },
+  openGraph: {
+    title: 'Paisa Reality - India\'s Free Money Hub',
+    description: 'Daily gold, silver, petrol, diesel, LPG prices. Government scheme finder. Free financial calculators. Bank rate comparison.',
+    url: 'https://paisareality.com',
+    siteName: 'Paisa Reality',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Paisa Reality - India\'s Free Money Hub',
+    description: 'Daily prices, government schemes, free calculators, and bank rate comparison. All in one place.',
   },
 };
 
@@ -24,29 +34,25 @@ interface PillarCard {
 const PILLAR_CARDS: PillarCard[] = [
   {
     title: 'Daily Prices',
-    description:
-      'Gold rate, silver rate, petrol price, diesel price, and LPG price for 50+ Indian cities.',
+    description: 'Gold rate, silver rate, petrol price, diesel price, and LPG price for 50+ Indian cities.',
     href: '/gold-rate',
     icon: '📊',
   },
   {
     title: 'Government Schemes',
-    description:
-      'Find schemes you may qualify for. Fill a simple form and we match you with active schemes in the database.',
+    description: 'Find schemes you may qualify for. Fill a simple form and we match you with active schemes.',
     href: '/schemes',
     icon: '🏛️',
   },
   {
     title: 'Financial Calculators',
-    description:
-      'EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA, and inflation calculators. All free to use.',
+    description: 'EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA, and inflation calculators. All free.',
     href: '/calculators',
     icon: '🧮',
   },
   {
     title: 'Bank Rate Comparison',
-    description:
-      'Compare FD rates, savings rates, home loan rates, and personal loan rates across 50+ Indian banks side by side.',
+    description: 'Compare FD rates, savings rates, home loan rates, and personal loan rates across 50+ banks.',
     href: '/bank-rates',
     icon: '🏦',
   },
@@ -94,27 +100,21 @@ const CALCULATOR_SHORTCUTS: CalculatorShortcut[] = [
   { name: 'Home Loan Calculator', href: '/calculators/home-loan' },
 ];
 
-interface TrustItem {
-  icon: string;
-  title: string;
-  description: string;
-}
-
-const TRUST_ITEMS: TrustItem[] = [
+const TRUST_ITEMS = [
   {
     icon: '✓',
-    title: 'Data from Official Sources',
-    description: 'Information includes source links wherever available. Verify critical details with the original provider.',
+    title: 'Official Sources',
+    description: 'We link to official sources wherever possible. Always verify important details yourself.',
   },
   {
     icon: '✓',
     title: 'Updated Daily',
-    description: 'Prices are refreshed every day. Scheme information is verified regularly.',
+    description: 'Prices refresh every day. Scheme data is checked regularly.',
   },
   {
     icon: '✓',
     title: '100% Free',
-    description: 'All tools, calculators, and information on Paisa Reality are free to use. No hidden charges.',
+    description: 'Every tool, calculator, and piece of information on Paisa Reality is free. No hidden charges.',
   },
 ];
 
@@ -122,27 +122,32 @@ const HOME_FAQS = [
   {
     question: 'What is Paisa Reality?',
     answer:
-      'Paisa Reality is a free website where you can check latest available gold, silver, petrol and diesel prices, find government schemes you may qualify for, use financial calculators, and compare bank rates. Always verify critical information with official sources.',
+      'Paisa Reality is a free website where you can check today\'s gold, silver, petrol and diesel prices, find government schemes you qualify for, use financial calculators, and compare bank rates. Always verify important info with official sources.',
   },
   {
     question: 'Is Paisa Reality free to use?',
     answer:
-      'Yes, Paisa Reality is completely free. You can check prices, use calculators, find schemes, and compare bank rates without paying anything. We earn through advertisements shown on the website.',
+      'Yes, completely free. You can check prices, use calculators, find schemes, and compare bank rates without paying anything. We earn through ads shown on the site.',
   },
   {
-    question: 'How often are the prices updated?',
+    question: 'How often are prices updated?',
     answer:
-      'Gold and silver prices are updated daily based on market rates. Petrol and diesel prices are updated daily as per oil marketing companies. LPG prices are updated on the 1st of every month.',
+      'Gold and silver prices update daily based on market rates. Petrol and diesel prices update daily as per oil marketing companies. LPG prices update on the 1st of every month.',
   },
   {
     question: 'How does the government scheme finder work?',
     answer:
-      'You fill a simple form with your basic details like age, state, income, and category. Our system checks your profile against active schemes in the database and shows likely matches.',
+      'You fill a simple form with your basic details like age, state, income, and category. We check your profile against active schemes and show you the ones you likely qualify for.',
   },
   {
     question: 'Is Paisa Reality a financial advisor?',
     answer:
-      'No. Paisa Reality is an informational website only. We provide data and tools to help you make informed decisions. Always verify information with official sources and consult a qualified financial advisor before making important money decisions.',
+      'No. We are an informational website only. We give you data and tools to help you make better decisions. Always consult a qualified financial advisor for important money decisions.',
+  },
+  {
+    question: 'What are Smart Tools?',
+    answer:
+      'Smart Tools are our advanced financial calculators. They handle complex questions like how much you need to retire, whether to prepay a loan or invest, and how to legally pay less tax. They run in your browser and are completely free.',
   },
 ];
 
@@ -152,7 +157,7 @@ export default function HomePage(): React.ReactElement {
     '@type': 'WebSite',
     name: 'Paisa Reality',
     url: 'https://paisareality.com',
-    description: "India's one-stop money hub. Latest available prices, government schemes, financial calculators, and bank rate comparisons.",
+    description: 'Check daily prices, find government schemes, use free calculators, and compare bank rates in India.',
     potentialAction: {
       '@type': 'SearchAction',
       target: 'https://paisareality.com/schemes?q={search_term_string}',
@@ -165,39 +170,52 @@ export default function HomePage(): React.ReactElement {
     '@type': 'Organization',
     name: 'Paisa Reality',
     url: 'https://paisareality.com',
-    logo: 'https://paisareality.com/logo.png',
+    logo: 'https://paisareality.com/paisa_reality_logo.png',
     sameAs: [],
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: HOME_FAQS.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
   };
 
   return (
     <>
-      <Script
-        id="website-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} 
-      />
-      <Script
-        id="org-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} 
-      />
+      <Script id="website-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+      <Script id="org-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+      <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="bg-white py-12 sm:py-16">
         <div className="container-main text-center">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            India's One-Stop Money Hub
+            India&apos;s Free Money Hub
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            Latest available prices, government schemes, financial calculators, and bank rate comparisons.
-            All free. All real. All in one place.
+            Today&apos;s prices, government schemes, free calculators, and bank rate comparisons. Everything in one place, updated daily.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/schemes" className="btn-primary no-underline">
+            <Link
+              href="/score"
+              className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold
+                         rounded-lg no-underline min-h-[44px] border-2 border-primary
+                         bg-white text-primary
+                         transition-all duration-250
+                         hover:bg-primary hover:text-white hover:border-primary
+                         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              Check your Money Health Score
+            </Link>
+            <Link href="/schemes" className="btn-secondary no-underline">
               Find Government Schemes
             </Link>
             <Link href="/gold-rate" className="btn-secondary no-underline">
-              Check Today's Prices
+              Check Today&apos;s Prices
             </Link>
           </div>
         </div>
@@ -205,20 +223,36 @@ export default function HomePage(): React.ReactElement {
 
       <AdBanner format="horizontal" className="container-main" />
 
+      {/* Smart Tools teaser (compact, no card grid) */}
+      <section className="section-spacing">
+        <div className="container-main max-w-2xl text-center">
+          <h2 className="heading-2 mb-4">Smart Tools</h2>
+          <p className="text-gray-600 text-base mb-6">
+            These are our advanced money tools. They do the hard maths for you. Things like how much you need to retire, should you prepay your loan or invest, and how to pay less tax in a legal way. All free, no login needed.
+          </p>
+          <Link
+            href="/smart-tools"
+            className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold
+                       rounded-lg no-underline min-h-[44px] border-2 border-primary
+                       bg-white text-primary
+                       transition-all duration-200
+                       hover:bg-primary hover:text-white hover:border-primary
+                       focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            See all Smart Tools
+          </Link>
+        </div>
+      </section>
+
       {/* Four Pillars */}
       <section className="section-spacing bg-gray-50">
         <div className="container-main">
-          <h2 className="heading-2 text-center mb-8">What You Can Do on Paisa Reality</h2>
+          <h2 className="heading-2 text-center mb-8">What You Can Do Here</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {PILLAR_CARDS.map((card) => (
-              <Link
-                key={card.href}
-                href={card.href}
-                className="card text-center no-underline group"
-              >
+              <Link key={card.href} href={card.href} className="card text-center no-underline group">
                 <div className="text-4xl mb-4">{card.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary
-                              transition-colors duration-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-200">
                   {card.title}
                 </h3>
                 <p className="text-sm text-gray-600">{card.description}</p>
@@ -231,14 +265,13 @@ export default function HomePage(): React.ReactElement {
       {/* Quick Prices */}
       <section className="section-spacing">
         <div className="container-main">
-          <h2 className="heading-2 text-center mb-8">Today's Prices</h2>
+          <h2 className="heading-2 text-center mb-8">Today&apos;s Prices</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {QUICK_PRICES.map((price) => (
               <Link
                 key={price.href}
                 href={price.href}
-                className="card text-center no-underline hover:border-primary
-                           transition-colors duration-200"
+                className="card text-center no-underline hover:border-primary transition-colors duration-200"
               >
                 <span className="text-base font-medium text-primary">{price.label}</span>
                 <span className="block mt-1 text-xs text-gray-500">Click to view</span>
@@ -255,17 +288,12 @@ export default function HomePage(): React.ReactElement {
         <div className="container-main">
           <h2 className="heading-2 text-center mb-2">Popular Government Schemes</h2>
           <p className="text-center text-gray-600 mb-8">
-            These are some of the most searched government schemes in India.
+            Some of the most searched government schemes in India.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {POPULAR_SCHEMES.map((scheme) => (
-              <Link
-                key={scheme.href}
-                href={scheme.href}
-                className="card no-underline group"
-              >
-                <h3 className="text-base font-semibold text-gray-900 mb-1 group-hover:text-primary
-                              transition-colors duration-200">
+              <Link key={scheme.href} href={scheme.href} className="card no-underline group">
+                <h3 className="text-base font-semibold text-gray-900 mb-1 group-hover:text-primary transition-colors duration-200">
                   {scheme.name}
                 </h3>
                 <p className="text-sm text-gray-600">{scheme.benefit}</p>
@@ -273,7 +301,15 @@ export default function HomePage(): React.ReactElement {
             ))}
           </div>
           <div className="text-center mt-6">
-            <Link href="/schemes" className="btn-primary no-underline">
+            <Link
+              href="/schemes"
+              className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold
+                         rounded-lg no-underline min-h-[44px] border-2 border-primary
+                         bg-white text-primary
+                         transition-all duration-200
+                         hover:bg-primary hover:text-white hover:border-primary
+                         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
               Find Schemes for You
             </Link>
           </div>
@@ -289,17 +325,14 @@ export default function HomePage(): React.ReactElement {
               <Link
                 key={calc.href}
                 href={calc.href}
-                className="card text-center no-underline hover:border-primary
-                           transition-colors duration-200 py-4"
+                className="card text-center no-underline hover:border-primary transition-colors duration-200 py-4"
               >
                 <span className="text-sm font-medium text-primary">{calc.name}</span>
               </Link>
             ))}
           </div>
           <div className="text-center mt-6">
-            <Link href="/calculators" className="link-internal text-base">
-              View All Calculators
-            </Link>
+            <Link href="/calculators" className="link-internal text-base">View All Calculators</Link>
           </div>
         </div>
       </section>
@@ -311,8 +344,7 @@ export default function HomePage(): React.ReactElement {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {TRUST_ITEMS.map((item) => (
               <div key={item.title} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full
-                              bg-primary text-white text-xl font-bold mb-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-white text-xl font-bold mb-4">
                   {item.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
