@@ -3,9 +3,9 @@ import { query } from '@/lib/db';
 import { verifyPassword, signToken, signRefreshToken } from '@/lib/auth';
 import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit';
 import { sanitizeEmail } from '@/lib/sanitize';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
 
-interface UserRow extends RowDataPacket {
+interface UserRow extends QueryResultRow {
   id: number; email: string; password_hash: string; name: string; plan: 'free' | 'premium';
 }
 
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!email) return NextResponse.json({ success: false, error: 'Please enter a valid email.' }, { status: 400 });
     if (!password) return NextResponse.json({ success: false, error: 'Please enter your password.' }, { status: 400 });
 
-    const users = await query<UserRow[]>('SELECT id, email, password_hash, name, plan FROM users WHERE email = ? LIMIT 1', [email]);
+    const users = await query<UserRow>('SELECT id, email, password_hash, name, plan FROM users WHERE lower(email) = lower($1) LIMIT 1', [email]);
     const user = users[0];
     if (!user) return NextResponse.json({ success: false, error: 'No account found with this email.' }, { status: 401 });
 

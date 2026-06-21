@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://paisareality.com/petrol-price' },
 };
 
-interface FuelRow extends RowDataPacket {
+interface FuelRow extends QueryResultRow {
   city_name: string; city_slug: string; state: string;
   petrol_price: number; diesel_price: number;
   petrol_change: number; diesel_change: number; price_date: string;
@@ -37,8 +38,7 @@ export default async function PetrolPricePage(): Promise<React.ReactElement> {
   let prices: FuelRow[] = [];
   let priceDate = '';
   try {
-    prices = await query<FuelRow[]>(
-      `SELECT c.name AS city_name, c.slug AS city_slug, c.state,
+    prices = await query<FuelRow>(`SELECT c.name AS city_name, c.slug AS city_slug, c.state,
               fp.petrol_price, fp.diesel_price, fp.petrol_change, fp.diesel_change, fp.price_date
        FROM fuel_prices fp JOIN cities c ON fp.city_id = c.id
        WHERE fp.price_date = (SELECT MAX(price_date) FROM fuel_prices)

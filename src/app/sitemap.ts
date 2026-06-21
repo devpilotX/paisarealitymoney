@@ -4,11 +4,12 @@ import { ALL_INDIAN_STATES } from '@/lib/cities';
 import { SCHEME_CATEGORIES } from '@/lib/constants';
 import { query } from '@/lib/db';
 import { getAllPostsAsync } from '@/lib/blog';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 
 const BASE_URL = 'https://paisareality.com';
 
-interface SchemeSitemapRow extends RowDataPacket {
+interface SchemeSitemapRow extends QueryResultRow {
   slug: string;
   updated_at: string | Date | null;
 }
@@ -111,8 +112,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const schemePages = await query<SchemeSitemapRow[]>(
-    'SELECT slug, updated_at FROM schemes WHERE is_active = TRUE ORDER BY updated_at DESC'
+  const schemePages = await query<SchemeSitemapRow>('SELECT slug, updated_at FROM schemes WHERE is_active = TRUE ORDER BY updated_at DESC'
   ).then((rows) => rows.map((scheme) => ({
     url: `${BASE_URL}/schemes/${scheme.slug}`,
     lastModified: toIsoDate(scheme.updated_at, now),

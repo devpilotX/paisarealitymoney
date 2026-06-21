@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { getCityBySlug, METRO_CITIES } from '@/lib/cities';
 import { formatDate } from '@/lib/constants';
 import PriceCard from '@/components/PriceCard';
@@ -11,7 +12,7 @@ import AdBanner from '@/components/AdBanner';
 
 interface PageProps { params: Promise<{ city: string }>; }
 
-interface GoldRow extends RowDataPacket {
+interface GoldRow extends QueryResultRow {
   price_date: string; gold_24k_per_gram: number; gold_22k_per_gram: number;
   gold_18k_per_gram: number; gold_24k_per_10gram: number; change_amount: number; change_percent: number;
 }
@@ -40,9 +41,8 @@ export default async function HindiGoldCityPage({ params }: PageProps): Promise<
 
   let today: GoldRow | undefined;
   try {
-    const rows = await query<GoldRow[]>(
-      `SELECT gp.price_date, gp.gold_24k_per_gram, gp.gold_22k_per_gram, gp.gold_18k_per_gram, gp.gold_24k_per_10gram, gp.change_amount, gp.change_percent
-       FROM gold_prices gp JOIN cities c ON gp.city_id = c.id WHERE c.slug = ? ORDER BY gp.price_date DESC LIMIT 1`, [city.slug]
+    const rows = await query<GoldRow>(`SELECT gp.price_date, gp.gold_24k_per_gram, gp.gold_22k_per_gram, gp.gold_18k_per_gram, gp.gold_24k_per_10gram, gp.change_amount, gp.change_percent
+       FROM gold_prices gp JOIN cities c ON gp.city_id = c.id WHERE c.slug = $1 ORDER BY gp.price_date DESC LIMIT 1`, [city.slug]
     );
     today = rows[0];
   } catch (error) { console.error('Hindi gold price error:', error); }

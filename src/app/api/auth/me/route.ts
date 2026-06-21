@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateRequest, unauthorizedResponse } from '@/lib/auth';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
 
-interface UserRow extends RowDataPacket {
+interface UserRow extends QueryResultRow {
   id: number; email: string; name: string; plan: string;
   age: number | null; gender: string | null; state: string | null;
 }
@@ -13,8 +13,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   if (!auth.authenticated) return unauthorizedResponse(auth.error);
 
   try {
-    const users = await query<UserRow[]>(
-      'SELECT id, email, name, plan, age, gender, state FROM users WHERE id = ? LIMIT 1',
+    const users = await query<UserRow>(
+      'SELECT id, email, name, plan, age, gender, state FROM users WHERE id = $1 LIMIT 1',
       [auth.user.userId]
     );
     const user = users[0];

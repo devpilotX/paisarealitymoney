@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { formatNumber, formatDate } from '@/lib/constants';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
@@ -12,7 +13,7 @@ import InArticleAd from '@/components/InArticleAd';
 
 interface PageProps { params: Promise<{ slug: string }>; }
 
-interface SchemeDetailRow extends RowDataPacket {
+interface SchemeDetailRow extends QueryResultRow {
   id: number; slug: string; name: string; name_hi: string | null;
   category: string; level: string; ministry: string | null;
   description: string; description_hi: string | null;
@@ -28,7 +29,7 @@ interface SchemeDetailRow extends RowDataPacket {
   source_url: string | null; last_verified: string | null; updated_at: string | null;
 }
 
-interface RelatedSchemeRow extends RowDataPacket {
+interface RelatedSchemeRow extends QueryResultRow {
   slug: string; name: string; benefit_summary: string; category: string;
 }
 
@@ -76,9 +77,8 @@ function buildEligibilitySummary(scheme: SchemeDetailRow): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const rows = await query<SchemeDetailRow[]>(
-      `SELECT slug, name, name_hi, category, benefit_summary, meta_title, meta_description
-       FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1`,
+    const rows = await query<SchemeDetailRow>(`SELECT slug, name, name_hi, category, benefit_summary, meta_title, meta_description
+       FROM schemes WHERE slug = $1 AND is_active = TRUE LIMIT 1`,
       [slug]
     );
     const scheme = rows[0];
@@ -141,8 +141,7 @@ export const revalidate = 3600;
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
-    const rows = await query<(RowDataPacket & { slug: string })[]>(
-      'SELECT slug FROM schemes WHERE is_active = TRUE ORDER BY slug'
+    const rows = await query<QueryResultRow & { slug: string }>('SELECT slug FROM schemes WHERE is_active = TRUE ORDER BY slug'
     );
     return rows.map((row) => ({ slug: row.slug }));
   } catch {
@@ -156,15 +155,13 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
   let relatedSchemes: RelatedSchemeRow[] = [];
 
   try {
-    const rows = await query<SchemeDetailRow[]>(
-      `SELECT * FROM schemes WHERE slug = ? AND is_active = TRUE LIMIT 1`, [slug]
+    const rows = await query<SchemeDetailRow>(`SELECT * FROM schemes WHERE slug = $1 AND is_active = TRUE LIMIT 1`, [slug]
     );
     scheme = rows[0];
 
     if (scheme) {
-      relatedSchemes = await query<RelatedSchemeRow[]>(
-        `SELECT slug, name, benefit_summary, category FROM schemes
-         WHERE category = ? AND slug != ? AND is_active = TRUE
+      relatedSchemes = await query<RelatedSchemeRow>(`SELECT slug, name, benefit_summary, category FROM schemes
+         WHERE category = $1 AND slug != $2 AND is_active = TRUE
          ORDER BY benefit_amount_max DESC LIMIT 6`,
         [scheme.category, scheme.slug]
       );

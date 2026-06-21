@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import Breadcrumb from '@/components/Breadcrumb';
 import BankRateTable from '@/components/BankRateTable';
 import FAQ from '@/components/FAQ';
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://paisareality.com/bank-rates/fd-rates' },
 };
 
-interface FDRateRow extends RowDataPacket {
+interface FDRateRow extends QueryResultRow {
   bank_name: string; bank_slug: string; bank_type: string;
   tenure: string; general_rate: number; senior_citizen_rate: number | null;
 }
@@ -31,8 +32,7 @@ export const revalidate = 3600;
 export default async function FDRatesPage(): Promise<React.ReactElement> {
   let rates: FDRateRow[] = [];
   try {
-    rates = await query<FDRateRow[]>(
-      `SELECT b.name as bank_name, b.slug as bank_slug, b.type as bank_type,
+    rates = await query<FDRateRow>(`SELECT b.name as bank_name, b.slug as bank_slug, b.type as bank_type,
               br.tenure, br.general_rate, br.senior_citizen_rate
        FROM bank_rates br JOIN banks b ON br.bank_id = b.id
        WHERE br.rate_type = 'fd'

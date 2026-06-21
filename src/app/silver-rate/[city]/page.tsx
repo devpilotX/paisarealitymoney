@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import { getCityBySlug, getRelatedCities, CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
 import PriceCard from '@/components/PriceCard';
@@ -18,7 +19,7 @@ import InArticleAd from '@/components/InArticleAd';
 
 interface PageProps { params: Promise<{ city: string }>; }
 
-interface SilverHistoryRow extends RowDataPacket {
+interface SilverHistoryRow extends QueryResultRow {
   price_date: string; silver_per_gram: number; silver_per_kg: number;
   change_amount: number; change_percent: number;
 }
@@ -47,10 +48,9 @@ export default async function SilverRateCityPage({ params }: PageProps): Promise
 
   let historyRows: SilverHistoryRow[] = [];
   try {
-    historyRows = await query<SilverHistoryRow[]>(
-      `SELECT sp.price_date, sp.silver_per_gram, sp.silver_per_kg, sp.change_amount, sp.change_percent
+    historyRows = await query<SilverHistoryRow>(`SELECT sp.price_date, sp.silver_per_gram, sp.silver_per_kg, sp.change_amount, sp.change_percent
        FROM silver_prices sp JOIN cities c ON sp.city_id = c.id
-       WHERE c.slug = ? ORDER BY sp.price_date DESC LIMIT 30`, [city.slug]
+       WHERE c.slug = $1 ORDER BY sp.price_date DESC LIMIT 30`, [city.slug]
     );
   } catch (error) { console.error('Failed to fetch silver history:', error); }
 

@@ -23,7 +23,7 @@ Free financial information platform for India. Daily prices, government schemes,
 | Framework | Next.js 16 (App Router, Turbopack) + React 18 |
 | Language | TypeScript 5 (strict) |
 | Styling | Tailwind CSS 3 |
-| Database | MySQL (prices, schemes, banks, users) + PostgreSQL (health score) |
+| Database | PostgreSQL (all data: prices, schemes, banks, users, health score) |
 | Auth | JWT + bcrypt |
 | Payments | Razorpay |
 | Email | Resend |
@@ -50,7 +50,7 @@ npm run dev             # http://localhost:3000
 | `npm run build` | Production build |
 | `npm run start` | Start production server |
 | `npm run typecheck` | TypeScript strict check |
-| `npm run db:seed-all` | Seed MySQL (cities, prices, schemes, banks) |
+| `npm run db:seed-all` | Seed PostgreSQL (cities, prices, schemes, banks) |
 | `npm run db:migrate-pg` | Create PostgreSQL tables for Health Score |
 
 ## Project structure

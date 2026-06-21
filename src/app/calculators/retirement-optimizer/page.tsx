@@ -28,7 +28,7 @@ const RETIREMENT_FAQS = [
   {
     question: 'How much corpus do I need to retire in India?',
     answer:
-      'It depends on your retirement-age expenses, how long you expect to live, and inflation. A common rule of thumb is 25–30 times your annual expense, but that hides risk. This tool runs 10,000 simulations of market returns to find the corpus that funds your inflation-adjusted spending with your chosen confidence level. for example, a corpus that lasts to age 90 in at least 90% of simulated futures. Because medical costs in India inflate faster than general prices, the figure is usually higher than simple rules suggest.',
+      'It depends on your retirement-age expenses, how long you expect to live, and inflation. A common rule of thumb is 25 to 30 times your annual expense, but that hides risk. This tool runs 10,000 simulations of market returns to find the corpus that funds your inflation-adjusted spending with your chosen confidence level. for example, a corpus that lasts to age 90 in at least 90% of simulated futures. Because medical costs in India inflate faster than general prices, the figure is usually higher than simple rules suggest.',
   },
   {
     question: 'Why use Monte Carlo instead of a single average return?',
@@ -43,7 +43,7 @@ const RETIREMENT_FAQS = [
   {
     question: 'What does "success probability" mean here?',
     answer:
-      'It is the percentage of simulated futures in which your money lasts all the way to your planning age (for example 90, 95 or 100) without ever hitting zero. A 90% success probability means that in 9 out of 10 simulated market histories, you never run out. There is no universally "safe" number, but most planners aim for 85–95%. Higher confidence requires a larger corpus or lower spending.',
+      'It is the percentage of simulated futures in which your money lasts all the way to your planning age (for example 90, 95 or 100) without ever hitting zero. A 90% success probability means that in 9 out of 10 simulated market histories, you never run out. There is no universally "safe" number, but most planners aim for 85 to 95%. Higher confidence requires a larger corpus or lower spending.',
   },
   {
     question: 'What is a glide path and why does it matter?',

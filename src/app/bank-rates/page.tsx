@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { query } from '@/lib/db';
-import { RowDataPacket } from 'mysql2/promise';
+import type { QueryResultRow } from 'pg';
+
 import Breadcrumb from '@/components/Breadcrumb';
 import BankCard from '@/components/BankCard';
 import FAQ from '@/components/FAQ';
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://paisareality.com/bank-rates' },
 };
 
-interface BankSummaryRow extends RowDataPacket {
+interface BankSummaryRow extends QueryResultRow {
   slug: string; name: string; type: string;
   fd_rate: number | null; savings_rate: number | null; home_loan_rate: number | null;
 }
@@ -30,8 +31,7 @@ export const revalidate = 3600;
 export default async function BankRatesPage(): Promise<React.ReactElement> {
   let banks: BankSummaryRow[] = [];
   try {
-    banks = await query<BankSummaryRow[]>(
-      `SELECT b.slug, b.name, b.type,
+    banks = await query<BankSummaryRow>(`SELECT b.slug, b.name, b.type,
               (SELECT br.general_rate FROM bank_rates br WHERE br.bank_id = b.id AND br.rate_type = 'fd' ORDER BY br.general_rate DESC LIMIT 1) as fd_rate,
               (SELECT br.general_rate FROM bank_rates br WHERE br.bank_id = b.id AND br.rate_type = 'savings' LIMIT 1) as savings_rate,
               (SELECT br.general_rate FROM bank_rates br WHERE br.bank_id = b.id AND br.rate_type = 'home_loan' ORDER BY br.general_rate ASC LIMIT 1) as home_loan_rate

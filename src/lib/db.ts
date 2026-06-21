@@ -1,113 +1,53 @@
-import mysql, { Pool, PoolOptions, RowDataPacket, ResultSetHeader } from 'mysql2/promise';
+/**
+ * Unified database access layer — PostgreSQL only.
+ * Drop-in replacement for the old MySQL db.ts.
+ * All query/execute calls route through the single PG pool in ./db/pg.ts.
+ */
+import { pgQuery, withPgTransaction, getPgPool } from './db/pg';
+import type { PoolClient, QueryResultRow } from 'pg';
 
-interface DatabaseConfig {
-  host: string;
-  port: number;
-  user: string;
-  password: string;
-  database: string;
-}
+export { getPgPool, pgQuery, withPgTransaction };
 
-function getDatabaseConfig(): DatabaseConfig {
-  const host = process.env.MYSQL_HOST;
-  const port = process.env.MYSQL_PORT;
-  const user = process.env.MYSQL_USER;
-  const password = process.env.MYSQL_PASSWORD;
-  const database = process.env.MYSQL_DATABASE;
-
-  if (!host || !port || !user || !password || !database) {
-    throw new Error(
-      'Missing required database environment variables. Check MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE.'
-    );
-  }
-
-  return {
-    host,
-    port: parseInt(port, 10),
-    user,
-    password,
-    database,
-  };
-}
-
-let pool: Pool | null = null;
-
-export function getPool(): Pool {
-  if (!pool) {
-    const poolConfig: PoolOptions = {
-      ...getDatabaseConfig(),
-      waitForConnections: true,
-      connectionLimit: 10,
-      maxIdle: 5,
-      idleTimeout: 60000,
-      queueLimit: 0,
-      enableKeepAlive: true,
-      keepAliveInitialDelay: 10000,
-      charset: 'utf8mb4',
-      timezone: '+05:30',
-    };
-    pool = mysql.createPool(poolConfig);
-  }
-  return pool;
-}
-
-export async function query<T extends RowDataPacket[]>(
+/**
+ * Run a parameterized SELECT and return typed rows.
+ * Replacement for the old mysql2 query<T>().
+ */
+export async function query<T extends QueryResultRow>(
   sql: string,
-  params?: (string | number | boolean | null | Date)[]
-): Promise<T> {
-  const db = getPool();
-  try {
-    const [rows] = await db.execute<T>(sql, params);
-    return rows;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown database error';
-    console.error(`Database query error: ${message}`, { sql, params });
-    throw new Error(`Database query failed: ${message}`);
-  }
+  params?: readonly unknown[]
+): Promise<T[]> {
+  return pgQuery<T>(sql, params ?? []);
 }
 
-export async function execute(
+/**
+ * Run a parameterized INSERT/UPDATE/DELETE.
+ * Returns { rowCount, rows } — use RETURNING id for insert ids.
+ */
+export async function execute<T extends QueryResultRow = QueryResultRow>(
   sql: string,
-  params?: (string | number | boolean | null | Date)[]
-): Promise<ResultSetHeader> {
-  const db = getPool();
-  try {
-    const [result] = await db.execute<ResultSetHeader>(sql, params);
-    return result;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown database error';
-    console.error(`Database execute error: ${message}`, { sql, params });
-    throw new Error(`Database execute failed: ${message}`);
-  }
+  params?: readonly unknown[]
+): Promise<{ rowCount: number; rows: T[] }> {
+  const pool = getPgPool();
+  const res = await pool.query<T>(sql, params ? [...params] : []);
+  return { rowCount: res.rowCount ?? 0, rows: res.rows };
 }
 
+/**
+ * Run a callback inside a single transaction (BEGIN/COMMIT, ROLLBACK on throw).
+ */
 export async function transaction<T>(
-  callback: (connection: mysql.PoolConnection) => Promise<T>
+  callback: (client: PoolClient) => Promise<T>
 ): Promise<T> {
-  const db = getPool();
-  const connection = await db.getConnection();
-  try {
-    await connection.beginTransaction();
-    const result = await callback(connection);
-    await connection.commit();
-    return result;
-  } catch (error) {
-    await connection.rollback();
-    const message = error instanceof Error ? error.message : 'Unknown transaction error';
-    console.error(`Transaction error: ${message}`);
-    throw new Error(`Transaction failed: ${message}`);
-  } finally {
-    connection.release();
-  }
+  return withPgTransaction(callback);
 }
 
 export async function healthCheck(): Promise<boolean> {
   try {
-    await query('SELECT 1 as health');
+    await pgQuery('SELECT 1 AS health');
     return true;
   } catch {
     return false;
   }
 }
 
-export default { getPool, query, execute, transaction, healthCheck };
+export default { query, execute, transaction, healthCheck };
