@@ -54,7 +54,7 @@ export default function InflationCalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate Impact of Inflation"
-          description="See how inflation reduces the value of your money over time."
+          description="See how inflation eats into your money over time. Plan so your savings do not lose value."
           result={
             <CalcResult items={[
               { label: `Cost after ${years} years`, value: formatINR(result.futureCost), highlight: true },

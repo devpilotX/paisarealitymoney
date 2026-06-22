@@ -105,10 +105,7 @@ export default function LifecycleTaxOptimizerPage(): React.ReactElement {
       </div>
       <h1 className="heading-1 mb-3">Multi-Year Tax Regime &amp; Investment Optimizer</h1>
       <p className="text-body mb-6 max-w-3xl">
-        Everyone asks &ldquo;old regime or new regime?&rdquo;. but the honest answer changes over your career. This tool
-        projects your tax under <strong>both regimes for every year</strong> to your horizon as your income, rent, home
-        loan and deductions evolve, finds the <strong>year your best regime flips</strong>, and minimises your
-        <strong> lifetime tax</strong> (in present-value terms). then recommends the tax-saving investment mix to match.
+        Compare old vs new tax regime for your exact income. See which one saves you more after all deductions.
       </p>
 
       <AdBanner format="horizontal" />

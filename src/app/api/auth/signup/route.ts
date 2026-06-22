@@ -3,8 +3,9 @@ import { query, execute } from '@/lib/db';
 import { hashPassword, signToken, signRefreshToken } from '@/lib/auth';
 import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit';
 import { sanitizeString, sanitizeEmail } from '@/lib/sanitize';
-import { sendWelcomeEmail } from '@/lib/email';
+import { sendWelcomeEmail, sendVerificationEmail } from '@/lib/email';
 import type { QueryResultRow } from 'pg';
+import crypto from 'crypto';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const rateCheck = checkRateLimit(request, 'auth', RATE_LIMITS.auth);
@@ -27,15 +28,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const passwordHash = await hashPassword(password);
     const result = await execute<QueryResultRow & { id: number }>(
-      'INSERT INTO users (email, password_hash, name) VALUES (lower($1), $2, $3) RETURNING id',
+      'INSERT INTO users (email, password_hash, name, full_name) VALUES (lower($1), $2, $3, $3) RETURNING id',
       [email, passwordHash, name]
     );
     const userId = result.rows[0]!.id;
 
+    // Create email verification token
+    const verifyToken = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+    execute(
+      'INSERT INTO email_verification_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)',
+      [userId, verifyToken, expiresAt]
+    ).catch(() => {});
+
     const token = signToken({ userId, email: email.toLowerCase(), plan: 'free' });
     const refreshToken = signRefreshToken({ userId, email: email.toLowerCase(), plan: 'free' });
 
-    sendWelcomeEmail(email, name).catch((err) => console.error('Welcome email failed:', err));
+    // Send welcome + verification emails (best-effort)
+    sendWelcomeEmail(email, name).catch(() => {});
+    sendVerificationEmail(email, name, verifyToken).catch(() => {});
 
     const response = NextResponse.json({ success: true, user: { id: userId, name, email: email.toLowerCase(), plan: 'free' }, token }, { status: 201 });
     response.cookies.set('auth-token', token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 7 * 24 * 60 * 60, path: '/' });

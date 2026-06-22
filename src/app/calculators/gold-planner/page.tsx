@@ -28,7 +28,7 @@ const FAQS = [
   {
     question: 'How much of my portfolio should be in gold?',
     answer:
-      'There is no single right answer, and this tool does not give personalised advice. As general education, commentators often cite a gold allocation band of roughly 5–15% of a diversified portfolio, with conservative investors sometimes discussed at the higher end and growth-tilted investors at the lower end. Gold is usually described as a diversifier. something that behaves differently from equities. rather than a primary growth engine. The right number for you depends on your goals and risk tolerance; a SEBI-registered adviser can help you decide.',
+      'There is no single right answer, and this tool does not give personalised advice. As general education, commentators often cite a gold allocation band of roughly 5 to 15% of a diversified portfolio, with conservative investors sometimes discussed at the higher end and growth-tilted investors at the lower end. Gold is usually described as a diversifier. something that behaves differently from equities. rather than a primary growth engine. The right number for you depends on your goals and risk tolerance; a SEBI-registered adviser can help you decide.',
   },
   {
     question: 'Why is gold called a diversifier?',
@@ -100,10 +100,7 @@ export default function GoldPlannerPage(): React.ReactElement {
       </div>
       <h1 className="heading-1 mb-3">Gold Allocation &amp; Cost-Averaging Explainer</h1>
       <p className="text-body mb-6 max-w-3xl">
-        A <strong>neutral, educational</strong> look at the role gold has played in a portfolio. and how to plan a
-        disciplined allocation through SIP/cost-averaging. It analyses <strong>historical</strong> returns, volatility,
-        drawdowns and correlation with the Nifty, replays SIP vs lump-sum, and compares SGB, Gold ETF, physical and digital
-        gold with their tax. It does <strong>not</strong> predict prices or tell you when to buy or sell.
+        Understand how gold fits in your portfolio. Historical data and educational allocation ranges to help you think clearly.
       </p>
 
       <AdBanner format="horizontal" />

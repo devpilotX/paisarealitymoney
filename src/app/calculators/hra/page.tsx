@@ -61,7 +61,7 @@ export default function HRACalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate HRA Exemption"
-          description="Find out how much of your HRA is tax-exempt under the old tax regime."
+          description="Calculate your HRA exemption to claim the maximum tax benefit on rent paid."
           result={
             <>
               <CalcResult items={[

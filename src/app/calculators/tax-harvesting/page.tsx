@@ -105,10 +105,7 @@ export default function TaxHarvestingPage(): React.ReactElement {
       </div>
       <h1 className="heading-1 mb-3">Equity Tax-Loss &amp; Gain Harvesting Optimizer</h1>
       <p className="text-body mb-6 max-w-3xl">
-        Before the financial year ends, this tool tells you <strong>exactly which holdings to sell. and how much</strong> , 
-        to legally cut your capital-gains tax. It uses the <strong>₹1.25 lakh LTCG exemption</strong> for tax-free
-        &ldquo;gain harvesting&rdquo;, books losses with the <strong>optimal set-off order</strong>, and shows your tax
-        with vs without harvesting plus the cost-basis reset benefit.
+        Find out if selling and rebuying investments can reduce your capital gains tax legally this year.
       </p>
 
       <AdBanner format="horizontal" />

@@ -57,7 +57,7 @@ export default function FDCalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate FD Maturity Amount"
-          description="Enter deposit amount, interest rate, tenure, and compounding frequency."
+          description="Calculate how much your fixed deposit will be worth at maturity. Compare regular and senior citizen rates."
           result={
             <CalcResult items={[
               { label: 'Maturity Amount', value: formatINR(Math.round(result.maturity)), highlight: true },

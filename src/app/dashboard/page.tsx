@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -22,10 +22,17 @@ export default function DashboardPage(): React.ReactElement {
       .finally(() => setLoading(false));
   }, [router]);
 
+  const logout = useCallback(() => {
+    document.cookie = 'auth-token=; path=/; max-age=0';
+    document.cookie = 'refresh-token=; path=/; max-age=0';
+    router.push('/login');
+  }, [router]);
+
   if (loading) return <div className="container-main py-12 text-center"><p className="text-gray-500">Loading...</p></div>;
   if (!user) return <div />;
 
   const dashboardLinks = [
+    { href: '/dashboard/account', title: 'My Account', desc: 'Edit profile, change password, verify email', icon: '👤' },
     { href: '/dashboard/bookmarks', title: 'Saved Schemes', desc: 'View schemes you have bookmarked', icon: '📌' },
     { href: '/dashboard/tracker', title: 'Application Tracker', desc: 'Track your scheme applications', icon: '📋' },
     { href: '/schemes', title: 'Find Schemes', desc: 'Discover new schemes for you', icon: '🔍' },
@@ -40,9 +47,12 @@ export default function DashboardPage(): React.ReactElement {
           <h1 className="heading-1 mb-1">Welcome, {user.name}</h1>
           <p className="text-sm text-gray-500">{user.email} | Plan: <span className="font-medium text-primary">{user.plan === 'premium' ? 'Premium' : 'Free'}</span></p>
         </div>
-        {user.plan === 'free' && (
-          <Link href="/pricing" className="btn-primary no-underline text-sm">Upgrade to Premium</Link>
-        )}
+        <div className="flex items-center gap-3">
+          {user.plan === 'free' && (
+            <Link href="/pricing" className="btn-primary no-underline text-sm">Upgrade</Link>
+          )}
+          <button onClick={logout} className="text-sm text-red-600 hover:underline">Logout</button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

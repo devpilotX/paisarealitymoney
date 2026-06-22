@@ -27,6 +27,19 @@ const CALCULATOR_LINKS: DropdownItem[] = [
   { href: '/calculators/home-loan', label: 'Home Loan' },
 ];
 
+const SMART_TOOLS_LINKS: DropdownItem[] = [
+  { href: '/smart-tools', label: 'All Smart Tools' },
+  { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
+  { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest' },
+  { href: '/calculators/debt-optimizer', label: 'Debt Optimizer' },
+  { href: '/calculators/budget-optimizer', label: 'Budget Optimizer' },
+  { href: '/calculators/lifecycle-tax-optimizer', label: 'Tax Regime Optimizer' },
+  { href: '/calculators/tax-harvesting', label: 'Tax Harvesting' },
+  { href: '/calculators/gold-planner', label: 'Gold Planner' },
+  { href: '/calculators/scheme-maximizer', label: 'Scheme Maximizer' },
+  { href: '/calculators/salary-optimizer', label: 'Salary Optimizer' },
+];
+
 interface NavItemConfig {
   label: string;
   href?: string;
@@ -35,7 +48,7 @@ interface NavItemConfig {
 
 const NAV_ITEMS: NavItemConfig[] = [
   { label: 'Prices', dropdown: PRICE_LINKS },
-  { label: 'Smart Tools', href: '/smart-tools' },
+  { label: 'Smart Tools', href: '/smart-tools', dropdown: SMART_TOOLS_LINKS },
   { label: 'Calculators', href: '/calculators', dropdown: CALCULATOR_LINKS },
   { label: 'Schemes', href: '/schemes' },
   { label: 'Bank Rates', href: '/bank-rates' },

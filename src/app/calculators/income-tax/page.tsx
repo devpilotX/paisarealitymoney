@@ -109,7 +109,7 @@ export default function IncomeTaxCalculatorPage(): React.ReactElement {
       <AdBanner format="horizontal" />
 
       <div className="my-8">
-        <Calculator title="Calculate Your Income Tax" description="Compare tax under old and new regime. FY 2025-26 (AY 2026-27) slabs.">
+        <Calculator title="Calculate Your Income Tax" description="Calculate your income tax under both old and new regimes. See which one saves you more.">
           <CalcSlider id="income" label="Gross Annual Income" value={grossIncome} onChange={setGrossIncome} min={0} max={50000000} step={50000} prefix="Rs " />
           <CalcSelect id="age" label="Age Group" value={ageGroup} onChange={setAgeGroup} options={[
             { value: 'general', label: 'Below 60 years' },

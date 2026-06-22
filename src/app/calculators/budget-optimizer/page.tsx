@@ -38,7 +38,7 @@ const FAQS = [
   {
     question: 'How big should my emergency fund be?',
     answer:
-      'The classic guidance is 3–6 months of expenses, but it depends on income stability. This tool recommends about 4 months for very stable jobs (government, large firms), 6 months for normal employment, and up to 9 months for variable, startup or freelance income. It then shows your gap to that target and roughly how many months of your current surplus it will take to fill. because an emergency fund should usually come before long-term investing.',
+      'The classic guidance is 3 to 6 months of expenses, but it depends on income stability. This tool recommends about 4 months for very stable jobs (government, large firms), 6 months for normal employment, and up to 9 months for variable, startup or freelance income. It then shows your gap to that target and roughly how many months of your current surplus it will take to fill. because an emergency fund should usually come before long-term investing.',
   },
   {
     question: 'How does it check whether my goals are achievable?',
@@ -100,10 +100,7 @@ export default function BudgetOptimizerPage(): React.ReactElement {
       </div>
       <h1 className="heading-1 mb-3">Smart Cash Flow &amp; Budget Optimizer</h1>
       <p className="text-body mb-6 max-w-3xl">
-        The 50/30/20 rule is a fine starting point. but your ideal budget depends on what you earn, where you live, and
-        how stable your income is. This tool <strong>adapts the split to you</strong>, finds the <strong>surplus you can
-        redirect</strong>, flags where you&rsquo;re overspending, sizes your <strong>emergency fund</strong>, and checks
-        whether your <strong>goals are on track</strong>. with a clear plan if money is tight.
+        Get a realistic budget split for your income. Covers needs, wants, savings, and emergency fund in one view.
       </p>
 
       <AdBanner format="horizontal" />
@@ -141,7 +138,7 @@ export default function BudgetOptimizerPage(): React.ReactElement {
 
         <h2>Emergency fund first, then goals</h2>
         <p>
-          Before locking money into long-term investments, you need a cushion. The tool sizes your emergency fund at 4–9
+          Before locking money into long-term investments, you need a cushion. The tool sizes your emergency fund at 4 to 9
           months of expenses depending on how stable your job is, shows the gap to that target, and estimates how long it
           will take to fill at your current surplus. Once that is in place, it turns to your goals: for each one it
           computes the monthly contribution required to hit the deadline and tells you whether your surplus can cover them

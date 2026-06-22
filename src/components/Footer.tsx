@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import SubscribeForm from './SubscribeForm';
 
 interface FooterLink {
   href: string;
@@ -73,7 +74,12 @@ export default function Footer(): React.ReactElement {
           <FooterColumn title="Legal" links={LEGAL_LINKS} />
         </div>
 
-        <div className="mt-10 pt-6 border-t border-gray-200">
+        <div className="mt-10 pt-6 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900 mb-2">Subscribe to our newsletter</h3>
+            <p className="text-xs text-gray-500 mb-3">Get weekly updates on prices, tools, and financial tips.</p>
+            <SubscribeForm />
+          </div>
           <p className="text-xs text-gray-500 leading-relaxed">
             Disclaimer: Paisa Reality is an informational website. We are not financial advisors.
             Prices shown are indicative and sourced from public data. Government scheme details are

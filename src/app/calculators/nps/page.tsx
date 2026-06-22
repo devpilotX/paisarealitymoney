@@ -57,7 +57,7 @@ export default function NPSCalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate NPS Corpus & Pension"
-          description="See your projected retirement corpus and monthly pension from NPS."
+          description="Estimate your NPS corpus at retirement based on your monthly contribution and expected returns."
           result={
             <CalcResult items={[
               { label: 'Total Corpus at 60', value: formatINR(result.corpus), highlight: true },

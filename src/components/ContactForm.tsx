@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-const API_BASE = 'https://api.devpilotx.com';
-
 const SUBJECT_OPTIONS = [
   'Data correction (wrong price, rate, or scheme info)',
   'Bug report (something is broken)',
@@ -32,13 +30,10 @@ export default function ContactForm(): React.ReactElement {
     const payload = {
       name: (data.get('name') as string)?.trim(),
       email: (data.get('email') as string)?.trim(),
-      subject: (data.get('subject') as string)?.trim() || 'Contact from paisareality.com',
       message: (data.get('message') as string)?.trim(),
-      site: 'paisareality.com',
-      sourcePage: typeof window !== 'undefined' ? window.location.pathname : '/contact',
     };
     try {
-      const res = await fetch(API_BASE + '/v2/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

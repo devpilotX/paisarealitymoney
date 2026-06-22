@@ -60,7 +60,7 @@ export default function SchemesPage(): React.ReactElement {
       <div className="text-center mb-8">
         <h1 className="heading-1 mb-3">Government Scheme Finder</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Fill a simple form and find out which central and state government schemes you may be eligible for. Covers active schemes in the database across education, housing, business, healthcare, and more.
+          Fill a short form and we match you with central and state schemes you likely qualify for. Education, housing, business, healthcare, and more.
         </p>
         <p className="text-sm text-gray-500 max-w-2xl mx-auto mt-3">
           For the official national catalogue, cross-check results on{' '}

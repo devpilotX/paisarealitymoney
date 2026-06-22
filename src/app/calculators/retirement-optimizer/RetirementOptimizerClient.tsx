@@ -269,7 +269,7 @@ export default function RetirementOptimizerClient(): React.ReactElement {
             <div className="card mb-6">
               <h3 className="text-base font-semibold mb-1">Projected corpus over time</h3>
               <p className="text-xs text-gray-500 mb-3">
-                Median (dark line) with 25–75th (inner) and 10–90th (outer) percentile bands across {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} simulations. The fan widens because returns are uncertain. the spread is the real risk.
+                Median (dark line) with 25th to 75th (inner) and 10th to 90th (outer) percentile bands across {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} simulations. The fan widens because returns are uncertain. the spread is the real risk.
               </p>
               <FanChart bands={analysis.base.fanChart} retirementAge={inputs.retirementAge} />
             </div>

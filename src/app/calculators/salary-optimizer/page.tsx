@@ -94,7 +94,7 @@ export default function SalaryOptimizerPage(): React.ReactElement {
       <Breadcrumb items={[{ label: 'Calculators', href: '/calculators' }, { label: 'Salary Structure Optimizer' }]} />
       <h1 className="heading-1 mb-3">Salary Structure Optimizer</h1>
       <p className="text-body mb-6 max-w-2xl">
-        Find the optimal salary breakup to minimize your income tax. We test every valid combination of Basic, HRA, NPS, LTA, and food coupons across both tax regimes to find your best structure.
+        Restructure your salary components to legally reduce tax. See exactly how much you can save by changing your CTC split.
       </p>
       <AdBanner format="horizontal" />
 

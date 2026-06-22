@@ -71,7 +71,7 @@ export default function GoldPlannerClient(): React.ReactElement {
 
       {/* Allocation band */}
       <div className="card mt-8 bg-primary-50 border-primary-100">
-        <h2 className="text-lg font-bold mb-1">Educational allocation band: {a.allocationBand.minPct}–{a.allocationBand.maxPct}% in gold</h2>
+        <h2 className="text-lg font-bold mb-1">Educational allocation band: {a.allocationBand.minPct} to {a.allocationBand.maxPct}% in gold</h2>
         <p className="text-sm text-gray-700">{a.allocationBand.note}</p>
       </div>
 
@@ -95,7 +95,7 @@ export default function GoldPlannerClient(): React.ReactElement {
       {/* Rolling returns */}
       <div className="card my-6 overflow-x-auto">
         <h3 className="text-base font-semibold mb-1">Rolling returns by holding period</h3>
-        <p className="text-xs text-gray-500 mb-3">Annualised return across every historical window of each length. The wide min–max range is the point: outcomes depend heavily on when you started.</p>
+        <p className="text-xs text-gray-500 mb-3">Annualised return across every historical window of each length. The wide min to max range is the point: outcomes depend heavily on when you started.</p>
         <table className="w-full text-sm">
           <thead><tr className="text-left text-gray-500 border-b border-gray-200"><th className="py-2 font-medium">Holding</th><th className="py-2 font-medium text-right">Worst</th><th className="py-2 font-medium text-right">Average</th><th className="py-2 font-medium text-right">Best</th><th className="py-2 font-medium text-right">% positive</th></tr></thead>
           <tbody>

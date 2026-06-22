@@ -283,7 +283,7 @@ export function allocationBandFor(riskProfile: RiskProfile): AllocationBand {
     case 'aggressive':
       return { riskProfile, minPct: 0, maxPct: 10, note: 'Growth-tilted portfolios are often described with a smaller gold sleeve. This is a commonly-cited educational range, not a recommendation.' };
     default:
-      return { riskProfile: 'moderate', minPct: 5, maxPct: 15, note: 'A 5–15% band is a widely-quoted educational guideline for a diversified portfolio. This is general information, not personalised advice.' };
+      return { riskProfile: 'moderate', minPct: 5, maxPct: 15, note: 'A 5 to 15% band is a widely-quoted educational guideline for a diversified portfolio. This is general information, not personalised advice.' };
   }
 }
 
