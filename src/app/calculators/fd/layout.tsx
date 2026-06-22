@@ -12,11 +12,6 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/fd',
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'FD Calculator India',
-    description: 'Calculate FD maturity amount with interest breakup. Free.',
-  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
