@@ -12,6 +12,11 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/gratuity',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Gratuity Calculator India',
+    description: 'Calculate your gratuity amount instantly. Free tool.',
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

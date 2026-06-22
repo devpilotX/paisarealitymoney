@@ -12,6 +12,11 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/nps',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NPS Calculator India',
+    description: 'Calculate NPS returns and retirement pension. Free tool.',
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -12,6 +12,11 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/hra',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HRA Calculator India',
+    description: 'Calculate HRA tax exemption under Section 10(13A). Free.',
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
