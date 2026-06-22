@@ -203,7 +203,7 @@ export async function getSchemesByState(state: string): Promise<MatchedScheme[]>
             states, categories, max_income, occupations, education_min, area,
             bpl_required, minority_only, disability_only
      FROM schemes
-     WHERE is_active = true AND (states IS NULL OR states @> $1::jsonb OR states @> '["all"]'::jsonb)
+     WHERE is_active = true AND (states IS NULL OR states @> $1::jsonb OR states @> '"all"'::jsonb)
      ORDER BY benefit_amount_max DESC NULLS LAST, name`,
     [JSON.stringify([state])]
   );
