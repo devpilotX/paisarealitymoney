@@ -65,18 +65,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    alternateLocale: 'hi_IN',
     url: SITE_URL,
     siteName: 'Paisa Reality',
     title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
     description:
-      "India's one-stop money hub.",
+      'Find Indian government schemes with eligibility, benefits, documents, and official apply links. Check gold, silver, petrol, and diesel prices. Use free calculators and compare bank rates.',
     images: [
       {
         url: '/paisa_reality_logo.png',
         width: 512,
         height: 512,
-        alt: 'Paisa Reality - India\'s Money Hub',
+        alt: 'Paisa Reality logo',
       },
     ],
   },
@@ -84,14 +83,13 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
     description:
-      "India's one-stop money hub.",
+      'Find Indian government schemes with eligibility, benefits, documents, and official apply links. Check gold, silver, petrol, and diesel prices. Use free calculators and compare bank rates.',
     images: ['/paisa_reality_logo.png'],
   },
   alternates: {
     canonical: SITE_URL,
     languages: {
       'en-IN': SITE_URL,
-      'hi-IN': SITE_URL + '/hi',
       'x-default': SITE_URL,
     },
   },
@@ -116,11 +114,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} data-scroll-behavior="smooth">
       <head>
-        <meta name="google-site-verification" content="UKt2p3p1YlGr_1Tk84QZ8UGMaIGeiPMArUEJqGCD0lU" />
         <meta name="google-adsense-account" content="ca-pub-6484525483464374" />
         <meta name="geo.region" content="IN" />
         <meta name="geo.country" content="India" />
-        <meta name="language" content="English,Hindi" />
+        <meta name="language" content="English" />
         <meta name="distribution" content="global" />
       </head>
       <body className="font-sans bg-white text-gray-900 antialiased flex flex-col min-h-screen">

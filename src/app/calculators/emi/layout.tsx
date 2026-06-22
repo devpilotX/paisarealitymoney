@@ -12,6 +12,11 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/emi',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'EMI Calculator India',
+    description: 'Calculate monthly EMI for any loan. Free, instant results.',
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

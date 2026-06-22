@@ -12,6 +12,11 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/sip',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SIP Calculator India',
+    description: 'See how much your monthly SIP can grow. Free, instant results.',
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

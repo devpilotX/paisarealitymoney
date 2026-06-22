@@ -12,6 +12,11 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/inflation',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Inflation Calculator India',
+    description: 'See how inflation affects your money over time. Free tool.',
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
