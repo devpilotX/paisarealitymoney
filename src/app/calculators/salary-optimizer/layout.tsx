@@ -12,11 +12,6 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/salary-optimizer',
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Salary Structure Optimizer India',
-    description: 'Restructure salary to maximize take-home. Free tool.',
-  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -12,11 +12,6 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/income-tax',
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Income Tax Calculator India 2024-25',
-    description: 'Compare old vs new tax regime. Calculate exact tax liability.',
-  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

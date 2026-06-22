@@ -12,11 +12,6 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/ppf',
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'PPF Calculator India',
-    description: 'Calculate PPF maturity amount over 15 years. Free tool.',
-  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

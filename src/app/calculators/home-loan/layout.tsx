@@ -12,11 +12,6 @@ export const metadata: Metadata = {
     url: 'https://paisareality.com/calculators/home-loan',
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Home Loan EMI Calculator India',
-    description: 'Calculate home loan EMI with full amortization schedule. Free.',
-  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
