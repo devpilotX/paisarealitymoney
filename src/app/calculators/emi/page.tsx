@@ -70,7 +70,7 @@ export default function EMICalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate Your Monthly EMI"
-          description="Enter loan amount, interest rate, and tenure to see your monthly payment."
+          description="Find out your exact monthly EMI before taking a loan. Works for home loans, car loans, personal loans, and any fixed-rate EMI."
           result={
             <CalcResult items={[
               { label: 'Monthly EMI', value: formatINR(Math.round(result.emi)), highlight: true },

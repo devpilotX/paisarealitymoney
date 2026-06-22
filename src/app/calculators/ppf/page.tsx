@@ -60,7 +60,7 @@ export default function PPFCalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate PPF Returns"
-          description={`Current PPF rate: ${PPF_RATE}% per annum. Tenure: ${PPF_TENURE} years.`}
+          description="See your PPF balance at maturity with year-by-year growth. Helps you plan long-term tax-free savings."
           result={
             <CalcResult items={[
               { label: 'Maturity Amount', value: formatINR(result.maturityAmount), highlight: true },

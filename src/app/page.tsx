@@ -8,7 +8,7 @@ import FAQ from '@/components/FAQ';
 export const metadata: Metadata = {
   title: 'Paisa Reality - Gold Rate Today, Silver Price, Petrol Diesel Price, Government Schemes, Free Calculators',
   description:
-    'Check today gold rate, silver rate, petrol price, diesel price and LPG price in India. Find government schemes you qualify for. Use free EMI, SIP, FD, PPF calculators. Compare bank rates across 50+ banks.',
+    'Check today gold rate, silver rate, petrol price, diesel price and LPG price in India. Find government schemes you qualify for. Use free EMI, SIP, FD, PPF calculators. Compare bank rates. Meet Yojana Mitra, your AI guide to schemes and tools.',
   alternates: { canonical: 'https://paisareality.com' },
   openGraph: {
     title: 'Paisa Reality - India\'s Free Money Hub',
@@ -149,6 +149,11 @@ const HOME_FAQS = [
     answer:
       'Smart Tools are our advanced financial calculators. They handle complex questions like how much you need to retire, whether to prepay a loan or invest, and how to legally pay less tax. They run in your browser and are completely free.',
   },
+  {
+    question: 'What is Yojana Mitra?',
+    answer:
+      'Yojana Mitra is our AI assistant built into the site. It helps you find government schemes, understand calculator results, and answer questions about anything on Paisa Reality. It only talks about what is on this website, nothing outside.',
+  },
 ];
 
 export default function HomePage(): React.ReactElement {
@@ -191,15 +196,15 @@ export default function HomePage(): React.ReactElement {
       <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       {/* Hero */}
-      <section className="bg-white py-12 sm:py-16">
-        <div className="container-main text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            India&apos;s Free Money Hub
+      <section className="bg-white py-10 sm:py-14">
+        <div className="container-main text-center px-4">
+          <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-3">
+            Your Money Deserves Better.
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            Today&apos;s prices, government schemes, free calculators, and bank rate comparisons. Everything in one place, updated daily.
+          <p className="text-base sm:text-lg text-gray-600 max-w-lg mx-auto mb-6">
+            Every Indian family works hard for their money. Now make your own decisions. Everything is in your hands.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/score"
               className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold
@@ -228,7 +233,7 @@ export default function HomePage(): React.ReactElement {
         <div className="container-main max-w-2xl text-center">
           <h2 className="heading-2 mb-4">Smart Tools</h2>
           <p className="text-gray-600 text-base mb-6">
-            These are our advanced money tools. They do the hard maths for you. Things like how much you need to retire, should you prepay your loan or invest, and how to pay less tax in a legal way. All free, no login needed.
+            Big money questions need more than a basic calculator. Our Smart Tools run thousands of scenarios to help you plan retirement, compare loan prepayment vs investing, and cut your tax bill. Free, instant, no login.
           </p>
           <Link
             href="/smart-tools"
@@ -247,7 +252,7 @@ export default function HomePage(): React.ReactElement {
       {/* Four Pillars */}
       <section className="section-spacing bg-gray-50">
         <div className="container-main">
-          <h2 className="heading-2 text-center mb-8">What You Can Do Here</h2>
+          <h2 className="heading-2 text-center mb-8">Everything You Need, Right Here</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {PILLAR_CARDS.map((card) => (
               <Link key={card.href} href={card.href} className="card text-center no-underline group">
@@ -286,9 +291,9 @@ export default function HomePage(): React.ReactElement {
       {/* Popular Schemes */}
       <section className="section-spacing bg-gray-50">
         <div className="container-main">
-          <h2 className="heading-2 text-center mb-2">Popular Government Schemes</h2>
+          <h2 className="heading-2 text-center mb-2">Government Schemes for You</h2>
           <p className="text-center text-gray-600 mb-8">
-            Some of the most searched government schemes in India.
+            The government made these for people like you. Check if you qualify.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {POPULAR_SCHEMES.map((scheme) => (
@@ -340,7 +345,7 @@ export default function HomePage(): React.ReactElement {
       {/* Trust Indicators */}
       <section className="section-spacing bg-gray-50">
         <div className="container-main">
-          <h2 className="heading-2 text-center mb-8">Why Trust Paisa Reality?</h2>
+          <h2 className="heading-2 text-center mb-8">Built on Trust</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {TRUST_ITEMS.map((item) => (
               <div key={item.title} className="text-center">

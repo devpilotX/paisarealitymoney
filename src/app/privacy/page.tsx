@@ -3,7 +3,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - Paisa Reality',
-  description: 'How Paisa Reality collects, uses, and protects your data. We use Google AdSense and Google Analytics. Your calculator data stays in your browser.',
+  description: 'Privacy policy for Paisa Reality. Learn what data we collect, how we use it, and your rights.',
   alternates: { canonical: 'https://paisareality.com/privacy' },
 };
 
@@ -13,99 +13,82 @@ export default function PrivacyPage(): React.ReactElement {
       <Breadcrumb items={[{ label: 'Privacy Policy' }]} />
 
       <article className="max-w-3xl">
-        <h1 className="heading-1 mb-2">Privacy Policy</h1>
-        <p className="text-sm text-gray-500 mb-8">Effective date: 1 January 2025. Last updated: 21 June 2026.</p>
+        <h1 className="heading-1 mb-4">Privacy Policy</h1>
+        <p className="text-body text-sm text-gray-500 mb-6">Last updated: June 2026</p>
 
-        <div className="space-y-8">
+        <div className="space-y-6 text-body">
           <section>
-            <h2 className="heading-2 mb-2">1. Who we are</h2>
-            <p className="text-body">Paisa Reality (paisareality.com) is operated by Dipanshu Kumar. This policy explains what data we collect, why, and how we protect it.</p>
+            <h2 className="heading-2 mb-2">Who we are</h2>
+            <p>Paisa Reality (paisareality.com) is a free financial information website for India. This policy explains what data we collect when you use our site, why we collect it, and how we handle it.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mb-2">2. Data you give us</h2>
-            <ul className="list-disc list-inside space-y-1 text-body">
-              <li><strong>Account registration:</strong> Name, email, and password (stored encrypted).</li>
-              <li><strong>Scheme finder:</strong> Age, gender, state, income, category, occupation. Used only to match you with relevant schemes.</li>
-              <li><strong>Contact form:</strong> Name, email, and your message.</li>
-              <li><strong>Health Score:</strong> Financial details you enter. These are processed in your browser. If you save your score, a snapshot is stored on our server linked to your account or an anonymous cookie.</li>
+            <h2 className="heading-2 mb-2">What data we collect</h2>
+            <p>We collect data only when you actively provide it or when standard web technology logs it automatically:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li><strong>Account information:</strong> If you create an account, we store your name, email address, phone number (optional), and city (optional).</li>
+              <li><strong>Contact form messages:</strong> Your name, email, and the message you send.</li>
+              <li><strong>Newsletter subscription:</strong> Your email address when you subscribe.</li>
+              <li><strong>Money Health Score data:</strong> The financial details you enter into the score calculator, if you choose to save your result.</li>
+              <li><strong>Usage data:</strong> Standard server logs including IP address, browser type, pages visited, and timestamps. Google Analytics collects aggregated browsing data.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="heading-2 mb-2">3. Data collected automatically</h2>
-            <ul className="list-disc list-inside space-y-1 text-body">
-              <li><strong>Analytics:</strong> Pages visited, time on page, clicks (via Google Analytics 4).</li>
-              <li><strong>Device info:</strong> Browser type, OS, screen size.</li>
-              <li><strong>IP address:</strong> Used for approximate location (city level) and rate limiting. Not stored permanently.</li>
-              <li><strong>Cookies:</strong> Functional cookies for login sessions and preferences. Ad cookies from Google AdSense.</li>
+            <h2 className="heading-2 mb-2">Cookies</h2>
+            <p>We use cookies for:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li><strong>Authentication:</strong> To keep you logged in (if you have an account).</li>
+              <li><strong>Google AdSense:</strong> Advertising cookies to show relevant ads. These are managed by Google.</li>
+              <li><strong>Google Analytics:</strong> To understand how people use the site so we can improve it.</li>
+            </ul>
+            <p className="mt-2">You can disable cookies in your browser settings, but some features (like staying logged in) will not work without them.</p>
+          </section>
+
+          <section>
+            <h2 className="heading-2 mb-2">How we use your data</h2>
+            <ul className="list-disc list-inside space-y-1">
+              <li>To provide the services you use (account access, saved scores, scheme matching).</li>
+              <li>To reply to your contact form messages.</li>
+              <li>To send newsletter emails if you subscribed (you can unsubscribe any time).</li>
+              <li>To send account-related emails (verification, password reset, login alerts).</li>
+              <li>To improve the site based on aggregated usage patterns.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="heading-2 mb-2">4. How we use your data</h2>
-            <ul className="list-disc list-inside space-y-1 text-body">
-              <li>To provide our services (prices, schemes, calculators, bank rates).</li>
-              <li>To match you with government schemes.</li>
-              <li>To save and show your score history (if you choose to save).</li>
-              <li>To understand traffic patterns and improve the website.</li>
-              <li>To display advertisements.</li>
-              <li>To prevent abuse and spam.</li>
+            <h2 className="heading-2 mb-2">We do not sell your data</h2>
+            <p>We do not sell, rent, or trade your personal information to third parties. We do not share your email with advertisers. Google AdSense and Analytics operate under their own privacy policies.</p>
+          </section>
+
+          <section>
+            <h2 className="heading-2 mb-2">Data storage and security</h2>
+            <p>Your data is stored in a PostgreSQL database. Passwords are hashed with bcrypt and never stored in plain text. We use HTTPS for all connections. While we take reasonable steps to protect your data, no system is perfectly secure.</p>
+          </section>
+
+          <section>
+            <h2 className="heading-2 mb-2">Data retention</h2>
+            <p>We keep your account data for as long as your account exists. If you delete your account, we remove your personal data within 30 days. Contact form messages are kept for up to 12 months. Newsletter subscription records are kept until you unsubscribe.</p>
+          </section>
+
+          <section>
+            <h2 className="heading-2 mb-2">Your rights</h2>
+            <p>You can:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li>View and edit your profile information from your account settings.</li>
+              <li>Unsubscribe from the newsletter at any time using the link in any email.</li>
+              <li>Request a copy of your data or ask us to delete it by emailing us.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="heading-2 mb-2">5. Calculator and Smart Tool data</h2>
-            <p className="text-body">All calculator and Smart Tool computations run entirely in your browser. The numbers you type into calculators are never sent to our server. They stay on your device.</p>
+            <h2 className="heading-2 mb-2">Changes to this policy</h2>
+            <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
           </section>
 
           <section>
-            <h2 className="heading-2 mb-2">6. Google AdSense</h2>
-            <p className="text-body">We use Google AdSense to show ads. Google uses cookies to serve ads based on your browsing history. You can opt out of personalized ads at <a href="https://www.google.com/settings/ads" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</p>
-          </section>
-
-          <section>
-            <h2 className="heading-2 mb-2">7. Google Analytics</h2>
-            <p className="text-body">We use Google Analytics 4 to understand how people use the website. It collects anonymized usage data. You can opt out using the <a href="https://tools.google.com/dlpage/gaoptout" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a>.</p>
-          </section>
-
-          <section>
-            <h2 className="heading-2 mb-2">8. Data sharing</h2>
-            <p className="text-body">We do not sell your data. We do not share personal information with third parties except:</p>
-            <ul className="list-disc list-inside space-y-1 text-body mt-2">
-              <li>Google (for analytics and ads, as described above).</li>
-              <li>Razorpay (for payment processing if you purchase a premium plan).</li>
-              <li>Law enforcement (if legally required).</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="heading-2 mb-2">9. Data storage and security</h2>
-            <p className="text-body">Account data is stored in encrypted databases. Passwords are hashed with bcrypt. We use HTTPS everywhere. However, no system is 100% secure. Use a strong, unique password for your account.</p>
-          </section>
-
-          <section>
-            <h2 className="heading-2 mb-2">10. Your rights</h2>
-            <ul className="list-disc list-inside space-y-1 text-body">
-              <li>You can delete your account at any time from the dashboard.</li>
-              <li>You can request a copy of your data by emailing us.</li>
-              <li>You can opt out of marketing emails using the unsubscribe link.</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="heading-2 mb-2">11. Children</h2>
-            <p className="text-body">Paisa Reality is not directed at children under 13. We do not knowingly collect data from children. If you believe a child has provided us data, contact us and we will delete it.</p>
-          </section>
-
-          <section>
-            <h2 className="heading-2 mb-2">12. Changes</h2>
-            <p className="text-body">We may update this policy. Changes will be posted here with a new date. Continued use means you accept the updated policy.</p>
-          </section>
-
-          <section>
-            <h2 className="heading-2 mb-2">13. Contact</h2>
-            <p className="text-body">Privacy questions? Email <a href="mailto:connect@paisareality.com" className="text-primary hover:underline">connect@paisareality.com</a>.</p>
+            <h2 className="heading-2 mb-2">Contact</h2>
+            <p>Questions about your privacy? Email us at <a href="mailto:connect@paisareality.com" className="link-internal">connect@paisareality.com</a>.</p>
           </section>
         </div>
       </article>

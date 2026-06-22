@@ -105,11 +105,7 @@ export default function PrepayVsInvestPage(): React.ReactElement {
       </div>
       <h1 className="heading-1 mb-3">Home Loan Prepay vs Invest Optimizer</h1>
       <p className="text-body mb-6 max-w-3xl">
-        You have some surplus cash. Should you <strong>prepay your home loan</strong> or <strong>invest it</strong>? The
-        usual advice. &ldquo;invest if returns beat your loan rate&rdquo;. ignores tax and risk. This tool gives a
-        proper answer: it pits the <strong>guaranteed after-tax return of prepaying</strong> against a
-        <strong> 10,000-path simulation</strong> of investing, and reports the probability of winning, the breakeven
-        return, and the <strong>optimal split</strong> for your risk appetite.
+        Should you prepay your loan or invest that money? This tool simulates both paths and shows which one likely puts you ahead.
       </p>
 
       <AdBanner format="horizontal" />

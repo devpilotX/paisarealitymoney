@@ -48,7 +48,7 @@ const FAQS = [
   {
     question: 'Why do credit cards cost so much more?',
     answer:
-      'Credit cards typically charge 36–48% a year and compound daily, not monthly. Daily compounding means interest is charged on interest every day, so the effective annual cost is higher than the headline rate suggests. That is why almost every optimal plan clears credit-card debt first. This tool models cards with daily compounding for accuracy.',
+      'Credit cards typically charge 36 to 48% a year and compound daily, not monthly. Daily compounding means interest is charged on interest every day, so the effective annual cost is higher than the headline rate suggests. That is why almost every optimal plan clears credit-card debt first. This tool models cards with daily compounding for accuracy.',
   },
   {
     question: 'What if my budget cannot cover all the minimum payments?',
@@ -105,10 +105,7 @@ export default function DebtOptimizerPage(): React.ReactElement {
       </div>
       <h1 className="heading-1 mb-3">Multi-Loan Debt Repayment Optimizer</h1>
       <p className="text-body mb-6 max-w-3xl">
-        Juggling a home loan, a car loan and a credit card on one budget? This tool finds the
-        <strong> mathematically optimal order</strong> to clear them. minimising both interest and time. and does it
-        <strong> tax-aware</strong>, so India&rsquo;s Section 24(b) and 80E deductions correctly reshuffle the queue. It
-        compares <strong>Avalanche, Snowball</strong> and a <strong>tax-adjusted</strong> plan side by side.
+        Got multiple loans or cards? This finds the fastest and cheapest order to clear them, saving you interest and time.
       </p>
 
       <AdBanner format="horizontal" />
@@ -158,7 +155,7 @@ export default function DebtOptimizerPage(): React.ReactElement {
 
         <h2>Credit cards, daily compounding and 0% offers</h2>
         <p>
-          Credit cards are almost always the first thing to clear: they charge 36–48% a year and compound
+          Credit cards are almost always the first thing to clear: they charge 36 to 48% a year and compound
           <strong> daily</strong>, so the true cost is even higher than the sticker rate. This tool models that daily
           compounding precisely. At the other extreme, a genuine <strong>0% EMI</strong> offer has no interest cost, so
           there is no benefit to prepaying it. the optimizer correctly pushes it to the very back of the queue and lets

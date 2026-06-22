@@ -157,7 +157,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
               </div>
               <div className="space-y-3">
                 <StatCard label="Prepay. guaranteed value" value={formatCompactINR(analysis.prepayValue)} sub={`Risk-free at ${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}% effective after-tax loan rate`} />
-                <StatCard label="Invest. expected value" value={formatCompactINR(analysis.investDistribution.mean)} sub={`Median ${formatCompactINR(analysis.investDistribution.p50)} · 10th–90th: ${formatCompactINR(analysis.investDistribution.p10)}–${formatCompactINR(analysis.investDistribution.p90)}`} tone="good" />
+                <StatCard label="Invest. expected value" value={formatCompactINR(analysis.investDistribution.mean)} sub={`Median ${formatCompactINR(analysis.investDistribution.p50)} · 10th to 90th: ${formatCompactINR(analysis.investDistribution.p10)} to ${formatCompactINR(analysis.investDistribution.p90)}`} tone="good" />
               </div>
             </div>
 

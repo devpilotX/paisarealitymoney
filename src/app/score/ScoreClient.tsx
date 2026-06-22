@@ -94,6 +94,7 @@ export default function ScoreClient(): React.ReactElement {
           {saved && <a href={`/score/r/${saved.scoreId}`} className="ml-3 link-internal">Share / view result -&gt;</a>}
           <p className="text-xs text-gray-400 mt-2">Saving keeps your history. Works logged-out; sign in to keep it across devices.</p>
         </div>
+        <EmailScore score={result.totalScore} band={result.band} pillars={PILLAR_NAMES.map(n => ({ name: PILLAR_LABEL[n], score: result.pillars[n].score }))} />
       </div>
 
       {/* Pillar breakdown */}
@@ -152,5 +153,43 @@ export default function ScoreClient(): React.ReactElement {
         <p className="text-xs text-yellow-800"><strong>Educational only, not financial advice.</strong> Your score is an estimate from the details you enter and is computed in your browser. Required-corpus and tax figures reuse our Retirement and Tax engines with conservative defaults.</p>
       </div>
     </div>
+  );
+}
+
+function EmailScore({ score, band, pillars }: { score: number; band: string; pillars: { name: string; score: number }[] }): React.ReactElement {
+  const [email, setEmail] = useState('');
+  const [subscribe, setSubscribe] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'err'>('idle');
+
+  const send = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+    setStatus('sending');
+    try {
+      const res = await fetch('/api/score/email', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, score, band, pillars, subscribe }),
+      });
+      setStatus(res.ok ? 'done' : 'err');
+    } catch { setStatus('err'); }
+  };
+
+  if (status === 'done') return <p className="text-sm text-green-700 mt-4">Score sent to your email!</p>;
+
+  return (
+    <form onSubmit={send} className="mt-4 flex flex-col gap-2">
+      <p className="text-sm text-gray-600">Email me my result:</p>
+      <div className="flex gap-2">
+        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
+          className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-primary focus:outline-none" />
+        <button type="submit" disabled={status === 'sending'} className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-800 disabled:opacity-60">
+          {status === 'sending' ? '...' : 'Send'}
+        </button>
+      </div>
+      <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
+        <input type="checkbox" checked={subscribe} onChange={e => setSubscribe(e.target.checked)} className="rounded border-gray-300 accent-primary" />
+        Also subscribe to the newsletter
+      </label>
+      {status === 'err' && <p className="text-xs text-red-600">Failed to send. Try again.</p>}
+    </form>
   );
 }

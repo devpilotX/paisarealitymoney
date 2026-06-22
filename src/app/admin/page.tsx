@@ -178,6 +178,9 @@ export default function AdminPage(): React.ReactElement {
                   <Link href="/admin/blogs/new" className="block px-4 py-3 bg-primary-50 rounded-lg text-sm font-medium text-primary hover:bg-primary-100 transition-colors">
                     + Write new blog post
                   </Link>
+                  <Link href="/admin/emails" className="block px-4 py-3 bg-primary-50 rounded-lg text-sm font-medium text-primary hover:bg-primary-100 transition-colors">
+                    Email Center / Newsletter
+                  </Link>
                   <button onClick={() => void triggerPriceUpdate()} className="block w-full text-left px-4 py-3 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
                     Refresh daily prices
                   </button>
@@ -265,12 +268,11 @@ export default function AdminPage(): React.ReactElement {
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold mb-2">Contact Messages</h2>
             <p className="text-sm text-gray-500 mb-4">
-              Messages sent through the contact form are delivered to <strong>connect@paisareality.com</strong> via the API. Check your inbox for new messages.
+              Messages from the contact form are stored in your database and delivered to your inbox.
             </p>
-            <div className="p-8 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-lg">
-              <p className="text-sm">Messages are delivered directly to your email.</p>
-              <p className="text-sm mt-1">To view them here, connect a database table for messages in a future update.</p>
-            </div>
+            <Link href="/admin/messages" className="inline-flex items-center px-4 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-800 transition-colors">
+              Open Messages
+            </Link>
           </div>
         )}
 

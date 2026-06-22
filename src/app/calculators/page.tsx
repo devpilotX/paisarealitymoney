@@ -67,9 +67,9 @@ export default function CalculatorsPage(): React.ReactElement {
       <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       <Breadcrumb items={[{ label: 'Financial Calculators' }]} />
-      <h1 className="heading-1 mb-3">Free Financial Calculators</h1>
+      <h1 className="heading-1 mb-3">Financial Calculators</h1>
       <p className="text-body mb-8 max-w-2xl">
-        Plan your finances with our free calculators. Calculate EMI, SIP returns, FD maturity, income tax, and more. Instant results, no signup, everything runs in your browser.
+        Our calculators give you real answers for the money questions you face every day. EMI, SIP, tax, loans, and more. Free, instant, no signup needed.
       </p>
 
       <AdBanner format="horizontal" />

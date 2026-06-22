@@ -50,7 +50,7 @@ export default async function BankRatesPage(): Promise<React.ReactElement> {
     <div className="container-main py-6">
       <Breadcrumb items={[{ label: 'Bank Rates' }]} />
       <h1 className="heading-1 mb-3">Bank Rates in India</h1>
-      <p className="text-body mb-6">Compare interest rates across 50+ Indian banks. FD rates, savings rates, home loan rates, and personal loan rates - all in one place.</p>
+      <p className="text-body mb-6">Compare rates across 50+ banks side by side so you pick the best deal. FD, savings, home loan, and personal loan rates updated regularly.</p>
 
       <AdBanner format="horizontal" />
 

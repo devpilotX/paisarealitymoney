@@ -106,11 +106,7 @@ export default function RetirementOptimizerPage(): React.ReactElement {
       </div>
       <h1 className="heading-1 mb-3">Retirement Corpus &amp; Withdrawal Optimizer</h1>
       <p className="text-body mb-6 max-w-3xl">
-        Most retirement calculators multiply one &ldquo;average&rdquo; return and hand you a single number. Real markets
-        crash and surge in an unpredictable order, and that order decides whether your money lasts. This tool runs a
-        <strong> 10,000-path Monte Carlo simulation</strong> to tell you three things: the <strong>corpus you need</strong>,
-        the <strong>monthly SIP</strong> to reach it, and a <strong>safe withdrawal strategy</strong>. with an honest
-        probability of success.
+        Find out how much you need to retire and whether you are on track. Runs thousands of simulations to show you real probabilities, not just one guess.
       </p>
 
       <AdBanner format="horizontal" />
@@ -155,7 +151,7 @@ export default function RetirementOptimizerPage(): React.ReactElement {
         <h2>Decumulation: making the corpus last</h2>
         <p>
           After you retire, the tool withdraws your living expenses every year, growing them with inflation. India has a
-          peculiar challenge here: <strong>medical inflation</strong> (often 10–14%) runs well ahead of general inflation
+          peculiar challenge here: <strong>medical inflation</strong> (often 10 to 14%) runs well ahead of general inflation
           (around 6%), so the tool lets you split your expenses and inflate the medical share faster. Any part-time or rental
           income you expect is netted off, and. if you switch them on. EPF and NPS are added, with the NPS 60% tax-free
           lump sum and compulsory 40% annuity handled per PFRDA rules. A plan &ldquo;succeeds&rdquo; if the corpus never hits
@@ -174,7 +170,7 @@ export default function RetirementOptimizerPage(): React.ReactElement {
 
         <h2>How to use the results</h2>
         <p>
-          Aim for a success probability you are comfortable with. most planners target 85–95%. If your number is lower, you
+          Aim for a success probability you are comfortable with. most planners target 85 to 95%. If your number is lower, you
           have four levers: invest more each month, spend less in retirement, retire later, or take a little more equity risk
           (within reason). If your number is very high, you may be over-saving and could afford to retire earlier or enjoy
           more today. Treat the output as a decision-making aid and a conversation starter with a qualified adviser. not as

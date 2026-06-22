@@ -60,7 +60,7 @@ export default function HomeLoanCalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate Home Loan EMI & Affordability"
-          description="Enter property value, down payment, and your income to check affordability."
+          description="Plan your home loan with full EMI breakdown, total interest, and prepayment impact."
           result={
             <>
               <CalcResult items={[

@@ -188,7 +188,7 @@ export const SCHEMES: Scheme[] = [
     benefitType: 'scholarship', benefitKind: 'recurring',
     predicates: { occupations: ['student'], categories: ['sc', 'st', 'obc', 'ews'], maxIncome: 800000, minAge: 14 },
     quantify: () => 12000, valuationNote: 'Maintenance allowance + fees; varies by course. valued at ~₹12,000/yr.',
-    howToApply: 'Apply at scholarships.gov.in (window usually Jul–Nov) with income & caste certificates.',
+    howToApply: 'Apply at scholarships.gov.in (window usually Jul to Nov) with income & caste certificates.',
     applyLink: 'https://scholarships.gov.in', source: 'scholarships.gov.in', lastVerified: '2025-06-21',
   },
   {

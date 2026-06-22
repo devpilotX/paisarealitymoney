@@ -100,10 +100,7 @@ export default function SchemeMaximizerPage(): React.ReactElement {
       </div>
       <h1 className="heading-1 mb-3">Government Scheme Benefit Maximizer</h1>
       <p className="text-body mb-6 max-w-3xl">
-        Listing sites tell you <em>which</em> government schemes you might qualify for. This tool tells you the part that
-        actually matters: the <strong>total rupee benefit you can claim</strong>. It quantifies the annual value of every
-        eligible central scheme, <strong>resolves overlaps</strong> to the best combination you can legally receive
-        together, separates one-time from recurring benefits, and shows you exactly <strong>how to claim each</strong>.
+        Enter your profile and see the total annual value of government schemes you may qualify for, ranked by benefit.
       </p>
 
       <AdBanner format="horizontal" />

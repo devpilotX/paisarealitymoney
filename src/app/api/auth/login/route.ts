@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { query } from '@/lib/db';
+import { query, execute } from '@/lib/db';
 import { verifyPassword, signToken, signRefreshToken } from '@/lib/auth';
 import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit';
 import { sanitizeEmail } from '@/lib/sanitize';
+import { sendLoginAlertEmail } from '@/lib/email';
 import type { QueryResultRow } from 'pg';
 
 interface UserRow extends QueryResultRow {
@@ -34,6 +35,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const response = NextResponse.json({ success: true, user: { id: user.id, name: user.name, email: user.email, plan: user.plan }, token });
     response.cookies.set('auth-token', token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 7 * 24 * 60 * 60, path: '/' });
     response.cookies.set('refresh-token', refreshToken, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 30 * 24 * 60 * 60, path: '/' });
+
+    sendLoginAlertEmail(user.email, user.name || 'User').catch(() => {});
+    execute('UPDATE users SET last_login_at = now() WHERE id = $1', [user.id]).catch(() => {});
+
     return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';

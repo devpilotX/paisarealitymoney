@@ -54,7 +54,7 @@ export default function SIPCalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate SIP Returns"
-          description="See how your monthly SIP investment grows over time with compounding."
+          description="See how your monthly SIP grows over time with compounding. Plan for any goal with a clear number."
           result={
             <CalcResult items={[
               { label: 'Future Value', value: formatINR(Math.round(result.futureValue)), highlight: true },

@@ -51,7 +51,7 @@ export default function GratuityCalculatorPage(): React.ReactElement {
       <div className="my-8">
         <Calculator
           title="Calculate Your Gratuity Amount"
-          description="Enter your last drawn salary (basic + DA) and years of service."
+          description="Check how much gratuity you are entitled to based on your salary and years of service."
           result={
             <CalcResult items={[
               { label: 'Gratuity Amount', value: formatINR(result.gratuity), highlight: true },
