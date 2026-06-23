@@ -1,28 +1,21 @@
-import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import { pageMetadata } from '@/lib/seo';
 import GoldPlannerClient from './GoldPlannerClient';
 
-export const metadata: Metadata = {
-  title: 'Gold Allocation & SIP Planner. Historical Explainer (India)',
+export const metadata = pageMetadata({
+  title: 'Gold Investment Calculator India: SGB vs Gold ETF',
   description:
-    'Understand gold\'s historical role in a portfolio and plan a disciplined SIP/cost-averaging allocation. Rolling returns, volatility, Nifty correlation, SGB vs Gold ETF vs digital gold with tax. Educational, neutral. not advice, not a price prediction.',
+    'Plan your gold allocation the smart way. Compare SGB vs gold ETF vs physical gold, see historical returns and risk, and the tax on each. Educational only.',
+  path: '/calculators/gold-planner',
   keywords: [
-    'how much gold in portfolio', 'gold sip calculator', 'sgb vs gold etf', 'gold allocation india',
+    'gold investment calculator india', 'sgb vs gold etf', 'gold allocation',
     'gold historical returns india', 'digital gold tax', 'sovereign gold bond vs etf',
   ],
-  alternates: { canonical: 'https://paisareality.com/calculators/gold-planner' },
-  openGraph: {
-    title: 'Gold Allocation & Cost-Averaging Explainer',
-    description:
-      'A neutral, educational look at gold\'s historical behaviour and how to plan a disciplined allocation via SIP. with SGB/ETF/digital-gold tax comparison. Not advice.',
-    url: 'https://paisareality.com/calculators/gold-planner',
-    type: 'website',
-  },
-};
+});
 
 const FAQS = [
   {
@@ -84,9 +77,10 @@ const jsonLd = {
 
 export default function GoldPlannerPage(): React.ReactElement {
   const calcLinks = [
-    { href: '/calculators/sip', label: 'SIP Calculator' },
     { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
-    { href: '/calculators/tax-harvesting', label: 'Tax-Loss Harvesting' },
+    { href: '/calculators/budget-optimizer', label: 'Budget Optimizer' },
+    { href: '/calculators/tax-harvesting', label: 'Tax Loss Harvesting Optimizer' },
+    { href: '/score', label: 'Money Health Score' },
     { href: '/gold-rate', label: 'Today\'s Gold Rate' },
   ];
 
@@ -163,7 +157,7 @@ export default function GoldPlannerPage(): React.ReactElement {
       </article>
 
       <ShareButton url="/calculators/gold-planner" title="Gold Allocation & Cost-Averaging Explainer - Paisa Reality" />
-      <InternalLinks title="Related" links={calcLinks} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
 

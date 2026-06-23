@@ -16,8 +16,11 @@ const PPF_TENURE = 15;
 
 const PPF_FAQS = [
   { question: 'What is the current PPF interest rate?', answer: `The current PPF interest rate is ${PPF_RATE}% per annum (as of FY 2025-26). The rate is reviewed quarterly by the government. Interest is compounded annually and credited on 31st March each year.` },
+  { question: 'How much can I invest in PPF per year?', answer: 'You can invest between Rs 500 and Rs 1.5 lakh in a PPF account in a financial year. Anything above Rs 1.5 lakh earns no interest and gets no tax benefit. You can deposit it as a lump sum or in up to 12 instalments across the year.' },
   { question: 'What is the PPF lock-in period?', answer: 'PPF has a mandatory lock-in period of 15 years. Partial withdrawals are allowed from the 7th year onwards (up to 50% of the balance at the end of the 4th year). Premature closure is allowed after 5 years in special cases like serious illness or higher education.' },
+  { question: 'Can I extend my PPF account after 15 years?', answer: 'Yes. After maturity you can extend the account in blocks of 5 years, with or without further contributions. The balance keeps earning the prevailing PPF rate, and during an extension you can make one partial withdrawal each year.' },
   { question: 'What are the tax benefits of PPF?', answer: 'PPF enjoys EEE (Exempt-Exempt-Exempt) tax status. The annual deposit up to Rs 1.5 lakh qualifies for deduction under Section 80C. The interest earned is completely tax-free. The maturity amount is also tax-free. This makes PPF one of the most tax-efficient investments.' },
+  { question: 'Is PPF better than ELSS for saving tax?', answer: 'Both qualify under Section 80C. PPF is fully safe with a fixed government rate and a 15 year lock-in, while ELSS invests in equity with a 3 year lock-in and higher but market-linked returns. PPF suits safety, ELSS suits long-term growth, and many people use both. This is general information, not advice.' },
 ];
 
 export default function PPFCalculatorPage(): React.ReactElement {

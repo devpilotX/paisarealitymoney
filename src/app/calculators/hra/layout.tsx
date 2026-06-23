@@ -1,18 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'HRA Calculator India. House Rent Allowance Exemption',
+export const metadata = pageMetadata({
+  title: 'HRA Calculator India: House Rent Allowance Exemption',
   description:
     'Calculate your HRA exemption under Section 10(13A). Find out how much of your HRA is tax-free based on salary, rent paid and city of residence.',
-  alternates: { canonical: 'https://paisareality.com/calculators/hra' },
-  openGraph: {
-    title: 'HRA Calculator India',
-    description: 'Calculate HRA tax exemption under Section 10(13A). Free.',
-    url: 'https://paisareality.com/calculators/hra',
-    type: 'website',
-  },
-};
+  path: '/calculators/hra',
+  keywords: ['hra calculator india', 'house rent allowance calculator', 'hra exemption calculator', 'section 10 13a calculator'],
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const jsonLd = {

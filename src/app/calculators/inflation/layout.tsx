@@ -1,18 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'Inflation Calculator India. Future Cost of Living',
+export const metadata = pageMetadata({
+  title: 'Inflation Calculator India: Future Cost of Living',
   description:
     'Calculate how inflation will increase the cost of things over time. See what today money will be worth in the future, or what a future expense costs in today terms.',
-  alternates: { canonical: 'https://paisareality.com/calculators/inflation' },
-  openGraph: {
-    title: 'Inflation Calculator India',
-    description: 'See how inflation affects your money over time. Free tool.',
-    url: 'https://paisareality.com/calculators/inflation',
-    type: 'website',
-  },
-};
+  path: '/calculators/inflation',
+  keywords: ['inflation calculator india', 'future value calculator', 'cost of living calculator', 'inflation impact calculator'],
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const jsonLd = {

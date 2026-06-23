@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -27,12 +28,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try {
     const rows = await query<BankRow>('SELECT name, slug FROM banks WHERE slug = $1 LIMIT 1', [bankSlug]);
     const bank = rows[0];
-    if (!bank) return { title: 'Bank Not Found' };
-    return {
-      title: `${bank.name} Interest Rates - FD, Savings, Loan Rates`,
+    if (!bank) return { title: 'Bank Not Found', robots: { index: false } };
+    return pageMetadata({
+      title: `${bank.name} Interest Rates: FD, Savings, Loan Rates`,
       description: `Check ${bank.name} FD rates, savings account rate, home loan rate, and personal loan rate. All rates updated regularly.`,
-      alternates: { canonical: `https://paisareality.com/bank-rates/${bank.slug}` },
-    };
+      path: `/bank-rates/${bank.slug}`,
+      keywords: [`${bank.name.toLowerCase()} fd rates`, `${bank.name.toLowerCase()} interest rates`, `${bank.name.toLowerCase()} home loan rate`],
+    });
   } catch { return { title: 'Bank Rates' }; }
 }
 

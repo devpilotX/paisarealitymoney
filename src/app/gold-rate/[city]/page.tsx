@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
@@ -39,12 +40,13 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { city: citySlug } = await params;
   const city = getCityBySlug(citySlug);
-  if (!city) return { title: 'City Not Found' };
-  return {
-    title: `Gold Rate in ${city.name} Today - 22K & 24K Price`,
+  if (!city) return { title: 'City Not Found', robots: { index: false } };
+  return pageMetadata({
+    title: `Gold Rate in ${city.name} Today: 22K & 24K Price`,
     description: `Check the latest available gold rate in ${city.name}, ${city.state}. 22K and 24K gold price per gram, 7-day history, and 30-day chart.`,
-    alternates: { canonical: `https://paisareality.com/gold-rate/${city.slug}` },
-  };
+    path: `/gold-rate/${city.slug}`,
+    keywords: [`gold rate in ${city.name.toLowerCase()}`, `gold price ${city.name.toLowerCase()}`, '22k 24k gold rate', 'gold rate today'],
+  });
 }
 
 export const revalidate = 900;

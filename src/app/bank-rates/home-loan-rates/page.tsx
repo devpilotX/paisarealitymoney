@@ -1,18 +1,20 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
 import Breadcrumb from '@/components/Breadcrumb';
 import BankRateTable from '@/components/BankRateTable';
+import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'Home Loan Interest Rates - Compare All Banks 2026',
+export const metadata = pageMetadata({
+  title: 'Home Loan Interest Rates: Compare All Banks 2026',
   description: 'Compare home loan interest rates across 50+ banks. Find the lowest home loan rate. Updated regularly.',
-  alternates: { canonical: 'https://paisareality.com/bank-rates/home-loan-rates' },
-};
+  path: '/bank-rates/home-loan-rates',
+  keywords: ['home loan interest rates', 'lowest home loan rate', 'home loan rates india 2026'],
+});
 
 interface LoanRateRow extends QueryResultRow {
   bank_name: string; bank_slug: string; bank_type: string;
@@ -47,6 +49,13 @@ export default async function HomeLoanRatesPage(): Promise<React.ReactElement> {
         <p className="text-body mb-4">Most home loans in India are now linked to the RBI repo rate (External Benchmark Lending Rate or EBLR). When RBI changes the repo rate, your home loan EMI changes accordingly. The actual rate you get depends on your credit score, loan amount, and relationship with the bank.</p>
         <p className="text-body mb-4">A difference of just 0.25% in home loan rate can save you lakhs over the loan tenure. For a Rs 50 lakh loan over 20 years, each 0.25% reduction saves approximately Rs 2.5 lakh in total interest. Always negotiate with the bank for a lower spread.</p>
       </article>
+      <FAQ items={[
+        { question: 'What is a good home loan interest rate in India?', answer: 'Home loan rates in India generally range from about 8.25% to 9.5%, depending on the bank, your credit score, and the loan amount. A rate near the lower end is considered good. Compare a few lenders before deciding.' },
+        { question: 'Are home loan rates fixed or floating?', answer: 'Most home loans in India are floating, linked to the RBI repo rate (EBLR). When the repo rate changes, your EMI changes. Fixed-rate home loans exist but are less common and usually priced higher.' },
+        { question: 'How much home loan can I get on my salary?', answer: 'Lenders usually keep your total EMIs within 40 to 50% of your monthly income. A longer tenure or a co-applicant can raise eligibility. Use our home loan calculator to estimate your EMI.' },
+        { question: 'Can I reduce my home loan interest rate?', answer: 'You can ask your bank to lower your spread, improve your credit score, or transfer the balance to a cheaper lender. Even a 0.25% cut can save lakhs over a long tenure.' },
+        { question: 'What charges apply on a home loan besides interest?', answer: 'Common charges include a processing fee (around 0.5% to 1%), legal and valuation fees, and stamp duty on the mortgage. Prepayment of floating-rate home loans is usually free of charge.' },
+      ]} />
       <ShareButton url="/bank-rates/home-loan-rates" title="Home Loan Rates - Paisa Reality" />
       <InternalLinks title="Related" links={otherLinks} columns={2} />
       <AdBanner format="horizontal" className="mt-8" />

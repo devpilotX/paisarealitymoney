@@ -83,10 +83,10 @@ export default function SalaryOptimizerPage(): React.ReactElement {
   const winner = result.bestRegime === 'old' ? result.oldRegimeResult : result.newRegimeResult;
 
   const calcLinks = [
-    { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
-    { href: '/calculators/hra', label: 'HRA Calculator' },
-    { href: '/calculators/nps', label: 'NPS Calculator' },
-    { href: '/calculators/gratuity', label: 'Gratuity Calculator' },
+    { href: '/calculators/lifecycle-tax-optimizer', label: 'Old vs New Tax Regime Optimizer' },
+    { href: '/calculators/tax-harvesting', label: 'Tax Loss Harvesting Optimizer' },
+    { href: '/calculators/debt-optimizer', label: 'Debt Payoff Optimizer' },
+    { href: '/score', label: 'Money Health Score' },
   ];
 
   return (
@@ -188,7 +188,7 @@ export default function SalaryOptimizerPage(): React.ReactElement {
       </div>
 
       <ShareButton url="/calculators/salary-optimizer" title="Salary Structure Optimizer - Paisa Reality" />
-      <InternalLinks title="Related Calculators" links={calcLinks} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={OPTIMIZER_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
     </div>

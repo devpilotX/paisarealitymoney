@@ -1,13 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 import ContactForm from '@/components/ContactForm';
 
-export const metadata: Metadata = {
-  title: 'Contact Us - Paisa Reality',
+export const metadata = pageMetadata({
+  title: 'Contact Us',
   description: 'Get in touch with the Paisa Reality team. Report errors, suggest features, or ask questions. We reply within 48 hours.',
-  alternates: { canonical: 'https://paisareality.com/contact' },
-};
+  path: '/contact',
+});
 
 export default function ContactPage(): React.ReactElement {
   return (

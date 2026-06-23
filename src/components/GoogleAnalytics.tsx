@@ -1,16 +1,15 @@
 'use client';
 
 import Script from 'next/script';
-
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-MT7980F7JH';
+import { GA_ID } from '@/lib/analytics';
 
 export default function GoogleAnalytics(): React.ReactElement | null {
-  if (!GA_MEASUREMENT_ID) {
+  if (!GA_ID) {
     return null;
   }
 
   const gtagSrc =
-    'https' + '://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+    'https' + '://www.googletagmanager.com/gtag/js?id=' + GA_ID;
 
   return (
     <>
@@ -20,7 +19,7 @@ export default function GoogleAnalytics(): React.ReactElement | null {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${GA_MEASUREMENT_ID}', {
+          gtag('config', '${GA_ID}', {
             page_path: window.location.pathname,
           });
         `}

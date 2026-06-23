@@ -1,28 +1,21 @@
-import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import { pageMetadata } from '@/lib/seo';
 import BudgetOptimizerClient from './BudgetOptimizerClient';
 
-export const metadata: Metadata = {
-  title: 'Smart Budget Calculator. Adaptive 50/30/20 for India',
+export const metadata = pageMetadata({
+  title: 'Budget Calculator India: 50 30 20 Planner',
   description:
-    'A free budget planner that adapts the 50/30/20 rule to your income, city and job stability. Finds your monthly surplus, flags overspending, sizes your emergency fund and checks goal feasibility. No login, 100% private.',
+    'Plan your monthly budget the smart way. We find your real surplus, flag overspending, and check your savings goals using the 50 30 20 rule. Free.',
+  path: '/calculators/budget-optimizer',
   keywords: [
-    '50/30/20 budget calculator india', 'budget calculator india', 'how to budget salary',
-    'monthly budget planner', 'emergency fund calculator', 'savings rate calculator india',
+    'budget calculator india', '50 30 20 budget planner', 'monthly budget calculator',
+    'emergency fund calculator', 'savings rate calculator india',
   ],
-  alternates: { canonical: 'https://paisareality.com/calculators/budget-optimizer' },
-  openGraph: {
-    title: 'Smart Cash Flow & Budget Optimizer',
-    description:
-      'Beyond static 50/30/20. an adaptive budget that flexes with your income and city, finds your surplus, and checks your goals. Free and private.',
-    url: 'https://paisareality.com/calculators/budget-optimizer',
-    type: 'website',
-  },
-};
+});
 
 const FAQS = [
   {
@@ -84,10 +77,10 @@ const jsonLd = {
 
 export default function BudgetOptimizerPage(): React.ReactElement {
   const calcLinks = [
-    { href: '/calculators/debt-optimizer', label: 'Debt Repayment Optimizer' },
+    { href: '/calculators/debt-optimizer', label: 'Debt Payoff Optimizer' },
     { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
-    { href: '/calculators/sip', label: 'SIP Calculator' },
-    { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
+    { href: '/calculators/scheme-maximizer', label: 'Scheme Benefit Maximizer' },
+    { href: '/score', label: 'Money Health Score' },
   ];
 
   return (
@@ -164,7 +157,7 @@ export default function BudgetOptimizerPage(): React.ReactElement {
       </article>
 
       <ShareButton url="/calculators/budget-optimizer" title="Smart Cash Flow & Budget Optimizer - Paisa Reality" />
-      <InternalLinks title="Related Calculators" links={calcLinks} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
 

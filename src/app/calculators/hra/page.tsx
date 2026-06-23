@@ -15,6 +15,9 @@ const HRA_FAQS = [
   { question: 'What is HRA exemption?', answer: 'HRA (House Rent Allowance) exemption reduces your taxable income if you are a salaried employee paying rent. The exemption is the minimum of three amounts: actual HRA received, 50% of salary (metro) or 40% (non-metro), and rent paid minus 10% of salary. This exemption is only available under the old tax regime.' },
   { question: 'Can I claim HRA if I have a home loan?', answer: 'Yes, you can claim both HRA exemption and home loan tax benefits if you live in a rented house in one city (for work) and own a house in another city. However, if you live in your own house and still claim HRA, the tax department may question this during assessment.' },
   { question: 'Do I need rent receipts for HRA?', answer: 'Yes, rent receipts are required if your annual rent exceeds Rs 1 lakh. For rent above Rs 1 lakh per year, you also need to provide the landlord PAN number. Keep monthly rent receipts and rent agreement as proof.' },
+  { question: 'Can I claim HRA if I pay rent to my parents?', answer: 'Yes, if you genuinely pay rent to a parent who owns the home and they report it as income. Keep proper rent receipts and ideally transfer the rent through your bank. You cannot claim HRA for a home that you own yourself.' },
+  { question: 'Is HRA exemption available under the new tax regime?', answer: 'No. The HRA exemption is only available under the old tax regime. If you choose the new regime, you cannot claim HRA, so compare your rent and other deductions before picking a regime.' },
+  { question: 'How is HRA exemption different for metro and non-metro cities?', answer: 'The salary-based limit is 50% of basic salary plus DA for metro cities (Delhi, Mumbai, Kolkata, Chennai) and 40% for non-metro cities. Your exemption is the lowest of actual HRA received, this limit, and rent paid minus 10% of salary.' },
 ];
 
 export default function HRACalculatorPage(): React.ReactElement {

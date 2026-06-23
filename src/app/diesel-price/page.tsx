@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -13,11 +13,12 @@ import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'Diesel Price Today in India - City-wise Rates',
+export const metadata = pageMetadata({
+  title: 'Diesel Price Today in India: City-wise Rates',
   description: 'Check the latest available diesel price in your city for 50+ Indian cities. Verify with oil company apps or fuel pumps before purchase.',
-  alternates: { canonical: 'https://paisareality.com/diesel-price' },
-};
+  path: '/diesel-price',
+  keywords: ['diesel price today', 'diesel rate today india', 'diesel price in my city', 'diesel rate city wise'],
+});
 
 interface FuelRow extends QueryResultRow {
   city_name: string; city_slug: string; state: string;
@@ -29,6 +30,9 @@ const DIESEL_FAQS = [
   { question: 'What is the diesel price in India today?', answer: 'Diesel prices vary by city due to different state taxes. Check the table above for today\'s diesel rate in your city. Prices are revised daily at 6 AM by oil marketing companies.' },
   { question: 'Why is diesel cheaper than petrol?', answer: 'Diesel is taxed at a lower rate than petrol in most states because it is considered essential for commercial transport, agriculture, and industry. The excise duty on diesel is also lower than petrol.' },
   { question: 'Is diesel price the same at all petrol pumps in a city?', answer: 'Diesel price should be almost the same at all authorized pumps in a city on a given day. Minor differences (Rs 0.01 to Rs 0.05) can occur due to transportation costs to the specific pump location.' },
+  { question: 'How is the diesel price calculated in India?', answer: 'Diesel price = base price linked to international rates + central excise duty + dealer commission + state VAT. The base price depends on global crude oil and the rupee to dollar rate, while the tax portion varies from state to state.' },
+  { question: 'Why do diesel prices affect inflation?', answer: 'Diesel powers most trucks, buses, tractors, and goods transport, so when diesel gets costlier, the cost of moving food and other goods rises too. That is why a change in diesel price has a wide effect across the economy.' },
+  { question: 'When are diesel prices revised?', answer: 'Under the daily pricing system, oil marketing companies can revise diesel prices every morning at 6 AM. In practice the price often holds steady for stretches and changes when global oil prices move significantly.' },
 ];
 
 export const revalidate = 900;

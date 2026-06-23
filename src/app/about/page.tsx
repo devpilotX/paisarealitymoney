@@ -1,13 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 
-export const metadata: Metadata = {
-  title: 'About Us - Paisa Reality | Free Financial Information for India',
+export const metadata = pageMetadata({
+  title: 'About Us',
   description: 'Paisa Reality is a free financial information platform for India. Daily prices, government schemes, calculators, and bank rate comparison. Learn who we are and what we do.',
-  alternates: { canonical: 'https://paisareality.com/about' },
-};
+  path: '/about',
+});
 
 export default function AboutPage(): React.ReactElement {
   return (

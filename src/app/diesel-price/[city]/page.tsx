@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
@@ -31,12 +32,13 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { city: citySlug } = await params;
   const city = getCityBySlug(citySlug);
-  if (!city) return { title: 'City Not Found' };
-  return {
-    title: `Diesel Price in ${city.name} Today - Per Litre Rate`,
+  if (!city) return { title: 'City Not Found', robots: { index: false } };
+  return pageMetadata({
+    title: `Diesel Price in ${city.name} Today: Per Litre Rate`,
     description: `Check the latest available diesel price in ${city.name}, ${city.state}. Current rate per litre with 7-day history and price trend chart.`,
-    alternates: { canonical: `https://paisareality.com/diesel-price/${city.slug}` },
-  };
+    path: `/diesel-price/${city.slug}`,
+    keywords: [`diesel price in ${city.name.toLowerCase()}`, `diesel rate ${city.name.toLowerCase()}`, 'diesel price today', 'diesel rate per litre'],
+  });
 }
 
 export const revalidate = 900;

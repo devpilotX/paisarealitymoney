@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       [slug]
     );
     const scheme = rows[0];
-    if (!scheme) return { title: 'Scheme Not Found' };
+    if (!scheme) return { title: 'Scheme Not Found', robots: { index: false } };
     const url = `https://paisareality.com/schemes/${scheme.slug}`;
     const title = scheme.meta_title || `${scheme.name} - Eligibility, Benefits & Apply Online 2026`;
     const description = scheme.meta_description || `${scheme.benefit_summary}. Check eligibility, documents required, and how to apply for ${scheme.name}.`;
@@ -108,20 +108,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         url,
         siteName: 'Paisa Reality',
         locale: 'en_IN',
-        images: [
-          {
-            url: 'https://paisareality.com/paisa_reality_logo.png',
-            width: 512,
-            height: 512,
-            alt: scheme.name,
-          },
-        ],
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
-        images: ['https://paisareality.com/paisa_reality_logo.png'],
       },
       robots: {
         index: true,
@@ -221,15 +212,6 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
             name: 'Online Application Portal',
           }
         : undefined,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://paisareality.com' },
-        { '@type': 'ListItem', position: 2, name: 'Schemes', item: 'https://paisareality.com/schemes' },
-        { '@type': 'ListItem', position: 3, name: scheme.name, item: pageUrl },
-      ],
     },
     {
       '@context': 'https://schema.org',

@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy - Paisa Reality',
+export const metadata = pageMetadata({
+  title: 'Privacy Policy',
   description: 'Privacy policy for Paisa Reality. Learn what data we collect, how we use it, and your rights.',
-  alternates: { canonical: 'https://paisareality.com/privacy' },
-};
+  path: '/privacy',
+});
 
 export default function PrivacyPage(): React.ReactElement {
   return (

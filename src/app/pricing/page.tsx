@@ -1,15 +1,15 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import AdBanner from '@/components/AdBanner';
 import PricingActions from '@/components/PricingActions';
 
-export const metadata: Metadata = {
-  title: 'Pricing - Paisa Reality Premium',
+export const metadata = pageMetadata({
+  title: 'Pricing: Paisa Reality Premium',
   description: 'Upgrade to Paisa Reality Premium for saved schemes, application tracker, email alerts, and ad-free experience.',
-  alternates: { canonical: 'https://paisareality.com/pricing' },
-};
+  path: '/pricing',
+});
 
 const PRICING_FAQS = [
   { question: 'What do I get with the free plan?', answer: 'Everything on Paisa Reality is free: daily prices, scheme finder, all calculators, and bank rate comparisons. The free plan shows ads.' },
@@ -33,7 +33,7 @@ export default function PricingPage(): React.ReactElement {
           <h2 className="text-xl font-bold text-gray-900 mb-1">Free</h2>
           <p className="text-3xl font-bold text-gray-900 mb-4">Rs 0 <span className="text-base font-normal text-gray-500">forever</span></p>
           <ul className="space-y-3 mb-6">
-            {['Daily gold, silver, fuel prices', 'Government scheme finder', 'All 10 financial calculators', 'Bank rate comparison', 'Blog articles'].map((f) => (
+            {['Daily gold, silver, fuel prices', 'Government scheme finder', 'All 10 financial calculators', 'Bank rate comparison', 'Newsletter articles'].map((f) => (
               <li key={f} className="flex items-start gap-2 text-sm"><span className="text-green-600 font-bold mt-0.5">\u2713</span>{f}</li>
             ))}
             {['Ads shown on pages'].map((f) => (

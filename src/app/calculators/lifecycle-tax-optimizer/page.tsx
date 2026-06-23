@@ -1,28 +1,21 @@
-import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import { pageMetadata } from '@/lib/seo';
 import LifecycleTaxOptimizerClient from './LifecycleTaxOptimizerClient';
 
-export const metadata: Metadata = {
-  title: 'Old vs New Tax Regime: Multi-Year Optimizer (Lifetime)',
+export const metadata = pageMetadata({
+  title: 'Old vs New Tax Regime Calculator (Multi Year)',
   description:
-    'Old or new tax regime. which saves more over your whole career, not just this year? This optimizer projects both regimes year-by-year as your income, rent, home loan and deductions change, finds your switch-over year, and minimises lifetime tax. Free, 100% private.',
+    'Old or new tax regime, which saves more? We project both across your career as your income, rent, and home loan change, and find your switch year. Free.',
+  path: '/calculators/lifecycle-tax-optimizer',
   keywords: [
-    'old vs new tax regime', 'which tax regime is better', 'new tax regime vs old calculator',
-    'tax regime calculator india', 'lifetime tax planning', 'when to switch tax regime',
+    'old vs new tax regime calculator', 'which tax regime is better', 'new tax regime vs old calculator',
+    'tax regime calculator india', 'when to switch tax regime', 'lifetime tax planning',
   ],
-  alternates: { canonical: 'https://paisareality.com/calculators/lifecycle-tax-optimizer' },
-  openGraph: {
-    title: 'Multi-Year Tax Regime & Investment Optimizer',
-    description:
-      'Beyond a one-year old-vs-new comparison: project the optimal regime and tax-saving plan across your whole career, with the crossover year and lifetime tax NPV.',
-    url: 'https://paisareality.com/calculators/lifecycle-tax-optimizer',
-    type: 'website',
-  },
-};
+});
 
 const FAQS = [
   {
@@ -89,10 +82,10 @@ const jsonLd = {
 
 export default function LifecycleTaxOptimizerPage(): React.ReactElement {
   const calcLinks = [
-    { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
     { href: '/calculators/salary-optimizer', label: 'Salary Structure Optimizer' },
-    { href: '/calculators/hra', label: 'HRA Calculator' },
+    { href: '/calculators/tax-harvesting', label: 'Tax Loss Harvesting Optimizer' },
     { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
+    { href: '/score', label: 'Money Health Score' },
   ];
 
   return (
@@ -173,7 +166,7 @@ export default function LifecycleTaxOptimizerPage(): React.ReactElement {
       </article>
 
       <ShareButton url="/calculators/lifecycle-tax-optimizer" title="Multi-Year Tax Regime & Investment Optimizer - Paisa Reality" />
-      <InternalLinks title="Related Calculators" links={calcLinks} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
 

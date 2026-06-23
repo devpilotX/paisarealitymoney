@@ -1,28 +1,21 @@
-import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import { pageMetadata } from '@/lib/seo';
 import DebtOptimizerClient from './DebtOptimizerClient';
 
-export const metadata: Metadata = {
-  title: 'Debt Payoff Optimizer. Avalanche vs Snowball (Tax-Aware)',
+export const metadata = pageMetadata({
+  title: 'Debt Payoff Calculator: Avalanche vs Snowball India',
   description:
-    'Multiple loans, one budget? Get the mathematically optimal repayment order that minimises interest and time. tax-aware for Section 24(b) and 80E. Compares Avalanche, Snowball and a tax-adjusted plan. Free, 100% private.',
+    'Have multiple loans? Get the cheapest, fastest payoff order. We compare avalanche vs snowball and a tax aware plan to clear your loans sooner. Free.',
+  path: '/calculators/debt-optimizer',
   keywords: [
-    'debt payoff calculator india', 'avalanche vs snowball calculator', 'debt repayment optimizer',
-    'which loan to pay first', 'multiple loan payoff calculator', 'debt free calculator india',
+    'debt payoff calculator', 'avalanche vs snowball india', 'clear loans fast',
+    'which loan to pay first', 'debt repayment optimizer', 'multiple loan payoff calculator',
   ],
-  alternates: { canonical: 'https://paisareality.com/calculators/debt-optimizer' },
-  openGraph: {
-    title: 'Multi-Loan Debt Repayment Optimizer. Tax-Aware',
-    description:
-      'Which loan should you attack first? The optimal, tax-aware order to clear multiple loans fastest and cheapest. Avalanche vs Snowball vs tax-adjusted, free and private.',
-    url: 'https://paisareality.com/calculators/debt-optimizer',
-    type: 'website',
-  },
-};
+});
 
 const FAQS = [
   {
@@ -90,9 +83,9 @@ const jsonLd = {
 export default function DebtOptimizerPage(): React.ReactElement {
   const calcLinks = [
     { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest Optimizer' },
-    { href: '/calculators/emi', label: 'EMI Calculator' },
-    { href: '/calculators/home-loan', label: 'Home Loan Calculator' },
-    { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
+    { href: '/calculators/budget-optimizer', label: 'Budget Optimizer' },
+    { href: '/calculators/salary-optimizer', label: 'Salary Structure Optimizer' },
+    { href: '/score', label: 'Money Health Score' },
   ];
 
   return (
@@ -173,7 +166,7 @@ export default function DebtOptimizerPage(): React.ReactElement {
       </article>
 
       <ShareButton url="/calculators/debt-optimizer" title="Multi-Loan Debt Repayment Optimizer - Paisa Reality" />
-      <InternalLinks title="Related Calculators" links={calcLinks} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
 

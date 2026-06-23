@@ -1,23 +1,16 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
-import Script from 'next/script';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import AdBanner from '@/components/AdBanner';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Smart Tools - Free Advanced Financial Calculators | Paisa Reality',
+export const metadata = pageMetadata({
+  title: 'Smart Tools: Free Advanced Financial Calculators',
   description:
     'Free advanced money tools: retirement planner, loan prepay vs invest, debt optimizer, tax regime optimizer, budget planner, tax harvesting, gold planner, scheme maximizer, salary optimizer.',
-  alternates: { canonical: 'https://paisareality.com/smart-tools' },
-  openGraph: {
-    title: 'Smart Tools - Free Advanced Financial Calculators',
-    description: 'Advanced money tools that do the hard maths for you. Retirement, debt, tax, budget, and more. Free, private, no login.',
-    url: 'https://paisareality.com/smart-tools',
-    siteName: 'Paisa Reality',
-    type: 'website',
-  },
-};
+  path: '/smart-tools',
+  keywords: ['smart financial tools', 'advanced financial calculators', 'monte carlo retirement calculator', 'debt payoff calculator', 'tax regime optimizer'],
+});
 
 interface SmartTool {
   title: string;
@@ -107,30 +100,8 @@ const SMART_TOOLS_FAQS = [
 ];
 
 export default function SmartToolsPage(): React.ReactElement {
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://paisareality.com' },
-      { '@type': 'ListItem', position: 2, name: 'Smart Tools', item: 'https://paisareality.com/smart-tools' },
-    ],
-  };
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: SMART_TOOLS_FAQS.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-    })),
-  };
-
   return (
     <div className="container-main py-6">
-      <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-
       <Breadcrumb items={[{ label: 'Smart Tools' }]} />
 
       <h1 className="heading-1 mb-2">Smart Tools</h1>

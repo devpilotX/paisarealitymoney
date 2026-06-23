@@ -1,18 +1,20 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
 import Breadcrumb from '@/components/Breadcrumb';
 import BankRateTable from '@/components/BankRateTable';
+import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'Savings Account Interest Rates - Compare All Banks',
+export const metadata = pageMetadata({
+  title: 'Savings Account Interest Rates: Compare All Banks',
   description: 'Compare savings account interest rates across 50+ Indian banks. Find which bank gives the highest savings rate.',
-  alternates: { canonical: 'https://paisareality.com/bank-rates/savings-rates' },
-};
+  path: '/bank-rates/savings-rates',
+  keywords: ['savings account interest rates', 'best savings account rate', 'highest savings rate india'],
+});
 
 interface SavingsRateRow extends QueryResultRow {
   bank_name: string; bank_slug: string; bank_type: string;
@@ -47,6 +49,13 @@ export default async function SavingsRatesPage(): Promise<React.ReactElement> {
         <p className="text-body mb-4">Savings account interest in India is calculated on the daily closing balance and paid quarterly or half-yearly. Most large banks offer 2.70% to 3.50% per annum. Small finance banks and some digital banks offer 5% to 7%.</p>
         <p className="text-body mb-4">Interest earned up to Rs 10,000 per year from savings accounts is tax-free under Section 80TTA (Rs 50,000 for senior citizens under 80TTB).</p>
       </article>
+      <FAQ items={[
+        { question: 'What is a good savings account interest rate in India?', answer: 'Most large banks offer 2.70% to 3.50% on savings accounts. Some small finance banks and digital banks offer 5% to 7%, though higher rates can come with conditions like a minimum balance. Compare the latest rates in the table above.' },
+        { question: 'How is savings account interest calculated?', answer: 'Interest is calculated on your daily closing balance and usually paid quarterly or half-yearly. Keeping a higher balance through the day earns more, even if you withdraw later in the month.' },
+        { question: 'Is savings account interest taxable?', answer: 'Interest up to Rs 10,000 a year is deductible under Section 80TTA (Rs 50,000 for senior citizens under 80TTB). Interest above that limit is added to your income and taxed at your slab rate.' },
+        { question: 'Are high-interest savings accounts safe?', answer: 'Deposits in scheduled banks, including small finance banks, are insured up to Rs 5 lakh per depositor by DICGC. For larger balances, you can spread money across banks or move surplus into FDs.' },
+        { question: 'Should I keep extra money in savings or an FD?', answer: 'Keep only emergency and short-term money in savings for instant access. Money you will not need for months usually earns more in an FD. Some banks offer a sweep facility that auto-moves surplus into FDs.' },
+      ]} />
       <ShareButton url="/bank-rates/savings-rates" title="Savings Rates - Paisa Reality" />
       <InternalLinks title="Related" links={otherLinks} columns={3} />
       <AdBanner format="horizontal" className="mt-8" />

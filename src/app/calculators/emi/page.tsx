@@ -14,7 +14,10 @@ import { trackCalculatorUse } from '@/lib/analytics';
 const EMI_FAQS = [
   { question: 'What is EMI?', answer: 'EMI stands for Equated Monthly Installment. It is the fixed amount you pay every month to repay a loan. EMI includes both principal repayment and interest. The EMI amount stays the same throughout the loan tenure, but the proportion of principal and interest changes over time.' },
   { question: 'How is EMI calculated?', answer: 'EMI is calculated using the formula: EMI = P x r x (1+r)^n / ((1+r)^n - 1), where P is the loan amount, r is the monthly interest rate (annual rate divided by 12), and n is the total number of monthly installments. This formula ensures equal payments throughout the loan period.' },
+  { question: 'How can I reduce my home loan EMI?', answer: 'You can lower your EMI by making a bigger down payment, choosing a longer tenure (which reduces the monthly amount but raises total interest), negotiating a lower rate, transferring the loan to a cheaper lender, or making part prepayments. Compare the total interest before you decide.' },
+  { question: 'Should I pick a shorter or longer loan tenure?', answer: 'A shorter tenure means a higher EMI but much less total interest. A longer tenure lowers the monthly EMI but you pay more interest over the life of the loan. Pick the shortest tenure whose EMI still fits comfortably in your monthly budget.' },
   { question: 'Does prepaying a loan reduce EMI?', answer: 'Prepaying a loan reduces the outstanding principal. You can either keep the same EMI and reduce tenure, or reduce the EMI and keep the same tenure. Reducing tenure saves more interest overall. Most banks allow prepayment without penalty for floating rate loans.' },
+  { question: 'What happens if I miss an EMI payment?', answer: 'Missing an EMI usually means a late fee plus penal interest, and the miss is reported to credit bureaus, which can lower your credit score. Repeated misses can hurt future borrowing. If you expect trouble, contact your lender early to discuss restructuring options.' },
 ];
 
 export default function EMICalculatorPage(): React.ReactElement {

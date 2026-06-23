@@ -1,18 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'Income Tax Calculator India 2024-25. Old vs New Regime',
+export const metadata = pageMetadata({
+  title: 'Income Tax Calculator FY 2025-26: Old vs New Regime',
   description:
-    'Calculate your income tax under old and new regime for FY 2024-25. See which regime saves you more tax based on your salary, deductions and exemptions.',
-  alternates: { canonical: 'https://paisareality.com/calculators/income-tax' },
-  openGraph: {
-    title: 'Income Tax Calculator India 2024-25',
-    description: 'Compare old vs new tax regime. Calculate exact tax liability.',
-    url: 'https://paisareality.com/calculators/income-tax',
-    type: 'website',
-  },
-};
+    'Calculate your income tax under the old and new regime for FY 2025-26. See which regime saves you more based on your salary, deductions, and exemptions.',
+  path: '/calculators/income-tax',
+  keywords: ['income tax calculator india', 'old vs new tax regime calculator', 'income tax calculator 2025-26', 'tax calculator india'],
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const jsonLd = {

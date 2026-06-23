@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
@@ -9,11 +9,12 @@ import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 
-export const metadata: Metadata = {
-  title: 'Bank Rates in India - Compare FD, Savings, Loan Rates',
+export const metadata = pageMetadata({
+  title: 'Bank Rates in India: Compare FD, Savings, Loan Rates',
   description: 'Compare FD rates, savings account rates, home loan rates, and personal loan rates across 50+ Indian banks. Updated regularly.',
-  alternates: { canonical: 'https://paisareality.com/bank-rates' },
-};
+  path: '/bank-rates',
+  keywords: ['bank interest rates india', 'compare bank rates', 'fd savings loan rates', 'best bank rates india'],
+});
 
 interface BankSummaryRow extends QueryResultRow {
   slug: string; name: string; type: string;
@@ -24,6 +25,9 @@ const BANK_FAQS = [
   { question: 'Which bank gives the highest FD rate?', answer: 'Small finance banks typically offer the highest FD rates (7.5% to 9%). Among large banks, SBI, HDFC Bank, and ICICI Bank offer competitive rates. Senior citizens get an additional 0.25% to 0.50% on FD rates. Rates change frequently, so always check the latest rates on this page.' },
   { question: 'What is a good savings account interest rate?', answer: 'Most large banks offer 2.70% to 3% on savings accounts. Some small finance banks and digital banks offer up to 7% on savings accounts. However, higher savings rates often come with conditions like minimum balance requirements. Choose based on your needs.' },
   { question: 'How to compare home loan rates?', answer: 'Look at the MCLR or repo-linked lending rate (RLLR) plus the spread. Lower spread means better rate. Also compare processing fees, prepayment charges, and flexibility. Fixed vs floating rate is another important choice. Floating rates are currently more common in India.' },
+  { question: 'What is the difference between fixed and floating interest rates?', answer: 'A fixed rate stays the same for the agreed period, so your EMI is predictable. A floating rate moves with the lender benchmark like the repo rate, so your EMI can rise or fall. Floating rates are more common for home loans in India and often start lower.' },
+  { question: 'How does my credit score affect the rate I get?', answer: 'Lenders offer their best rates to borrowers with high credit scores, usually 750 and above. A lower score can mean a higher rate or even rejection. Checking and improving your score before applying can save you a lot of interest.' },
+  { question: 'Are bank interest rates the same at every branch?', answer: 'Yes. A bank sets one rate card nationally, so the FD, savings, and loan rates are the same across its branches on a given day. What differs is the offer you personally qualify for, based on your profile and amount.' },
 ];
 
 export const revalidate = 3600;

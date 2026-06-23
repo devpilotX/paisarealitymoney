@@ -1,28 +1,21 @@
-import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import { pageMetadata } from '@/lib/seo';
 import PrepayVsInvestClient from './PrepayVsInvestClient';
 
-export const metadata: Metadata = {
-  title: 'Home Loan Prepay vs Invest Calculator (Risk-Adjusted)',
+export const metadata = pageMetadata({
+  title: 'Home Loan Prepay vs Invest Calculator (India)',
   description:
-    'Should you prepay your home loan or invest the surplus? Get a risk-adjusted, after-tax answer from a 10,000-path Monte Carlo simulation. probability of winning, breakeven return and the optimal hybrid split. Free, 100% private.',
+    'Should you prepay your home loan or invest the surplus? Get a risk adjusted, after tax answer with the probability each path wins. Free and private.',
+  path: '/calculators/prepay-vs-invest',
   keywords: [
-    'prepay home loan or invest', 'home loan prepayment vs investment calculator', 'should i prepay my home loan',
-    'prepay vs sip calculator india', 'home loan prepayment calculator', 'invest or prepay loan',
+    'home loan prepay vs invest', 'should i prepay home loan or invest', 'prepay vs sip calculator india',
+    'home loan prepayment calculator', 'invest or prepay loan',
   ],
-  alternates: { canonical: 'https://paisareality.com/calculators/prepay-vs-invest' },
-  openGraph: {
-    title: 'Home Loan Prepay vs Invest Optimizer. Risk-Adjusted',
-    description:
-      'Prepay your loan or invest the surplus? A 10,000-path, after-tax, risk-adjusted answer with probability of winning, breakeven return and the best hybrid split.',
-    url: 'https://paisareality.com/calculators/prepay-vs-invest',
-    type: 'website',
-  },
-};
+});
 
 const FAQS = [
   {
@@ -89,10 +82,10 @@ const jsonLd = {
 
 export default function PrepayVsInvestPage(): React.ReactElement {
   const calcLinks = [
-    { href: '/calculators/home-loan', label: 'Home Loan Calculator' },
-    { href: '/calculators/emi', label: 'EMI Calculator' },
-    { href: '/calculators/sip', label: 'SIP Calculator' },
+    { href: '/calculators/debt-optimizer', label: 'Debt Payoff Optimizer' },
     { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
+    { href: '/calculators/budget-optimizer', label: 'Budget Optimizer' },
+    { href: '/score', label: 'Money Health Score' },
   ];
 
   return (
@@ -177,7 +170,7 @@ export default function PrepayVsInvestPage(): React.ReactElement {
       </article>
 
       <ShareButton url="/calculators/prepay-vs-invest" title="Home Loan Prepay vs Invest Optimizer - Paisa Reality" />
-      <InternalLinks title="Related Calculators" links={calcLinks} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
 

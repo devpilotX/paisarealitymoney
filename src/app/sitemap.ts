@@ -14,6 +14,10 @@ interface SchemeSitemapRow extends QueryResultRow {
   updated_at: string | Date | null;
 }
 
+interface BankSitemapRow extends QueryResultRow {
+  slug: string;
+}
+
 function stateNameToSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
@@ -27,89 +31,96 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date().toISOString();
 
   const staticPages: MetadataRoute.Sitemap = [
+    // Flagship
     { url: BASE_URL, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
+    { url: `${BASE_URL}/score`, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${BASE_URL}/smart-tools`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    // 9 Smart Tools
+    { url: `${BASE_URL}/calculators/retirement-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/calculators/prepay-vs-invest`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/calculators/debt-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/calculators/lifecycle-tax-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/calculators/budget-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/calculators/tax-harvesting`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/calculators/gold-planner`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/calculators/scheme-maximizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/calculators/salary-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    // Rate hubs
     { url: `${BASE_URL}/gold-rate`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/silver-rate`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/petrol-price`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/diesel-price`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/lpg-price`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/schemes`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE_URL}/lpg-price`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    // Calculators hub + basic calculators
     { url: `${BASE_URL}/calculators`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/emi`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/sip`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/fd`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/ppf`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/income-tax`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/home-loan`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/nps`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/gratuity`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/hra`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/inflation`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/calculators/salary-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/smart-tools`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${BASE_URL}/score`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/retirement-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/prepay-vs-invest`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/debt-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/lifecycle-tax-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/budget-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/tax-harvesting`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/gold-planner`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/calculators/scheme-maximizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/emi`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/sip`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/fd`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/ppf`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/income-tax`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/home-loan`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/nps`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/gratuity`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/hra`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/calculators/inflation`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    // Schemes hub + bank rates (hub + sub-pages)
+    { url: `${BASE_URL}/schemes`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/bank-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${BASE_URL}/bank-rates/fd-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/bank-rates/savings-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/bank-rates/home-loan-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/bank-rates/personal-loan-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
+    { url: `${BASE_URL}/bank-rates/fd-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE_URL}/bank-rates/savings-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE_URL}/bank-rates/home-loan-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE_URL}/bank-rates/personal-loan-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    // Content + legal
+    { url: `${BASE_URL}/newsletter`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${BASE_URL}/pricing`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
-    { url: `${BASE_URL}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
-    { url: `${BASE_URL}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
-    { url: `${BASE_URL}/disclaimer`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${BASE_URL}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/disclaimer`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
+  const cityPriority = 0.7;
   const goldCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
     url: `${BASE_URL}/gold-rate/${city.slug}`,
     lastModified: now,
     changeFrequency: 'daily' as const,
-    priority: 0.8,
+    priority: cityPriority,
   }));
 
   const silverCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
     url: `${BASE_URL}/silver-rate/${city.slug}`,
     lastModified: now,
     changeFrequency: 'daily' as const,
-    priority: 0.8,
+    priority: cityPriority,
   }));
 
   const petrolCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
     url: `${BASE_URL}/petrol-price/${city.slug}`,
     lastModified: now,
     changeFrequency: 'daily' as const,
-    priority: 0.8,
+    priority: cityPriority,
   }));
 
   const dieselCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
     url: `${BASE_URL}/diesel-price/${city.slug}`,
     lastModified: now,
     changeFrequency: 'daily' as const,
-    priority: 0.8,
+    priority: cityPriority,
   }));
 
   const categoryPages: MetadataRoute.Sitemap = SCHEME_CATEGORIES.map((category) => ({
     url: `${BASE_URL}/category/${category.slug}`,
     lastModified: now,
     changeFrequency: 'weekly',
-    priority: 0.8,
+    priority: 0.7,
   }));
 
   const statePages: MetadataRoute.Sitemap = ALL_INDIAN_STATES.map((state) => ({
     url: `${BASE_URL}/state/${stateNameToSlug(state)}`,
     lastModified: now,
     changeFrequency: 'weekly',
-    priority: 0.7,
+    priority: 0.6,
   }));
 
   const schemePages = await query<SchemeSitemapRow>('SELECT slug, updated_at FROM schemes WHERE is_active = TRUE ORDER BY updated_at DESC'
@@ -117,15 +128,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${BASE_URL}/schemes/${scheme.slug}`,
     lastModified: toIsoDate(scheme.updated_at, now),
     changeFrequency: 'weekly' as const,
-    priority: 0.85,
+    priority: 0.8,
   }))).catch(() => [] as MetadataRoute.Sitemap);
 
   const blogPages = await getAllPostsAsync(true)
     .then((posts) => posts.map((post) => ({
-      url: `${BASE_URL}/blog/${post.slug}`,
+      url: `${BASE_URL}/newsletter/${post.slug}`,
       lastModified: post.updatedAt || post.date || now,
       changeFrequency: 'weekly' as const,
-      priority: 0.65,
+      priority: 0.6,
+    })))
+    .catch(() => [] as MetadataRoute.Sitemap);
+
+  const bankPages = await query<BankSitemapRow>('SELECT slug FROM banks ORDER BY name')
+    .then((rows) => rows.map((bank) => ({
+      url: `${BASE_URL}/bank-rates/${bank.slug}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
     })))
     .catch(() => [] as MetadataRoute.Sitemap);
 
@@ -135,6 +155,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...statePages,
     ...schemePages,
     ...blogPages,
+    ...bankPages,
     ...goldCityPages,
     ...silverCityPages,
     ...petrolCityPages,

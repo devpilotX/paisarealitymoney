@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
@@ -10,11 +10,12 @@ import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'LPG Price Today in India - State-wise Cylinder Rates',
+export const metadata = pageMetadata({
+  title: 'LPG Price Today in India: State-wise Cylinder Rates',
   description: 'Check the latest available LPG gas cylinder price. State-wise 14.2 kg domestic and 19 kg commercial cylinder rates.',
-  alternates: { canonical: 'https://paisareality.com/lpg-price' },
-};
+  path: '/lpg-price',
+  keywords: ['lpg price today', 'lpg cylinder price', 'gas cylinder price today', 'domestic lpg rate india'],
+});
 
 interface LpgRow extends QueryResultRow {
   state: string; domestic_14kg: number; commercial_19kg: number;
@@ -26,6 +27,8 @@ const LPG_FAQS = [
   { question: 'How often do LPG prices change?', answer: 'Oil marketing companies revise LPG prices on the 1st of every month based on international LPG rates and the rupee-dollar exchange rate. Sometimes the government absorbs price increases through subsidies.' },
   { question: 'How can I get LPG subsidy?', answer: 'LPG subsidy is provided under the PM Ujjwala Yojana for eligible households. The subsidy amount is directly transferred to your linked bank account (DBTL - Direct Benefit Transfer for LPG). You need to link your Aadhaar to your bank account and LPG connection to receive the subsidy.' },
   { question: 'What is the difference between domestic and commercial LPG?', answer: 'Domestic LPG cylinders (14.2 kg, blue color) are subsidized and meant for household cooking. Commercial cylinders (19 kg, red/orange color) are sold at market price and used by restaurants, hotels, and businesses. Using a domestic cylinder for commercial purposes is illegal.' },
+  { question: 'How do I book an LPG cylinder refill?', answer: 'You can book a refill through your gas company app or website, by calling or SMS to the IVRS number, or through partner apps. Booking online is usually fastest and gives you a reference number to track delivery.' },
+  { question: 'Is the LPG price the same across all gas companies?', answer: 'Indane, Bharat Gas, and HP Gas usually price the 14.2 kg domestic cylinder very close to each other within a state, because rates are set monthly and taxed at the state level. Small differences can exist, so check your own provider.' },
 ];
 
 export const revalidate = 3600;

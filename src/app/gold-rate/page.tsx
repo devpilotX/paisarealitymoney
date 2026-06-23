@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -13,12 +13,13 @@ import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'Gold Rate Today in India - Latest 22K & 24K Prices',
+export const metadata = pageMetadata({
+  title: 'Gold Rate Today in India: Latest 22K & 24K Prices',
   description:
     'Check the latest available gold rate in India. 22 Karat and 24 Karat gold prices per gram and per 10 grams for 50+ Indian cities.',
-  alternates: { canonical: 'https://paisareality.com/gold-rate' },
-};
+  path: '/gold-rate',
+  keywords: ['gold rate today', 'gold price today india', '22k 24k gold rate', 'gold rate per gram'],
+});
 
 interface GoldRow extends QueryResultRow {
   city_name: string;
@@ -48,6 +49,14 @@ const GOLD_FAQS = [
   {
     question: 'Is the gold price shown here the same as what jewellers charge?',
     answer: 'The prices shown here are indicative market rates. Jewellers add making charges (5% to 25% depending on design), GST (3%), and sometimes hallmarking charges. The actual price you pay at a jewellery shop will be higher than the base rate shown here.',
+  },
+  {
+    question: 'Why do gold prices go up and down?',
+    answer: 'Gold prices move with international rates, the rupee to dollar exchange rate, import duty changes, interest rates, and seasonal demand during festivals and weddings. When markets feel uncertain, many people buy gold as a safe haven, which can push prices up.',
+  },
+  {
+    question: 'What is hallmarked gold and why does it matter?',
+    answer: 'Hallmarked gold carries a BIS mark certifying its purity, such as 22K or 18K. Buying hallmarked jewellery protects you from paying a high-purity price for lower-purity gold. Always check for the BIS hallmark and the purity grade before you buy.',
   },
 ];
 
