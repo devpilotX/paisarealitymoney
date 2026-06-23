@@ -9,7 +9,7 @@ interface FooterLink {
 const ABOUT_LINKS: FooterLink[] = [
   { href: '/about', label: 'About Us' },
   { href: '/contact', label: 'Contact Us' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/newsletter', label: 'Newsletter' },
 ];
 
 const QUICK_LINKS: FooterLink[] = [

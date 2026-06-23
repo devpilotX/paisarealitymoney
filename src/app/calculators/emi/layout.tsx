@@ -1,18 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'EMI Calculator India. Calculate Loan EMI Instantly',
+export const metadata = pageMetadata({
+  title: 'EMI Calculator India: Calculate Loan EMI Instantly',
   description:
     'Calculate your monthly EMI for home loan, personal loan or car loan. Enter amount, interest rate and tenure to see total interest and payment breakup.',
-  alternates: { canonical: 'https://paisareality.com/calculators/emi' },
-  openGraph: {
-    title: 'EMI Calculator India',
-    description: 'Calculate monthly EMI for any loan. Free, instant results.',
-    url: 'https://paisareality.com/calculators/emi',
-    type: 'website',
-  },
-};
+  path: '/calculators/emi',
+  keywords: ['emi calculator india', 'loan emi calculator', 'home loan emi calculator', 'car loan emi calculator', 'personal loan emi'],
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const jsonLd = {

@@ -1,28 +1,21 @@
-import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import { pageMetadata } from '@/lib/seo';
 import RetirementOptimizerClient from './RetirementOptimizerClient';
 
-export const metadata: Metadata = {
-  title: 'Retirement Corpus & Withdrawal Optimizer (Monte Carlo)',
+export const metadata = pageMetadata({
+  title: 'Retirement Calculator India: Monte Carlo Corpus Planner',
   description:
-    'Find the corpus you need to retire in India, the monthly SIP to get there, and a safe withdrawal plan. using a 10,000-path Monte Carlo simulation, not a single average return. 100% free and private.',
+    'Work out the corpus you need to retire in India and a safe withdrawal rate, using a 10,000 path Monte Carlo simulation. Free, private, and no login.',
+  path: '/calculators/retirement-optimizer',
   keywords: [
-    'retirement calculator india', 'retirement corpus calculator', 'how much to retire in india',
-    'monte carlo retirement', 'safe withdrawal rate india', 'FIRE calculator india', 'SIP for retirement',
+    'monte carlo retirement calculator india', 'retirement corpus calculator', 'safe withdrawal rate india',
+    'how much to retire in india', 'retirement calculator india', 'SIP for retirement',
   ],
-  alternates: { canonical: 'https://paisareality.com/calculators/retirement-optimizer' },
-  openGraph: {
-    title: 'Retirement Corpus & Withdrawal Optimizer. Monte Carlo',
-    description:
-      'How much do you need to retire? Solve your corpus, SIP and safe withdrawal with a 10,000-path simulation. Free, private, runs in your browser.',
-    url: 'https://paisareality.com/calculators/retirement-optimizer',
-    type: 'website',
-  },
-};
+});
 
 const RETIREMENT_FAQS = [
   {
@@ -90,10 +83,10 @@ const jsonLd = {
 
 export default function RetirementOptimizerPage(): React.ReactElement {
   const calcLinks = [
-    { href: '/calculators/sip', label: 'SIP Calculator' },
-    { href: '/calculators/nps', label: 'NPS Calculator' },
-    { href: '/calculators/ppf', label: 'PPF Calculator' },
-    { href: '/calculators/salary-optimizer', label: 'Salary Structure Optimizer' },
+    { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest Optimizer' },
+    { href: '/calculators/budget-optimizer', label: 'Budget Optimizer' },
+    { href: '/calculators/gold-planner', label: 'Gold Allocation Planner' },
+    { href: '/score', label: 'Money Health Score' },
   ];
 
   return (
@@ -179,7 +172,7 @@ export default function RetirementOptimizerPage(): React.ReactElement {
       </article>
 
       <ShareButton url="/calculators/retirement-optimizer" title="Retirement Corpus & Withdrawal Optimizer - Paisa Reality" />
-      <InternalLinks title="Related Calculators" links={calcLinks} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={RETIREMENT_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
 

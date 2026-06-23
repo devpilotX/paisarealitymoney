@@ -26,20 +26,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Post Not Found' };
   }
 
+  const url = `https://paisareality.com/newsletter/${post.slug}`;
   return {
     title: post.metaTitle || post.title,
     description: post.metaDescription || post.description,
+    alternates: { canonical: url },
     openGraph: {
       type: 'article',
       publishedTime: post.date,
+      modifiedTime: post.updatedAt,
+      title: post.title,
+      description: post.description,
+      url,
+      siteName: 'Paisa Reality',
+    },
+    twitter: {
+      card: 'summary_large_image',
       title: post.title,
       description: post.description,
     },
-    alternates: { canonical: `https://paisareality.com/blog/${post.slug}` },
   };
 }
 
-function sanitizeBlogHtml(html: string): string {
+function sanitizePostHtml(html: string): string {
   return sanitizeHtml(html, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
       'img',
@@ -68,7 +77,7 @@ function sanitizeBlogHtml(html: string): string {
   });
 }
 
-export default async function BlogPostPage({ params }: PageProps): Promise<React.ReactElement> {
+export default async function NewsletterPostPage({ params }: PageProps): Promise<React.ReactElement> {
   const { slug } = await params;
   const post = await getPostBySlugAsync(slug).catch(() => null);
 
@@ -77,23 +86,25 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
   }
 
   const rawHtml = await marked.parse(post.content, { breaks: true, gfm: true });
-  const htmlContent = sanitizeBlogHtml(rawHtml);
+  const htmlContent = sanitizePostHtml(rawHtml);
   const related = (await getAllPostsAsync(true).catch(() => []))
     .filter((relatedPost) => relatedPost.slug !== post.slug)
     .slice(0, 4);
 
   const articleSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    author: { '@type': 'Organization', name: post.author },
+    author: { '@type': 'Organization', name: 'Paisa Reality', url: 'https://paisareality.com' },
     datePublished: post.date,
     dateModified: post.updatedAt,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://paisareality.com/newsletter/${post.slug}` },
     publisher: {
       '@type': 'Organization',
       name: 'Paisa Reality',
       url: 'https://paisareality.com',
+      logo: { '@type': 'ImageObject', url: 'https://paisareality.com/paisa_reality_logo.png' },
     },
   };
 
@@ -103,7 +114,7 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
-      <Breadcrumb items={[{ label: 'Blog', href: '/blog' }, { label: post.title }]} />
+      <Breadcrumb items={[{ label: 'Newsletter', href: '/newsletter' }, { label: post.title }]} />
       <article className="max-w-3xl mx-auto">
         <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-4">
           {post.category}
@@ -114,7 +125,7 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
         </p>
         <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: htmlContent }} />
         <div className="mt-8 pt-6 border-t">
-          <ShareButton url={`/blog/${post.slug}`} title={post.title} />
+          <ShareButton url={`/newsletter/${post.slug}`} title={post.title} />
         </div>
       </article>
 
@@ -123,7 +134,7 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
           <h2 className="heading-3 mb-6">More Articles</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {related.map((relatedPost) => (
-              <a key={relatedPost.slug} href={`/blog/${relatedPost.slug}`} className="card hover:shadow-md">
+              <a key={relatedPost.slug} href={`/newsletter/${relatedPost.slug}`} className="card hover:shadow-md">
                 <h3 className="font-medium text-primary">{relatedPost.title}</h3>
                 <p className="text-sm text-gray-500 mt-1">
                   {formatDate(relatedPost.date)} - {relatedPost.readTime}

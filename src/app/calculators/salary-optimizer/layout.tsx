@@ -1,18 +1,16 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'Salary Structure Optimizer India. Maximize Take Home Pay',
+export const metadata = pageMetadata({
+  title: 'Salary Structure Optimizer: CTC Tax Calculator India',
   description:
-    'Optimize your salary structure to legally maximize take-home pay. Restructure basic, HRA, allowances and deductions to pay less tax.',
-  alternates: { canonical: 'https://paisareality.com/calculators/salary-optimizer' },
-  openGraph: {
-    title: 'Salary Structure Optimizer India',
-    description: 'Restructure salary to maximize take-home. Free tool.',
-    url: 'https://paisareality.com/calculators/salary-optimizer',
-    type: 'website',
-  },
-};
+    'Restructure your CTC to legally cut income tax. We compare old and new regime and show exactly which salary components to change. Free and private.',
+  path: '/calculators/salary-optimizer',
+  keywords: [
+    'salary structure optimizer', 'ctc tax optimization', 'restructure salary',
+    'salary calculator india tax', 'maximize take home pay',
+  ],
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const jsonLd = {

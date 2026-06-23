@@ -1,18 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'NPS Calculator India. National Pension Scheme Returns',
+export const metadata = pageMetadata({
+  title: 'NPS Calculator India: National Pension Scheme Returns',
   description:
     'Calculate your NPS corpus at retirement and monthly pension. See how much to invest monthly in NPS to reach your retirement goal.',
-  alternates: { canonical: 'https://paisareality.com/calculators/nps' },
-  openGraph: {
-    title: 'NPS Calculator India',
-    description: 'Calculate NPS returns and retirement pension. Free tool.',
-    url: 'https://paisareality.com/calculators/nps',
-    type: 'website',
-  },
-};
+  path: '/calculators/nps',
+  keywords: ['nps calculator india', 'national pension scheme calculator', 'nps pension calculator', 'nps corpus calculator'],
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const jsonLd = {

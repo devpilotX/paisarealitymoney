@@ -15,6 +15,9 @@ const GRATUITY_FAQS = [
   { question: 'Who is eligible for gratuity?', answer: 'Any employee who has completed 5 or more years of continuous service with an employer is eligible for gratuity. This applies to all organizations with 10 or more employees. In case of death or disability, the 5-year condition is waived.' },
   { question: 'How is gratuity calculated?', answer: 'For employees covered under the Payment of Gratuity Act: Gratuity = (Last drawn salary x 15 x Years of service) / 26. Last drawn salary means basic salary plus dearness allowance. For employees not covered under the Act: Gratuity = (Last drawn salary x 15 x Years of service) / 30.' },
   { question: 'Is gratuity taxable?', answer: 'Gratuity is tax-exempt up to Rs 20 lakh (for private sector employees). For government employees, the entire gratuity amount is tax-exempt. Any amount exceeding the exemption limit is taxable as per your income tax slab.' },
+  { question: 'What is the maximum gratuity amount?', answer: 'The maximum tax-free gratuity under the Payment of Gratuity Act is Rs 20 lakh. Employers can pay more, but the amount above Rs 20 lakh is taxable as per your slab. The calculator reflects this exemption cap.' },
+  { question: 'Do I get gratuity if I resign before 5 years?', answer: 'Generally no, because gratuity needs 5 years of continuous service. The main exceptions are death or disability, where the 5 year rule is waived. Some courts have allowed it at 4 years and 240 days, so check your employer policy.' },
+  { question: 'Is gratuity calculated on basic salary or total salary?', answer: 'Gratuity uses your last drawn basic salary plus dearness allowance, not your full CTC. Allowances like HRA and bonuses are not part of the gratuity formula.' },
 ];
 
 export default function GratuityCalculatorPage(): React.ReactElement {

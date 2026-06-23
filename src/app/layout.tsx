@@ -6,7 +6,9 @@ import Footer from '@/components/Footer';
 import CookieConsent from '@/components/CookieConsent';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import AdSenseScript from '@/components/AdSenseScript';
+import YojanaMitra from '@/components/YojanaMitra';
 import Script from 'next/script'
+import { SITE_URL, SITE_NAME } from '@/lib/seo';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -14,31 +16,28 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const SITE_URL = 'https' + '://paisareality.com';
-const SEARCH_TARGET = SITE_URL + '/search?q={search_term_string}';
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
-    template: '%s | Paisa Reality',
+    default: 'Paisa Reality: Free Money Health Score and Smart Tools',
+    template: '%s',
   },
   description:
-    'Find Indian government schemes with eligibility, benefits, documents, and official apply links. Check gold, silver, petrol, and diesel prices. Use free calculators and compare bank rates.',
+    'Paisa Reality helps you check your free Money Health Score, use 9 smart financial tools, track live rates, find government schemes, and compare bank rates in India.',
   keywords: [
+    'money health score',
+    'financial health score india',
+    'smart financial tools',
+    'retirement calculator india',
+    'debt payoff calculator',
+    'old vs new tax regime calculator',
     'government schemes india',
-    'sarkari yojana',
-    'pm yojana',
     'gold rate today',
     'silver rate today',
     'petrol price today',
-    'diesel price today',
-    'government schemes',
     'EMI calculator',
     'SIP calculator',
-    'FD calculator',
-    'bank rates',
-    'India',
+    'bank rates india',
   ],
   authors: [{ name: 'Paisa Reality' }],
   creator: 'Paisa Reality',
@@ -65,33 +64,22 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    alternateLocale: 'hi_IN',
     url: SITE_URL,
-    siteName: 'Paisa Reality',
-    title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
+    siteName: SITE_NAME,
+    title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
     description:
-      "India's one-stop money hub.",
-    images: [
-      {
-        url: '/paisa_reality_logo.png',
-        width: 512,
-        height: 512,
-        alt: 'Paisa Reality - India\'s Money Hub',
-      },
-    ],
+      'Check your free Money Health Score, use 9 smart tools for retirement, debt, and tax planning, and track live rates, schemes, and bank rates in India.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Paisa Reality - Gold Rate, Schemes, Calculators, Bank Rates',
+    title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
     description:
-      "India's one-stop money hub.",
-    images: ['/paisa_reality_logo.png'],
+      'Check your free Money Health Score and use 9 smart tools for retirement, debt, and tax planning. Plus live rates, schemes, and bank rates.',
   },
   alternates: {
     canonical: SITE_URL,
     languages: {
       'en-IN': SITE_URL,
-      'hi-IN': SITE_URL + '/hi',
       'x-default': SITE_URL,
     },
   },
@@ -113,6 +101,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }): React.ReactElement {
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: SITE_URL + '/paisa_reality_logo.png',
+  };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: SITE_URL,
+  };
+
   return (
     <html lang="en" className={inter.variable} data-scroll-behavior="smooth">
       <head>
@@ -120,7 +123,7 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-6484525483464374" />
         <meta name="geo.region" content="IN" />
         <meta name="geo.country" content="India" />
-        <meta name="language" content="English,Hindi" />
+        <meta name="language" content="English" />
         <meta name="distribution" content="global" />
       </head>
       <body className="font-sans bg-white text-gray-900 antialiased flex flex-col min-h-screen">
@@ -133,31 +136,9 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <CookieConsent />
-        <Script
-          src="https://api.devpilotx.com/widget.js"
-          data-assistant="yojana-mitra"
-          strategy="afterInteractive"
-        />
-        <Script id="organization-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
-          name: 'Paisa Reality',
-          url: SITE_URL,
-          logo: SITE_URL + '/paisa_reality_logo.png',
-          sameAs: ['https://devpilotx.com'],
-        }) }} />
-        <Script id="website-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          name: 'Paisa Reality',
-          url: SITE_URL,
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: SEARCH_TARGET,
-            'query-input': 'required name=search_term_string',
-          },
-        }) }} />
-        <Script src="https://api.devpilotx.com/v2/widget.js" strategy="afterInteractive" />
+        <YojanaMitra />
+        <Script id="organization-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+        <Script id="website-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </body>
     </html>
   );

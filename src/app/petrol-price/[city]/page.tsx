@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
@@ -31,12 +32,13 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { city: citySlug } = await params;
   const city = getCityBySlug(citySlug);
-  if (!city) return { title: 'City Not Found' };
-  return {
-    title: `Petrol Price in ${city.name} Today - Per Litre Rate`,
+  if (!city) return { title: 'City Not Found', robots: { index: false } };
+  return pageMetadata({
+    title: `Petrol Price in ${city.name} Today: Per Litre Rate`,
     description: `Check the latest available petrol price in ${city.name}, ${city.state}. Current rate per litre, 7-day history, and price trend.`,
-    alternates: { canonical: `https://paisareality.com/petrol-price/${city.slug}` },
-  };
+    path: `/petrol-price/${city.slug}`,
+    keywords: [`petrol price in ${city.name.toLowerCase()}`, `petrol rate ${city.name.toLowerCase()}`, 'petrol price today', 'petrol rate per litre'],
+  });
 }
 
 export const revalidate = 900;

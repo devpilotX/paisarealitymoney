@@ -1,28 +1,21 @@
-import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import { pageMetadata } from '@/lib/seo';
 import SchemeMaximizerClient from './SchemeMaximizerClient';
 
-export const metadata: Metadata = {
-  title: 'Government Scheme Benefit Maximizer. Total ₹ You Can Claim',
+export const metadata = pageMetadata({
+  title: 'Government Scheme Benefit Calculator India',
   description:
-    'Find every central government scheme you qualify for AND the total rupee benefit per year. not just a list. Quantifies cash, subsidy, pension and insurance value, resolves overlaps, and shows how to claim. Free, 100% private.',
+    'See the total rupee benefit of every central scheme you qualify for. We resolve conflicts and give step by step instructions to claim each one. Free.',
+  path: '/calculators/scheme-maximizer',
   keywords: [
-    'government scheme eligibility', 'government scheme benefit calculator', 'schemes i am eligible for',
-    'pm kisan ayushman eligibility', 'total government benefit india', 'sarkari yojana calculator',
+    'government scheme benefit calculator', 'which schemes do i qualify for', 'sarkari yojana calculator',
+    'government scheme eligibility', 'total government benefit india',
   ],
-  alternates: { canonical: 'https://paisareality.com/calculators/scheme-maximizer' },
-  openGraph: {
-    title: 'Government Scheme Benefit Maximizer',
-    description:
-      'Not just a list. the total rupee benefit of every central scheme you qualify for, conflict-resolved, with how to claim each. Free and private.',
-    url: 'https://paisareality.com/calculators/scheme-maximizer',
-    type: 'website',
-  },
-};
+});
 
 const FAQS = [
   {
@@ -84,10 +77,11 @@ const jsonLd = {
 
 export default function SchemeMaximizerPage(): React.ReactElement {
   const links = [
-    { href: '/schemes', label: 'Browse all schemes' },
     { href: '/calculators/budget-optimizer', label: 'Budget Optimizer' },
-    { href: '/calculators/lifecycle-tax-optimizer', label: 'Tax Regime Optimizer' },
-    { href: '/calculators', label: 'All calculators' },
+    { href: '/calculators/salary-optimizer', label: 'Salary Structure Optimizer' },
+    { href: '/calculators/lifecycle-tax-optimizer', label: 'Old vs New Tax Regime Optimizer' },
+    { href: '/score', label: 'Money Health Score' },
+    { href: '/schemes', label: 'Browse all schemes' },
   ];
 
   return (
@@ -158,7 +152,7 @@ export default function SchemeMaximizerPage(): React.ReactElement {
       </article>
 
       <ShareButton url="/calculators/scheme-maximizer" title="Government Scheme Benefit Maximizer - Paisa Reality" />
-      <InternalLinks title="Related" links={links} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={links} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
 

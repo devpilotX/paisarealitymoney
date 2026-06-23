@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -13,11 +13,12 @@ import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'Petrol Price Today in India - City-wise Rates',
+export const metadata = pageMetadata({
+  title: 'Petrol Price Today in India: City-wise Rates',
   description: 'Check the latest available petrol price in your city for 50+ Indian cities. Verify with oil company apps or fuel pumps before purchase.',
-  alternates: { canonical: 'https://paisareality.com/petrol-price' },
-};
+  path: '/petrol-price',
+  keywords: ['petrol price today', 'petrol rate today india', 'petrol price in my city', 'petrol rate city wise'],
+});
 
 interface FuelRow extends QueryResultRow {
   city_name: string; city_slug: string; state: string;
@@ -30,6 +31,8 @@ const PETROL_FAQS = [
   { question: 'Why is petrol price different in each city?', answer: 'The base price of petrol is the same across India. But each state charges different VAT (Value Added Tax) rates. Some cities also have additional cess or surcharges. Mumbai typically has the highest petrol price because Maharashtra charges a higher VAT.' },
   { question: 'How is petrol price calculated in India?', answer: 'Petrol price = Base price + Excise duty (central tax) + Dealer commission + VAT (state tax). The base price depends on international crude oil rates and the rupee-dollar exchange rate. Excise duty is set by the central government, and VAT varies by state.' },
   { question: 'When do petrol prices change?', answer: 'Under the daily pricing system, oil companies can revise petrol and diesel prices every day at 6 AM based on international crude oil rates. However, in practice, prices remain stable for weeks or months, with changes happening when there are significant shifts in global oil prices.' },
+  { question: 'Why is petrol so expensive in India?', answer: 'A large part of the petrol price is tax. Central excise duty plus state VAT often make up close to half the pump price. The rest reflects international crude oil costs, the rupee to dollar rate, refining, and dealer commission.' },
+  { question: 'Are petrol prices the same across India?', answer: 'No. The base cost is similar everywhere, but each state sets its own VAT, so the final pump price differs from city to city. States with higher VAT, like Maharashtra, usually have higher petrol prices.' },
 ];
 
 export const revalidate = 900;

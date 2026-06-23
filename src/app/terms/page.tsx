@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 
-export const metadata: Metadata = {
-  title: 'Terms of Service - Paisa Reality',
+export const metadata = pageMetadata({
+  title: 'Terms of Service',
   description: 'Terms of service for using Paisa Reality. Read our acceptable use policy, limitations, and governing law.',
-  alternates: { canonical: 'https://paisareality.com/terms' },
-};
+  path: '/terms',
+});
 
 export default function TermsPage(): React.ReactElement {
   return (

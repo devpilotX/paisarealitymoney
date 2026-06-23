@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 
-export const metadata: Metadata = {
-  title: 'Disclaimer - Paisa Reality',
+export const metadata = pageMetadata({
+  title: 'Disclaimer',
   description: 'Important disclaimer about information on Paisa Reality. We are an informational website, not a financial advisor.',
-  alternates: { canonical: 'https://paisareality.com/disclaimer' },
-};
+  path: '/disclaimer',
+});
 
 export default function DisclaimerPage(): React.ReactElement {
   return (

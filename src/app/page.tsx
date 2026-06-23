@@ -1,26 +1,25 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Script from 'next/script';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import FAQ from '@/components/FAQ';
 
 export const metadata: Metadata = {
-  title: 'Paisa Reality - Gold Rate Today, Silver Price, Petrol Diesel Price, Government Schemes, Free Calculators',
+  title: 'Money Health Score and Smart Tools | Paisa Reality',
   description:
-    'Check today gold rate, silver rate, petrol price, diesel price and LPG price in India. Find government schemes you qualify for. Use free EMI, SIP, FD, PPF calculators. Compare bank rates. Meet Yojana Mitra, your AI guide to schemes and tools.',
+    'Check your free Money Health Score and 9 smart tools for retirement, debt, and tax. Plus daily gold and fuel prices, government schemes, calculators, and bank rates.',
   alternates: { canonical: 'https://paisareality.com' },
   openGraph: {
-    title: 'Paisa Reality - India\'s Free Money Hub',
-    description: 'Daily gold, silver, petrol, diesel, LPG prices. Government scheme finder. Free financial calculators. Bank rate comparison.',
+    title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
+    description: 'Check your free Money Health Score and 9 smart tools for retirement, debt, and tax planning. Plus live rates, schemes, and bank rate comparison.',
     url: 'https://paisareality.com',
     siteName: 'Paisa Reality',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Paisa Reality - India\'s Free Money Hub',
-    description: 'Daily prices, government schemes, free calculators, and bank rate comparison. All in one place.',
+    title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
+    description: 'Your free Money Health Score and 9 smart tools, plus live prices, schemes, calculators, and bank rates.',
   },
 };
 
@@ -149,57 +148,16 @@ const HOME_FAQS = [
     answer:
       'Smart Tools are our advanced financial calculators. They handle complex questions like how much you need to retire, whether to prepay a loan or invest, and how to legally pay less tax. They run in your browser and are completely free.',
   },
-  {
-    question: 'What is Yojana Mitra?',
-    answer:
-      'Yojana Mitra is our AI assistant built into the site. It helps you find government schemes, understand calculator results, and answer questions about anything on Paisa Reality. It only talks about what is on this website, nothing outside.',
-  },
 ];
 
 export default function HomePage(): React.ReactElement {
-  const websiteSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Paisa Reality',
-    url: 'https://paisareality.com',
-    description: 'Check daily prices, find government schemes, use free calculators, and compare bank rates in India.',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://paisareality.com/schemes?q={search_term_string}',
-      'query-input': 'required name=search_term_string',
-    },
-  };
-
-  const orgSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Paisa Reality',
-    url: 'https://paisareality.com',
-    logo: 'https://paisareality.com/paisa_reality_logo.png',
-    sameAs: [],
-  };
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: HOME_FAQS.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-    })),
-  };
-
   return (
     <>
-      <Script id="website-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
-      <Script id="org-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
-      <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-
       {/* Hero */}
       <section className="bg-white py-10 sm:py-14">
         <div className="container-main text-center px-4">
           <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-3">
-            Your Money Deserves Better.
+            Your Money Health Score and Smart Financial Tools
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-lg mx-auto mb-6">
             Every Indian family works hard for their money. Now make your own decisions. Everything is in your hands.

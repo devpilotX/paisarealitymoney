@@ -1,18 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'FD Calculator India. Calculate Fixed Deposit Maturity',
+export const metadata = pageMetadata({
+  title: 'FD Calculator India: Fixed Deposit Maturity',
   description:
     'Calculate your fixed deposit maturity amount and interest earned. Compare simple and compound interest for any bank FD in India.',
-  alternates: { canonical: 'https://paisareality.com/calculators/fd' },
-  openGraph: {
-    title: 'FD Calculator India',
-    description: 'Calculate FD maturity amount with interest breakup. Free.',
-    url: 'https://paisareality.com/calculators/fd',
-    type: 'website',
-  },
-};
+  path: '/calculators/fd',
+  keywords: ['fd calculator india', 'fixed deposit calculator', 'fd maturity calculator', 'fd interest calculator'],
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const jsonLd = {

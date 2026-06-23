@@ -9,14 +9,14 @@ declare global {
   }
 }
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID ?? '';
+export const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-MT7980F7JH';
 
 export function trackPageView(url: string): void {
-  if (typeof window === 'undefined' || !GA_MEASUREMENT_ID) {
+  if (typeof window === 'undefined' || !GA_ID) {
     return;
   }
   try {
-    window.gtag('config', GA_MEASUREMENT_ID, {
+    window.gtag('config', GA_ID, {
       page_path: url,
     });
   } catch (error) {
@@ -28,7 +28,7 @@ export function trackEvent(
   eventName: string,
   params?: Record<string, string | number | boolean>
 ): void {
-  if (typeof window === 'undefined' || !GA_MEASUREMENT_ID) {
+  if (typeof window === 'undefined' || !GA_ID) {
     return;
   }
   try {

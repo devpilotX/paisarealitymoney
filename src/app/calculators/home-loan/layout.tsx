@@ -1,18 +1,13 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'Home Loan EMI Calculator India. Monthly Payment Breakup',
+export const metadata = pageMetadata({
+  title: 'Home Loan EMI Calculator India: Payment Breakup',
   description:
     'Calculate your home loan EMI, total interest and year-wise payment schedule. Compare different loan amounts, tenures and interest rates for Indian home loans.',
-  alternates: { canonical: 'https://paisareality.com/calculators/home-loan' },
-  openGraph: {
-    title: 'Home Loan EMI Calculator India',
-    description: 'Calculate home loan EMI with full amortization schedule. Free.',
-    url: 'https://paisareality.com/calculators/home-loan',
-    type: 'website',
-  },
-};
+  path: '/calculators/home-loan',
+  keywords: ['home loan emi calculator india', 'home loan calculator', 'housing loan emi calculator', 'home loan interest calculator'],
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const jsonLd = {

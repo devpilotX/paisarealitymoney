@@ -1,28 +1,21 @@
-import type { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import { pageMetadata } from '@/lib/seo';
 import TaxHarvestingClient from './TaxHarvestingClient';
 
-export const metadata: Metadata = {
-  title: 'Tax-Loss & Gain Harvesting Optimizer (₹1.25L LTCG)',
+export const metadata = pageMetadata({
+  title: 'Tax Loss Harvesting Calculator India (LTCG)',
   description:
-    'Before year-end, find exactly which holdings to sell to legally cut your capital-gains tax. using the ₹1.25L LTCG exemption and loss set-off rules. Free, 100% private, no login.',
+    'Cut your capital gains tax legally. We show which holdings to sell before year end and use the 1.25 lakh LTCG exemption to save you money. Free, private.',
+  path: '/calculators/tax-harvesting',
   keywords: [
-    'tax loss harvesting india', 'tax gain harvesting', 'ltcg 1.25 lakh exemption', 'capital gains tax saving',
+    'tax loss harvesting india', 'capital gains harvesting', 'ltcg exemption',
     'tax harvesting calculator', 'how to save ltcg tax', 'set off capital losses',
   ],
-  alternates: { canonical: 'https://paisareality.com/calculators/tax-harvesting' },
-  openGraph: {
-    title: 'Equity Tax-Loss & Gain Harvesting Optimizer',
-    description:
-      'Tells you exactly which lots to sell (and how much) to minimise capital-gains tax using the ₹1.25L LTCG exemption and loss set-off rules. Free and private.',
-    url: 'https://paisareality.com/calculators/tax-harvesting',
-    type: 'website',
-  },
-};
+});
 
 const FAQS = [
   {
@@ -89,10 +82,10 @@ const jsonLd = {
 
 export default function TaxHarvestingPage(): React.ReactElement {
   const calcLinks = [
-    { href: '/calculators/sip', label: 'SIP Calculator' },
-    { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
-    { href: '/calculators/lifecycle-tax-optimizer', label: 'Multi-Year Tax Optimizer' },
-    { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
+    { href: '/calculators/lifecycle-tax-optimizer', label: 'Old vs New Tax Regime Optimizer' },
+    { href: '/calculators/salary-optimizer', label: 'Salary Structure Optimizer' },
+    { href: '/calculators/gold-planner', label: 'Gold Allocation Planner' },
+    { href: '/score', label: 'Money Health Score' },
   ];
 
   return (
@@ -165,7 +158,7 @@ export default function TaxHarvestingPage(): React.ReactElement {
       </article>
 
       <ShareButton url="/calculators/tax-harvesting" title="Equity Tax-Loss & Gain Harvesting Optimizer - Paisa Reality" />
-      <InternalLinks title="Related Calculators" links={calcLinks} columns={2} />
+      <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
 

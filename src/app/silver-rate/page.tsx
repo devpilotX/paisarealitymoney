@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -13,11 +13,12 @@ import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'Silver Rate Today in India - Latest Price per Gram & Kg',
+export const metadata = pageMetadata({
+  title: 'Silver Rate Today in India: Price per Gram & Kg',
   description: 'Check the latest available silver rate in India. Silver prices per gram and per kg for 50+ cities.',
-  alternates: { canonical: 'https://paisareality.com/silver-rate' },
-};
+  path: '/silver-rate',
+  keywords: ['silver rate today', 'silver price today india', 'silver rate per gram', 'silver price per kg'],
+});
 
 interface SilverRow extends QueryResultRow {
   city_name: string; city_slug: string; state: string;
@@ -29,6 +30,9 @@ const SILVER_FAQS = [
   { question: 'What is the silver rate in India today?', answer: 'Silver prices in India change daily. Check this page for the latest per gram and per kg silver rates for 50+ cities. Prices are updated every morning based on commodity market data.' },
   { question: 'Why do silver prices vary by city?', answer: 'Silver prices differ across cities due to local taxes, transportation costs, and demand. The differences are usually Rs 0.50 to Rs 2 per gram between cities.' },
   { question: 'Is silver a good investment?', answer: 'Silver is considered a hedge against inflation and economic uncertainty. It is more volatile than gold but also more affordable. Silver has industrial uses (electronics, solar panels) which can drive demand. Consult a financial advisor before investing.' },
+  { question: 'What is the difference between physical and digital silver?', answer: 'Physical silver (coins, bars, jewellery) is held by you but carries making charges and storage concerns. Silver ETFs and digital silver track the price without storage hassle. Each option has its own cost and tax treatment, so compare before buying.' },
+  { question: 'Why is silver more volatile than gold?', answer: 'Silver has heavy industrial demand, from electronics to solar panels, so its price reacts to both investment demand and the wider economy. This dual role makes silver swing more sharply than gold in both directions.' },
+  { question: 'How is silver taxed in India?', answer: 'Gains on silver are treated as capital gains. Selling after a short holding period is taxed at your slab rate, while a longer holding qualifies for long-term capital gains treatment. Rules change, so verify the current holding period and rate before you sell.' },
 ];
 
 export const revalidate = 900;

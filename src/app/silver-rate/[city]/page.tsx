@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
@@ -31,12 +32,13 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { city: citySlug } = await params;
   const city = getCityBySlug(citySlug);
-  if (!city) return { title: 'City Not Found' };
-  return {
-    title: `Silver Rate in ${city.name} Today - Price per Gram & Kg`,
+  if (!city) return { title: 'City Not Found', robots: { index: false } };
+  return pageMetadata({
+    title: `Silver Rate in ${city.name} Today: Price per Gram & Kg`,
     description: `Check the latest available silver rate in ${city.name}, ${city.state}. Price per gram and per kg, 7-day history, and 30-day chart.`,
-    alternates: { canonical: `https://paisareality.com/silver-rate/${city.slug}` },
-  };
+    path: `/silver-rate/${city.slug}`,
+    keywords: [`silver rate in ${city.name.toLowerCase()}`, `silver price ${city.name.toLowerCase()}`, 'silver rate per gram', 'silver rate today'],
+  });
 }
 
 export const revalidate = 900;

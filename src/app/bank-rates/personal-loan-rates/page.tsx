@@ -1,18 +1,20 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
 import Breadcrumb from '@/components/Breadcrumb';
 import BankRateTable from '@/components/BankRateTable';
+import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'Personal Loan Interest Rates - Compare All Banks',
+export const metadata = pageMetadata({
+  title: 'Personal Loan Interest Rates: Compare All Banks',
   description: 'Compare personal loan rates across Indian banks. Find the lowest personal loan rate for your needs.',
-  alternates: { canonical: 'https://paisareality.com/bank-rates/personal-loan-rates' },
-};
+  path: '/bank-rates/personal-loan-rates',
+  keywords: ['personal loan interest rates', 'lowest personal loan rate', 'personal loan rates india'],
+});
 
 interface LoanRateRow extends QueryResultRow {
   bank_name: string; bank_slug: string; bank_type: string;
@@ -47,6 +49,13 @@ export default async function PersonalLoanRatesPage(): Promise<React.ReactElemen
         <p className="text-body mb-4">Personal loan rates in India range from 10% to 24% depending on the bank, your credit score (CIBIL score), income, employer, and loan amount. Salaried employees at large companies generally get lower rates. A CIBIL score above 750 helps you get the best rates.</p>
         <p className="text-body mb-4">Personal loans are unsecured (no collateral needed) which is why rates are higher than home loans or car loans. Processing fees typically range from 1% to 3% of the loan amount. Some banks waive processing fees during promotional periods.</p>
       </article>
+      <FAQ items={[
+        { question: 'What is a good personal loan interest rate?', answer: 'Personal loan rates in India typically range from about 10% to 24%. Rates near 10 to 12% are good and usually go to salaried borrowers with high credit scores at large employers.' },
+        { question: 'How is my personal loan rate decided?', answer: 'Lenders look at your credit score, income, employer, existing loans, and the amount and tenure you want. A CIBIL score above 750 usually unlocks the best rates.' },
+        { question: 'Why are personal loan rates higher than home loans?', answer: 'Personal loans are unsecured, with no collateral, so the lender takes more risk and charges a higher rate. Secured loans like home or car loans are cheaper because an asset backs them.' },
+        { question: 'What fees apply on a personal loan?', answer: 'Expect a processing fee of about 1% to 3% of the loan amount, and sometimes prepayment or foreclosure charges. Read the terms so you know the true cost beyond the headline rate.' },
+        { question: 'How can I get a lower personal loan rate?', answer: 'Improve your credit score, reduce existing debt, apply with a steady income and employer, and compare offers across banks. A pre-approved offer from your salary-account bank is often cheaper.' },
+      ]} />
       <ShareButton url="/bank-rates/personal-loan-rates" title="Personal Loan Rates - Paisa Reality" />
       <InternalLinks title="Related" links={otherLinks} columns={3} />
       <AdBanner format="horizontal" className="mt-8" />

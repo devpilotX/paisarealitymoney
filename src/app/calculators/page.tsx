@@ -1,22 +1,15 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
-import Script from 'next/script';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import AdBanner from '@/components/AdBanner';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Free Financial Calculators - EMI, SIP, FD, PPF, Income Tax, Home Loan | Paisa Reality',
+export const metadata = pageMetadata({
+  title: 'Free Financial Calculators: EMI, SIP, FD, PPF, Tax',
   description: 'Free financial calculators for EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA and inflation. Instant results in your browser. No signup needed.',
-  alternates: { canonical: 'https://paisareality.com/calculators' },
-  openGraph: {
-    title: 'Free Financial Calculators - EMI, SIP, FD, PPF, Tax',
-    description: 'Calculate EMI, SIP returns, FD maturity, PPF, income tax, home loan, NPS, gratuity, HRA and inflation. All free, no login.',
-    url: 'https://paisareality.com/calculators',
-    siteName: 'Paisa Reality',
-    type: 'website',
-  },
-};
+  path: '/calculators',
+  keywords: ['financial calculators india', 'emi calculator', 'sip calculator', 'fd calculator', 'income tax calculator'],
+});
 
 interface CalcCard { title: string; description: string; href: string; icon: string; }
 
@@ -42,30 +35,8 @@ const CALC_FAQS = [
 ];
 
 export default function CalculatorsPage(): React.ReactElement {
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://paisareality.com' },
-      { '@type': 'ListItem', position: 2, name: 'Calculators', item: 'https://paisareality.com/calculators' },
-    ],
-  };
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: CALC_FAQS.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-    })),
-  };
-
   return (
     <div className="container-main py-6">
-      <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-
       <Breadcrumb items={[{ label: 'Financial Calculators' }]} />
       <h1 className="heading-1 mb-3">Financial Calculators</h1>
       <p className="text-body mb-8 max-w-2xl">

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
@@ -10,11 +10,12 @@ import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 
-export const metadata: Metadata = {
-  title: 'FD Interest Rates - Compare Fixed Deposit Rates 2026',
+export const metadata = pageMetadata({
+  title: 'FD Interest Rates: Compare Fixed Deposit Rates 2026',
   description: 'Compare fixed deposit (FD) interest rates across 50+ Indian banks. Find the highest FD rate for your tenure. Senior citizen rates included.',
-  alternates: { canonical: 'https://paisareality.com/bank-rates/fd-rates' },
-};
+  path: '/bank-rates/fd-rates',
+  keywords: ['fd interest rates', 'fixed deposit rates', 'highest fd rate', 'best fd rates india 2026'],
+});
 
 interface FDRateRow extends QueryResultRow {
   bank_name: string; bank_slug: string; bank_type: string;

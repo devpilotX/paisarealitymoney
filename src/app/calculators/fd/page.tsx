@@ -13,7 +13,10 @@ import { trackCalculatorUse } from '@/lib/analytics';
 
 const FD_FAQS = [
   { question: 'What is a Fixed Deposit?', answer: 'A Fixed Deposit (FD) is a savings instrument offered by banks where you deposit a lump sum amount for a fixed period at a guaranteed interest rate. The interest rate is higher than a regular savings account. FDs are considered one of the safest investment options in India as they are insured up to Rs 5 lakh by DICGC.' },
+  { question: 'Which bank gives the highest FD interest rate?', answer: 'Small finance banks often offer the highest FD rates, followed by some private banks, with large public banks usually a little lower. Senior citizens get an extra 0.25 to 0.75%. Rates change frequently, so compare the latest rates on our bank rates page before you book.' },
   { question: 'Is FD interest taxable?', answer: 'Yes. Interest earned on FD is fully taxable as per your income tax slab. Banks deduct TDS (Tax Deducted at Source) at 10% if annual interest exceeds Rs 40,000 (Rs 50,000 for senior citizens). You can submit Form 15G/15H to avoid TDS if your total income is below the taxable limit.' },
+  { question: 'Can I break my FD before maturity?', answer: 'Yes, most FDs allow premature withdrawal, but the bank usually pays a slightly lower interest rate and may charge a small penalty. If you might need the money soon, consider a shorter tenure or splitting the amount across a few smaller FDs so you break only what you need.' },
+  { question: 'What is a tax-saving FD?', answer: 'A tax-saving FD has a 5 year lock-in, and the deposit qualifies for a deduction up to Rs 1.5 lakh under Section 80C. The interest is still taxable. You cannot withdraw it early or take a loan against it during the lock-in period.' },
   { question: 'What is the difference between simple and compound interest on FD?', answer: 'Simple interest is calculated only on the original deposit amount. Compound interest is calculated on the deposit plus accumulated interest. Most banks offer compound interest on FDs, which means your effective return is higher. Quarterly compounding is most common.' },
 ];
 
