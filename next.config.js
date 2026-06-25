@@ -24,8 +24,8 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      { source: '/blog', destination: '/newsletter', permanent: true },
-      { source: '/blog/:slug', destination: '/newsletter/:slug', permanent: true },
+      { source: '/blog', destination: '/newsletter', statusCode: 301 },
+      { source: '/blog/:slug', destination: '/newsletter/:slug', statusCode: 301 },
     ]
   },
 }

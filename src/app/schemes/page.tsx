@@ -17,7 +17,7 @@ const SCHEME_FAQS = [
   { question: 'Is my data stored or shared?', answer: 'No. Your profile data is only used to find matching schemes. We do not store your personal details or share them with anyone. The matching happens in real-time and your data is discarded after showing results.' },
   { question: 'How accurate is the eligibility check?', answer: 'Our eligibility matching covers the main criteria like age, gender, state, income, category, and education. However, some schemes have additional detailed requirements that we may not cover. Always verify your eligibility on the official scheme website before applying.' },
   { question: 'Can I apply for schemes through Paisa Reality?', answer: 'No. Paisa Reality only helps you find schemes you may be eligible for. To apply, you need to visit the official government website or the nearest Common Service Centre (CSC). We provide links to official application portals where available.' },
-  { question: 'How many schemes are in your database?', answer: 'We currently have 100+ central government schemes in our database, covering education, housing, business, agriculture, healthcare, women, senior citizens, skill training, and more. We keep adding new schemes and updating existing ones regularly.' },
+  { question: 'How many schemes are in your database?', answer: 'We currently have over 200 central and state government schemes in our database, covering agriculture, education, housing, business, healthcare, women and child, pension, insurance, employment, skill training, and more. We keep adding new schemes and updating existing ones regularly.' },
 ];
 
 const POPULAR_SCHEME_LINKS = [

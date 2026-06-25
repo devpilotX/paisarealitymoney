@@ -6,7 +6,6 @@ import Footer from '@/components/Footer';
 import CookieConsent from '@/components/CookieConsent';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import AdSenseScript from '@/components/AdSenseScript';
-import YojanaMitra from '@/components/YojanaMitra';
 import Script from 'next/script'
 import { SITE_URL, SITE_NAME } from '@/lib/seo';
 
@@ -136,7 +135,6 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <CookieConsent />
-        <YojanaMitra />
         <Script id="organization-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
         <Script id="website-jsonld" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </body>

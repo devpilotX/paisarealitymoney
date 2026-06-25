@@ -50,6 +50,11 @@ export const SCHEME_CATEGORIES = [
   { slug: 'senior-citizen', label: 'Senior Citizen', labelHi: 'वरिष्ठ नागरिक' },
   { slug: 'disability', label: 'Disability', labelHi: 'विकलांग' },
   { slug: 'skill-training', label: 'Skill Training', labelHi: 'कौशल प्रशिक्षण' },
+  { slug: 'employment', label: 'Employment', labelHi: 'रोजगार' },
+  { slug: 'pension', label: 'Pension', labelHi: 'पेंशन' },
+  { slug: 'insurance', label: 'Insurance', labelHi: 'बीमा' },
+  { slug: 'finance', label: 'Finance and Savings', labelHi: 'वित्त और बचत' },
+  { slug: 'social', label: 'Social Welfare', labelHi: 'सामाजिक कल्याण' },
 ] as const;
 
 export const GA_EVENTS = {
