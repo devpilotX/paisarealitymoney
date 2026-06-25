@@ -1,0 +1,16 @@
+# Paisa Reality daily price update service.
+# Install on the server:
+#   sudo cp deploy/systemd/paisareality-prices.* /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now paisareality-prices.timer
+#
+# The CRON_SECRET is read at runtime from /opt/paisareality/.env and is never
+# written into this unit file.
+[Unit]
+Description=Paisa Reality daily price update
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'set -a; . /opt/paisareality/.env; set +a; exec curl -fsS --max-time 90 "http://127.0.0.1:3000/api/cron/prices?secret=$CRON_SECRET"'
