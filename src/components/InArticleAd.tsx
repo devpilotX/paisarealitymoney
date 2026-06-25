@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { adClientId } from './AdSenseScript';
 
 declare global {
   interface Window {
@@ -13,41 +14,65 @@ export default function InArticleAd({
 }: {
   className?: string;
 }): React.ReactElement | null {
-  const isAdLoaded = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pushed = useRef(false);
+  const [inView, setInView] = useState(false);
   const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
-  const adSlot = process.env.NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT
+  const adSlot =
+    process.env.NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT
     || process.env.NEXT_PUBLIC_ADSENSE_DEFAULT_SLOT
     || '';
 
   useEffect(() => {
-    if (isAdLoaded.current || !pubId || !adSlot) {
+    const el = containerRef.current;
+    if (!el || !pubId || !adSlot || typeof IntersectionObserver === 'undefined') {
       return;
     }
-
-    try {
-      if (typeof window !== 'undefined' && window.adsbygoogle) {
-        window.adsbygoogle.push({});
-        isAdLoaded.current = true;
-      }
-    } catch (error) {
-      console.error('In-article ad loading error:', error);
-    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [pubId, adSlot]);
+
+  useEffect(() => {
+    if (!inView || pushed.current || !pubId || !adSlot) {
+      return;
+    }
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      pushed.current = true;
+    } catch {
+      // The AdSense library may not be ready yet; ignore silently.
+    }
+  }, [inView, pubId, adSlot]);
 
   if (!pubId || !adSlot) {
     return null;
   }
 
   return (
-    <div className={`overflow-hidden ${className}`} style={{ minHeight: 0 }}>
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'block', textAlign: 'center' }}
-        data-ad-layout="in-article"
-        data-ad-format="fluid"
-        data-ad-client={`ca-${pubId}`}
-        data-ad-slot={adSlot}
-      />
+    <div
+      ref={containerRef}
+      className={`overflow-hidden ${className}`}
+      style={{ minHeight: 250 }}
+    >
+      {inView && (
+        <ins
+          className="adsbygoogle"
+          style={{ display: 'block', textAlign: 'center' }}
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client={adClientId(pubId)}
+          data-ad-slot={adSlot}
+        />
+      )}
     </div>
   );
 }
