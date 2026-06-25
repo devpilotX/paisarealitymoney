@@ -13,6 +13,7 @@
     "db:seed-schemes": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-schemes.ts",
     "db:seed-banks": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-banks.ts",
     "db:seed-schemes-expansion": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-schemes-expansion.ts",
+    "db:seed-banks-expansion": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-banks-expansion.ts",
     "db:seed-all": "npm run db:seed-cities && npm run db:seed-prices && npm run db:seed-schemes && npm run db:seed-banks",
     "db:migrate-pg": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-pg.ts"
   },

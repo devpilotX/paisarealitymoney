@@ -14,6 +14,16 @@ interface BlogPostSummary {
 
 type Tab = 'overview' | 'blogs' | 'messages' | 'actions';
 
+interface SiteStats {
+  schemes: { total: number; central: number; state: number };
+  banks: number;
+  bankRates: number;
+  cities: number;
+  users: number;
+  newsletterPosts: { total: number; published: number };
+  pricesUpdated: string | null;
+}
+
 export default function AdminPage(): React.ReactElement {
   const [loggedIn, setLoggedIn] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -24,6 +34,7 @@ export default function AdminPage(): React.ReactElement {
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState<Tab>('overview');
   const [actionLog, setActionLog] = useState('');
+  const [stats, setStats] = useState<SiteStats | null>(null);
 
   const loadPosts = useCallback(async (): Promise<boolean> => {
     setLoading(true);
@@ -35,12 +46,23 @@ export default function AdminPage(): React.ReactElement {
     return true;
   }, []);
 
+  const loadStats = useCallback(async (): Promise<void> => {
+    try {
+      const res = await fetch('/api/admin/stats');
+      if (!res.ok) return;
+      setStats((await res.json()) as SiteStats);
+    } catch {
+      // stats are best-effort; ignore failures
+    }
+  }, []);
+
   useEffect(() => {
     void loadPosts().then((ok) => {
       setLoggedIn(ok);
       setChecking(false);
+      if (ok) void loadStats();
     });
-  }, [loadPosts]);
+  }, [loadPosts, loadStats]);
 
   const handleLogin = useCallback(async () => {
     setError('');
@@ -52,7 +74,8 @@ export default function AdminPage(): React.ReactElement {
     if (!res.ok) { setError('Invalid credentials'); return; }
     setLoggedIn(true);
     await loadPosts();
-  }, [email, loadPosts, password]);
+    void loadStats();
+  }, [email, loadPosts, loadStats, password]);
 
   const handleDelete = useCallback(async (id: number) => {
     if (!window.confirm('Delete this post?')) return;
@@ -164,8 +187,21 @@ export default function AdminPage(): React.ReactElement {
         {/* Overview tab */}
         {tab === 'overview' && (
           <div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              <StatCard label="Government Schemes" value={stats?.schemes.total ?? 0} />
+              <StatCard label="Banks Compared" value={stats?.banks ?? 0} />
+              <StatCard label="Cities Covered" value={stats?.cities ?? 0} />
+              <StatCard label="Registered Users" value={stats?.users ?? 0} />
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6 text-sm text-gray-600">
+              <span className="font-medium text-gray-800">Live data:</span>{' '}
+              {stats?.schemes.central ?? 0} central and {stats?.schemes.state ?? 0} state schemes,{' '}
+              {stats?.bankRates ?? 0} bank rate entries.{' '}
+              Prices last updated {stats?.pricesUpdated ? new Date(stats.pricesUpdated).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'not yet'}.{' '}
+              Newsletter: {stats?.newsletterPosts.published ?? 0} published, {stats ? stats.newsletterPosts.total - stats.newsletterPosts.published : 0} draft.
+            </div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <StatCard label="Total Posts" value={posts.length} />
+              <StatCard label="Newsletter Posts" value={posts.length} />
               <StatCard label="Published" value={publishedCount} />
               <StatCard label="Drafts" value={draftCount} />
               <StatCard label="Smart Tools" value={9} />
@@ -300,7 +336,7 @@ export default function AdminPage(): React.ReactElement {
                 <Link href="/score" target="_blank" className="px-3 py-2 text-center text-sm bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">Health Score</Link>
                 <Link href="/schemes" target="_blank" className="px-3 py-2 text-center text-sm bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">Schemes</Link>
                 <Link href="/bank-rates" target="_blank" className="px-3 py-2 text-center text-sm bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">Bank Rates</Link>
-                <Link href="/blog" target="_blank" className="px-3 py-2 text-center text-sm bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">Blog</Link>
+                <Link href="/newsletter" target="_blank" className="px-3 py-2 text-center text-sm bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">Newsletter</Link>
                 <Link href="/sitemap.xml" target="_blank" className="px-3 py-2 text-center text-sm bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">Sitemap</Link>
               </div>
             </div>
