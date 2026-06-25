@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import Script from 'next/script';
 
 interface FAQItem {
   question: string;
@@ -80,9 +79,8 @@ export default function FAQ({ items, title = 'Frequently Asked Questions' }: FAQ
         })}
       </div>
 
-      {/* FAQ Schema JSON-LD */}
-      <Script
-        id="faq-schema-markup"
+      {/* FAQ Schema JSON-LD (server-rendered for reliable indexing) */}
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
