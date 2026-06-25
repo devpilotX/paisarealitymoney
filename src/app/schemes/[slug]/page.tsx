@@ -85,7 +85,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!scheme) return { title: 'Scheme Not Found', robots: { index: false } };
     const url = `https://paisareality.com/schemes/${scheme.slug}`;
     const title = scheme.meta_title || `${scheme.name} - Eligibility, Benefits & Apply Online 2026`;
-    const description = scheme.meta_description || `${scheme.benefit_summary}. Check eligibility, documents required, and how to apply for ${scheme.name}.`;
+    const rawDescription = scheme.meta_description || `${scheme.benefit_summary} Check eligibility, required documents, and how to apply for ${scheme.name}.`;
+    const description = rawDescription.length > 160 ? `${rawDescription.slice(0, 157).trimEnd()}...` : rawDescription;
     const keywords = [
       scheme.name,
       scheme.name_hi,
@@ -169,15 +170,25 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
   const faqs = [
     {
       question: `What is ${scheme.name}?`,
-      answer: scheme.benefit_summary,
+      answer: scheme.description,
     },
     {
       question: `Who is eligible for ${scheme.name}?`,
-      answer: `Eligibility depends on factors like age${scheme.min_age ? ` (${scheme.min_age}${scheme.max_age ? `-${scheme.max_age}` : '+'} years)` : ''}, gender${scheme.gender !== 'all' ? ` (${scheme.gender} only)` : ''}, income${scheme.max_income ? ` (up to Rs ${formatNumber(scheme.max_income)} per year)` : ''}, and category. Check the eligibility section above for complete details.`,
+      answer: buildEligibilitySummary(scheme),
     },
     {
-      question: `How to apply for ${scheme.name}?`,
-      answer: scheme.how_to_apply || `Visit the official website${scheme.apply_url ? ` at ${scheme.apply_url}` : ''} or your nearest Common Service Centre (CSC) to apply. Carry all required documents as listed on this page.`,
+      question: `How do I apply for ${scheme.name}?`,
+      answer: scheme.how_to_apply || `Visit the official website${scheme.apply_url ? ` at ${scheme.apply_url}` : ''} or your nearest Common Service Centre to apply. Carry all required documents listed on this page.`,
+    },
+    {
+      question: `What documents are required for ${scheme.name}?`,
+      answer: documents.length > 0 ? `You typically need: ${documents.join(', ')}.` : 'Refer to the official scheme portal for the latest list of required documents.',
+    },
+    {
+      question: `Is ${scheme.name} a central or state government scheme?`,
+      answer: scheme.level === 'central'
+        ? `${scheme.name} is a central government scheme${scheme.ministry ? ` administered by the ${scheme.ministry}` : ''}.`
+        : `${scheme.name} is a state government scheme${scheme.ministry ? ` run by the ${scheme.ministry}` : ''}.`,
     },
   ];
 
@@ -212,38 +223,6 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
             name: 'Online Application Portal',
           }
         : undefined,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: `What is ${scheme.name}?`,
-          acceptedAnswer: { '@type': 'Answer', text: scheme.description },
-        },
-        {
-          '@type': 'Question',
-          name: `Who is eligible for ${scheme.name}?`,
-          acceptedAnswer: { '@type': 'Answer', text: buildEligibilitySummary(scheme) },
-        },
-        {
-          '@type': 'Question',
-          name: `How to apply for ${scheme.name}?`,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: scheme.how_to_apply || `Visit ${scheme.apply_url || scheme.official_url || pageUrl} and follow the official application process.`,
-          },
-        },
-        {
-          '@type': 'Question',
-          name: `What documents are required for ${scheme.name}?`,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: documents.length > 0 ? documents.join(', ') : 'Refer to the official scheme portal for the latest document list.',
-          },
-        },
-      ],
     },
   ];
 
