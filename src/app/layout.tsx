@@ -125,6 +125,11 @@ export default function RootLayout({
         <meta name="geo.country" content="India" />
         <meta name="language" content="English" />
         <meta name="distribution" content="global" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
+        <link rel="dns-prefetch" href="https://tpc.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
       <body className="font-sans bg-white text-gray-900 antialiased flex flex-col min-h-screen">
         <Script id="sw-killswitch" strategy="beforeInteractive">

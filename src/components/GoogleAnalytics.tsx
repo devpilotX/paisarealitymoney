@@ -13,8 +13,8 @@ export default function GoogleAnalytics(): React.ReactElement | null {
 
   return (
     <>
-      <Script src={gtagSrc} strategy="afterInteractive" />
-      <Script id="google-analytics" strategy="afterInteractive">
+      <Script src={gtagSrc} strategy="lazyOnload" />
+      <Script id="google-analytics" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
