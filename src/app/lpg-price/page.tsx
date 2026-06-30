@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { datasetSchema } from '@/lib/schema';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
@@ -54,8 +55,10 @@ export default async function LpgPricePage(): Promise<React.ReactElement> {
     { href: '/schemes', label: 'Government Schemes' },
   ];
 
+  const ldSchema = datasetSchema({ name: 'LPG Cylinder Price in India', description: 'Latest domestic and commercial LPG cylinder prices across major Indian cities.', path: '/lpg-price' });
   return (
     <div className="container-main py-6">
+      <script id="lpghub-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'LPG Price Today' }]} />
       <h1 className="heading-1 mb-2">LPG Gas Cylinder Price Today in India</h1>
       <p className="text-body mb-6">State-wise LPG cylinder rates as of {priceDate}. Prices revised monthly.</p>

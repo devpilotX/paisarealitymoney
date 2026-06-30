@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { datasetSchema } from '@/lib/schema';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -52,8 +53,10 @@ export default async function DieselPricePage(): Promise<React.ReactElement> {
 
   const cityLinks = CITIES.slice(0, 20).map((c) => ({ href: `/diesel-price/${c.slug}`, label: `Diesel Price in ${c.name}`, description: c.state }));
 
+  const ldSchema = datasetSchema({ name: 'Diesel Price Today in India', description: 'Daily diesel prices per litre across major Indian cities.', path: '/diesel-price' });
   return (
     <div className="container-main py-6">
+      <script id="dieselhub-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Diesel Price Today' }]} />
       <h1 className="heading-1 mb-2">Diesel Price Today in India</h1>
       <p className="text-body mb-6">City-wise diesel rates for {priceDate}. Verify with oil company apps or fuel pumps before purchase.</p>

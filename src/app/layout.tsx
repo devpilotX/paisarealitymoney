@@ -106,14 +106,21 @@ export default function RootLayout({
     '@type': 'Organization',
     name: SITE_NAME,
     url: SITE_URL,
-    logo: SITE_URL + '/paisa_reality_logo.png',
+    logo: { '@type': 'ImageObject', url: SITE_URL + '/paisa_reality_logo.png' },
+    description:
+      'Paisa Reality offers a free Money Health Score, smart financial calculators, live gold, silver, petrol and diesel rates, government scheme matching, and bank rate comparison for India.',
+    areaServed: { '@type': 'Country', name: 'India' },
+    knowsLanguage: ['en-IN', 'hi-IN'],
   };
 
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
+    alternateName: 'PaisaReality',
     url: SITE_URL,
+    inLanguage: ['en-IN', 'hi-IN'],
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
   };
 
   return (
@@ -138,7 +145,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <AdSenseScript />
         <Header />
-        <main className="flex-1">{children}</main>
+            <main className="flex-1">{children}</main>
         <Footer />
         <CookieConsent />
         <YojanaMitra />

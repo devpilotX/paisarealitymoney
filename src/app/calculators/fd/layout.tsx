@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { calculatorSchema, howToSchema } from '@/lib/schema';
 import Script from 'next/script';
 
 export const metadata = pageMetadata({
@@ -10,18 +11,26 @@ export const metadata = pageMetadata({
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'FD Calculator',
-    url: 'https://paisareality.com/calculators/fd',
-    applicationCategory: 'FinanceApplication',
-    operatingSystem: 'Any',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-  };
+  const appSchema = calculatorSchema({
+    name: 'FD Calculator India',
+    path: '/calculators/fd',
+    description: 'Calculate fixed deposit maturity amount and interest earned for any bank FD in India.',
+    featureList: ['FD maturity value', 'Simple and compound interest', 'Any tenure', 'Free, no login'],
+  });
+  const guideSchema = howToSchema({
+    name: 'How to calculate FD maturity',
+    description: 'Work out your fixed deposit maturity in three steps.',
+    path: '/calculators/fd',
+    steps: [
+      { name: 'How to use the FD calculator', text: 'Enter your deposit amount.' },
+      { name: 'Set rate and tenure', text: 'Enter the interest rate and deposit tenure.' },
+      { name: 'See maturity', text: 'View your maturity amount and total interest earned.' },
+    ],
+  });
   return (
     <>
-      <Script id="fd-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script id="fd-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }} />
+      <Script id="fd-howto-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(guideSchema) }} />
       {children}
     </>
   );

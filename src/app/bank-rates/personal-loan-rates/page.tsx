@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { financialProductSchema } from '@/lib/schema';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
@@ -37,8 +38,10 @@ export default async function PersonalLoanRatesPage(): Promise<React.ReactElemen
   const tableRates = rates.map((r) => ({ bankName: r.bank_name, bankSlug: r.bank_slug, bankType: r.bank_type, tenure: r.tenure ?? 'Up to 5 years', generalRate: r.general_rate, seniorCitizenRate: r.senior_citizen_rate }));
   const otherLinks = [{ href: '/bank-rates/home-loan-rates', label: 'Home Loan Rates' }, { href: '/bank-rates/fd-rates', label: 'FD Rates' }, { href: '/calculators/emi', label: 'EMI Calculator' }];
 
+  const ldSchema = financialProductSchema({ name: 'Personal Loan Interest Rates in India', description: 'Compare personal loan interest rates across major Indian banks.', path: '/bank-rates/personal-loan-rates', category: 'LoanOrCredit' });
   return (
     <div className="container-main py-6">
+      <script id="personalloanrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: 'Personal Loan Rates' }]} />
       <h1 className="heading-1 mb-3">Personal Loan Interest Rates</h1>
       <p className="text-body mb-6">Compare personal loan rates. Rates depend on your credit score, income, and employer.</p>

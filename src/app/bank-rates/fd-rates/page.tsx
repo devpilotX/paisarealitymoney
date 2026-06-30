@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { financialProductSchema } from '@/lib/schema';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
@@ -53,8 +54,10 @@ export default async function FDRatesPage(): Promise<React.ReactElement> {
     { href: '/calculators/fd', label: 'FD Calculator' },
   ];
 
+  const ldSchema = financialProductSchema({ name: 'Fixed Deposit (FD) Interest Rates in India', description: 'Compare fixed deposit interest rates across 50+ Indian banks, including senior citizen rates.', path: '/bank-rates/fd-rates', category: 'FixedDeposit' });
   return (
     <div className="container-main py-6">
+      <script id="fdrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: 'FD Rates' }]} />
       <h1 className="heading-1 mb-3">Fixed Deposit (FD) Interest Rates 2026</h1>
       <p className="text-body mb-6">Compare FD rates across 50+ Indian banks. Click column headers to sort. Senior citizen rates included.</p>

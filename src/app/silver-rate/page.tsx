@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { datasetSchema } from '@/lib/schema';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -52,8 +53,10 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
 
   const cityLinks = CITIES.slice(0, 20).map((c) => ({ href: `/silver-rate/${c.slug}`, label: `Silver Rate in ${c.name}`, description: c.state }));
 
+  const ldSchema = datasetSchema({ name: 'Silver Rate Today in India', description: 'Daily silver prices per gram and per kilogram across major Indian cities.', path: '/silver-rate' });
   return (
     <div className="container-main py-6">
+      <script id="silverhub-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Silver Rate Today' }]} />
       <h1 className="heading-1 mb-2">Silver Rate Today in India</h1>
       <p className="text-body mb-6">Latest available silver prices per gram and per kg for {priceDate}. Verify with your jeweller before buying.</p>

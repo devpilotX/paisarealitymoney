@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { financialProductSchema } from '@/lib/schema';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
@@ -37,8 +38,10 @@ export default async function HomeLoanRatesPage(): Promise<React.ReactElement> {
   const tableRates = rates.map((r) => ({ bankName: r.bank_name, bankSlug: r.bank_slug, bankType: r.bank_type, tenure: r.tenure ?? 'Up to 30 years', generalRate: r.general_rate, seniorCitizenRate: r.senior_citizen_rate }));
   const otherLinks = [{ href: '/bank-rates/fd-rates', label: 'FD Rates' }, { href: '/bank-rates/personal-loan-rates', label: 'Personal Loan Rates' }, { href: '/calculators/home-loan', label: 'Home Loan Calculator' }, { href: '/calculators/emi', label: 'EMI Calculator' }];
 
+  const ldSchema = financialProductSchema({ name: 'Home Loan Interest Rates in India', description: 'Compare home loan interest rates across 50+ Indian banks and lenders.', path: '/bank-rates/home-loan-rates', category: 'MortgageLoan' });
   return (
     <div className="container-main py-6">
+      <script id="homeloanrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: 'Home Loan Rates' }]} />
       <h1 className="heading-1 mb-3">Home Loan Interest Rates 2026</h1>
       <p className="text-body mb-6">Compare home loan rates across Indian banks. Sorted by lowest rate first. Click headers to re-sort.</p>
