@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { datasetSchema } from '@/lib/schema';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -52,8 +53,10 @@ export default async function PetrolPricePage(): Promise<React.ReactElement> {
 
   const cityLinks = CITIES.slice(0, 20).map((c) => ({ href: `/petrol-price/${c.slug}`, label: `Petrol Price in ${c.name}`, description: c.state }));
 
+  const ldSchema = datasetSchema({ name: 'Petrol Price Today in India', description: 'Daily petrol prices per litre across major Indian cities.', path: '/petrol-price' });
   return (
     <div className="container-main py-6">
+      <script id="petrolhub-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Petrol Price Today' }]} />
       <h1 className="heading-1 mb-2">Petrol Price Today in India</h1>
       <p className="text-body mb-6">City-wise petrol rates for {priceDate}. Verify with oil company apps or fuel pumps before purchase.</p>

@@ -70,6 +70,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/bank-rates/savings-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/bank-rates/home-loan-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/bank-rates/personal-loan-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    // Guides (comparison / how-to landing pages)
+    { url: `${BASE_URL}/guides`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE_URL}/guides/old-vs-new-tax-regime`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/guides/sip-vs-fd`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/guides/ppf-vs-nps`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/guides/fd-vs-rd`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/guides/22k-vs-24k-gold`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     // Content + legal
     { url: `${BASE_URL}/newsletter`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${BASE_URL}/pricing`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },

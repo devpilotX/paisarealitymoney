@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { datasetSchema } from '@/lib/schema';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -87,8 +88,10 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
     description: c.state,
   }));
 
+  const ldSchema = datasetSchema({ name: 'Gold Rate Today in India', description: 'Daily 22K and 24K gold prices per gram and per 10 grams across 50+ Indian cities.', path: '/gold-rate' });
   return (
     <div className="container-main py-6">
+      <script id="goldhub-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Gold Rate Today' }]} />
 
       <h1 className="heading-1 mb-2">Gold Rate Today in India</h1>

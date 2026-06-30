@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/seo';
+import { financialProductSchema } from '@/lib/schema';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
@@ -37,8 +38,10 @@ export default async function SavingsRatesPage(): Promise<React.ReactElement> {
   const tableRates = rates.map((r) => ({ bankName: r.bank_name, bankSlug: r.bank_slug, bankType: r.bank_type, tenure: r.tenure ?? 'Regular', generalRate: r.general_rate, seniorCitizenRate: r.senior_citizen_rate }));
   const otherLinks = [{ href: '/bank-rates/fd-rates', label: 'FD Rates' }, { href: '/bank-rates/home-loan-rates', label: 'Home Loan Rates' }, { href: '/bank-rates/personal-loan-rates', label: 'Personal Loan Rates' }];
 
+  const ldSchema = financialProductSchema({ name: 'Savings Account Interest Rates in India', description: 'Compare savings account interest rates across major Indian banks.', path: '/bank-rates/savings-rates', category: 'SavingsAccount' });
   return (
     <div className="container-main py-6">
+      <script id="savingsrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: 'Savings Rates' }]} />
       <h1 className="heading-1 mb-3">Savings Account Interest Rates</h1>
       <p className="text-body mb-6">Compare savings account rates across Indian banks. Higher rates available with small finance banks and digital banks.</p>
