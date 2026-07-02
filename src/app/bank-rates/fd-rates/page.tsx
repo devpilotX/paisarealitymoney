@@ -10,6 +10,7 @@ import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
+import RatesAsOf from '@/components/RatesAsOf';
 
 export const metadata = pageMetadata({
   title: 'FD Interest Rates: Compare Fixed Deposit Rates 2026',
@@ -60,7 +61,8 @@ export default async function FDRatesPage(): Promise<React.ReactElement> {
       <script id="fdrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: 'FD Rates' }]} />
       <h1 className="heading-1 mb-3">Fixed Deposit (FD) Interest Rates 2026</h1>
-      <p className="text-body mb-6">Compare FD rates across 50+ Indian banks. Click column headers to sort. Senior citizen rates included.</p>
+      <p className="text-body mb-2">Compare FD rates across 50+ Indian banks. Click column headers to sort. Senior citizen rates included.</p>
+      <RatesAsOf rateType="fd" className="mb-6" />
       <AdBanner format="horizontal" />
 
       <div className="my-8">

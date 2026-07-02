@@ -6,6 +6,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
+import LastReviewed from '@/components/LastReviewed';
 
 export const metadata = pageMetadata({
   title: '22K vs 24K Gold: What Is the Difference?',
@@ -34,7 +35,8 @@ export default function Page(): React.ReactElement {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <Breadcrumb items={[{ label: 'Guides', href: '/guides' }, { label: '22K vs 24K Gold' }]} />
       <article className="max-w-3xl">
-        <h1 className="heading-1 mb-4">22K vs 24K Gold: The Simple Difference</h1>
+        <h1 className="heading-1 mb-2">22K vs 24K Gold: The Simple Difference</h1>
+        <LastReviewed date="2026-06-30" className="mb-4" />
         <p className="text-body text-lg mb-6">
           When you go to buy gold you will hear 22 carat and 24 carat thrown around, and the prices are different. So what is the real difference and which one should you buy. It comes down to purity and what you plan to do with the gold. Here is the plain version.
         </p>

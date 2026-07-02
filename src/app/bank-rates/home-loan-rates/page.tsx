@@ -9,6 +9,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import RatesAsOf from '@/components/RatesAsOf';
 
 export const metadata = pageMetadata({
   title: 'Home Loan Interest Rates: Compare All Banks 2026',
@@ -44,7 +45,8 @@ export default async function HomeLoanRatesPage(): Promise<React.ReactElement> {
       <script id="homeloanrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: 'Home Loan Rates' }]} />
       <h1 className="heading-1 mb-3">Home Loan Interest Rates 2026</h1>
-      <p className="text-body mb-6">Compare home loan rates across Indian banks. Sorted by lowest rate first. Click headers to re-sort.</p>
+      <p className="text-body mb-2">Compare home loan rates across Indian banks. Sorted by lowest rate first. Click headers to re-sort.</p>
+      <RatesAsOf rateType="home_loan" className="mb-6" />
       <AdBanner format="horizontal" />
       <div className="my-8"><BankRateTable title="Home Loan Rate Comparison" rates={tableRates} rateLabel="Home Loan Rate" /></div>
       <article className="max-w-3xl my-8">

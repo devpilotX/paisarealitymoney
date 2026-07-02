@@ -6,8 +6,8 @@ Live: https://paisareality.com
 
 ## What it does
 
-- Daily Prices: gold, silver, petrol, diesel, and LPG across 50+ Indian cities, with per-city pages.
-- Smart Tools: 9 advanced calculators including retirement corpus and withdrawal optimizer, prepay vs invest, multi-loan debt optimizer, tax regime optimizer, budget optimizer, tax-loss harvesting, gold planner, scheme benefit maximizer, and salary optimizer.
+- Daily Prices: gold, silver, petrol, diesel, and LPG across 50+ Indian cities, with per-city pages and visible "data verified as of" provenance on every price surface.
+- Smart Tools: 10 advanced calculators including the Real Return Checker (XIRR-based mis-selling exposer for endowment/money-back/"double your money" pitches), retirement corpus and withdrawal optimizer, prepay vs invest, multi-loan debt optimizer, tax regime optimizer, budget optimizer, tax-loss harvesting, gold planner, scheme benefit maximizer, and salary optimizer.
 - Basic Calculators: EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA, and inflation.
 - Government Schemes: a profile-based finder that matches users with eligible central and state schemes, plus a detailed page for every scheme with eligibility, benefits, how to apply, and official links.
 - Bank Rate Comparison: fixed deposit, savings, home loan, and personal loan rates across many banks.
@@ -15,6 +15,7 @@ Live: https://paisareality.com
 - Guides: plain-language comparison articles for everyday money decisions, including old vs new tax regime, SIP vs FD, PPF vs NPS, FD vs RD, and 22K vs 24K gold.
 - Newsletter: simple personal finance articles and price updates.
 - Admin Dashboard: content and site management, served only on the admin subdomain and protected by JWT auth.
+- Data integrity: fuel/LPG baselines carry an as-of date and source, admins can override any price via `/api/admin/prices/overrides` without a deploy, and the daily cron emails the admin if data goes stale or an update fails. Methodology is public at `/methodology`, editorial standards at `/editorial-policy`.
 
 ## Tech stack
 
@@ -75,7 +76,9 @@ Set these in `.env`. Only the variable names are listed here. Never commit real 
 | `npm run build` | Production build |
 | `npm run start` | Start the production server |
 | `npm run typecheck` | TypeScript strict check |
+| `npm test` | Run every unit test suite (DB-free, also runs in CI) |
 | `npm run db:migrate-pg` | Create PostgreSQL tables for the Money Health Score |
+| `npm run db:migrate-price-integrity` | Add fuel/LPG provenance columns, price_overrides, and system_meta tables |
 | `npm run db:seed-cities` | Seed cities |
 | `npm run db:seed-prices` | Seed price history |
 | `npm run db:seed-schemes` | Seed the base set of government schemes |
@@ -127,7 +130,7 @@ Production runs the app with PM2 behind Nginx, with Cloudflare in front.
 
 1. On the server, pull the latest code: `git pull origin main`
 2. Install dependencies: `npm install`
-3. Run database migrations or the additive scheme seed only when needed
+3. Run database migrations or the additive scheme seed only when needed. The price-integrity release requires a one-time `npm run db:migrate-price-integrity` before restart.
 4. Build: `NODE_OPTIONS="--max-old-space-size=4096" npm run build`
 5. Restart the process: `pm2 restart paisareality --update-env && pm2 save`
 6. Nginx config for the main domain and the admin subdomain lives in `deploy/nginx/`

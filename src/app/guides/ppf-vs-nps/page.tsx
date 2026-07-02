@@ -6,6 +6,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
+import LastReviewed from '@/components/LastReviewed';
 
 export const metadata = pageMetadata({
   title: 'PPF vs NPS: Which Is Better for Retirement in 2026?',
@@ -34,7 +35,8 @@ export default function Page(): React.ReactElement {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <Breadcrumb items={[{ label: 'Guides', href: '/guides' }, { label: 'PPF vs NPS' }]} />
       <article className="max-w-3xl">
-        <h1 className="heading-1 mb-4">PPF vs NPS: Picking Your Retirement Base</h1>
+        <h1 className="heading-1 mb-2">PPF vs NPS: Picking Your Retirement Base</h1>
+        <LastReviewed date="2026-06-30" className="mb-4" />
         <p className="text-body text-lg mb-6">
           Both PPF and NPS are popular ways to save for the long term and both give tax benefits. But they work very differently. One is fully safe and fixed, the other is market linked with a chance of higher returns. Here is how to think about it.
         </p>

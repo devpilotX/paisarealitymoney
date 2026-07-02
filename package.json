@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit --pretty false",
+    "test": "ts-node --project tsconfig.scripts.json scripts/run-tests.ts",
     "db:seed-cities": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-cities.ts",
     "db:seed-prices": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-prices.ts",
     "db:seed-schemes": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-schemes.ts",
@@ -16,7 +17,8 @@
     "db:seed-schemes-expansion-2": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-schemes-expansion-2.ts",
     "db:seed-banks-expansion": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-banks-expansion.ts",
     "db:seed-all": "npm run db:seed-cities && npm run db:seed-prices && npm run db:seed-schemes && npm run db:seed-banks",
-    "db:migrate-pg": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-pg.ts"
+    "db:migrate-pg": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-pg.ts",
+    "db:migrate-price-integrity": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-price-integrity.ts"
   },
   "dependencies": {
     "@react-pdf/renderer": "^3.4.4",

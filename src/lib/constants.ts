@@ -19,6 +19,7 @@ export const NAV_LINKS = [
 ] as const;
 
 export const CALCULATOR_LINKS = [
+  { href: '/calculators/real-return', label: 'Real Return Checker', labelHi: 'असली रिटर्न चेकर' },
   { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer', labelHi: 'रिटायरमेंट ऑप्टिमाइज़र' },
   { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest', labelHi: 'प्रीपे बनाम निवेश' },
   { href: '/calculators/debt-optimizer', label: 'Debt Optimizer', labelHi: 'ऋण ऑप्टिमाइज़र' },

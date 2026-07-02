@@ -6,6 +6,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
+import LastReviewed from '@/components/LastReviewed';
 
 export const metadata = pageMetadata({
   title: 'Old vs New Tax Regime FY 2026-27: Which Saves More?',
@@ -34,7 +35,8 @@ export default function Page(): React.ReactElement {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <Breadcrumb items={[{ label: 'Guides', href: '/guides' }, { label: 'Old vs New Tax Regime' }]} />
       <article className="max-w-3xl">
-        <h1 className="heading-1 mb-4">Old vs New Tax Regime: Which One Saves You More</h1>
+        <h1 className="heading-1 mb-2">Old vs New Tax Regime: Which One Saves You More</h1>
+        <LastReviewed date="2026-06-30" className="mb-4" />
         <p className="text-body text-lg mb-6">
           Every year the same question comes up at tax time. Should you go with the old regime or the new one. The honest answer is that it depends on how many deductions you claim. Let us break it down in plain words so you can pick the one that puts more money back in your pocket.
         </p>

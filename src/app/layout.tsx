@@ -68,13 +68,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
     description:
-      'Check your free Money Health Score, use 9 smart tools for retirement, debt, and tax planning, and track live rates, schemes, and bank rates in India.',
+      'Check your free Money Health Score, use 10 smart tools for retirement, debt, and tax planning, and track live rates, schemes, and bank rates in India.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
     description:
-      'Check your free Money Health Score and use 9 smart tools for retirement, debt, and tax planning. Plus live rates, schemes, and bank rates.',
+      'Check your free Money Health Score and use 10 smart tools for retirement, debt, and tax planning. Plus live rates, schemes, and bank rates.',
   },
   alternates: {
     canonical: SITE_URL,

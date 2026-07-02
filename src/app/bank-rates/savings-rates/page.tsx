@@ -9,6 +9,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import RatesAsOf from '@/components/RatesAsOf';
 
 export const metadata = pageMetadata({
   title: 'Savings Account Interest Rates: Compare All Banks',
@@ -44,7 +45,8 @@ export default async function SavingsRatesPage(): Promise<React.ReactElement> {
       <script id="savingsrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: 'Savings Rates' }]} />
       <h1 className="heading-1 mb-3">Savings Account Interest Rates</h1>
-      <p className="text-body mb-6">Compare savings account rates across Indian banks. Higher rates available with small finance banks and digital banks.</p>
+      <p className="text-body mb-2">Compare savings account rates across Indian banks. Higher rates available with small finance banks and digital banks.</p>
+      <RatesAsOf rateType="savings" className="mb-6" />
       <AdBanner format="horizontal" />
       <div className="my-8"><BankRateTable title="Savings Account Rate Comparison" rates={tableRates} showTenure={false} rateLabel="Savings Rate" /></div>
       <article className="max-w-3xl my-8">

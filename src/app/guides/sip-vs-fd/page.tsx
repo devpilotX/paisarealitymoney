@@ -6,6 +6,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
+import LastReviewed from '@/components/LastReviewed';
 
 export const metadata = pageMetadata({
   title: 'SIP vs FD: Which Is Better for You in 2026?',
@@ -34,7 +35,8 @@ export default function Page(): React.ReactElement {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <Breadcrumb items={[{ label: 'Guides', href: '/guides' }, { label: 'SIP vs FD' }]} />
       <article className="max-w-3xl">
-        <h1 className="heading-1 mb-4">SIP vs FD: Where Should Your Money Go</h1>
+        <h1 className="heading-1 mb-2">SIP vs FD: Where Should Your Money Go</h1>
+        <LastReviewed date="2026-06-30" className="mb-4" />
         <p className="text-body text-lg mb-6">
           This is one of the most common money questions in India. Should you start a SIP in mutual funds or just put your money in a fixed deposit. Both are good, but they are good for different reasons. Here is the simple version so you can decide.
         </p>

@@ -60,7 +60,7 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<boolea
     <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Your Paisa Reality account is set up. Here is what you can use right away:</p>
     <ul style="font-size:15px;color:#374151;line-height:2;padding-left:20px;margin:0 0 16px;">
       <li>Daily gold, silver, petrol, diesel, and LPG prices for 50+ cities</li>
-      <li>9 Smart Tools that run Monte Carlo simulations in your browser</li>
+      <li>10 Smart Tools that run Monte Carlo simulations in your browser</li>
       <li>11 financial calculators (EMI, SIP, FD, tax, and more)</li>
       <li>Government scheme finder matched to your profile</li>
       <li>Bank rate comparison across 50+ banks</li>
@@ -137,6 +137,18 @@ export async function sendPasswordChangedEmail(to: string, name: string): Promis
     ${btn(`${APP_URL}/forgot-password`, 'Reset Password')}
   `);
   const r = await sendEmail({ to, subject: 'Your Paisa Reality password was changed', html, replyTo: 'support@paisareality.com' });
+  return r.ok;
+}
+
+/** Operational alert to the site admin (cron failures, stale data). */
+export async function sendAdminAlert(subject: string, lines: string[]): Promise<boolean> {
+  const items = lines.map((l) => `<li style="margin:0 0 6px;">${escapeHtml(l)}</li>`).join('');
+  const html = emailLayout(`
+    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">${escapeHtml(subject)}</h2>
+    <ul style="font-size:14px;color:#374151;line-height:1.6;padding-left:20px;margin:0 0 16px;">${items}</ul>
+    <p style="font-size:13px;color:#6b7280;margin:0;">Sent automatically by the Paisa Reality price cron.</p>
+  `);
+  const r = await sendEmail({ to: ADMIN_EMAIL, subject: `[Paisa Reality Alert] ${subject}`, html });
   return r.ok;
 }
 

@@ -6,6 +6,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
+import LastReviewed from '@/components/LastReviewed';
 
 export const metadata = pageMetadata({
   title: 'FD vs RD: Which Deposit Is Right for You in 2026?',
@@ -34,7 +35,8 @@ export default function Page(): React.ReactElement {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <Breadcrumb items={[{ label: 'Guides', href: '/guides' }, { label: 'FD vs RD' }]} />
       <article className="max-w-3xl">
-        <h1 className="heading-1 mb-4">FD vs RD: Which Deposit Suits You</h1>
+        <h1 className="heading-1 mb-2">FD vs RD: Which Deposit Suits You</h1>
+        <LastReviewed date="2026-06-30" className="mb-4" />
         <p className="text-body text-lg mb-6">
           FD and RD sound similar and both are safe bank deposits, but they fit different situations. The right one depends on whether you already have the money or you are saving it month by month. Here is the simple way to tell them apart.
         </p>

@@ -13,6 +13,7 @@ import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
+import DataProvenance from '@/components/DataProvenance';
 
 export const metadata = pageMetadata({
   title: 'Diesel Price Today in India: City-wise Rates',
@@ -25,6 +26,7 @@ interface FuelRow extends QueryResultRow {
   city_name: string; city_slug: string; state: string;
   petrol_price: number; diesel_price: number;
   petrol_change: number; diesel_change: number; price_date: string;
+  data_as_of: string | null; source: string | null;
 }
 
 const DIESEL_FAQS = [
@@ -43,7 +45,8 @@ export default async function DieselPricePage(): Promise<React.ReactElement> {
   let priceDate = '';
   try {
     prices = await query<FuelRow>(`SELECT c.name AS city_name, c.slug AS city_slug, c.state,
-              fp.petrol_price, fp.diesel_price, fp.petrol_change, fp.diesel_change, fp.price_date
+              fp.petrol_price, fp.diesel_price, fp.petrol_change, fp.diesel_change, fp.price_date,
+              fp.data_as_of::text AS data_as_of, fp.source
        FROM fuel_prices fp JOIN cities c ON fp.city_id = c.id
        WHERE fp.price_date = (SELECT MAX(price_date) FROM fuel_prices)
        ORDER BY c.is_metro DESC, c.name LIMIT 50`
@@ -59,7 +62,8 @@ export default async function DieselPricePage(): Promise<React.ReactElement> {
       <script id="dieselhub-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Diesel Price Today' }]} />
       <h1 className="heading-1 mb-2">Diesel Price Today in India</h1>
-      <p className="text-body mb-6">City-wise diesel rates for {priceDate}. Verify with oil company apps or fuel pumps before purchase.</p>
+      <p className="text-body mb-2">City-wise diesel rates for {priceDate}. Verify with oil company apps or fuel pumps before purchase.</p>
+      {prices[0] && <DataProvenance asOf={prices[0].data_as_of ?? prices[0].price_date} source={prices[0].source ?? 'OMC published rates'} className="mb-6" />}
       <AdBanner format="horizontal" />
       <div className="my-6"><CitySelector basePath="/diesel-price" placeholder="Search city for diesel price..." /></div>
 

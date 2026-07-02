@@ -10,6 +10,8 @@ const ABOUT_LINKS: FooterLink[] = [
   { href: '/about', label: 'About Us' },
   { href: '/contact', label: 'Contact Us' },
   { href: '/newsletter', label: 'Newsletter' },
+  { href: '/methodology', label: 'Data Methodology' },
+  { href: '/editorial-policy', label: 'Editorial Policy' },
 ];
 
 const QUICK_LINKS: FooterLink[] = [

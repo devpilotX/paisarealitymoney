@@ -29,6 +29,7 @@ const CALCULATOR_LINKS: DropdownItem[] = [
 
 const SMART_TOOLS_LINKS: DropdownItem[] = [
   { href: '/smart-tools', label: 'All Smart Tools' },
+  { href: '/calculators/real-return', label: 'Real Return Checker' },
   { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
   { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest' },
   { href: '/calculators/debt-optimizer', label: 'Debt Optimizer' },

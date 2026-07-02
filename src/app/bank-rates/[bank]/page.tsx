@@ -11,6 +11,7 @@ import InternalLinks from '@/components/InternalLinks';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
+import RatesAsOf from '@/components/RatesAsOf';
 
 interface PageProps { params: Promise<{ bank: string }>; }
 
@@ -101,6 +102,7 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
         <div>
           <h1 className="heading-1 mb-2">{bank.name} Interest Rates</h1>
           <p className="text-sm text-gray-500">{typeLabel[bank.type] ?? bank.type}</p>
+          <RatesAsOf bankSlug={bank.slug} className="mt-2" />
         </div>
         {bank.website && (
           <a href={bank.website} target="_blank" rel="noopener noreferrer" className="btn-secondary text-sm no-underline flex-shrink-0">

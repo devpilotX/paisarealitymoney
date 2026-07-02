@@ -17,12 +17,14 @@ import InternalLinks from '@/components/InternalLinks';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
+import DataProvenance from '@/components/DataProvenance';
 
 interface PageProps { params: Promise<{ city: string }>; }
 
 interface FuelHistoryRow extends QueryResultRow {
   price_date: string; petrol_price: number; diesel_price: number;
   petrol_change: number; diesel_change: number;
+  data_as_of: string | null; source: string | null;
 }
 
 export async function generateStaticParams(): Promise<Array<{ city: string }>> {
@@ -50,7 +52,7 @@ export default async function PetrolPriceCityPage({ params }: PageProps): Promis
 
   let historyRows: FuelHistoryRow[] = [];
   try {
-    historyRows = await query<FuelHistoryRow>(`SELECT fp.price_date, fp.petrol_price, fp.diesel_price, fp.petrol_change, fp.diesel_change
+    historyRows = await query<FuelHistoryRow>(`SELECT fp.price_date, fp.petrol_price, fp.diesel_price, fp.petrol_change, fp.diesel_change, fp.data_as_of::text AS data_as_of, fp.source
        FROM fuel_prices fp JOIN cities c ON fp.city_id = c.id
        WHERE c.slug = $1 ORDER BY fp.price_date DESC LIMIT 30`, [city.slug]
     );
@@ -72,7 +74,8 @@ export default async function PetrolPriceCityPage({ params }: PageProps): Promis
     <div className="container-main py-6">
       <Breadcrumb items={[{ label: 'Petrol Price', href: '/petrol-price' }, { label: city.name }]} />
       <h1 className="heading-1 mb-2">Petrol Price in {city.name} Today</h1>
-      <p className="text-body mb-6">Current petrol and diesel rates in {city.name}, {city.state}.{today ? ` Updated: ${formatDate(today.price_date)}.` : ''}</p>
+      <p className="text-body mb-2">Current petrol and diesel rates in {city.name}, {city.state}.{today ? ` Updated: ${formatDate(today.price_date)}.` : ''}</p>
+      {today && <DataProvenance asOf={today.data_as_of ?? today.price_date} source={today.source ?? 'OMC published rates'} className="mb-6" />}
       <AdBanner format="horizontal" />
 
       {today && (
