@@ -1,5 +1,11 @@
 import { execute, query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
+import {
+  FUEL_BASELINE_AS_OF,
+  FUEL_BASELINE_SOURCE,
+  STATE_LPG,
+  resolveCityFuel,
+} from '@/lib/fuel-data';
 
 interface MetalSpot {
   gold: number;
@@ -25,8 +31,15 @@ export interface UpdateResult {
   recordsProcessed: number;
   errors: string[];
   source: string;
+  /** Oldest verification date backing the data written in this run (fuel/LPG). */
+  dataAsOf?: string;
 }
 
+/**
+ * City premiums applied on top of the spot-derived landed price, in Rs/gram.
+ * These reflect typical local jeweller spreads and are periodically calibrated,
+ * not live city quotes. The methodology page discloses this.
+ */
 const CITY_GOLD_PREMIUM: Record<string, number> = {
   mumbai: 0, delhi: 20, bangalore: -10, chennai: 30, kolkata: 15,
   hyderabad: 5, pune: -5, ahmedabad: 10, jaipur: 25, lucknow: 20,
@@ -39,59 +52,6 @@ const CITY_GOLD_PREMIUM: Record<string, number> = {
   amritsar: 24, noida: 20, mangalore: -6, jammu: 30, jalandhar: 22,
   shimla: 28, tiruchirappalli: 34, hubli: -4, salem: 32, aurangabad: -2,
   srinagar: 32, meerut: 22,
-};
-
-const CITY_FUEL_BASE: Record<string, { petrol: number; diesel: number }> = {
-  mumbai: { petrol: 103.44, diesel: 89.97 }, delhi: { petrol: 94.72, diesel: 87.62 },
-  bangalore: { petrol: 101.94, diesel: 87.89 }, chennai: { petrol: 100.76, diesel: 92.13 },
-  kolkata: { petrol: 104.95, diesel: 91.76 }, hyderabad: { petrol: 107.41, diesel: 95.65 },
-  pune: { petrol: 104.36, diesel: 90.11 }, ahmedabad: { petrol: 94.26, diesel: 89.72 },
-  jaipur: { petrol: 104.88, diesel: 90.35 }, lucknow: { petrol: 94.65, diesel: 87.76 },
-  surat: { petrol: 94.34, diesel: 89.83 }, kanpur: { petrol: 94.78, diesel: 87.91 },
-  nagpur: { petrol: 104.18, diesel: 89.62 }, indore: { petrol: 104.79, diesel: 90.15 },
-  thane: { petrol: 103.44, diesel: 89.97 }, bhopal: { petrol: 108.65, diesel: 93.12 },
-  visakhapatnam: { petrol: 107.52, diesel: 95.32 }, patna: { petrol: 107.24, diesel: 94.04 },
-  vadodara: { petrol: 94.31, diesel: 89.78 }, ghaziabad: { petrol: 94.82, diesel: 87.72 },
-  ludhiana: { petrol: 95.42, diesel: 88.18 }, agra: { petrol: 94.71, diesel: 87.68 },
-  coimbatore: { petrol: 100.85, diesel: 92.27 }, madurai: { petrol: 100.97, diesel: 92.39 },
-  varanasi: { petrol: 94.73, diesel: 87.74 }, rajkot: { petrol: 94.28, diesel: 89.75 },
-  ranchi: { petrol: 99.16, diesel: 94.26 }, chandigarh: { petrol: 96.2, diesel: 84.26 },
-  mysore: { petrol: 101.84, diesel: 87.79 }, guwahati: { petrol: 96.01, diesel: 88.72 },
-  bhubaneswar: { petrol: 103.19, diesel: 94.76 }, dehradun: { petrol: 94.82, diesel: 87.92 },
-  raipur: { petrol: 102.42, diesel: 93.15 }, kochi: { petrol: 107.71, diesel: 96.52 },
-  thiruvananthapuram: { petrol: 107.8, diesel: 96.61 }, jodhpur: { petrol: 104.91, diesel: 90.38 },
-  gwalior: { petrol: 108.59, diesel: 93.06 }, vijayawada: { petrol: 107.55, diesel: 95.35 },
-  amritsar: { petrol: 95.48, diesel: 88.24 }, noida: { petrol: 94.87, diesel: 87.77 },
-  mangalore: { petrol: 101.88, diesel: 87.83 }, jammu: { petrol: 98.28, diesel: 89.72 },
-  jalandhar: { petrol: 95.44, diesel: 88.2 }, shimla: { petrol: 96.12, diesel: 87.95 },
-  tiruchirappalli: { petrol: 100.91, diesel: 92.33 }, hubli: { petrol: 101.86, diesel: 87.81 },
-  salem: { petrol: 100.89, diesel: 92.31 }, aurangabad: { petrol: 104.15, diesel: 89.59 },
-  srinagar: { petrol: 100.58, diesel: 91.22 }, meerut: { petrol: 94.85, diesel: 87.75 },
-};
-
-const STATE_LPG: Record<string, { domestic: number; commercial: number }> = {
-  Maharashtra: { domestic: 903, commercial: 1865.5 },
-  Delhi: { domestic: 803, commercial: 1772 },
-  Karnataka: { domestic: 903.5, commercial: 1880 },
-  'Tamil Nadu': { domestic: 903, commercial: 1877.5 },
-  'West Bengal': { domestic: 903, commercial: 1907.5 },
-  Telangana: { domestic: 903, commercial: 1870 },
-  Gujarat: { domestic: 903, commercial: 1825 },
-  Rajasthan: { domestic: 903, commercial: 1840.5 },
-  'Uttar Pradesh': { domestic: 903, commercial: 1810 },
-  'Madhya Pradesh': { domestic: 903, commercial: 1835 },
-  Bihar: { domestic: 903, commercial: 1920 },
-  Punjab: { domestic: 903, commercial: 1800 },
-  'Andhra Pradesh': { domestic: 903, commercial: 1875 },
-  Kerala: { domestic: 903, commercial: 1900 },
-  Jharkhand: { domestic: 903, commercial: 1915 },
-  Assam: { domestic: 903, commercial: 1950 },
-  Odisha: { domestic: 903, commercial: 1895 },
-  Chhattisgarh: { domestic: 903, commercial: 1850 },
-  Uttarakhand: { domestic: 903, commercial: 1830 },
-  'Himachal Pradesh': { domestic: 903, commercial: 1845 },
-  Chandigarh: { domestic: 803, commercial: 1790 },
-  'Jammu & Kashmir': { domestic: 903, commercial: 1860 },
 };
 
 const round2 = (value: number): number => Math.round(value * 100) / 100;
@@ -169,6 +129,53 @@ async function getPreviousPrice(table: string, column: string, cityId: number): 
   return rows[0]?.val ?? null;
 }
 
+// ---------------------------------------------------------------------------
+// Manual price overrides (admin-managed)
+// ---------------------------------------------------------------------------
+
+export interface PriceOverride {
+  payload: Record<string, number | null>;
+  asOf: string;
+  source: string;
+}
+
+interface PriceOverrideRow extends QueryResultRow {
+  region_key: string;
+  payload: Record<string, number | null>;
+  as_of: string;
+  source: string;
+}
+
+/**
+ * Load admin overrides for a commodity, keyed by region (city slug or state
+ * name). Returns an empty map when the table does not exist yet so the cron
+ * keeps working before the migration has run.
+ */
+export async function getPriceOverrides(commodity: 'fuel' | 'lpg'): Promise<Map<string, PriceOverride>> {
+  try {
+    const rows = await query<PriceOverrideRow>(
+      'SELECT region_key, payload, as_of::text AS as_of, source FROM price_overrides WHERE commodity = $1',
+      [commodity]
+    );
+    const map = new Map<string, PriceOverride>();
+    for (const row of rows) {
+      map.set(row.region_key, { payload: row.payload ?? {}, asOf: row.as_of, source: row.source });
+    }
+    return map;
+  } catch {
+    return new Map();
+  }
+}
+
+function pickNumber(payload: Record<string, number | null>, key: string): number | undefined {
+  const value = payload[key];
+  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : undefined;
+}
+
+// ---------------------------------------------------------------------------
+// Updaters
+// ---------------------------------------------------------------------------
+
 export async function updateGoldPricesLive(): Promise<UpdateResult> {
   const errors: string[] = [];
   let recordsProcessed = 0;
@@ -207,7 +214,7 @@ export async function updateGoldPricesLive(): Promise<UpdateResult> {
       }
     }
 
-    return { success: true, message: `Gold: ${recordsProcessed} cities updated from live spot USD ${metals.gold}/oz at USD/INR ${fx.usdToInr}`, recordsProcessed, errors, source: 'gold-api.com + frankfurter.dev' };
+    return { success: true, message: `Gold: ${recordsProcessed} cities updated from live spot USD ${metals.gold}/oz at USD/INR ${fx.usdToInr}`, recordsProcessed, errors, source: 'gold-api.com + frankfurter.dev', dataAsOf: today };
   } catch (error) {
     return { success: false, message: `Gold update failed: ${error instanceof Error ? error.message : 'Unknown error'}`, recordsProcessed, errors, source: 'gold-api.com + frankfurter.dev' };
   }
@@ -247,7 +254,7 @@ export async function updateSilverPricesLive(): Promise<UpdateResult> {
       }
     }
 
-    return { success: true, message: `Silver: ${recordsProcessed} cities updated from live spot USD ${metals.silver}/oz`, recordsProcessed, errors, source: 'gold-api.com + frankfurter.dev' };
+    return { success: true, message: `Silver: ${recordsProcessed} cities updated from live spot USD ${metals.silver}/oz`, recordsProcessed, errors, source: 'gold-api.com + frankfurter.dev', dataAsOf: today };
   } catch (error) {
     return { success: false, message: `Silver update failed: ${error instanceof Error ? error.message : 'Unknown error'}`, recordsProcessed, errors, source: 'gold-api.com + frankfurter.dev' };
   }
@@ -256,31 +263,41 @@ export async function updateSilverPricesLive(): Promise<UpdateResult> {
 export async function updateFuelPricesLive(): Promise<UpdateResult> {
   const errors: string[] = [];
   let recordsProcessed = 0;
+  let oldestAsOf = getDateString(new Date());
 
   try {
-    const cities = await getAllCities();
+    const [cities, overrides] = await Promise.all([getAllCities(), getPriceOverrides('fuel')]);
     const today = getDateString(new Date());
 
     for (const city of cities) {
       try {
-        const base = CITY_FUEL_BASE[city.slug] ?? { petrol: 96.72, diesel: 89.62 };
+        const baseline = resolveCityFuel(city.slug, city.state);
+        const override = overrides.get(city.slug) ?? overrides.get(city.state);
+        const petrol = (override && pickNumber(override.payload, 'petrol')) ?? baseline.petrol;
+        const diesel = (override && pickNumber(override.payload, 'diesel')) ?? baseline.diesel;
+        const asOf = override ? override.asOf : FUEL_BASELINE_AS_OF;
+        const source = override ? override.source : FUEL_BASELINE_SOURCE;
+        if (asOf < oldestAsOf) oldestAsOf = asOf;
+
         const prevRows = await query<QueryResultRow & { petrol_price: number; diesel_price: number }>(
           'SELECT petrol_price, diesel_price FROM fuel_prices WHERE city_id = $1 ORDER BY price_date DESC LIMIT 1',
           [city.id]
         );
         const prev = prevRows[0];
-        const petrolChange = prev ? round2(base.petrol - prev.petrol_price) : 0;
-        const dieselChange = prev ? round2(base.diesel - prev.diesel_price) : 0;
+        const petrolChange = prev ? round2(petrol - prev.petrol_price) : 0;
+        const dieselChange = prev ? round2(diesel - prev.diesel_price) : 0;
 
         await execute(
-          `INSERT INTO fuel_prices (city_id, price_date, petrol_price, diesel_price, petrol_change, diesel_change)
-           VALUES ($1, $2, $3, $4, $5, $6)
+          `INSERT INTO fuel_prices (city_id, price_date, petrol_price, diesel_price, petrol_change, diesel_change, data_as_of, source)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
            ON CONFLICT (city_id, price_date) DO UPDATE SET
              petrol_price = EXCLUDED.petrol_price,
              diesel_price = EXCLUDED.diesel_price,
              petrol_change = EXCLUDED.petrol_change,
-             diesel_change = EXCLUDED.diesel_change`,
-          [city.id, today, base.petrol, base.diesel, petrolChange, dieselChange]
+             diesel_change = EXCLUDED.diesel_change,
+             data_as_of = EXCLUDED.data_as_of,
+             source = EXCLUDED.source`,
+          [city.id, today, petrol, diesel, petrolChange, dieselChange, asOf, source]
         );
         recordsProcessed++;
       } catch (error) {
@@ -288,36 +305,48 @@ export async function updateFuelPricesLive(): Promise<UpdateResult> {
       }
     }
 
-    return { success: true, message: `Fuel: ${recordsProcessed} cities updated from published OMC rates`, recordsProcessed, errors, source: 'IOCL/BPCL published rates' };
+    return { success: true, message: `Fuel: ${recordsProcessed} cities written, data verified as of ${oldestAsOf}`, recordsProcessed, errors, source: FUEL_BASELINE_SOURCE, dataAsOf: oldestAsOf };
   } catch (error) {
-    return { success: false, message: `Fuel update failed: ${error instanceof Error ? error.message : 'Unknown error'}`, recordsProcessed, errors, source: 'IOCL/BPCL published rates' };
+    return { success: false, message: `Fuel update failed: ${error instanceof Error ? error.message : 'Unknown error'}`, recordsProcessed, errors, source: FUEL_BASELINE_SOURCE };
   }
 }
 
 export async function updateLpgPricesLive(): Promise<UpdateResult> {
   const errors: string[] = [];
   let recordsProcessed = 0;
+  let oldestAsOf = getDateString(new Date());
 
   try {
+    const overrides = await getPriceOverrides('lpg');
     const today = getDateString(new Date());
 
-    for (const [state, prices] of Object.entries(STATE_LPG)) {
+    for (const [state, baseline] of Object.entries(STATE_LPG)) {
       try {
+        const override = overrides.get(state);
+        const domestic = (override && pickNumber(override.payload, 'domestic')) ?? baseline.domestic;
+        const commercialOverride = override ? pickNumber(override.payload, 'commercial') : undefined;
+        const commercial = commercialOverride ?? baseline.commercial;
+        const asOf = override ? override.asOf : FUEL_BASELINE_AS_OF;
+        const source = override ? override.source : FUEL_BASELINE_SOURCE;
+        if (asOf < oldestAsOf) oldestAsOf = asOf;
+
         const prevRows = await query<QueryResultRow & { domestic_14kg: number }>(
           'SELECT domestic_14kg FROM lpg_prices WHERE state = $1 ORDER BY price_date DESC LIMIT 1',
           [state]
         );
-        const change = prevRows[0] ? round2(prices.domestic - prevRows[0].domestic_14kg) : 0;
+        const change = prevRows[0] ? round2(domestic - prevRows[0].domestic_14kg) : 0;
 
         await execute(
-          `INSERT INTO lpg_prices (state, price_date, domestic_14kg, commercial_19kg, subsidy_amount, change_amount)
-           VALUES ($1, $2, $3, $4, $5, $6)
+          `INSERT INTO lpg_prices (state, price_date, domestic_14kg, commercial_19kg, subsidy_amount, change_amount, data_as_of, source)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
            ON CONFLICT (state, price_date) DO UPDATE SET
              domestic_14kg = EXCLUDED.domestic_14kg,
              commercial_19kg = EXCLUDED.commercial_19kg,
              subsidy_amount = EXCLUDED.subsidy_amount,
-             change_amount = EXCLUDED.change_amount`,
-          [state, today, prices.domestic, prices.commercial, 0, change]
+             change_amount = EXCLUDED.change_amount,
+             data_as_of = EXCLUDED.data_as_of,
+             source = EXCLUDED.source`,
+          [state, today, domestic, commercial, 0, change, asOf, source]
         );
         recordsProcessed++;
       } catch (error) {
@@ -325,8 +354,8 @@ export async function updateLpgPricesLive(): Promise<UpdateResult> {
       }
     }
 
-    return { success: true, message: `LPG: ${recordsProcessed} states updated from published OMC rates`, recordsProcessed, errors, source: 'OMC published rates' };
+    return { success: true, message: `LPG: ${recordsProcessed} states written, data verified as of ${oldestAsOf}`, recordsProcessed, errors, source: FUEL_BASELINE_SOURCE, dataAsOf: oldestAsOf };
   } catch (error) {
-    return { success: false, message: `LPG update failed: ${error instanceof Error ? error.message : 'Unknown error'}`, recordsProcessed, errors, source: 'OMC published rates' };
+    return { success: false, message: `LPG update failed: ${error instanceof Error ? error.message : 'Unknown error'}`, recordsProcessed, errors, source: FUEL_BASELINE_SOURCE };
   }
 }

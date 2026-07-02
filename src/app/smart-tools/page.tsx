@@ -21,6 +21,12 @@ interface SmartTool {
 
 const SMART_TOOLS: SmartTool[] = [
   {
+    title: 'Real Return Checker',
+    description: '"Pay 50,000 a year, get 14 lakh!" — but what does it ACTUALLY pay? Type in any policy or scheme pitch and see its true annual return vs FD, PPF, and inflation.',
+    href: '/calculators/real-return',
+    tag: 'Mis-selling shield',
+  },
+  {
     title: 'Retirement Corpus and Withdrawal Optimizer',
     description: 'How much corpus do you need to retire? What SIP gets you there? What is a safe withdrawal rate? Uses Monte Carlo simulation with 10,000 paths.',
     href: '/calculators/retirement-optimizer',

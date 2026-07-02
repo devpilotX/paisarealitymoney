@@ -10,6 +10,7 @@ import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
+import DataProvenance from '@/components/DataProvenance';
 
 export const metadata = pageMetadata({
   title: 'LPG Price Today in India: State-wise Cylinder Rates',
@@ -19,12 +20,13 @@ export const metadata = pageMetadata({
 });
 
 interface LpgRow extends QueryResultRow {
-  state: string; domestic_14kg: number; commercial_19kg: number;
+  state: string; domestic_14kg: number; commercial_19kg: number | null;
   subsidy_amount: number; change_amount: number; price_date: string;
+  data_as_of: string | null; source: string | null;
 }
 
 const LPG_FAQS = [
-  { question: 'What is the LPG cylinder price today?', answer: 'LPG prices vary by state. A 14.2 kg domestic cylinder costs between Rs 803 and Rs 903 depending on your state. Commercial 19 kg cylinders cost between Rs 1,770 and Rs 1,950. Prices are revised on the 1st of every month.' },
+  { question: 'What is the LPG cylinder price today?', answer: 'LPG prices vary by state. A 14.2 kg domestic cylinder currently costs between roughly Rs 940 and Rs 1,105 depending on your state. Commercial 19 kg cylinders cost around Rs 2,900 to Rs 3,200 in metro cities. Prices are revised on the 1st of every month; check the table above for your state.' },
   { question: 'How often do LPG prices change?', answer: 'Oil marketing companies revise LPG prices on the 1st of every month based on international LPG rates and the rupee-dollar exchange rate. Sometimes the government absorbs price increases through subsidies.' },
   { question: 'How can I get LPG subsidy?', answer: 'LPG subsidy is provided under the PM Ujjwala Yojana for eligible households. The subsidy amount is directly transferred to your linked bank account (DBTL - Direct Benefit Transfer for LPG). You need to link your Aadhaar to your bank account and LPG connection to receive the subsidy.' },
   { question: 'What is the difference between domestic and commercial LPG?', answer: 'Domestic LPG cylinders (14.2 kg, blue color) are subsidized and meant for household cooking. Commercial cylinders (19 kg, red/orange color) are sold at market price and used by restaurants, hotels, and businesses. Using a domestic cylinder for commercial purposes is illegal.' },
@@ -38,7 +40,8 @@ export default async function LpgPricePage(): Promise<React.ReactElement> {
   let prices: LpgRow[] = [];
   let priceDate = '';
   try {
-    prices = await query<LpgRow>(`SELECT state, domestic_14kg, commercial_19kg, subsidy_amount, change_amount, price_date
+    prices = await query<LpgRow>(`SELECT state, domestic_14kg, commercial_19kg, subsidy_amount, change_amount, price_date,
+              data_as_of::text AS data_as_of, source
        FROM lpg_prices
        WHERE price_date = (SELECT MAX(price_date) FROM lpg_prices)
        ORDER BY state`
@@ -61,7 +64,8 @@ export default async function LpgPricePage(): Promise<React.ReactElement> {
       <script id="lpghub-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'LPG Price Today' }]} />
       <h1 className="heading-1 mb-2">LPG Gas Cylinder Price Today in India</h1>
-      <p className="text-body mb-6">State-wise LPG cylinder rates as of {priceDate}. Prices revised monthly.</p>
+      <p className="text-body mb-2">State-wise LPG cylinder rates as of {priceDate}. Prices revised monthly.</p>
+      {prices[0] && <DataProvenance asOf={prices[0].data_as_of ?? prices[0].price_date} source={prices[0].source ?? 'OMC published rates'} className="mb-6" />}
       <AdBanner format="horizontal" />
 
       {prices.length > 0 && (
@@ -81,7 +85,7 @@ export default async function LpgPricePage(): Promise<React.ReactElement> {
                   <tr key={row.state} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                     <td className="py-3 px-4 font-medium text-gray-900">{row.state}</td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.domestic_14kg)}</td>
-                    <td className="py-3 px-4 text-right font-medium">{formatINR(row.commercial_19kg)}</td>
+                    <td className="py-3 px-4 text-right font-medium">{row.commercial_19kg != null ? formatINR(row.commercial_19kg) : <span className="text-gray-400" title="No published rate for this state; check your distributor">—</span>}</td>
                     <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>
                       {row.change_amount === 0 ? 'No change' : `${row.change_amount > 0 ? '+' : ''}${formatINR(row.change_amount)}`}
                     </td>

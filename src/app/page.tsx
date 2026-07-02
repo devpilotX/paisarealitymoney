@@ -7,7 +7,7 @@ import FAQ from '@/components/FAQ';
 export const metadata: Metadata = {
   title: 'Money Health Score and Smart Tools | Paisa Reality',
   description:
-    'Check your free Money Health Score and 9 smart tools for retirement, debt, and tax. Plus daily gold and fuel prices, government schemes, calculators, and bank rates.',
+    'Check your free Money Health Score and 10 smart tools for retirement, debt, and tax. Plus daily gold and fuel prices, government schemes, calculators, and bank rates.',
   alternates: {
     canonical: 'https://paisareality.com',
     languages: {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
-    description: 'Check your free Money Health Score and 9 smart tools for retirement, debt, and tax planning. Plus live rates, schemes, and bank rate comparison.',
+    description: 'Check your free Money Health Score and 10 smart tools for retirement, debt, and tax planning. Plus live rates, schemes, and bank rate comparison.',
     url: 'https://paisareality.com',
     siteName: 'Paisa Reality',
     type: 'website',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
-    description: 'Your free Money Health Score and 9 smart tools, plus live prices, schemes, calculators, and bank rates.',
+    description: 'Your free Money Health Score and 10 smart tools, plus live prices, schemes, calculators, and bank rates.',
   },
 };
 

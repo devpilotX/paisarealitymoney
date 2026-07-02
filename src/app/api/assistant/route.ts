@@ -15,6 +15,17 @@ function clientIp(req: NextRequest): string {
   return req.headers.get('x-real-ip') ?? 'unknown';
 }
 
+/**
+ * Model fallback chain. gemini-1.5-flash is deprecated (Google retired the
+ * 1.5 series for new API projects), so default to current models and let
+ * GEMINI_MODEL pin a specific one without a code change.
+ */
+function geminiModels(): string[] {
+  const pinned = process.env.GEMINI_MODEL?.trim();
+  const chain = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+  return pinned ? [pinned, ...chain.filter((m) => m !== pinned)] : chain;
+}
+
 async function callGemini(message: string, history: ChatTurn[], apiKey: string): Promise<string | null> {
   const contents = [
     ...history.slice(-8).map((t) => ({
@@ -23,29 +34,33 @@ async function callGemini(message: string, history: ChatTurn[], apiKey: string):
     })),
     { role: 'user', parts: [{ text: message }] },
   ];
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents,
-          generationConfig: { temperature: 0.4, maxOutputTokens: 400 },
-        }),
-      },
-    );
-    if (!res.ok) return null;
-    const data = (await res.json()) as {
-      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-    };
-    const parts = data.candidates?.[0]?.content?.parts ?? [];
-    const text = parts.map((p) => p.text ?? '').join('').trim();
-    return text.length > 0 ? text : null;
-  } catch {
-    return null;
+
+  for (const model of geminiModels()) {
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            contents,
+            generationConfig: { temperature: 0.4, maxOutputTokens: 400 },
+          }),
+        },
+      );
+      if (!res.ok) continue;
+      const data = (await res.json()) as {
+        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+      };
+      const parts = data.candidates?.[0]?.content?.parts ?? [];
+      const text = parts.map((p) => p.text ?? '').join('').trim();
+      if (text.length > 0) return text;
+    } catch {
+      // try the next model in the chain
+    }
   }
+  return null;
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {

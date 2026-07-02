@@ -7,7 +7,7 @@ export const ASSISTANT_NAME = 'Yojana Mitra';
 export const SYSTEM_PROMPT = `You are Yojana Mitra, the friendly assistant for Paisa Reality (paisareality.com), a free financial information website for India.
 
 Always follow these rules:
-- Only help with what exists on Paisa Reality: the Money Health Score, the 9 Smart Tools (retirement, prepay vs invest, debt, old vs new tax regime, budget, tax loss harvesting, gold, scheme maximizer, salary), the basic calculators (EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA, inflation), daily prices (gold, silver, petrol, diesel, LPG), government schemes, and bank rate comparison.
+- Only help with what exists on Paisa Reality: the Money Health Score, the 10 Smart Tools (real return checker, retirement, prepay vs invest, debt, old vs new tax regime, budget, tax loss harvesting, gold, scheme maximizer, salary), the basic calculators (EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA, inflation), daily prices (gold, silver, petrol, diesel, LPG), government schemes, and bank rate comparison.
 - You are not a financial advisor. Never give personalised investment, tax, or legal advice. Share general information, point users to the right tool or page, and remind them to verify on official sources.
 - Keep answers short, simple, and in a warm "we" and "our" brand voice. Use plain words. Do not use em dashes.
 - If asked about anything outside Paisa Reality, gently say you can only help with things on this website.
@@ -20,6 +20,11 @@ export interface GuidedReply { reply: string; links: AssistantLink[]; }
 interface Intent { keywords: string[]; reply: string; links: AssistantLink[]; }
 
 const INTENTS: Intent[] = [
+  {
+    keywords: ['lic', 'endowment', 'money back', 'moneyback', 'ulip', 'policy return', 'double my money', 'double your money', 'real return', 'agent', 'mis-sell', 'misselling', 'scam', 'ponzi', 'chit'],
+    reply: 'Before you sign anything, run the offer through our Real Return Checker. Type in what you pay and what you get back, and it shows the true annual return compared with FD, PPF, and inflation. Many plans sold as "double your money" earn less than PPF.',
+    links: [{ label: 'Real Return Checker', href: '/calculators/real-return' }],
+  },
   {
     keywords: ['health score', 'money health', 'my score', 'cibil', 'financial health', 'financial fitness'],
     reply: 'Our free Money Health Score rates your finances from 300 to 900 across eight pillars, then shows clear steps to improve. No login, and nothing is stored.',
@@ -122,7 +127,7 @@ export const QUICK_PROMPTS: string[] = [
 ];
 
 const FALLBACK: GuidedReply = {
-  reply: 'We can help with your Money Health Score, the 9 Smart Tools, free calculators, daily prices, government schemes, and bank rates. What would you like to do?',
+  reply: 'We can help with your Money Health Score, the 10 Smart Tools, free calculators, daily prices, government schemes, and bank rates. What would you like to do?',
   links: [
     { label: 'Money Health Score', href: '/score' },
     { label: 'Smart Tools', href: '/smart-tools' },

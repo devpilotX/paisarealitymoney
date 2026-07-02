@@ -9,6 +9,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
+import RatesAsOf from '@/components/RatesAsOf';
 
 export const metadata = pageMetadata({
   title: 'Personal Loan Interest Rates: Compare All Banks',
@@ -44,7 +45,8 @@ export default async function PersonalLoanRatesPage(): Promise<React.ReactElemen
       <script id="personalloanrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: 'Personal Loan Rates' }]} />
       <h1 className="heading-1 mb-3">Personal Loan Interest Rates</h1>
-      <p className="text-body mb-6">Compare personal loan rates. Rates depend on your credit score, income, and employer.</p>
+      <p className="text-body mb-2">Compare personal loan rates. Rates depend on your credit score, income, and employer.</p>
+      <RatesAsOf rateType="personal_loan" className="mb-6" />
       <AdBanner format="horizontal" />
       <div className="my-8"><BankRateTable title="Personal Loan Rate Comparison" rates={tableRates} rateLabel="Personal Loan Rate" /></div>
       <article className="max-w-3xl my-8">
