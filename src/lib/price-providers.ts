@@ -3,9 +3,11 @@ import type { QueryResultRow } from 'pg';
 import {
   FUEL_BASELINE_AS_OF,
   FUEL_BASELINE_SOURCE,
+  STATE_FUEL,
   STATE_LPG,
   resolveCityFuel,
 } from '@/lib/fuel-data';
+import { FUEL_LIVE_SOURCE, fetchLiveStateFuel } from '@/lib/fuel-live';
 
 interface MetalSpot {
   gold: number;
@@ -284,17 +286,31 @@ export async function updateFuelPricesLive(): Promise<UpdateResult> {
   let oldestAsOf = getDateString(new Date());
 
   try {
-    const [cities, overrides] = await Promise.all([getAllCities(), getPriceOverrides('fuel')]);
+    const [cities, overrides, live] = await Promise.all([
+      getAllCities(),
+      getPriceOverrides('fuel'),
+      fetchLiveStateFuel(),
+    ]);
     const today = getDateString(new Date());
 
     for (const city of cities) {
       try {
         const baseline = resolveCityFuel(city.slug, city.state);
         const override = overrides.get(city.slug) ?? overrides.get(city.state);
-        const petrol = (override && pickNumber(override.payload, 'petrol')) ?? baseline.petrol;
-        const diesel = (override && pickNumber(override.payload, 'diesel')) ?? baseline.diesel;
-        const asOf = override ? override.asOf : FUEL_BASELINE_AS_OF;
-        const source = override ? override.source : FUEL_BASELINE_SOURCE;
+
+        // Live state rate, shifted by the city's known intra-state offset so
+        // city pages keep their published spread over the state figure.
+        const stateBase = STATE_FUEL[city.state];
+        const livePetrolState = live?.petrol[city.state];
+        const liveDieselState = live?.diesel[city.state];
+        const liveBoth = livePetrolState !== undefined && liveDieselState !== undefined && stateBase !== undefined;
+        const livePetrol = liveBoth ? round2(livePetrolState + (baseline.petrol - stateBase.petrol)) : undefined;
+        const liveDiesel = liveBoth ? round2(liveDieselState + (baseline.diesel - stateBase.diesel)) : undefined;
+
+        const petrol = (override && pickNumber(override.payload, 'petrol')) ?? livePetrol ?? baseline.petrol;
+        const diesel = (override && pickNumber(override.payload, 'diesel')) ?? liveDiesel ?? baseline.diesel;
+        const asOf = override ? override.asOf : liveBoth ? today : FUEL_BASELINE_AS_OF;
+        const source = override ? override.source : liveBoth ? FUEL_LIVE_SOURCE : FUEL_BASELINE_SOURCE;
         if (asOf < oldestAsOf) oldestAsOf = asOf;
 
         const prevRows = await query<QueryResultRow & { petrol_price: number; diesel_price: number }>(
@@ -323,7 +339,15 @@ export async function updateFuelPricesLive(): Promise<UpdateResult> {
       }
     }
 
-    return { success: true, message: `Fuel: ${recordsProcessed} cities written, data verified as of ${oldestAsOf}`, recordsProcessed, errors, source: FUEL_BASELINE_SOURCE, dataAsOf: oldestAsOf };
+    const liveUsed = oldestAsOf === today;
+    return {
+      success: true,
+      message: `Fuel: ${recordsProcessed} cities written from ${liveUsed ? 'live daily rates' : 'verified baseline'}, data as of ${oldestAsOf}`,
+      recordsProcessed,
+      errors,
+      source: liveUsed ? FUEL_LIVE_SOURCE : FUEL_BASELINE_SOURCE,
+      dataAsOf: oldestAsOf,
+    };
   } catch (error) {
     return { success: false, message: `Fuel update failed: ${error instanceof Error ? error.message : 'Unknown error'}`, recordsProcessed, errors, source: FUEL_BASELINE_SOURCE };
   }
