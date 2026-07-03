@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cacheClearAll } from '@/lib/cache';
 import { execute, query } from '@/lib/db';
 import { sendAdminAlert } from '@/lib/email';
+import { checkPriceAlerts } from '@/lib/price-alerts';
 import { FUEL_STALE_AFTER_DAYS, LPG_STALE_AFTER_DAYS } from '@/lib/fuel-data';
 import {
   updateFuelPricesLive,
@@ -94,7 +95,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   cacheClearAll();
 
+  // Fresh prices are in — evaluate user price alerts against them.
+  const userAlerts = await checkPriceAlerts();
+
   const problems = collectAlerts(results);
+  if (userAlerts.errors.length > 0) {
+    problems.push(`Price alerts: ${userAlerts.errors.length} error(s), first: ${userAlerts.errors[0]}`);
+  }
   let alerted = false;
   if (problems.length > 0 && (await shouldSendAlert())) {
     alerted = await sendAdminAlert('Price data needs attention', problems);
@@ -107,6 +114,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     updatedAt: new Date().toISOString(),
     problems,
     alerted,
+    userAlerts,
     results,
   });
 }

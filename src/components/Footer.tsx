@@ -24,6 +24,7 @@ const QUICK_LINKS: FooterLink[] = [
   { href: '/lpg-price', label: 'LPG Price Today' },
   { href: '/schemes', label: 'Government Schemes' },
   { href: '/bank-rates', label: 'Bank Rates' },
+  { href: '/interest-rates', label: 'Interest Rates' },
 ];
 
 const CALCULATOR_LINKS: FooterLink[] = [

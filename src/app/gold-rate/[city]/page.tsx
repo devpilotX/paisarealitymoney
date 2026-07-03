@@ -41,12 +41,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { city: citySlug } = await params;
   const city = getCityBySlug(citySlug);
   if (!city) return { title: 'City Not Found', robots: { index: false } };
-  return pageMetadata({
+  const meta = pageMetadata({
     title: `Gold Rate in ${city.name} Today: 22K & 24K Price`,
     description: `Check the latest available gold rate in ${city.name}, ${city.state}. 22K and 24K gold price per gram, 7-day history, and 30-day chart.`,
     path: `/gold-rate/${city.slug}`,
     keywords: [`gold rate in ${city.name.toLowerCase()}`, `gold price ${city.name.toLowerCase()}`, '22k 24k gold rate', 'gold rate today'],
   });
+  const url = `https://paisareality.com/gold-rate/${city.slug}`;
+  meta.alternates = {
+    canonical: url,
+    languages: {
+      'en-IN': url,
+      'hi-IN': `https://paisareality.com/hi/gold-rate/${city.slug}`,
+      'x-default': url,
+    },
+  };
+  return meta;
 }
 
 export const revalidate = 900;
@@ -107,9 +117,13 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
       ]} />
 
       <h1 className="heading-1 mb-2">Gold Rate in {city.name} Today</h1>
-      <p className="text-body mb-6">
+      <p className="text-body mb-2">
         Latest available 22K and 24K gold prices in {city.name}, {city.state}.
         {today ? ` Last updated: ${formatDate(today.price_date)}.` : ''}
+      </p>
+      <p className="text-sm mb-6">
+        <Link href="/dashboard/alerts" className="link-internal">🔔 Set a free price alert</Link>
+        <span className="text-gray-500"> and we will email you when gold in {city.name} hits your target.</span>
       </p>
 
       <AdBanner format="horizontal" />

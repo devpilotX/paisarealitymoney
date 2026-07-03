@@ -101,7 +101,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       keywords,
-      alternates: { canonical: url },
+      alternates: {
+        canonical: url,
+        languages: {
+          'en-IN': url,
+          'hi-IN': `https://paisareality.com/hi/schemes/${scheme.slug}`,
+          'x-default': url,
+        },
+      },
       openGraph: {
         type: 'article',
         title,
