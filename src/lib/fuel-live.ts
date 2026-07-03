@@ -66,7 +66,11 @@ export function filterSaneStates(
   return out;
 }
 
-/** Fetch and parse the live state tables. Returns null on any failure. */
+/**
+ * Fetch and parse the live state tables. Returns null on any failure — but
+ * never silently: every fallback path logs its reason so pm2 logs show why
+ * the site is on baseline instead of live data.
+ */
 export async function fetchLiveStateFuel(): Promise<LiveStateFuel | null> {
   if ((process.env.FUEL_LIVE_FETCH || '').toLowerCase() === 'off') return null;
   const url = process.env.FUEL_LIVE_URL || 'https://www.cardekho.com/petrol-price';
@@ -80,16 +84,27 @@ export async function fetchLiveStateFuel(): Promise<LiveStateFuel | null> {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PaisaRealityBot/1.0; +https://paisareality.com/methodology)' },
     });
     clearTimeout(timer);
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error(`fuel-live: source returned HTTP ${res.status}, falling back to baseline`);
+      return null;
+    }
     const html = await res.text();
 
-    const petrol = filterSaneStates(parseStateFuelTable(html, 'petrol'), 'petrol');
-    const diesel = filterSaneStates(parseStateFuelTable(html, 'diesel'), 'diesel');
+    const rawPetrol = parseStateFuelTable(html, 'petrol');
+    const rawDiesel = parseStateFuelTable(html, 'diesel');
+    const petrol = filterSaneStates(rawPetrol, 'petrol');
+    const diesel = filterSaneStates(rawDiesel, 'diesel');
 
     // Require broad coverage — a half-parsed page is a red flag, not data.
-    if (Object.keys(petrol).length < 15 || Object.keys(diesel).length < 15) return null;
+    if (Object.keys(petrol).length < 15 || Object.keys(diesel).length < 15) {
+      console.error(
+        `fuel-live: coverage too low (parsed ${Object.keys(rawPetrol).length}/${Object.keys(rawDiesel).length}, sane ${Object.keys(petrol).length}/${Object.keys(diesel).length}, html ${html.length} bytes), falling back to baseline`
+      );
+      return null;
+    }
     return { petrol, diesel };
-  } catch {
+  } catch (error) {
+    console.error(`fuel-live: fetch failed (${error instanceof Error ? error.message : 'unknown'}), falling back to baseline`);
     return null;
   }
 }
