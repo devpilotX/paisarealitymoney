@@ -101,20 +101,33 @@ export async function fetchExchangeRate(): Promise<ExchangeRate> {
   return { usdToInr: getNumber(data.rates?.INR, 'USD to INR rate') };
 }
 
+/**
+ * Landed-cost conversion. Import duty on gold and silver has been 6% (5% BCD
+ * + 1% AIDC) since the July 2024 budget — the old 15%/7.5% values inflated
+ * gold ~8% above the real market. The market-premium factor captures the
+ * spread between duty-adjusted parity and published Indian dealer rates;
+ * calibrate it against GoodReturns city rates whenever it drifts. All four
+ * knobs are env-tunable so a budget change never needs a code deploy.
+ */
 export function internationalToIndianGold24k(usdPerOz: number, usdToInr: number): number {
-  const importDuty = Number.parseFloat(process.env.GOLD_IMPORT_DUTY || '0.15');
+  const importDuty = Number.parseFloat(process.env.GOLD_IMPORT_DUTY || '0.06');
   const gst = Number.parseFloat(process.env.GOLD_GST || '0.03');
+  const marketPremium = Number.parseFloat(process.env.GOLD_MARKET_PREMIUM || '0');
   const gramsPerOz = 31.1035;
   const inrPerGram = (usdPerOz / gramsPerOz) * usdToInr;
-  return round2(inrPerGram * (1 + importDuty) * (1 + gst));
+  return round2(inrPerGram * (1 + importDuty) * (1 + gst) * (1 + marketPremium));
 }
 
 export function internationalToIndianSilver(usdPerOz: number, usdToInr: number): number {
-  const importDuty = 0.075;
-  const gst = 0.03;
+  const importDuty = Number.parseFloat(process.env.SILVER_IMPORT_DUTY || '0.06');
+  const gst = Number.parseFloat(process.env.SILVER_GST || '0.03');
+  // Indian silver has carried a large physical premium over international
+  // parity since the 2025 silver squeeze. Calibrated 3 Jul 2026 vs published
+  // dealer rates (~Rs 245/g vs Rs 208/g parity). Review monthly.
+  const marketPremium = Number.parseFloat(process.env.SILVER_MARKET_PREMIUM || '0.175');
   const gramsPerOz = 31.1035;
   const inrPerGram = (usdPerOz / gramsPerOz) * usdToInr;
-  return round2(inrPerGram * (1 + importDuty) * (1 + gst));
+  return round2(inrPerGram * (1 + importDuty) * (1 + gst) * (1 + marketPremium));
 }
 
 async function getAllCities(): Promise<CityRow[]> {
