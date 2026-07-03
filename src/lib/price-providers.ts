@@ -283,6 +283,7 @@ export async function updateSilverPricesLive(): Promise<UpdateResult> {
 export async function updateFuelPricesLive(): Promise<UpdateResult> {
   const errors: string[] = [];
   let recordsProcessed = 0;
+  let liveCount = 0;
   let oldestAsOf = getDateString(new Date());
 
   try {
@@ -311,6 +312,7 @@ export async function updateFuelPricesLive(): Promise<UpdateResult> {
         const diesel = (override && pickNumber(override.payload, 'diesel')) ?? liveDiesel ?? baseline.diesel;
         const asOf = override ? override.asOf : liveBoth ? today : FUEL_BASELINE_AS_OF;
         const source = override ? override.source : liveBoth ? FUEL_LIVE_SOURCE : FUEL_BASELINE_SOURCE;
+        if (!override && liveBoth) liveCount++;
         if (asOf < oldestAsOf) oldestAsOf = asOf;
 
         const prevRows = await query<QueryResultRow & { petrol_price: number; diesel_price: number }>(
@@ -339,13 +341,12 @@ export async function updateFuelPricesLive(): Promise<UpdateResult> {
       }
     }
 
-    const liveUsed = oldestAsOf === today;
     return {
       success: true,
-      message: `Fuel: ${recordsProcessed} cities written from ${liveUsed ? 'live daily rates' : 'verified baseline'}, data as of ${oldestAsOf}`,
+      message: `Fuel: ${recordsProcessed} cities written (${liveCount} live daily, ${recordsProcessed - liveCount} baseline/override), oldest data ${oldestAsOf}`,
       recordsProcessed,
       errors,
-      source: liveUsed ? FUEL_LIVE_SOURCE : FUEL_BASELINE_SOURCE,
+      source: liveCount > recordsProcessed / 2 ? FUEL_LIVE_SOURCE : FUEL_BASELINE_SOURCE,
       dataAsOf: oldestAsOf,
     };
   } catch (error) {
