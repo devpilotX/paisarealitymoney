@@ -25,7 +25,7 @@ interface FDRateRow extends QueryResultRow {
 }
 
 const FD_FAQS = [
-  { question: 'Which bank has the highest FD rate in 2026?', answer: 'Small finance banks like AU Small Finance Bank, Equitas Small Finance Bank, and Unity Small Finance Bank typically offer the highest FD rates (7.5% to 9%). Among large banks, SBI offers up to 7.10% and HDFC Bank up to 7.25% for select tenures. Senior citizens get 0.25% to 0.75% extra.' },
+  { question: 'Which bank has the highest FD rate in 2026?', answer: 'Small finance banks typically offer the highest FD rates, usually 1 to 2 percentage points above the large banks. Among large banks, top rates currently cluster in the mid-6% range after the 2025-26 repo rate cuts, with special limited-period schemes slightly higher. Senior citizens get 0.25% to 0.75% extra at most banks. Sort the table above to see the current leaders.' },
   { question: 'What is the best FD tenure?', answer: 'The best tenure depends on the bank and your needs. Many banks offer their highest rates for 1 to 2 year FDs. Some banks have special FD schemes (like SBI Amrit Kalash, HDFC Bank special FD) with higher rates for specific tenures. Compare rates for your preferred tenure using the table above.' },
   { question: 'Is FD interest taxable?', answer: 'Yes, FD interest is fully taxable as per your income tax slab. TDS is deducted at 10% if annual interest exceeds Rs 40,000 (Rs 50,000 for senior citizens). Submit Form 15G/15H to avoid TDS if your total income is below the taxable limit. Consider tax-saving 5-year FD for Section 80C deduction.' },
 ];
