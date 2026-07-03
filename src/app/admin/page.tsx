@@ -12,7 +12,16 @@ interface BlogPostSummary {
   date: string;
 }
 
-type Tab = 'overview' | 'blogs' | 'messages' | 'actions';
+type Tab = 'overview' | 'blogs' | 'prices' | 'messages' | 'actions';
+
+interface PriceOverride {
+  id: number;
+  commodity: string;
+  region_key: string;
+  payload: Record<string, number | null>;
+  as_of: string;
+  source: string;
+}
 
 interface SiteStats {
   schemes: { total: number; central: number; state: number };
@@ -84,13 +93,12 @@ export default function AdminPage(): React.ReactElement {
   }, [loadPosts]);
 
   const triggerPriceUpdate = useCallback(async () => {
-    const secret = window.prompt('Enter CRON_SECRET:');
-    if (!secret) return;
     setActionLog('Updating prices...');
-    const res = await fetch(`/api/cron/prices?secret=${encodeURIComponent(secret)}`);
-    const data = await res.json();
-    setActionLog(res.ok ? 'Prices updated successfully.' : `Error: ${JSON.stringify(data)}`);
-  }, []);
+    const res = await fetch('/api/admin/prices/refresh', { method: 'POST' });
+    const data = (await res.json()) as { success?: boolean; duration?: string };
+    setActionLog(res.ok && data.success ? `All prices refreshed in ${data.duration ?? ''}.` : `Error: ${JSON.stringify(data)}`);
+    void loadStats();
+  }, [loadStats]);
 
   const handleLogout = useCallback(() => {
     document.cookie = 'admin_token=; path=/; max-age=0';
@@ -145,6 +153,7 @@ export default function AdminPage(): React.ReactElement {
   const TABS: { id: Tab; label: string }[] = [
     { id: 'overview', label: 'Overview' },
     { id: 'blogs', label: `Blogs (${posts.length})` },
+    { id: 'prices', label: 'Prices' },
     { id: 'messages', label: 'Messages' },
     { id: 'actions', label: 'Actions' },
   ];
@@ -204,7 +213,7 @@ export default function AdminPage(): React.ReactElement {
               <StatCard label="Newsletter Posts" value={posts.length} />
               <StatCard label="Published" value={publishedCount} />
               <StatCard label="Drafts" value={draftCount} />
-              <StatCard label="Smart Tools" value={9} />
+              <StatCard label="Smart Tools" value={10} />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -299,6 +308,9 @@ export default function AdminPage(): React.ReactElement {
           </div>
         )}
 
+        {/* Prices tab */}
+        {tab === 'prices' && <PricesTab onRefresh={triggerPriceUpdate} actionLog={actionLog} />}
+
         {/* Messages tab */}
         {tab === 'messages' && (
           <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -354,11 +366,11 @@ export default function AdminPage(): React.ReactElement {
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-gray-500">Smart Tools</p>
-                  <p className="font-medium">9 tools live</p>
+                  <p className="font-medium">10 tools live</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-gray-500">Calculators</p>
-                  <p className="font-medium">10 basic + 9 advanced</p>
+                  <p className="font-medium">10 basic + 10 advanced</p>
                 </div>
               </div>
             </div>
@@ -374,6 +386,156 @@ function StatCard({ label, value }: { label: string; value: number }): React.Rea
     <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-sm text-gray-500 mb-1">{label}</p>
       <p className="text-2xl font-bold text-gray-900">{value}</p>
+    </div>
+  );
+}
+
+function PricesTab({ onRefresh, actionLog }: { onRefresh: () => Promise<void>; actionLog: string }): React.ReactElement {
+  const [overrides, setOverrides] = useState<PriceOverride[]>([]);
+  const [baseline, setBaseline] = useState<{ asOf: string; source: string } | null>(null);
+  const [msg, setMsg] = useState('');
+  const [commodity, setCommodity] = useState<'fuel' | 'lpg'>('fuel');
+  const [regionKey, setRegionKey] = useState('');
+  const [petrol, setPetrol] = useState('');
+  const [diesel, setDiesel] = useState('');
+  const [domestic, setDomestic] = useState('');
+  const [commercial, setCommercial] = useState('');
+  const [source, setSource] = useState('OMC published rates');
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/prices/overrides');
+      if (!res.ok) return;
+      const data = (await res.json()) as { baseline?: { asOf: string; source: string }; overrides?: PriceOverride[] };
+      setBaseline(data.baseline ?? null);
+      setOverrides(data.overrides ?? []);
+    } catch { /* best effort */ }
+  }, []);
+
+  useEffect(() => { void load(); }, [load]);
+
+  const save = useCallback(async () => {
+    setMsg('');
+    const payload: Record<string, number> = {};
+    if (commodity === 'fuel') {
+      if (petrol) payload.petrol = Number(petrol);
+      if (diesel) payload.diesel = Number(diesel);
+    } else {
+      if (domestic) payload.domestic = Number(domestic);
+      if (commercial) payload.commercial = Number(commercial);
+    }
+    const res = await fetch('/api/admin/prices/overrides', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ commodity, regionKey: regionKey.trim(), payload, asOf: new Date().toISOString().slice(0, 10), source }),
+    });
+    const data = (await res.json()) as { ok?: boolean; error?: string };
+    setMsg(data.ok ? 'Saved. Live prices refreshed.' : data.error ?? 'Failed to save.');
+    if (data.ok) { setRegionKey(''); setPetrol(''); setDiesel(''); setDomestic(''); setCommercial(''); void load(); }
+  }, [commodity, regionKey, petrol, diesel, domestic, commercial, source, load]);
+
+  const remove = useCallback(async (o: PriceOverride) => {
+    if (!window.confirm(`Remove override for ${o.region_key}? The compiled baseline will apply again.`)) return;
+    await fetch(`/api/admin/prices/overrides?commodity=${o.commodity}&regionKey=${encodeURIComponent(o.region_key)}`, { method: 'DELETE' });
+    void load();
+  }, [load]);
+
+  return (
+    <div className="space-y-4">
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-1">Live price refresh</h3>
+            <p className="text-sm text-gray-500">
+              Gold and silver pull live spot on every run. Fuel and LPG use the verified baseline
+              {baseline ? ` (as of ${baseline.asOf})` : ''} plus any overrides below. The cron also runs 06:20, 12:20, 18:20 IST.
+            </p>
+          </div>
+          <button onClick={() => void onRefresh()} className="px-4 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-800 transition-colors flex-shrink-0">
+            Refresh all prices now
+          </button>
+        </div>
+        {actionLog && <p className="mt-3 text-sm text-gray-600 bg-gray-50 p-3 rounded">{actionLog}</p>}
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <h3 className="font-semibold text-gray-900 mb-1">Set a price override</h3>
+        <p className="text-sm text-gray-500 mb-4">
+          When OMC prices change, enter the new value here — it overrides the baseline instantly, no deploy needed.
+          Region is a city slug for fuel (e.g. <code className="bg-gray-100 px-1 rounded">delhi</code>) or a state name for fuel/LPG (e.g. <code className="bg-gray-100 px-1 rounded">Maharashtra</code>).
+        </p>
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 items-end">
+          <label className="text-xs text-gray-500">Commodity
+            <select value={commodity} onChange={(e) => setCommodity(e.target.value as 'fuel' | 'lpg')} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm">
+              <option value="fuel">Fuel (petrol/diesel)</option>
+              <option value="lpg">LPG (cylinder)</option>
+            </select>
+          </label>
+          <label className="text-xs text-gray-500">Region
+            <input value={regionKey} onChange={(e) => setRegionKey(e.target.value)} placeholder={commodity === 'fuel' ? 'delhi or Delhi' : 'Delhi'} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+          </label>
+          {commodity === 'fuel' ? (
+            <>
+              <label className="text-xs text-gray-500">Petrol ₹/L
+                <input type="number" step="0.01" value={petrol} onChange={(e) => setPetrol(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+              </label>
+              <label className="text-xs text-gray-500">Diesel ₹/L
+                <input type="number" step="0.01" value={diesel} onChange={(e) => setDiesel(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+              </label>
+            </>
+          ) : (
+            <>
+              <label className="text-xs text-gray-500">Domestic 14.2kg ₹
+                <input type="number" step="0.5" value={domestic} onChange={(e) => setDomestic(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+              </label>
+              <label className="text-xs text-gray-500">Commercial 19kg ₹
+                <input type="number" step="0.5" value={commercial} onChange={(e) => setCommercial(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+              </label>
+            </>
+          )}
+          <label className="text-xs text-gray-500">Source
+            <input value={source} onChange={(e) => setSource(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+          </label>
+          <button onClick={() => void save()} className="px-4 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-800 transition-colors">
+            Save override
+          </button>
+        </div>
+        {msg && <p className="mt-3 text-sm text-gray-600 bg-gray-50 p-3 rounded">{msg}</p>}
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="p-5 pb-0"><h3 className="font-semibold text-gray-900">Active overrides ({overrides.length})</h3></div>
+        {overrides.length === 0 ? (
+          <p className="p-5 text-sm text-gray-500">No overrides — the compiled baseline applies everywhere.</p>
+        ) : (
+          <table className="w-full text-sm mt-3">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="text-left px-4 py-2 font-medium text-gray-600">Commodity</th>
+                <th className="text-left px-4 py-2 font-medium text-gray-600">Region</th>
+                <th className="text-left px-4 py-2 font-medium text-gray-600">Values</th>
+                <th className="text-left px-4 py-2 font-medium text-gray-600 hidden sm:table-cell">As of</th>
+                <th className="text-right px-4 py-2 font-medium text-gray-600">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {overrides.map((o) => (
+                <tr key={o.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 text-gray-700">{o.commodity}</td>
+                  <td className="px-4 py-2 font-medium text-gray-900">{o.region_key}</td>
+                  <td className="px-4 py-2 text-gray-600">
+                    {Object.entries(o.payload).filter(([, v]) => v != null).map(([k, v]) => `${k}: ₹${v}`).join(', ')}
+                  </td>
+                  <td className="px-4 py-2 text-gray-500 hidden sm:table-cell">{o.as_of}</td>
+                  <td className="px-4 py-2 text-right">
+                    <button onClick={() => void remove(o)} className="text-red-600 hover:underline">Remove</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }

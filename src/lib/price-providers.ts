@@ -134,10 +134,15 @@ async function getAllCities(): Promise<CityRow[]> {
   return query<CityRow>('SELECT id, slug, name, state, is_metro FROM cities ORDER BY id');
 }
 
-async function getPreviousPrice(table: string, column: string, cityId: number): Promise<number | null> {
+/**
+ * Previous-day price for change calculation. Strictly BEFORE the given date:
+ * intra-day re-runs must compare against yesterday's close, not against the
+ * row this same cron wrote an hour ago (that made every change read ~0.00).
+ */
+async function getPreviousPrice(table: string, column: string, cityId: number, beforeDate: string): Promise<number | null> {
   const rows = await query<QueryResultRow & { val: number }>(
-    `SELECT ${column} AS val FROM ${table} WHERE city_id = $1 ORDER BY price_date DESC LIMIT 1`,
-    [cityId]
+    `SELECT ${column} AS val FROM ${table} WHERE city_id = $1 AND price_date < $2 ORDER BY price_date DESC LIMIT 1`,
+    [cityId, beforeDate]
   );
   return rows[0]?.val ?? null;
 }
@@ -204,7 +209,7 @@ export async function updateGoldPricesLive(): Promise<UpdateResult> {
         const price24k = round2(base24k + premium);
         const price22k = round2(price24k * 0.9167);
         const price18k = round2(price24k * 0.75);
-        const prev = await getPreviousPrice('gold_prices', 'gold_24k_per_gram', city.id);
+        const prev = await getPreviousPrice('gold_prices', 'gold_24k_per_gram', city.id, today);
         const change = prev ? round2(price24k - prev) : 0;
         const changePct = prev ? round2((change / prev) * 100) : 0;
 
@@ -247,7 +252,7 @@ export async function updateSilverPricesLive(): Promise<UpdateResult> {
         const premium = (CITY_GOLD_PREMIUM[city.slug] ?? 15) * 0.012;
         const silverPerGram = round2(baseSilver + premium);
         const silverPerKg = round2(silverPerGram * 1000);
-        const prev = await getPreviousPrice('silver_prices', 'silver_per_gram', city.id);
+        const prev = await getPreviousPrice('silver_prices', 'silver_per_gram', city.id, today);
         const change = prev ? round2(silverPerGram - prev) : 0;
         const changePct = prev ? round2((change / prev) * 100) : 0;
 
@@ -293,8 +298,8 @@ export async function updateFuelPricesLive(): Promise<UpdateResult> {
         if (asOf < oldestAsOf) oldestAsOf = asOf;
 
         const prevRows = await query<QueryResultRow & { petrol_price: number; diesel_price: number }>(
-          'SELECT petrol_price, diesel_price FROM fuel_prices WHERE city_id = $1 ORDER BY price_date DESC LIMIT 1',
-          [city.id]
+          'SELECT petrol_price, diesel_price FROM fuel_prices WHERE city_id = $1 AND price_date < $2 ORDER BY price_date DESC LIMIT 1',
+          [city.id, today]
         );
         const prev = prevRows[0];
         const petrolChange = prev ? round2(petrol - prev.petrol_price) : 0;
@@ -344,8 +349,8 @@ export async function updateLpgPricesLive(): Promise<UpdateResult> {
         if (asOf < oldestAsOf) oldestAsOf = asOf;
 
         const prevRows = await query<QueryResultRow & { domestic_14kg: number }>(
-          'SELECT domestic_14kg FROM lpg_prices WHERE state = $1 ORDER BY price_date DESC LIMIT 1',
-          [state]
+          'SELECT domestic_14kg FROM lpg_prices WHERE state = $1 AND price_date < $2 ORDER BY price_date DESC LIMIT 1',
+          [state, today]
         );
         const change = prevRows[0] ? round2(domestic - prevRows[0].domestic_14kg) : 0;
 

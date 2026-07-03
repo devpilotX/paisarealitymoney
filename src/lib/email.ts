@@ -10,19 +10,33 @@ function getResendClient(): Resend {
   return new Resend(apiKey);
 }
 
-function emailLayout(content: string): string {
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="font-family:Inter,system-ui,sans-serif;max-width:600px;margin:0 auto;padding:0;background:#f9fafb;">
-<div style="background:#ffffff;border-radius:12px;margin:20px;overflow:hidden;border:1px solid #e5e7eb;">
-<div style="background:#007A78;padding:24px;text-align:center;">
-<h1 style="color:#ffffff;font-size:22px;margin:0;font-weight:700;">Paisa Reality</h1>
-<p style="color:#d1fae5;font-size:13px;margin:6px 0 0;">India's one-stop money hub</p>
-</div>
-<div style="padding:32px 28px;">${content}</div>
-<div style="background:#f9fafb;padding:20px 28px;border-top:1px solid #e5e7eb;text-align:center;">
-<p style="font-size:12px;color:#6b7280;margin:0;">Paisa Reality - paisareality.com</p>
-<p style="font-size:11px;color:#9ca3af;margin:6px 0 0;">You received this email because of your account or interaction on our website.</p>
-</div></div></body></html>`;
+function emailLayout(content: string, preheader = ''): string {
+  const preheaderHtml = preheader
+    ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${escapeHtml(preheader)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>`
+    : '';
+  const footLink = (href: string, label: string): string =>
+    `<a href="${APP_URL}${href}" style="color:#007A78;text-decoration:none;font-size:12px;font-weight:600;">${label}</a>`;
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"></head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:'Segoe UI',Inter,system-ui,-apple-system,sans-serif;">
+${preheaderHtml}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px 12px;"><tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e5e7eb;">
+<tr><td style="background:linear-gradient(135deg,#007A78 0%,#005a58 100%);background-color:#007A78;padding:26px 28px;text-align:center;">
+<span style="display:inline-block;background:#ffffff;color:#007A78;font-size:15px;font-weight:800;border-radius:8px;padding:5px 10px;letter-spacing:0.3px;">&#8377;</span>
+<h1 style="color:#ffffff;font-size:23px;margin:10px 0 0;font-weight:800;letter-spacing:-0.3px;">Paisa Reality</h1>
+<p style="color:#b8e5e3;font-size:12.5px;margin:6px 0 0;letter-spacing:0.4px;">INDIA&rsquo;S ONE-STOP MONEY HUB</p>
+</td></tr>
+<tr><td style="padding:32px 28px;">${content}</td></tr>
+<tr><td style="background:#f9fafb;padding:20px 28px;border-top:1px solid #e5e7eb;text-align:center;">
+<p style="margin:0 0 10px;">
+${footLink('/gold-rate', 'Gold Rate')} &nbsp;&middot;&nbsp; ${footLink('/interest-rates', 'Interest Rates')} &nbsp;&middot;&nbsp; ${footLink('/calculators', 'Calculators')} &nbsp;&middot;&nbsp; ${footLink('/schemes', 'Schemes')} &nbsp;&middot;&nbsp; ${footLink('/score', 'Health Score')}
+</p>
+<p style="font-size:12px;color:#6b7280;margin:0;">Paisa Reality &middot; <a href="${APP_URL}" style="color:#6b7280;">paisareality.com</a></p>
+<p style="font-size:11px;color:#9ca3af;margin:6px 0 0;line-height:1.5;">Free financial information for India. Not investment advice &mdash; verify with official sources before acting.<br>You received this email because of your account or activity on our website.</p>
+</td></tr>
+</table>
+</td></tr></table>
+</body></html>`;
 }
 
 function btn(href: string, label: string): string {
