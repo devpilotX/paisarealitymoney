@@ -55,10 +55,12 @@ export default function MethodologyPage(): React.ReactElement {
         <section>
           <h2 className="heading-2 mb-3">Petrol and diesel prices</h2>
           <p className="text-body mb-3">
-            Fuel prices come from rates published by the oil marketing companies (Indian Oil, Bharat Petroleum,
-            Hindustan Petroleum) as aggregated by public trackers. Where a city-specific published rate exists we
-            use it; otherwise we use the published state rate, because fuel VAT is set at the state level and
-            variation within a state is typically under Re 1 per litre.
+            Fuel prices are fetched daily from the oil marketing companies&apos; published rates (Indian Oil,
+            Bharat Petroleum, Hindustan Petroleum) as aggregated by public trackers, following the OMCs&apos; 6 AM
+            revision. City rates apply the published state rate plus each city&apos;s known local spread, because
+            fuel VAT is set at the state level. Every live value is sanity-checked against our verified baseline
+            before it is published; if the live feed is ever unavailable, we fall back to the baseline and show
+            its verification date instead of pretending.
           </p>
           <p className="text-body">
             Every fuel page shows a <strong>&quot;data verified as of&quot;</strong> date. That is the date we
