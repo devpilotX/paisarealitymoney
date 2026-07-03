@@ -64,6 +64,7 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<boolea
       <li>11 financial calculators (EMI, SIP, FD, tax, and more)</li>
       <li>Government scheme finder matched to your profile</li>
       <li>Bank rate comparison across 50+ banks</li>
+      <li>Free price alerts: an email when gold or silver hits your target</li>
       <li>Money Health Score out of 900</li>
     </ul>
     ${btn(`${APP_URL}/dashboard`, 'Go to Dashboard')}
@@ -137,6 +138,28 @@ export async function sendPasswordChangedEmail(to: string, name: string): Promis
     ${btn(`${APP_URL}/forgot-password`, 'Reset Password')}
   `);
   const r = await sendEmail({ to, subject: 'Your Paisa Reality password was changed', html, replyTo: 'support@paisareality.com' });
+  return r.ok;
+}
+
+/** One-shot price alert: the target a user set has been hit. */
+export async function sendPriceAlertEmail(
+  to: string,
+  name: string,
+  details: { commodityLabel: string; cityName: string; direction: 'below' | 'above'; targetPrice: number; currentPrice: number }
+): Promise<boolean> {
+  const fmt = (v: number): string => `Rs ${v.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+  const verb = details.direction === 'below' ? 'dropped to' : 'risen to';
+  const html = emailLayout(`
+    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">Price alert: ${escapeHtml(details.commodityLabel)} in ${escapeHtml(details.cityName)}</h2>
+    <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Hey ${escapeHtml(name)}, the price you were watching has ${verb} your target.</p>
+    <div style="background:#f3f4f6;border-radius:8px;padding:16px;margin:0 0 16px;">
+      <p style="font-size:14px;color:#374151;margin:0 0 8px;"><strong>Current price:</strong> ${fmt(details.currentPrice)}</p>
+      <p style="font-size:14px;color:#374151;margin:0;"><strong>Your target:</strong> ${details.direction === 'below' ? 'at or below' : 'at or above'} ${fmt(details.targetPrice)}</p>
+    </div>
+    <p style="font-size:13px;color:#6b7280;margin:0 0 16px;">Local jeweller rates can differ slightly. Verify the day's rate before you buy or sell. This alert has now been used up; set a new one anytime from your dashboard.</p>
+    ${btn(`${APP_URL}/dashboard/alerts`, 'Manage Alerts')}
+  `);
+  const r = await sendEmail({ to, subject: `Price alert hit: ${details.commodityLabel} in ${details.cityName}`, html });
   return r.ok;
 }
 

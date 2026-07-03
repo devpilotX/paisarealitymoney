@@ -13,6 +13,8 @@ Live: https://paisareality.com
 - Bank Rate Comparison: fixed deposit, savings, home loan, and personal loan rates across many banks.
 - Money Health Score: a single score out of 900 across eight financial pillars, with guidance to improve it.
 - Guides: plain-language comparison articles for everyday money decisions, including old vs new tax regime, SIP vs FD, PPF vs NPS, FD vs RD, and 22K vs 24K gold.
+- Price Alerts: logged-in users set one-shot gold/silver targets per city; the daily cron emails them when a target is hit (free plan 3 active alerts, premium 15).
+- Interest Rates hub: quarterly small savings rates (PPF, SSY, SCSS, NSC, KVP, post office deposits), RBI policy rates, and the EPF rate with tax notes, at `/interest-rates`.
 - Newsletter: simple personal finance articles and price updates.
 - Admin Dashboard: content and site management, served only on the admin subdomain and protected by JWT auth.
 - Data integrity: fuel/LPG baselines carry an as-of date and source, admins can override any price via `/api/admin/prices/overrides` without a deploy, and the daily cron emails the admin if data goes stale or an update fails. Methodology is public at `/methodology`, editorial standards at `/editorial-policy`.
@@ -79,6 +81,7 @@ Set these in `.env`. Only the variable names are listed here. Never commit real 
 | `npm test` | Run every unit test suite (DB-free, also runs in CI) |
 | `npm run db:migrate-pg` | Create PostgreSQL tables for the Money Health Score |
 | `npm run db:migrate-price-integrity` | Add fuel/LPG provenance columns, price_overrides, and system_meta tables |
+| `npm run db:migrate-alerts` | Create the price_alerts table |
 | `npm run db:seed-cities` | Seed cities |
 | `npm run db:seed-prices` | Seed price history |
 | `npm run db:seed-schemes` | Seed the base set of government schemes |

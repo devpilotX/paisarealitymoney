@@ -33,6 +33,7 @@ export default function DashboardPage(): React.ReactElement {
 
   const dashboardLinks = [
     { href: '/dashboard/account', title: 'My Account', desc: 'Edit profile, change password, verify email', icon: '👤' },
+    { href: '/dashboard/alerts', title: 'Price Alerts', desc: 'Get an email when gold or silver hits your target price', icon: '🔔' },
     { href: '/dashboard/bookmarks', title: 'Saved Schemes', desc: 'View schemes you have bookmarked', icon: '📌' },
     { href: '/dashboard/tracker', title: 'Application Tracker', desc: 'Track your scheme applications', icon: '📋' },
     { href: '/schemes', title: 'Find Schemes', desc: 'Discover new schemes for you', icon: '🔍' },
