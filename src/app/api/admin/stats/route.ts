@@ -26,6 +26,9 @@ export async function GET(): Promise<NextResponse> {
       'SELECT count(*)::int AS total, count(*) FILTER (WHERE is_published)::int AS published FROM blog_posts',
     ))[0];
     const gold = (await query<DateRow>('SELECT max(price_date)::text AS d FROM gold_prices'))[0];
+    const alerts = await query<CountRow>('SELECT count(*)::int AS n FROM price_alerts WHERE active')
+      .then((rows) => rows[0]?.n ?? 0)
+      .catch(() => 0);
 
     return NextResponse.json({
       schemes: { total: schemes?.total ?? 0, central: schemes?.central ?? 0, state: schemes?.state ?? 0 },
@@ -33,6 +36,7 @@ export async function GET(): Promise<NextResponse> {
       bankRates: bankRates?.n ?? 0,
       cities: cities?.n ?? 0,
       users: users?.n ?? 0,
+      activeAlerts: alerts,
       newsletterPosts: { total: posts?.total ?? 0, published: posts?.published ?? 0 },
       pricesUpdated: gold?.d ?? null,
     });

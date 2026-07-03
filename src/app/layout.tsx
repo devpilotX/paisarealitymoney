@@ -140,7 +140,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
       <body className="font-sans bg-white text-gray-900 antialiased flex flex-col min-h-screen">
-        <Script id="sw-killswitch" strategy="beforeInteractive">
+        <Script id="sw-killswitch" strategy="afterInteractive">
   {`if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));if(window.caches){caches.keys().then(k=>k.forEach(n=>caches.delete(n)))}}`}
 </Script>
         <GoogleAnalytics />

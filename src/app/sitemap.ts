@@ -120,6 +120,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: cityPriority,
   }));
 
+  // Hindi mirror pages — they carry reciprocal hreflang with the English
+  // versions, so list them for discovery too.
+  const hindiStaticPages: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/hi`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE_URL}/hi/gold-rate`, lastModified: now, changeFrequency: 'daily', priority: 0.7 },
+    { url: `${BASE_URL}/hi/schemes`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+  ];
+
+  const hindiGoldCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
+    url: `${BASE_URL}/hi/gold-rate/${city.slug}`,
+    lastModified: now,
+    changeFrequency: 'daily' as const,
+    priority: 0.6,
+  }));
+
   const categoryPages: MetadataRoute.Sitemap = SCHEME_CATEGORIES.map((category) => ({
     url: `${BASE_URL}/category/${category.slug}`,
     lastModified: now,
@@ -134,13 +149,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  const schemePages = await query<SchemeSitemapRow>('SELECT slug, updated_at FROM schemes WHERE is_active = TRUE ORDER BY updated_at DESC'
-  ).then((rows) => rows.map((scheme) => ({
+  const schemeRows = await query<SchemeSitemapRow>(
+    'SELECT slug, updated_at FROM schemes WHERE is_active = TRUE ORDER BY updated_at DESC'
+  ).catch(() => [] as SchemeSitemapRow[]);
+
+  const schemePages: MetadataRoute.Sitemap = schemeRows.map((scheme) => ({
     url: `${BASE_URL}/schemes/${scheme.slug}`,
     lastModified: toIsoDate(scheme.updated_at, now),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
-  }))).catch(() => [] as MetadataRoute.Sitemap);
+  }));
+
+  const hindiSchemePages: MetadataRoute.Sitemap = schemeRows.map((scheme) => ({
+    url: `${BASE_URL}/hi/schemes/${scheme.slug}`,
+    lastModified: toIsoDate(scheme.updated_at, now),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }));
 
   const blogPages = await getAllPostsAsync(true)
     .then((posts) => posts.map((post) => ({
@@ -171,5 +196,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...silverCityPages,
     ...petrolCityPages,
     ...dieselCityPages,
+    ...hindiStaticPages,
+    ...hindiGoldCityPages,
+    ...hindiSchemePages,
   ];
 }
