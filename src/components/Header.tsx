@@ -52,6 +52,7 @@ const NAV_ITEMS: NavItemConfig[] = [
   { label: 'Smart Tools', href: '/smart-tools', dropdown: SMART_TOOLS_LINKS },
   { label: 'Calculators', href: '/calculators', dropdown: CALCULATOR_LINKS },
   { label: 'Schemes', href: '/schemes' },
+  { label: 'Scholarships', href: '/scholarships' },
   { label: 'Bank Rates', href: '/bank-rates' },
 ];
 

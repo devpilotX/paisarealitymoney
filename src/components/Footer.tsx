@@ -23,6 +23,7 @@ const QUICK_LINKS: FooterLink[] = [
   { href: '/diesel-price', label: 'Diesel Price Today' },
   { href: '/lpg-price', label: 'LPG Price Today' },
   { href: '/schemes', label: 'Government Schemes' },
+  { href: '/scholarships', label: 'Scholarships' },
   { href: '/bank-rates', label: 'Bank Rates' },
   { href: '/interest-rates', label: 'Interest Rates' },
 ];
