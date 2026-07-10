@@ -66,6 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/calculators/inflation`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     // Schemes hub + bank rates (hub + sub-pages)
     { url: `${BASE_URL}/schemes`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE_URL}/scholarships`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE_URL}/bank-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/bank-rates/fd-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/bank-rates/savings-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },

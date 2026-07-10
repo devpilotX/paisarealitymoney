@@ -19,7 +19,8 @@
     "db:seed-all": "npm run db:seed-cities && npm run db:seed-prices && npm run db:seed-schemes && npm run db:seed-banks",
     "db:migrate-pg": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-pg.ts",
     "db:migrate-price-integrity": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-price-integrity.ts",
-    "db:migrate-alerts": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-alerts.ts"
+    "db:migrate-alerts": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-alerts.ts",
+    "db:migrate-scholarships": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-scholarships.ts"
   },
   "dependencies": {
     "@react-pdf/renderer": "^3.4.4",
