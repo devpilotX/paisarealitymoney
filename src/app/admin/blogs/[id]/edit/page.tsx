@@ -23,6 +23,7 @@ interface BlogPostResponse {
     content: string;
     category: string;
     tags: string[];
+    coverImage: string | null;
     metaTitle: string | null;
     metaDescription: string | null;
     isPublished: boolean;
@@ -39,6 +40,7 @@ export default function EditBlogPage({
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [coverImage, setCoverImage] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('finance');
   const [tags, setTags] = useState('');
@@ -56,6 +58,7 @@ export default function EditBlogPage({
         if (data.post) {
           setTitle(data.post.title);
           setDescription(data.post.description);
+          setCoverImage(data.post.coverImage || '');
           setContent(data.post.content);
           setCategory(data.post.category);
           setTags((data.post.tags || []).join(', '));
@@ -90,6 +93,7 @@ export default function EditBlogPage({
             .split(',')
             .map((tag) => tag.trim())
             .filter(Boolean),
+          coverImage: coverImage || null,
           metaTitle,
           metaDescription,
           isPublished,
@@ -111,6 +115,7 @@ export default function EditBlogPage({
   }, [
     category,
     content,
+    coverImage,
     description,
     id,
     isPublished,
@@ -147,6 +152,16 @@ export default function EditBlogPage({
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               className="input-field h-20"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Cover image URL (thumbnail)</label>
+            <input
+              value={coverImage}
+              onChange={(event) => setCoverImage(event.target.value)}
+              className="input-field"
+              placeholder="https://.../cover.jpg"
             />
           </div>
 

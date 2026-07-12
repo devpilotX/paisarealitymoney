@@ -95,16 +95,16 @@ export default function EMICalculatorPage(): React.ReactElement {
           <h2 className="heading-2 mb-4">Year-wise Amortization Schedule</h2>
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b-2 border-gray-200 bg-gray-50">
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Year</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Principal Paid</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Interest Paid</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Balance</th>
+              <tr className="border-b-2 border-line bg-paper-2">
+                <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Year</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-ink">Principal Paid</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-ink">Interest Paid</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-ink">Balance</th>
               </tr>
             </thead>
             <tbody>
               {result.schedule.map((row) => (
-                <tr key={row.year} className="border-b border-gray-100">
+                <tr key={row.year} className="border-b border-line/60">
                   <td className="py-2 px-4 text-sm">{row.year}</td>
                   <td className="py-2 px-4 text-sm text-right">{formatINR(Math.round(row.principal))}</td>
                   <td className="py-2 px-4 text-sm text-right">{formatINR(Math.round(row.interest))}</td>

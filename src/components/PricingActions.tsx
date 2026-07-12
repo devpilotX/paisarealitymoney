@@ -106,7 +106,7 @@ export default function PricingActions(): React.ReactElement {
           {loadingPlan === 'yearly' ? 'Starting payment...' : 'Pay Yearly - Rs 999'}
         </button>
       </div>
-      {message && <p className="text-xs text-center text-gray-600 mt-3">{message}</p>}
+      {message && <p className="text-xs text-center text-muted mt-3">{message}</p>}
     </>
   );
 }

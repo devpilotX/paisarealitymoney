@@ -32,15 +32,15 @@ export default function InternalLinks({
           <Link
             key={link.href}
             href={link.href}
-            className="block p-4 rounded-lg border border-gray-200 no-underline
+            className="block p-4 rounded-[5px] border border-line no-underline
                        transition-all duration-200 ease-in-out
-                       hover:border-primary hover:shadow-sm group"
+                       hover:border-navy hover:bg-paper-2 group"
           >
-            <span className="text-base font-medium text-primary group-hover:text-primary-600">
+            <span className="text-base font-semibold text-navy group-hover:text-brand-red">
               {link.label}
             </span>
             {link.description && (
-              <span className="block mt-1 text-sm text-gray-500">{link.description}</span>
+              <span className="block mt-1 text-sm text-muted-2">{link.description}</span>
             )}
           </Link>
         ))}

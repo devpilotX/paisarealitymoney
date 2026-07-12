@@ -14,8 +14,8 @@ function UnsubContent(): React.ReactElement {
       .catch(() => setStatus('invalid'));
   }, [token]);
 
-  if (status === 'loading') return <p className="text-gray-500">Processing...</p>;
-  if (status === 'invalid') return <p className="text-red-600">Invalid or expired unsubscribe link.</p>;
+  if (status === 'loading') return <p className="text-muted-2">Processing...</p>;
+  if (status === 'invalid') return <p className="text-brand-red">Invalid or expired unsubscribe link.</p>;
   return <p className="text-green-700">You have been unsubscribed. You will no longer receive newsletter emails from Paisa Reality.</p>;
 }
 
@@ -23,7 +23,7 @@ export default function UnsubscribePage(): React.ReactElement {
   return (
     <div className="container-main py-12 max-w-md mx-auto text-center">
       <h1 className="heading-1 mb-6">Unsubscribe</h1>
-      <Suspense fallback={<p className="text-gray-500">Loading...</p>}>
+      <Suspense fallback={<p className="text-muted-2">Loading...</p>}>
         <UnsubContent />
       </Suspense>
     </div>

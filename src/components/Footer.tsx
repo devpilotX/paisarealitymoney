@@ -46,15 +46,15 @@ const LEGAL_LINKS: FooterLink[] = [
 function FooterColumn({ title, links }: { title: string; links: FooterLink[] }): React.ReactElement {
   return (
     <div>
-      <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+      <h3 className="font-sans text-xs font-semibold text-paper uppercase tracking-[0.13em] mb-4">
         {title}
       </h3>
-      <ul className="space-y-2">
+      <ul className="space-y-2.5">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
-              className="text-sm text-gray-600 no-underline transition-colors duration-200 hover:text-primary"
+              className="text-sm text-paper/60 no-underline transition-colors duration-200 hover:text-brand-yellow"
             >
               {link.label}
             </Link>
@@ -69,7 +69,7 @@ export default function Footer(): React.ReactElement {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-200">
+    <footer className="bg-navy-deep text-paper/70">
       <div className="container-main py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <FooterColumn title="About" links={ABOUT_LINKS} />
@@ -78,13 +78,13 @@ export default function Footer(): React.ReactElement {
           <FooterColumn title="Legal" links={LEGAL_LINKS} />
         </div>
 
-        <div className="mt-10 pt-6 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div className="mt-10 pt-6 border-t border-paper/15 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">Subscribe to our newsletter</h3>
-            <p className="text-xs text-gray-500 mb-3">Get weekly updates on prices, tools, and financial tips.</p>
+            <h3 className="font-sans text-sm font-semibold text-paper mb-2">Subscribe to our newsletter</h3>
+            <p className="text-xs text-paper/50 mb-3">Get weekly updates on prices, tools, and financial tips.</p>
             <SubscribeForm />
           </div>
-          <p className="text-xs text-gray-500 leading-relaxed">
+          <p className="text-xs text-paper/45 leading-relaxed">
             Disclaimer: Paisa Reality is an informational website. We are not financial advisors.
             Prices shown are indicative and sourced from public data. Government scheme details are
             sourced from official websites. Always verify information with official sources before
@@ -92,13 +92,12 @@ export default function Footer(): React.ReactElement {
           </p>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-primary">Paisa</span>
-            <span className="text-lg font-bold text-gray-900">Reality</span>
-          </div>
-          <p className="text-sm text-gray-500">
-            &copy; {currentYear} Paisa Reality. All rights reserved.
+        <div className="mt-6 pt-6 border-t border-paper/15 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="font-serif text-lg font-bold text-paper">
+            Paisa<span className="text-brand-yellow">Reality</span>
+          </span>
+          <p className="text-xs text-paper/45">
+            &copy; {currentYear} Paisa Reality. Built in India, for Indian families.
           </p>
         </div>
       </div>

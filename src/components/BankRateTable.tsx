@@ -53,7 +53,7 @@ export default function BankRateTable({
   }, [rates, sortField, sortOrder]);
 
   const SortArrow = ({ field }: { field: SortField }): React.ReactElement => (
-    <span className={`ml-1 text-xs ${sortField === field ? 'text-primary' : 'text-gray-400'}`}>
+    <span className={`ml-1 text-xs ${sortField === field ? 'text-navy' : 'text-muted-2'}`}>
       {sortField === field ? (sortOrder === 'asc' ? '\u25B2' : '\u25BC') : '\u25BC'}
     </span>
   );
@@ -69,34 +69,34 @@ export default function BankRateTable({
     <div className="mb-8">
       <h2 className="heading-3 mb-4">{title}</h2>
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-white rounded-lg border border-gray-200">
+        <table className="w-full border-collapse bg-paper rounded-[5px] border border-line overflow-hidden">
           <thead>
-            <tr className="bg-gray-50 text-left text-sm font-semibold text-gray-700">
-              <th className="px-4 py-3 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('bankName')}>
+            <tr className="bg-paper-2 text-left text-sm font-semibold text-navy">
+              <th className="px-4 py-3 cursor-pointer hover:bg-paper-3" onClick={() => handleSort('bankName')}>
                 Bank <SortArrow field="bankName" />
               </th>
               <th className="px-4 py-3">Type</th>
               {showTenure && <th className="px-4 py-3">Tenure</th>}
-              <th className="px-4 py-3 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('generalRate')}>
+              <th className="px-4 py-3 cursor-pointer hover:bg-paper-3" onClick={() => handleSort('generalRate')}>
                 {rateLabel} <SortArrow field="generalRate" />
               </th>
-              <th className="px-4 py-3 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('seniorCitizenRate')}>
+              <th className="px-4 py-3 cursor-pointer hover:bg-paper-3" onClick={() => handleSort('seniorCitizenRate')}>
                 Senior Citizen <SortArrow field="seniorCitizenRate" />
               </th>
             </tr>
           </thead>
           <tbody>
             {sortedRates.map((rate, index) => (
-              <tr key={`${rate.bankSlug}-${rate.tenure}-${index}`} className="border-t border-gray-100 hover:bg-gray-50 text-sm">
+              <tr key={`${rate.bankSlug}-${rate.tenure}-${index}`} className="border-t border-line/60 hover:bg-paper-2 text-sm">
                 <td className="px-4 py-3">
-                  <Link href={`/bank-rates/${rate.bankSlug}`} className="text-primary hover:underline font-medium">
+                  <Link href={`/bank-rates/${rate.bankSlug}`} className="text-navy hover:text-brand-red font-medium">
                     {rate.bankName}
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-gray-600">{bankTypeLabel(rate.bankType)}</td>
-                {showTenure && <td className="px-4 py-3 text-gray-600">{rate.tenure ?? '-'}</td>}
-                <td className="px-4 py-3 font-semibold text-gray-900">{Number(rate.generalRate).toFixed(2)}%</td>
-                <td className="px-4 py-3 text-gray-700">
+                <td className="px-4 py-3 text-muted">{bankTypeLabel(rate.bankType)}</td>
+                {showTenure && <td className="px-4 py-3 text-muted">{rate.tenure ?? '-'}</td>}
+                <td className="px-4 py-3 font-bold text-navy">{Number(rate.generalRate).toFixed(2)}%</td>
+                <td className="px-4 py-3 text-ink">
                   {rate.seniorCitizenRate ? `${Number(rate.seniorCitizenRate).toFixed(2)}%` : '-'}
                 </td>
               </tr>
@@ -105,7 +105,7 @@ export default function BankRateTable({
         </table>
       </div>
       {rates.length === 0 && (
-        <p className="text-center text-gray-500 py-8">No rates available yet.</p>
+        <p className="text-center text-muted-2 py-8">No rates available yet.</p>
       )}
     </div>
   );

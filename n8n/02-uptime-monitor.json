@@ -1,0 +1,88 @@
+{
+  "name": "Paisa Reality - 02 Uptime Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "minutes", "minutesInterval": 15 }
+          ]
+        }
+      },
+      "id": "schedule02",
+      "name": "Every 15 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.APP_URL }}/",
+        "options": {
+          "timeout": 20000,
+          "response": { "response": { "fullResponse": true, "neverError": true } }
+        }
+      },
+      "id": "http02",
+      "name": "Check homepage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond-status",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 200,
+              "operator": { "type": "number", "operation": "notEquals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if02",
+      "name": "Not healthy?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"from\": $env.FROM_EMAIL, \"to\": [$env.ADMIN_EMAIL], \"subject\": \"ALERT: Paisa Reality homepage check failed\", \"html\": \"<p>The homepage returned HTTP status \" + $json.statusCode + \". Please check the site.</p>\" } }}",
+        "options": {}
+      },
+      "id": "alert02",
+      "name": "Email admin (Resend)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1020, 220],
+      "credentials": {
+        "httpHeaderAuth": { "id": "resend-api", "name": "Resend API" }
+      }
+    }
+  ],
+  "connections": {
+    "Every 15 minutes": {
+      "main": [ [ { "node": "Check homepage", "type": "main", "index": 0 } ] ]
+    },
+    "Check homepage": {
+      "main": [ [ { "node": "Not healthy?", "type": "main", "index": 0 } ] ]
+    },
+    "Not healthy?": {
+      "main": [ [ { "node": "Email admin (Resend)", "type": "main", "index": 0 } ], [] ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "pinData": {}
+}

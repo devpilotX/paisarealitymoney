@@ -100,14 +100,14 @@ export default function ShareButton({
 
   return (
     <div className="flex items-center gap-2 py-4">
-      <span className="text-sm font-medium text-gray-600 mr-1">Share:</span>
+      <span className="text-sm font-medium text-muted mr-1">Share:</span>
       {SHARE_OPTIONS.map((option) => (
         <button
           key={option.name}
           type="button"
           onClick={() => handleShareClick(option)}
           className={`inline-flex items-center justify-center w-10 h-10 rounded-full
-                     bg-gray-100 text-gray-700
+                     bg-paper-2 text-navy border border-line
                      transition-all duration-200 ease-in-out
                      ${option.color}
                      min-w-[44px] min-h-[44px]`}
@@ -121,9 +121,9 @@ export default function ShareButton({
         type="button"
         onClick={handleCopyLink}
         className="inline-flex items-center justify-center gap-1.5 px-4 h-10 rounded-full
-                   bg-gray-100 text-gray-700 text-sm font-medium
+                   bg-paper-2 text-navy border border-line text-sm font-medium
                    transition-all duration-200 ease-in-out
-                   hover:bg-gray-800 hover:text-white
+                   hover:bg-navy hover:text-paper
                    min-h-[44px]"
         title="Copy link to clipboard"
         aria-label="Copy link to clipboard"

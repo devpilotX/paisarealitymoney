@@ -1,0 +1,79 @@
+{
+  "name": "Paisa Reality - 04 Scholarship Deadline Digest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "cronExpression", "expression": "0 4 * * 1" } ] }
+      },
+      "id": "schedule04",
+      "name": "Weekly (Monday)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT count(*)::int AS n, COALESCE(string_agg('<li>' || name || ' - closes ' || to_char(deadline, 'DD Mon YYYY') || ' (<a href=\"' || COALESCE(official_url, '#') || '\">official portal</a>)</li>', '' ORDER BY deadline), '') AS items FROM scholarships WHERE active = TRUE AND deadline IS NOT NULL AND deadline BETWEEN CURRENT_DATE AND (CURRENT_DATE + 14)",
+        "options": {}
+      },
+      "id": "pg04",
+      "name": "Closing within 14 days",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [500, 300],
+      "credentials": {
+        "postgres": { "id": "pr-postgres", "name": "Paisa Reality Postgres" }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond-any",
+              "leftValue": "={{ $json.n }}",
+              "rightValue": 0,
+              "operator": { "type": "number", "operation": "gt" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if04",
+      "name": "Any closing?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"from\": $env.FROM_EMAIL, \"to\": [$env.ADMIN_EMAIL], \"subject\": $json.n + \" scholarship(s) closing within 14 days\", \"html\": \"<h2>Scholarships closing soon</h2><ul>\" + $json.items + \"</ul><p>Consider a social post or newsletter mention.</p>\" } }}",
+        "options": {}
+      },
+      "id": "digest04",
+      "name": "Email admin (Resend)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1020, 220],
+      "credentials": {
+        "httpHeaderAuth": { "id": "resend-api", "name": "Resend API" }
+      }
+    }
+  ],
+  "connections": {
+    "Weekly (Monday)": { "main": [ [ { "node": "Closing within 14 days", "type": "main", "index": 0 } ] ] },
+    "Closing within 14 days": { "main": [ [ { "node": "Any closing?", "type": "main", "index": 0 } ] ] },
+    "Any closing?": { "main": [ [ { "node": "Email admin (Resend)", "type": "main", "index": 0 } ], [] ] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "pinData": {}
+}

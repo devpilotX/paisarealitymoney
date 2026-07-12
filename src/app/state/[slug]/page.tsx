@@ -102,7 +102,7 @@ export default async function StateSchemesPage({ params }: PageProps): Promise<R
           ))}
         </div>
       ) : (
-        <p className="text-center py-12 text-gray-500">No schemes found for this state yet.</p>
+        <p className="text-center py-12 text-muted-2">No schemes found for this state yet.</p>
       )}
 
       <InArticleAd />

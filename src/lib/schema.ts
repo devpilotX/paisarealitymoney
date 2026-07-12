@@ -157,3 +157,33 @@ export function datasetSchema(input: {
     isAccessibleForFree: true,
   };
 }
+
+
+/** MonetaryGrant schema for a scholarship / financial-aid listing. Keep truthful. */
+export function scholarshipSchema(input: {
+  name: string;
+  description: string;
+  path: string;
+  provider?: string | null;
+  amount?: number | null;
+  officialUrl?: string | null;
+}): Json {
+  const schema: Json = {
+    '@context': 'https://schema.org',
+    '@type': 'MonetaryGrant',
+    name: input.name,
+    description: input.description,
+    url: absoluteUrl(input.path),
+    funder: {
+      '@type': 'Organization',
+      name: input.provider || SITE_NAME,
+    },
+    areaServed: { '@type': 'Country', name: 'India' },
+    inLanguage: 'en-IN',
+  };
+  if (input.amount != null && input.amount > 0) {
+    schema.amount = { '@type': 'MonetaryAmount', currency: 'INR', value: input.amount };
+  }
+  if (input.officialUrl) schema.sameAs = input.officialUrl;
+  return schema;
+}

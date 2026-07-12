@@ -42,7 +42,7 @@ export default async function RatesAsOf({ rateType, bankSlug, className = '' }: 
   if (!asOf) return null;
 
   return (
-    <p className={`text-xs text-gray-500 ${className}`}>
+    <p className={`text-xs text-muted-2 ${className}`}>
       Rates as of {formatDate(asOf)}. Banks revise rates without notice, so always verify on the bank&apos;s official
       website or branch before you book a deposit or apply for a loan.
     </p>

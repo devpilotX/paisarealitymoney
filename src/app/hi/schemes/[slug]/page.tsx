@@ -50,11 +50,11 @@ export default async function HindiSchemeDetailPage({ params }: PageProps): Prom
       <Breadcrumb items={[{ label: 'हिंदी', href: '/hi' }, { label: 'योजनाएं', href: '/schemes' }, { label: scheme.name_hi ?? scheme.name }]} />
       <article className="max-w-4xl">
         <h1 className="heading-1 mb-2">{scheme.name_hi ?? scheme.name}</h1>
-        {scheme.name_hi && <p className="text-lg text-gray-500 mb-4">{scheme.name}</p>}
+        {scheme.name_hi && <p className="text-lg text-muted-2 mb-4">{scheme.name}</p>}
         <AdBanner format="horizontal" />
         <div className="bg-primary-50 rounded-lg p-6 my-6">
           <h2 className="text-lg font-semibold mb-2">प्रमुख लाभ</h2>
-          <p className="text-base text-gray-800">{scheme.benefit_summary}</p>
+          <p className="text-base text-ink">{scheme.benefit_summary}</p>
           {scheme.benefit_amount_max && <p className="text-xl font-bold text-primary mt-2">₹{formatNumber(scheme.benefit_amount_max)} तक</p>}
         </div>
         <section className="my-8">

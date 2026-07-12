@@ -1,0 +1,79 @@
+{
+  "name": "Paisa Reality - 06 Stale Data Watchdog",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "cronExpression", "expression": "30 3 * * *" } ] }
+      },
+      "id": "schedule06",
+      "name": "Every day",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT (CURRENT_DATE - MAX(price_date)::date) AS age_days, MAX(price_date)::text AS latest FROM gold_prices",
+        "options": {}
+      },
+      "id": "pg06",
+      "name": "Latest price date",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [500, 300],
+      "credentials": {
+        "postgres": { "id": "pr-postgres", "name": "Paisa Reality Postgres" }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond-stale",
+              "leftValue": "={{ $json.age_days }}",
+              "rightValue": 2,
+              "operator": { "type": "number", "operation": "gt" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if06",
+      "name": "Stale?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"from\": $env.FROM_EMAIL, \"to\": [$env.ADMIN_EMAIL], \"subject\": \"ALERT: Paisa Reality price data looks stale\", \"html\": \"<p>Latest gold price date is \" + $json.latest + \" (\" + $json.age_days + \" days old). The daily update may have failed.</p>\" } }}",
+        "options": {}
+      },
+      "id": "alert06",
+      "name": "Email admin (Resend)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1020, 220],
+      "credentials": {
+        "httpHeaderAuth": { "id": "resend-api", "name": "Resend API" }
+      }
+    }
+  ],
+  "connections": {
+    "Every day": { "main": [ [ { "node": "Latest price date", "type": "main", "index": 0 } ] ] },
+    "Latest price date": { "main": [ [ { "node": "Stale?", "type": "main", "index": 0 } ] ] },
+    "Stale?": { "main": [ [ { "node": "Email admin (Resend)", "type": "main", "index": 0 } ], [] ] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "pinData": {}
+}

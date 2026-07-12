@@ -23,7 +23,7 @@ const PLOT_H = H - PAD_T - PAD_B;
 
 export default function FanChart({ bands, retirementAge }: FanChartProps): React.ReactElement {
   if (bands.length < 2) {
-    return <div className="text-sm text-gray-400 py-8 text-center">Adjust inputs to see the projection.</div>;
+    return <div className="text-sm text-muted-2 py-8 text-center">Adjust inputs to see the projection.</div>;
   }
 
   const minAge = bands[0]!.age;

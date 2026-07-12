@@ -73,7 +73,7 @@ export default async function HindiGoldCityPage({ params }: PageProps): Promise<
         <h2 className="heading-3 mb-4">अन्य शहरों में सोने का भाव</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {otherCities.map((c) => (
-            <Link key={c.slug} href={`/hi/gold-rate/${c.slug}`} className="p-3 rounded-lg border border-gray-200 text-center no-underline hover:border-primary transition-colors">
+            <Link key={c.slug} href={`/hi/gold-rate/${c.slug}`} className="p-3 rounded-lg border border-line text-center no-underline hover:border-navy transition-colors">
               <span className="text-sm font-medium text-primary">{c.nameHi}</span>
             </Link>
           ))}

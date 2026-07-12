@@ -25,21 +25,21 @@ import {
 
 function StatCard({ label, value, sub, tone = 'default' }: { label: string; value: string; sub?: string; tone?: 'default' | 'good' | 'warn' | 'bad' }): React.ReactElement {
   const toneClass =
-    tone === 'good' ? 'text-green-700' : tone === 'warn' ? 'text-amber-700' : tone === 'bad' ? 'text-red-700' : 'text-primary';
+    tone === 'good' ? 'text-green-700' : tone === 'warn' ? 'text-brown' : tone === 'bad' ? 'text-brand-red' : 'text-navy';
   return (
     <div className="card">
-      <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">{label}</p>
       <p className={`text-2xl font-bold ${toneClass}`}>{value}</p>
-      {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
+      {sub && <p className="text-xs text-muted-2 mt-1">{sub}</p>}
     </div>
   );
 }
 
 function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }): React.ReactElement {
   return (
-    <div className={`flex justify-between gap-4 text-sm py-1 ${strong ? 'font-semibold border-t border-gray-200 pt-2 mt-1' : ''}`}>
-      <span className="text-gray-600">{label}</span>
-      <span className={strong ? 'text-gray-900' : 'font-medium text-gray-900'}>{value}</span>
+    <div className={`flex justify-between gap-4 text-sm py-1 ${strong ? 'font-semibold border-t border-line pt-2 mt-1' : ''}`}>
+      <span className="text-muted">{label}</span>
+      <span className={strong ? 'text-navy' : 'font-medium text-navy'}>{value}</span>
     </div>
   );
 }
@@ -155,9 +155,9 @@ export default function RetirementOptimizerClient(): React.ReactElement {
 
       {/* Advanced assumptions */}
       <details className="card mt-4">
-        <summary className="cursor-pointer font-semibold text-gray-900 select-none">Advanced assumptions (returns, inflation, glide path, EPF &amp; NPS)</summary>
+        <summary className="cursor-pointer font-semibold text-navy select-none">Advanced assumptions (returns, inflation, glide path, EPF &amp; NPS)</summary>
         <div className="mt-5 space-y-5">
-          <p className="text-xs text-gray-500">Every figure below is an editable assumption, not a hidden constant. Indian defaults are pre-filled.</p>
+          <p className="text-xs text-muted-2">Every figure below is an editable assumption, not a hidden constant. Indian defaults are pre-filled.</p>
 
           <CalcSlider id="genInfl" label="General inflation" value={inputs.generalInflationPct} onChange={(v) => set('generalInflationPct', v)} min={0} max={12} step={0.5} suffix="%" />
           <CalcSlider id="medInfl" label="Medical inflation" value={inputs.medicalInflationPct} onChange={(v) => set('medicalInflationPct', v)} min={0} max={18} step={0.5} suffix="%" />
@@ -228,7 +228,7 @@ export default function RetirementOptimizerClient(): React.ReactElement {
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
           <h2 className="heading-2">Your retirement outlook</h2>
           {computing && (
-            <span className="text-sm text-gray-500 inline-flex items-center gap-2">
+            <span className="text-sm text-muted-2 inline-flex items-center gap-2">
               <span className="inline-block w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" aria-hidden="true" />
               Simulating {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} scenarios…
             </span>
@@ -242,16 +242,16 @@ export default function RetirementOptimizerClient(): React.ReactElement {
               <div className="card">
                 <SuccessGauge probability={success} target={target} label={`Chance your corpus lasts to age ${inputs.endAge}`} />
               </div>
-              <div className={`card ${onTrack ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
-                <h3 className="text-base font-semibold mb-2">{onTrack ? '✅ You are on track' : '⚠️ Likely shortfall'}</h3>
-                <p className="text-sm text-gray-700">
+              <div className={`card ${onTrack ? 'bg-green-50 border-green-200' : 'bg-brand-yellow-soft/30 border-brand-yellow/50'}`}>
+                <h3 className="text-base font-semibold mb-2">{onTrack ? 'You are on track' : 'Likely shortfall'}</h3>
+                <p className="text-sm text-ink">
                   {onTrack ? (
                     <>At ₹{formatCompactINR(inputs.monthlySIP)}/month, your plan succeeds in <strong>{Math.round(success * 100)}%</strong> of simulated futures. at or above your {inputs.desiredSuccessProbabilityPct}% target. You could consider retiring earlier or spending a little more.</>
                   ) : (
                     <>At ₹{formatCompactINR(inputs.monthlySIP)}/month, your plan succeeds in only <strong>{Math.round(success * 100)}%</strong> of futures, below your {inputs.desiredSuccessProbabilityPct}% target. Raise your SIP to <strong>{formatCompactINR(analysis.requiredMonthlySIP.value)}/month</strong>, trim retirement spending toward <strong>{formatCompactINR(analysis.safeMonthlyWithdrawalToday)}/month</strong>, or delay retirement.</>
                   )}
                 </p>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-muted-2 mt-2">
                   Why: success depends on whether early-retirement market crashes (sequence-of-returns risk) drain the corpus before it can recover. which a single “average return” hides.
                 </p>
               </div>
@@ -268,7 +268,7 @@ export default function RetirementOptimizerClient(): React.ReactElement {
             {/* Fan chart */}
             <div className="card mb-6">
               <h3 className="text-base font-semibold mb-1">Projected corpus over time</h3>
-              <p className="text-xs text-gray-500 mb-3">
+              <p className="text-xs text-muted-2 mb-3">
                 Median (dark line) with 25th to 75th (inner) and 10th to 90th (outer) percentile bands across {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} simulations. The fan widens because returns are uncertain. the spread is the real risk.
               </p>
               <FanChart bands={analysis.base.fanChart} retirementAge={inputs.retirementAge} />
@@ -279,10 +279,10 @@ export default function RetirementOptimizerClient(): React.ReactElement {
             {/* Sensitivity */}
             <div className="card my-6 overflow-x-auto">
               <h3 className="text-base font-semibold mb-1">Sensitivity. what moves the needle</h3>
-              <p className="text-xs text-gray-500 mb-3">How your {Math.round(success * 100)}% success probability changes if one assumption is wrong.</p>
+              <p className="text-xs text-muted-2 mb-3">How your {Math.round(success * 100)}% success probability changes if one assumption is wrong.</p>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-gray-500 border-b border-gray-200">
+                  <tr className="text-left text-muted-2 border-b border-line">
                     <th className="py-2 font-medium">Scenario</th>
                     <th className="py-2 font-medium text-right">Success %</th>
                     <th className="py-2 font-medium text-right">Change</th>
@@ -290,10 +290,10 @@ export default function RetirementOptimizerClient(): React.ReactElement {
                 </thead>
                 <tbody>
                   {analysis.sensitivity.map((row) => (
-                    <tr key={row.label} className="border-b border-gray-100">
-                      <td className="py-2 text-gray-700">{row.label}</td>
+                    <tr key={row.label} className="border-b border-line/60">
+                      <td className="py-2 text-ink">{row.label}</td>
                       <td className="py-2 text-right font-medium">{Math.round(row.successProbability * 100)}%</td>
-                      <td className={`py-2 text-right font-medium ${row.deltaVsBase > 0.5 ? 'text-green-700' : row.deltaVsBase < -0.5 ? 'text-red-700' : 'text-gray-400'}`}>
+                      <td className={`py-2 text-right font-medium ${row.deltaVsBase > 0.5 ? 'text-green-700' : row.deltaVsBase < -0.5 ? 'text-red-700' : 'text-muted-2'}`}>
                         {row.deltaVsBase > 0 ? '+' : ''}{row.deltaVsBase.toFixed(0)} pp
                       </td>
                     </tr>
@@ -307,7 +307,7 @@ export default function RetirementOptimizerClient(): React.ReactElement {
               <button
                 type="button"
                 onClick={() => setShowWorking((s) => !s)}
-                className="w-full flex items-center justify-between text-left font-semibold text-gray-900 min-h-[44px]"
+                className="w-full flex items-center justify-between text-left font-semibold text-navy min-h-[44px]"
                 aria-expanded={showWorking}
               >
                 <span>Show the full calculation</span>
@@ -317,8 +317,8 @@ export default function RetirementOptimizerClient(): React.ReactElement {
               {showWorking && (
                 <div className="mt-4 space-y-5 text-sm">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">1. Accumulation (today → retirement)</h4>
-                    <p className="text-gray-600 mb-2">
+                    <h4 className="font-semibold text-navy mb-1">1. Accumulation (today → retirement)</h4>
+                    <p className="text-muted mb-2">
                       {analysis.yearsToRetirement} years of a ₹{formatCompactINR(inputs.monthlySIP)}/month SIP, stepped up {inputs.annualStepUpPct}%/yr, plus your ₹{formatCompactINR(inputs.currentCorpus)} starting corpus, compounded at each year&apos;s glide-path return. Equity moves from {Math.round(equityFractionAtAge(inputs, inputs.currentAge) * 100)}% today to {Math.round(equityFractionAtAge(inputs, inputs.retirementAge) * 100)}% at retirement.
                     </p>
                     <Row label="Expected (deterministic) corpus at retirement" value={formatINR(Math.round(working.det))} />
@@ -328,16 +328,16 @@ export default function RetirementOptimizerClient(): React.ReactElement {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">2. Spending in retirement</h4>
-                    <p className="text-gray-600 mb-2">
+                    <h4 className="font-semibold text-navy mb-1">2. Spending in retirement</h4>
+                    <p className="text-muted mb-2">
                       Today&apos;s ₹{formatCompactINR(inputs.currentMonthlyExpense)}/month becomes ₹{formatCompactINR(working.firstWithdrawal / 12)}/month at age {inputs.retirementAge} after inflation ({inputs.generalInflationPct}% general, {inputs.medicalInflationPct}% on the {inputs.medicalExpenseSharePct}% medical share). Each later year is inflated again.
                     </p>
                     <Row label="First-year withdrawal (nominal, at retirement)" value={formatINR(Math.round(working.firstWithdrawal))} />
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">3. Required corpus &amp; the sequence-risk buffer</h4>
-                    <p className="text-gray-600 mb-2">
+                    <h4 className="font-semibold text-navy mb-1">3. Required corpus &amp; the sequence-risk buffer</h4>
+                    <p className="text-muted mb-2">
                       With zero volatility, the present value of all future withdrawals (discounted at a conservative {working.postReturnApprox.toFixed(1)}%) is the bare minimum. The Monte Carlo adds a buffer because a crash in your first retirement years is far more damaging than the same crash later.
                     </p>
                     <Row label="Deterministic minimum (closed-form PV)" value={formatINR(Math.round(working.detRequired))} />
@@ -345,11 +345,11 @@ export default function RetirementOptimizerClient(): React.ReactElement {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">4. Corpus percentiles by age</h4>
+                    <h4 className="font-semibold text-navy mb-1">4. Corpus percentiles by age</h4>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
                         <thead>
-                          <tr className="text-left text-gray-500 border-b border-gray-200">
+                          <tr className="text-left text-muted-2 border-b border-line">
                             <th className="py-1.5 font-medium">Age</th>
                             <th className="py-1.5 font-medium text-right">10th %ile</th>
                             <th className="py-1.5 font-medium text-right">Median</th>
@@ -358,8 +358,8 @@ export default function RetirementOptimizerClient(): React.ReactElement {
                         </thead>
                         <tbody>
                           {decadeBands.map((b) => (
-                            <tr key={b.age} className="border-b border-gray-100">
-                              <td className="py-1.5 text-gray-700">{b.age}{b.age === inputs.retirementAge ? ' (retire)' : ''}</td>
+                            <tr key={b.age} className="border-b border-line/60">
+                              <td className="py-1.5 text-ink">{b.age}{b.age === inputs.retirementAge ? ' (retire)' : ''}</td>
                               <td className="py-1.5 text-right">{formatCompactINR(b.p10)}</td>
                               <td className="py-1.5 text-right font-medium">{formatCompactINR(b.p50)}</td>
                               <td className="py-1.5 text-right">{formatCompactINR(b.p90)}</td>
@@ -370,7 +370,7 @@ export default function RetirementOptimizerClient(): React.ReactElement {
                     </div>
                   </div>
 
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-2">
                     Model: nominal returns, annual steps with an exact monthly-SIP factor, seeded RNG (reproducible), withdrawals at the start of each year. Returns are drawn {inputs.returnModel === 'bootstrap' ? `by resampling historical years (dataset as of ${HISTORICAL_RETURNS_AS_OF})` : 'from a normal distribution per asset class'}. EPF/NPS, when enabled, grow at their fixed expected rates; NPS applies the 60% lump-sum / 40% annuity rule.
                   </p>
                 </div>

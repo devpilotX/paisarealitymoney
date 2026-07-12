@@ -34,18 +34,18 @@ export default function LoginPage(): React.ReactElement {
         <h1 className="heading-1 text-center mb-8">Log In</h1>
         <form onSubmit={handleSubmit} className="card space-y-5">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-ink mb-1">Email</label>
             <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" placeholder="you@example.com" required />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-ink mb-1">Password</label>
             <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" placeholder="Min 8 characters" required minLength={8} />
           </div>
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && <p className="text-brand-red text-sm">{error}</p>}
           <button type="submit" disabled={loading} className="btn-primary w-full">
             {loading ? 'Logging in...' : 'Log In'}
           </button>
-          <p className="text-sm text-center text-gray-500">
+          <p className="text-sm text-center text-muted-2">
             Do not have an account? <Link href="/signup" className="link-internal">Sign up for free</Link>
           </p>
         </form>

@@ -72,20 +72,20 @@ export default async function LpgPricePage(): Promise<React.ReactElement> {
         <div className="overflow-x-auto my-8">
           <h2 className="heading-2 mb-4">LPG Cylinder Price by State</h2>
           <table className="w-full border-collapse">
-            <thead><tr className="border-b-2 border-gray-200 bg-gray-50">
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">State</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Domestic 14.2 kg</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Commercial 19 kg</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Change</th>
+            <thead><tr className="border-b border-line bg-paper-2">
+              <th className="text-left py-3 px-4 text-sm font-semibold text-navy">State</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Domestic 14.2 kg</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Commercial 19 kg</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Change</th>
             </tr></thead>
             <tbody>
               {prices.map((row) => {
-                const cc = row.change_amount > 0 ? 'text-green-600' : row.change_amount < 0 ? 'text-red-600' : 'text-gray-500';
+                const cc = row.change_amount > 0 ? 'price-up' : row.change_amount < 0 ? 'price-down' : 'price-neutral';
                 return (
-                  <tr key={row.state} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-4 font-medium text-gray-900">{row.state}</td>
+                  <tr key={row.state} className="border-b border-line/60 hover:bg-paper-2 transition-colors">
+                    <td className="py-3 px-4 font-medium text-ink">{row.state}</td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.domestic_14kg)}</td>
-                    <td className="py-3 px-4 text-right font-medium">{row.commercial_19kg != null ? formatINR(row.commercial_19kg) : <span className="text-gray-400" title="No published rate for this state; check your distributor">—</span>}</td>
+                    <td className="py-3 px-4 text-right font-medium">{row.commercial_19kg != null ? formatINR(row.commercial_19kg) : <span className="text-muted-2" title="No published rate for this state; check your distributor">-</span>}</td>
                     <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>
                       {row.change_amount === 0 ? 'No change' : `${row.change_amount > 0 ? '+' : ''}${formatINR(row.change_amount)}`}
                     </td>

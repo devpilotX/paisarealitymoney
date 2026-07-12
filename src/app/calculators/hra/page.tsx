@@ -71,11 +71,11 @@ export default function HRACalculatorPage(): React.ReactElement {
                 { label: 'HRA Exemption (per year)', value: formatINR(result.hraExemption), highlight: true },
                 { label: 'Taxable HRA (per year)', value: formatINR(result.taxableHRA) },
               ]} />
-              <div className="mt-4 bg-gray-50 rounded-lg p-4 text-sm space-y-1">
-                <p className="font-medium text-gray-700">Exemption is the minimum of:</p>
-                <p className="text-gray-600">1. Actual HRA received: {formatINR(result.exemption1)}</p>
-                <p className="text-gray-600">2. {city === 'metro' ? '50%' : '40%'} of Basic+DA: {formatINR(result.exemption2)}</p>
-                <p className="text-gray-600">3. Rent paid minus 10% of Basic+DA: {formatINR(result.exemption3)}</p>
+              <div className="mt-4 bg-paper-2 rounded-lg p-4 text-sm space-y-1">
+                <p className="font-medium text-ink">Exemption is the minimum of:</p>
+                <p className="text-muted">1. Actual HRA received: {formatINR(result.exemption1)}</p>
+                <p className="text-muted">2. {city === 'metro' ? '50%' : '40%'} of Basic+DA: {formatINR(result.exemption2)}</p>
+                <p className="text-muted">3. Rent paid minus 10% of Basic+DA: {formatINR(result.exemption3)}</p>
               </div>
             </>
           }

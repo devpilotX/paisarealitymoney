@@ -30,7 +30,7 @@ const PLOT_H = H - PAD_T - PAD_B;
 export default function PayoffTimelineChart({ series, xLabel = 'Months from today', xTickStepOverride, emptyMessage = 'Add loans and a budget to see the payoff timeline.' }: PayoffTimelineChartProps): React.ReactElement {
   const active = series.filter((s) => s.timeline.length > 1);
   if (active.length === 0) {
-    return <div className="text-sm text-gray-400 py-8 text-center">{emptyMessage}</div>;
+    return <div className="text-sm text-muted-2 py-8 text-center">{emptyMessage}</div>;
   }
 
   let maxMonths = 0;
@@ -78,7 +78,7 @@ export default function PayoffTimelineChart({ series, xLabel = 'Months from toda
       </svg>
       <div className="flex flex-wrap gap-4 justify-center mt-2">
         {active.map((s) => (
-          <span key={s.label} className="inline-flex items-center gap-1.5 text-xs text-gray-600">
+          <span key={s.label} className="inline-flex items-center gap-1.5 text-xs text-muted">
             <span className="inline-block w-3 h-1.5 rounded" style={{ backgroundColor: s.color }} aria-hidden="true" />
             {s.label}
           </span>

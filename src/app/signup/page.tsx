@@ -35,25 +35,25 @@ export default function SignupPage(): React.ReactElement {
         <h1 className="heading-1 text-center mb-8">Create Account</h1>
         <form onSubmit={handleSubmit} className="card space-y-5">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-ink mb-1">Full Name</label>
             <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} className="input-field" placeholder="Your name" required minLength={2} />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-ink mb-1">Email</label>
             <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" placeholder="you@example.com" required />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-ink mb-1">Password</label>
             <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" placeholder="Min 8 characters" required minLength={8} />
           </div>
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && <p className="text-brand-red text-sm">{error}</p>}
           <button type="submit" disabled={loading} className="btn-primary w-full">
             {loading ? 'Creating account...' : 'Create Free Account'}
           </button>
-          <p className="text-sm text-center text-gray-500">
+          <p className="text-sm text-center text-muted-2">
             Already have an account? <Link href="/login" className="link-internal">Log in</Link>
           </p>
-          <p className="text-xs text-center text-gray-400">
+          <p className="text-xs text-center text-muted-2">
             By signing up, you agree to our <Link href="/terms" className="link-internal">Terms</Link> and <Link href="/privacy" className="link-internal">Privacy Policy</Link>.
           </p>
         </form>

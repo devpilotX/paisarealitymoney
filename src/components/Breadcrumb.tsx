@@ -41,11 +41,11 @@ export default function Breadcrumb({ items }: BreadcrumbProps): React.ReactEleme
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <nav aria-label="Breadcrumb" className="py-3">
-        <ol className="flex flex-wrap items-center gap-1 text-sm text-gray-500">
+        <ol className="flex flex-wrap items-center gap-1 text-sm text-muted-2">
           <li>
             <Link
               href="/"
-              className="no-underline text-gray-500 hover:text-primary transition-colors duration-200"
+              className="no-underline text-muted-2 hover:text-brand-red transition-colors duration-200"
             >
               Home
             </Link>
@@ -54,15 +54,15 @@ export default function Breadcrumb({ items }: BreadcrumbProps): React.ReactEleme
             const isLast = index === items.length - 1;
             return (
               <li key={item.label} className="flex items-center gap-1">
-                <span className="text-gray-400" aria-hidden="true">
+                <span className="text-muted-2" aria-hidden="true">
                   /
                 </span>
                 {isLast || !item.href ? (
-                  <span className="text-gray-900 font-medium">{item.label}</span>
+                  <span className="text-navy font-medium">{item.label}</span>
                 ) : (
                   <Link
                     href={item.href}
-                    className="no-underline text-gray-500 hover:text-primary transition-colors duration-200"
+                    className="no-underline text-muted-2 hover:text-brand-red transition-colors duration-200"
                   >
                     {item.label}
                   </Link>

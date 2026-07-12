@@ -30,7 +30,7 @@ function ResetForm(): React.ReactElement {
 
   if (!token) return (
     <div className="text-center">
-      <p className="text-red-600">Invalid reset link. Please request a new one from the <Link href="/forgot-password" className="link-internal">forgot password</Link> page.</p>
+      <p className="text-brand-red">Invalid reset link. Please request a new one from the <Link href="/forgot-password" className="link-internal">forgot password</Link> page.</p>
     </div>
   );
 
@@ -44,14 +44,14 @@ function ResetForm(): React.ReactElement {
   return (
     <form onSubmit={handleSubmit} className="card space-y-5">
       <div>
-        <label htmlFor="pw" className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+        <label htmlFor="pw" className="block text-sm font-medium text-ink mb-1">New Password</label>
         <input id="pw" type="password" value={password} onChange={e => setPassword(e.target.value)} className="input-field" placeholder="Min 8 characters" required minLength={8} />
       </div>
       <div>
-        <label htmlFor="cpw" className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+        <label htmlFor="cpw" className="block text-sm font-medium text-ink mb-1">Confirm Password</label>
         <input id="cpw" type="password" value={confirm} onChange={e => setConfirm(e.target.value)} className="input-field" required minLength={8} />
       </div>
-      {msg && <p className="text-red-600 text-sm">{msg}</p>}
+      {msg && <p className="text-brand-red text-sm">{msg}</p>}
       <button type="submit" disabled={loading} className="btn-primary w-full">
         {loading ? 'Resetting...' : 'Reset Password'}
       </button>
@@ -65,7 +65,7 @@ export default function ResetPasswordPage(): React.ReactElement {
       <Breadcrumb items={[{ label: 'Reset Password' }]} />
       <div className="max-w-md mx-auto">
         <h1 className="heading-1 text-center mb-8">Reset Password</h1>
-        <Suspense fallback={<p className="text-center text-gray-500">Loading...</p>}>
+        <Suspense fallback={<p className="text-center text-muted-2">Loading...</p>}>
           <ResetForm />
         </Suspense>
       </div>

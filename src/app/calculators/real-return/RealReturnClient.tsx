@@ -15,11 +15,11 @@ import {
 } from '@/lib/real-return';
 
 const BAND_STYLES: Record<VerdictBand, { box: string; badge: string }> = {
-  invalid: { box: 'bg-gray-50 border-gray-300', badge: 'bg-gray-200 text-gray-700' },
+  invalid: { box: 'bg-paper-2 border-line', badge: 'bg-line text-ink' },
   loss: { box: 'bg-red-50 border-red-300', badge: 'bg-red-600 text-white' },
   'below-savings': { box: 'bg-red-50 border-red-300', badge: 'bg-red-600 text-white' },
   'below-inflation': { box: 'bg-red-50 border-red-300', badge: 'bg-red-500 text-white' },
-  'below-ppf': { box: 'bg-orange-50 border-orange-300', badge: 'bg-orange-500 text-white' },
+  'below-ppf': { box: 'bg-brand-red/5 border-brand-red/40', badge: 'bg-brand-red text-paper' },
   moderate: { box: 'bg-yellow-50 border-yellow-300', badge: 'bg-yellow-500 text-white' },
   competitive: { box: 'bg-green-50 border-green-300', badge: 'bg-green-600 text-white' },
   'too-good': { box: 'bg-red-50 border-red-400', badge: 'bg-red-700 text-white' },
@@ -87,18 +87,18 @@ export default function RealReturnClient(): React.ReactElement {
 
         {inputs.mode === 'moneyback' && (
           <div>
-            <p className="text-sm font-medium text-gray-700 mb-2">Payouts along the way</p>
+            <p className="text-sm font-medium text-ink mb-2">Payouts along the way</p>
             {inputs.moneybacks.length === 0 && (
-              <p className="text-xs text-gray-500 mb-2">Add each money-back payout the plan promises (for example Rs 1 lakh in year 5).</p>
+              <p className="text-xs text-muted-2 mb-2">Add each money-back payout the plan promises (for example Rs 1 lakh in year 5).</p>
             )}
             <div className="space-y-2">
               {inputs.moneybacks.map((mb, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <label className="text-xs text-gray-500">
+                  <label className="text-xs text-muted-2">
                     Year
                     <input type="number" min={1} max={inputs.maturityYear} value={mb.year} onChange={(e) => setMoneyback(i, { year: Number(e.target.value) })} className="input-field mt-0.5 w-20" />
                   </label>
-                  <label className="text-xs text-gray-500 flex-1">
+                  <label className="text-xs text-muted-2 flex-1">
                     Amount (₹)
                     <input type="number" min={0} step={10000} value={mb.amount} onChange={(e) => setMoneyback(i, { amount: Number(e.target.value) })} className="input-field mt-0.5 w-full" />
                   </label>
@@ -121,10 +121,10 @@ export default function RealReturnClient(): React.ReactElement {
       <div className={`rounded-xl border-2 px-5 py-5 mt-8 ${style.box}`}>
         <div className="flex flex-wrap items-center gap-3 mb-2">
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${style.badge}`}>REAL ANNUAL RETURN</span>
-          <span className="text-3xl font-extrabold text-gray-900">{a.irrPct !== null ? `${a.irrPct}%` : '—'}</span>
+          <span className="text-3xl font-extrabold text-navy">{a.irrPct !== null ? `${a.irrPct}%` : '—'}</span>
         </div>
-        <h2 className="text-lg font-bold text-gray-900 mb-1">{a.verdict.title}</h2>
-        <p className="text-sm text-gray-700">{a.verdict.message}</p>
+        <h2 className="text-lg font-bold text-navy mb-1">{a.verdict.title}</h2>
+        <p className="text-sm text-ink">{a.verdict.message}</p>
       </div>
 
       {a.valid && (
@@ -132,31 +132,31 @@ export default function RealReturnClient(): React.ReactElement {
           {/* Agent's number vs reality */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">The pitch says</p>
-              <p className="text-2xl font-bold text-gray-900">{a.multiple}x your money</p>
-              <p className="text-xs text-gray-500 mt-1">Pay {formatCompactINR(a.totalPaid)}, receive {formatCompactINR(a.totalReceived)}</p>
+              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">The pitch says</p>
+              <p className="text-2xl font-bold text-navy">{a.multiple}x your money</p>
+              <p className="text-xs text-muted-2 mt-1">Pay {formatCompactINR(a.totalPaid)}, receive {formatCompactINR(a.totalReceived)}</p>
             </div>
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">The math says</p>
+              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">The math says</p>
               <p className="text-2xl font-bold text-primary">{a.irrPct !== null ? `${a.irrPct}% / year` : '—'}</p>
-              <p className="text-xs text-gray-500 mt-1">{a.doublingYears !== null ? `Money doubles every ~${Math.round(a.doublingYears)} years at this rate` : 'This money never doubles'}</p>
+              <p className="text-xs text-muted-2 mt-1">{a.doublingYears !== null ? `Money doubles every ~${Math.round(a.doublingYears)} years at this rate` : 'This money never doubles'}</p>
             </div>
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Buying power today</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCompactINR(a.receivedTodayValue)}</p>
-              <p className="text-xs text-gray-500 mt-1">What everything you receive is worth in today&apos;s rupees (6% inflation)</p>
+              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Buying power today</p>
+              <p className="text-2xl font-bold text-navy">{formatCompactINR(a.receivedTodayValue)}</p>
+              <p className="text-xs text-muted-2 mt-1">What everything you receive is worth in today&apos;s rupees (6% inflation)</p>
             </div>
           </div>
 
           {/* Benchmarks */}
           <div className="card my-6 overflow-x-auto">
             <h3 className="text-base font-semibold mb-1">The same payments, somewhere boring instead</h3>
-            <p className="text-xs text-gray-500 mb-3">
+            <p className="text-xs text-muted-2 mb-3">
               If you invested the exact same amounts on the exact same dates, here is what you would have by year {a.horizonYears}. The offer gives you {formatCompactINR(a.totalReceived)} in total.
             </p>
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-gray-500 border-b border-gray-200">
+                <tr className="text-left text-muted-2 border-b border-line">
                   <th className="py-2 font-medium">Alternative</th>
                   <th className="py-2 font-medium text-right">Rate</th>
                   <th className="py-2 font-medium text-right">Value at year {a.horizonYears}</th>
@@ -167,9 +167,9 @@ export default function RealReturnClient(): React.ReactElement {
                 {a.benchmarks.map((b) => {
                   const diff = b.futureValue - a.totalReceived;
                   return (
-                    <tr key={b.name} className="border-b border-gray-100">
-                      <td className="py-2 text-gray-800"><div className="font-medium">{b.name}</div><div className="text-xs text-gray-400">{b.note}</div></td>
-                      <td className="py-2 text-right text-gray-600">{b.ratePct}%</td>
+                    <tr key={b.name} className="border-b border-line/60">
+                      <td className="py-2 text-ink"><div className="font-medium">{b.name}</div><div className="text-xs text-muted-2">{b.note}</div></td>
+                      <td className="py-2 text-right text-muted">{b.ratePct}%</td>
                       <td className="py-2 text-right font-medium">{formatCompactINR(b.futureValue)}</td>
                       <td className={`py-2 text-right font-medium ${diff > 0 ? 'text-green-700' : 'text-red-600'}`}>
                         {diff > 0 ? `+${formatCompactINR(diff)}` : `−${formatCompactINR(Math.abs(diff))}`}
@@ -179,7 +179,7 @@ export default function RealReturnClient(): React.ReactElement {
                 })}
               </tbody>
             </table>
-            <p className="text-xs text-gray-400 mt-2">Money-back payouts arrive earlier than maturity; the real-return figure above already accounts for that timing.</p>
+            <p className="text-xs text-muted-2 mt-2">Money-back payouts arrive earlier than maturity; the real-return figure above already accounts for that timing.</p>
           </div>
 
           <InArticleAd />
@@ -190,17 +190,17 @@ export default function RealReturnClient(): React.ReactElement {
               <h3 className="text-base font-semibold mb-3 text-red-700">Read this before you sign</h3>
               <ul className="space-y-2 list-disc pl-5">
                 {a.redFlags.map((f, i) => (
-                  <li key={i} className="text-sm text-gray-700">{f}</li>
+                  <li key={i} className="text-sm text-ink">{f}</li>
                 ))}
               </ul>
             </div>
           )}
 
-          <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+          <div className="p-4 bg-paper-2 border border-line rounded-lg">
             <h4 className="text-sm font-semibold mb-2">Assumptions</h4>
             <ul className="space-y-1 list-disc pl-5">
               {a.assumptions.map((s, i) => (
-                <li key={i} className="text-xs text-gray-500">{s}</li>
+                <li key={i} className="text-xs text-muted-2">{s}</li>
               ))}
             </ul>
           </div>

@@ -53,7 +53,7 @@ export default function PriceChart({
     return (
       <div className="card">
         <h3 className="heading-3 mb-4">{title}</h3>
-        <p className="text-center py-8 text-gray-500">Not enough data for chart.</p>
+        <p className="text-center py-8 text-muted-2">Not enough data for chart.</p>
       </div>
     );
   }

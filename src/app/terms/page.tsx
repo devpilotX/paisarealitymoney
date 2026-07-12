@@ -14,7 +14,7 @@ export default function TermsPage(): React.ReactElement {
 
       <article className="max-w-3xl">
         <h1 className="heading-1 mb-4">Terms of Service</h1>
-        <p className="text-body text-sm text-gray-500 mb-6">Last updated: June 2026</p>
+        <p className="text-body text-sm text-muted-2 mb-6">Last updated: June 2026</p>
 
         <div className="space-y-6 text-body">
           <section>

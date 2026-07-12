@@ -226,6 +226,9 @@ export default function AdminPage(): React.ReactElement {
                   <Link href="/admin/emails" className="block px-4 py-3 bg-primary-50 rounded-lg text-sm font-medium text-primary hover:bg-primary-100 transition-colors">
                     Email Center / Newsletter
                   </Link>
+                  <Link href="/admin/ads" className="block px-4 py-3 bg-primary-50 rounded-lg text-sm font-medium text-primary hover:bg-primary-100 transition-colors">
+                    Ad Manager (image / video ads)
+                  </Link>
                   <button onClick={() => void triggerPriceUpdate()} className="block w-full text-left px-4 py-3 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
                     Refresh daily prices
                   </button>

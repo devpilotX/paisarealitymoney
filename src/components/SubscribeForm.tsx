@@ -25,10 +25,10 @@ export default function SubscribeForm(): React.ReactElement {
       <input
         type="email" required value={email} onChange={e => setEmail(e.target.value)}
         placeholder="Your email"
-        className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:outline-none"
+        className="flex-1 px-3 py-2 text-sm rounded-[3px] bg-paper border border-line text-ink focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy"
       />
       <button type="submit" disabled={status === 'loading'}
-        className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-800 disabled:opacity-60">
+        className="px-4 py-2 text-sm font-bold text-paper bg-navy rounded-[3px] hover:bg-navy-deep disabled:opacity-60">
         {status === 'loading' ? '...' : 'Subscribe'}
       </button>
     </form>

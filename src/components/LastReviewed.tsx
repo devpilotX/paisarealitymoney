@@ -14,9 +14,9 @@ interface LastReviewedProps {
  */
 export default function LastReviewed({ date, className = '' }: LastReviewedProps): React.ReactElement {
   return (
-    <p className={`text-xs text-gray-500 ${className}`}>
+    <p className={`text-xs text-muted-2 ${className}`}>
       Last reviewed on {formatDate(date)} by the Paisa Reality editorial team ·{' '}
-      <Link href="/editorial-policy" className="underline hover:text-gray-700">
+      <Link href="/editorial-policy" className="underline hover:text-brand-red">
         Editorial policy
       </Link>
     </p>

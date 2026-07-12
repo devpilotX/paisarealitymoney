@@ -17,8 +17,8 @@ import {
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }): React.ReactElement {
   return (
     <label className="flex items-center gap-3 cursor-pointer min-h-[40px]">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="w-5 h-5 rounded border-gray-300 accent-primary" />
-      <span className="text-sm text-gray-800">{label}</span>
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="w-5 h-5 rounded border-line accent-primary" />
+      <span className="text-sm text-ink">{label}</span>
     </label>
   );
 }
@@ -27,19 +27,19 @@ function SchemeCard({ e }: { e: EligibleScheme }): React.ReactElement {
   const kindBadge = e.scheme.benefitKind === 'recurring'
     ? { label: `${formatINR(e.annualValue)}/yr`, cls: 'bg-green-100 text-green-800' }
     : e.scheme.benefitKind === 'one-time'
-      ? { label: `${formatINR(e.annualValue)} one-time`, cls: 'bg-amber-100 text-amber-800' }
-      : { label: 'Access / credit', cls: 'bg-gray-100 text-gray-600' };
+      ? { label: `${formatINR(e.annualValue)} one-time`, cls: 'bg-brand-yellow-soft/70 text-brown' }
+      : { label: 'Access / credit', cls: 'bg-paper-2 text-muted' };
   return (
-    <div className="border border-gray-200 rounded-lg p-4">
+    <div className="border border-line rounded-lg p-4">
       <div className="flex items-start justify-between gap-3 mb-1">
-        <h4 className="font-semibold text-gray-900">{e.scheme.name}</h4>
+        <h4 className="font-semibold text-navy">{e.scheme.name}</h4>
         <span className={`text-xs font-semibold px-2 py-1 rounded whitespace-nowrap ${kindBadge.cls}`}>{kindBadge.label}</span>
       </div>
-      <p className="text-xs text-gray-500 mb-2">{e.scheme.valuationNote}</p>
-      <p className="text-sm text-gray-700 mb-2"><strong>How to claim:</strong> {e.scheme.howToApply}</p>
+      <p className="text-xs text-muted-2 mb-2">{e.scheme.valuationNote}</p>
+      <p className="text-sm text-ink mb-2"><strong>How to claim:</strong> {e.scheme.howToApply}</p>
       <div className="flex items-center justify-between gap-2">
         <a href={e.scheme.applyLink} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:underline">Official link →</a>
-        <span className="text-xs text-gray-400">Verified {e.scheme.lastVerified}</span>
+        <span className="text-xs text-muted-2">Verified {e.scheme.lastVerified}</span>
       </div>
     </div>
   );
@@ -91,19 +91,19 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {/* Headline */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-8">
         <div className="card bg-green-50 border-green-200 sm:col-span-2">
-          <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Your total benefit (conflict-resolved optimal set)</p>
-          <p className="text-3xl font-bold text-green-700">{formatINR(a.totalAnnualBenefit)}<span className="text-base font-normal text-gray-500">/year</span></p>
-          {a.totalOneTimeBenefit > 0 && <p className="text-sm text-gray-600 mt-1">plus <strong>{formatINR(a.totalOneTimeBenefit)}</strong> in one-time benefits</p>}
+          <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Your total benefit (conflict-resolved optimal set)</p>
+          <p className="text-3xl font-bold text-green-700">{formatINR(a.totalAnnualBenefit)}<span className="text-base font-normal text-muted-2">/year</span></p>
+          {a.totalOneTimeBenefit > 0 && <p className="text-sm text-muted mt-1">plus <strong>{formatINR(a.totalOneTimeBenefit)}</strong> in one-time benefits</p>}
         </div>
         <div className="card">
-          <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Schemes you qualify for</p>
+          <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Schemes you qualify for</p>
           <p className="text-3xl font-bold text-primary">{a.eligible.length}</p>
-          <p className="text-xs text-gray-500 mt-1">{a.optimalSet.length} in your optimal (non-conflicting) set</p>
+          <p className="text-xs text-muted-2 mt-1">{a.optimalSet.length} in your optimal (non-conflicting) set</p>
         </div>
       </div>
 
       {a.conflictsResolved && (
-        <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 mb-6 text-sm text-amber-800">
+        <div className="rounded-lg bg-brand-yellow-soft/30 border border-brand-yellow/50 p-3 mb-6 text-sm text-brown">
           Some schemes you qualify for overlap (e.g. you can draw only one social-security pension). We picked the combination that maximises your total benefit.
         </div>
       )}
@@ -112,7 +112,7 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {recurring.length > 0 && (
         <div className="my-6">
           <h2 className="heading-2 mb-1">Recurring benefits (every year)</h2>
-          <p className="text-sm text-gray-500 mb-4">Ranked by annual rupee value. Apply to each via its official link.</p>
+          <p className="text-sm text-muted-2 mb-4">Ranked by annual rupee value. Apply to each via its official link.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {recurring.map((e) => <SchemeCard key={e.scheme.id} e={e} />)}
           </div>
@@ -125,7 +125,7 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {oneTime.length > 0 && (
         <div className="my-6">
           <h2 className="heading-2 mb-1">One-time benefits</h2>
-          <p className="text-sm text-gray-500 mb-4">Claimable once (housing subsidy, toolkit, maternity benefit, etc.).</p>
+          <p className="text-sm text-muted-2 mb-4">Claimable once (housing subsidy, toolkit, maternity benefit, etc.).</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {oneTime.map((e) => <SchemeCard key={e.scheme.id} e={e} />)}
           </div>
@@ -136,7 +136,7 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {a.facilitationSchemes.length > 0 && (
         <div className="card my-6">
           <h3 className="text-base font-semibold mb-1">Also available: credit &amp; access schemes (not a cash benefit)</h3>
-          <p className="text-xs text-gray-500 mb-3">These give you access to loans or services. valuable, but the loan itself is not &ldquo;free money&rdquo;, so we count it as ₹0 in your total.</p>
+          <p className="text-xs text-muted-2 mb-3">These give you access to loans or services. valuable, but the loan itself is not &ldquo;free money&rdquo;, so we count it as ₹0 in your total.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {a.facilitationSchemes.map((e) => <SchemeCard key={e.scheme.id} e={e} />)}
           </div>
@@ -147,12 +147,12 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {a.nearMisses.length > 0 && (
         <div className="card my-6">
           <h3 className="text-base font-semibold mb-1">So close. change one thing to unlock these</h3>
-          <p className="text-xs text-gray-500 mb-3">You miss each of these by a single criterion.</p>
+          <p className="text-xs text-muted-2 mb-3">You miss each of these by a single criterion.</p>
           <ul className="space-y-2">
             {a.nearMisses.map((m) => (
               <li key={m.scheme.id} className="text-sm flex justify-between gap-3">
-                <span className="text-gray-700">{m.scheme.name}</span>
-                <span className="text-gray-500 text-right">{m.reason}</span>
+                <span className="text-ink">{m.scheme.name}</span>
+                <span className="text-muted-2 text-right">{m.reason}</span>
               </li>
             ))}
           </ul>
@@ -160,7 +160,7 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       )}
 
       {a.eligible.length === 0 && (
-        <div className="card my-6 text-center text-gray-600">
+        <div className="card my-6 text-center text-muted">
           <p>No central schemes matched this exact profile. Check the near-misses above, and note that many <strong>state-specific</strong> schemes (not yet in this dataset) may apply. see your state portal.</p>
         </div>
       )}

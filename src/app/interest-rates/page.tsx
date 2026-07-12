@@ -94,10 +94,10 @@ export default function InterestRatesPage(): React.ReactElement {
         (PPF, SSY, SCSS, NSC, KVP, post office deposits), the RBI policy rates your home loan tracks, and the
         EPF rate. Updated on announcement day, every quarter.
       </p>
-      <p className="text-xs text-gray-500 mb-6">
+      <p className="text-xs text-muted-2 mb-6">
         Small savings rates for {SMALL_SAVINGS_QUARTER}, announced {formatDate(SMALL_SAVINGS_ANNOUNCED)} · next
         revision {formatDate(SMALL_SAVINGS_NEXT_REVISION)} ·{' '}
-        <Link href="/methodology" className="underline hover:text-gray-700">How we verify data</Link>
+        <Link href="/methodology" className="underline hover:text-brand-red">How we verify data</Link>
       </p>
 
       <AdBanner format="horizontal" />
@@ -106,23 +106,23 @@ export default function InterestRatesPage(): React.ReactElement {
         <h2 className="heading-2 mb-4">Small savings scheme rates: {SMALL_SAVINGS_QUARTER}</h2>
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b-2 border-gray-200 bg-gray-50">
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Scheme</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Rate (p.a.)</th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 hidden sm:table-cell">Compounding</th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Tax treatment</th>
+            <tr className="border-b border-line bg-paper-2">
+              <th className="text-left py-3 px-4 text-sm font-semibold text-navy">Scheme</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Rate (p.a.)</th>
+              <th className="text-left py-3 px-4 text-sm font-semibold text-navy hidden sm:table-cell">Compounding</th>
+              <th className="text-left py-3 px-4 text-sm font-semibold text-navy">Tax treatment</th>
             </tr>
           </thead>
           <tbody>
             {SMALL_SAVINGS.map((s) => (
-              <tr key={s.name} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+              <tr key={s.name} className="border-b border-line/60 hover:bg-paper-2 transition-colors">
                 <td className="py-3 px-4">
-                  <span className="font-medium text-gray-900">{s.name}</span>
-                  {s.note && <span className="block text-xs text-gray-500 mt-0.5">{s.note}</span>}
+                  <span className="font-medium text-navy">{s.name}</span>
+                  {s.note && <span className="block text-xs text-muted-2 mt-0.5">{s.note}</span>}
                 </td>
-                <td className="py-3 px-4 text-right font-semibold text-primary">{s.ratePct.toFixed(1)}%</td>
-                <td className="py-3 px-4 text-sm text-gray-600 hidden sm:table-cell">{s.compounding}</td>
-                <td className="py-3 px-4 text-sm text-gray-600">{s.taxNote}</td>
+                <td className="py-3 px-4 text-right font-semibold text-navy">{s.ratePct.toFixed(1)}%</td>
+                <td className="py-3 px-4 text-sm text-muted hidden sm:table-cell">{s.compounding}</td>
+                <td className="py-3 px-4 text-sm text-muted">{s.taxNote}</td>
               </tr>
             ))}
           </tbody>
@@ -134,24 +134,24 @@ export default function InterestRatesPage(): React.ReactElement {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
         <div className="overflow-x-auto">
           <h2 className="heading-2 mb-4">RBI policy rates</h2>
-          <p className="text-xs text-gray-500 mb-3">
+          <p className="text-xs text-muted-2 mb-3">
             As of the {formatDate(RBI_RATES_AS_OF)} MPC outcome · stance: {RBI_STANCE} · next meeting {RBI_NEXT_MPC}
           </p>
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b-2 border-gray-200 bg-gray-50">
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Rate</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Value</th>
+              <tr className="border-b border-line bg-paper-2">
+                <th className="text-left py-3 px-4 text-sm font-semibold text-navy">Rate</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Value</th>
               </tr>
             </thead>
             <tbody>
               {RBI_RATES.map((r) => (
-                <tr key={r.name} className="border-b border-gray-100">
+                <tr key={r.name} className="border-b border-line/60">
                   <td className="py-3 px-4">
-                    <span className="font-medium text-gray-900">{r.name}</span>
-                    <span className="block text-xs text-gray-500 mt-0.5">{r.note}</span>
+                    <span className="font-medium text-navy">{r.name}</span>
+                    <span className="block text-xs text-muted-2 mt-0.5">{r.note}</span>
                   </td>
-                  <td className="py-3 px-4 text-right font-semibold text-primary">{r.ratePct.toFixed(2)}%</td>
+                  <td className="py-3 px-4 text-right font-semibold text-navy">{r.ratePct.toFixed(2)}%</td>
                 </tr>
               ))}
             </tbody>
@@ -161,9 +161,9 @@ export default function InterestRatesPage(): React.ReactElement {
         <div>
           <h2 className="heading-2 mb-4">EPF rate</h2>
           <div className="card">
-            <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Employees&apos; Provident Fund, {EPF_RATE_YEAR}</p>
-            <p className="text-3xl font-bold text-primary mb-2">{EPF_RATE_PCT}%</p>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Employees&apos; Provident Fund, {EPF_RATE_YEAR}</p>
+            <p className="font-serif text-3xl font-bold text-navy mb-2">{EPF_RATE_PCT}%</p>
+            <p className="text-sm text-muted">
               Notified by the EPFO on {formatDate(EPF_NOTIFIED)}, unchanged for the third straight year. Interest
               is calculated on your monthly running balance and credited once a year. Tax-free within the Rs 2.5
               lakh per year contribution limit (Rs 5 lakh where the employer does not contribute).

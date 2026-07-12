@@ -90,7 +90,7 @@ export default async function CategoryPage({ params }: PageProps): Promise<React
           ))}
         </div>
       ) : (
-        <p className="text-center py-12 text-gray-500">No schemes found in this category yet.</p>
+        <p className="text-center py-12 text-muted-2">No schemes found in this category yet.</p>
       )}
 
       <InArticleAd />

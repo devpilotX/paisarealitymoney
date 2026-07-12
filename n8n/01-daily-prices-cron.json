@@ -1,0 +1,40 @@
+{
+  "name": "Paisa Reality - 01 Daily Prices Cron",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "expression": "0 2 * * *" }
+          ]
+        }
+      },
+      "id": "schedule01",
+      "name": "Every day",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.APP_URL }}/api/cron/prices?secret={{ $env.CRON_SECRET }}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "http01",
+      "name": "Run daily price + alerts cron",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [540, 300]
+    }
+  ],
+  "connections": {
+    "Every day": {
+      "main": [
+        [ { "node": "Run daily price + alerts cron", "type": "main", "index": 0 } ]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "pinData": {}
+}

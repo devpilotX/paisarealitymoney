@@ -93,7 +93,7 @@ export default function AlertsPage(): React.ReactElement {
       .catch(() => setError('Could not delete the alert.'));
   }, [load]);
 
-  if (loading) return <div className="container-main py-12 text-center"><p className="text-gray-500">Loading alerts...</p></div>;
+  if (loading) return <div className="container-main py-12 text-center"><p className="text-muted-2">Loading alerts...</p></div>;
 
   const activeAlerts = alerts.filter((a) => a.active);
   const pastAlerts = alerts.filter((a) => !a.active);
@@ -111,7 +111,7 @@ export default function AlertsPage(): React.ReactElement {
         <h2 className="heading-3 mb-4">New alert</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="commodity" className="block text-sm font-medium text-gray-700 mb-1">Metal</label>
+            <label htmlFor="commodity" className="block text-sm font-medium text-ink mb-1">Metal</label>
             <select id="commodity" value={commodity} onChange={(e) => setCommodity(e.target.value)} className="input-field">
               <option value="gold_24k">24K Gold (per gram)</option>
               <option value="gold_22k">22K Gold (per gram)</option>
@@ -119,7 +119,7 @@ export default function AlertsPage(): React.ReactElement {
             </select>
           </div>
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">City</label>
+            <label htmlFor="city" className="block text-sm font-medium text-ink mb-1">City</label>
             <select id="city" value={citySlug} onChange={(e) => setCitySlug(e.target.value)} className="input-field">
               {CITIES.map((c) => (
                 <option key={c.slug} value={c.slug}>{c.name}</option>
@@ -127,18 +127,18 @@ export default function AlertsPage(): React.ReactElement {
             </select>
           </div>
           <div>
-            <label htmlFor="direction" className="block text-sm font-medium text-gray-700 mb-1">Alert me when the price is</label>
+            <label htmlFor="direction" className="block text-sm font-medium text-ink mb-1">Alert me when the price is</label>
             <select id="direction" value={direction} onChange={(e) => setDirection(e.target.value)} className="input-field">
               <option value="below">At or below my target (buy signal)</option>
               <option value="above">At or above my target (sell signal)</option>
             </select>
           </div>
           <div>
-            <label htmlFor="target" className="block text-sm font-medium text-gray-700 mb-1">Target price (₹ per gram)</label>
+            <label htmlFor="target" className="block text-sm font-medium text-ink mb-1">Target price (₹ per gram)</label>
             <input id="target" type="number" min={1} step="0.01" required value={target} onChange={(e) => setTarget(e.target.value)} placeholder={commodity === 'silver' ? 'e.g. 190' : 'e.g. 11500'} className="input-field" />
           </div>
         </div>
-        {error && <p className="text-sm text-red-600 mt-4">{error}</p>}
+        {error && <p className="text-sm text-brand-red mt-4">{error}</p>}
         <button type="submit" disabled={saving} className="btn-primary mt-4 disabled:opacity-60">
           {saving ? 'Saving...' : 'Create alert'}
         </button>
@@ -150,15 +150,15 @@ export default function AlertsPage(): React.ReactElement {
           {activeAlerts.map((a) => (
             <div key={a.id} className="card flex items-center justify-between gap-4">
               <div>
-                <p className="font-semibold text-gray-900">{COMMODITY_LABELS[a.commodity] ?? a.commodity} in {a.city_name}</p>
-                <p className="text-sm text-gray-600">Email me when the price is {a.direction === 'below' ? 'at or below' : 'at or above'} <strong>{fmtINR(a.target_price)}</strong></p>
+                <p className="font-semibold text-navy">{COMMODITY_LABELS[a.commodity] ?? a.commodity} in {a.city_name}</p>
+                <p className="text-sm text-muted">Email me when the price is {a.direction === 'below' ? 'at or below' : 'at or above'} <strong>{fmtINR(a.target_price)}</strong></p>
               </div>
-              <button onClick={() => remove(a.id)} className="text-sm text-red-600 hover:underline flex-shrink-0">Delete</button>
+              <button onClick={() => remove(a.id)} className="text-sm text-brand-red hover:underline flex-shrink-0">Delete</button>
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-500 mb-10">No active alerts. Create one above — it takes ten seconds.</p>
+        <p className="text-sm text-muted-2 mb-10">No active alerts. Create one above. It takes ten seconds.</p>
       )}
 
       {pastAlerts.length > 0 && (
@@ -166,14 +166,14 @@ export default function AlertsPage(): React.ReactElement {
           <h2 className="heading-2 mb-4">Triggered</h2>
           <div className="space-y-3 max-w-2xl">
             {pastAlerts.map((a) => (
-              <div key={a.id} className="card flex items-center justify-between gap-4 bg-gray-50">
+              <div key={a.id} className="card flex items-center justify-between gap-4 bg-paper-2">
                 <div>
-                  <p className="font-medium text-gray-700">{COMMODITY_LABELS[a.commodity] ?? a.commodity} in {a.city_name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-medium text-ink">{COMMODITY_LABELS[a.commodity] ?? a.commodity} in {a.city_name}</p>
+                  <p className="text-sm text-muted-2">
                     Hit {a.triggered_price != null ? fmtINR(a.triggered_price) : 'target'} (target {a.direction === 'below' ? '≤' : '≥'} {fmtINR(a.target_price)})
                   </p>
                 </div>
-                <button onClick={() => remove(a.id)} className="text-sm text-gray-400 hover:text-red-600 hover:underline flex-shrink-0">Clear</button>
+                <button onClick={() => remove(a.id)} className="text-sm text-muted-2 hover:text-brand-red hover:underline flex-shrink-0">Clear</button>
               </div>
             ))}
           </div>

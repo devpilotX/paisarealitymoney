@@ -71,20 +71,20 @@ function ScholarshipCard({ s }: { s: Scholarship }): React.ReactElement {
           {s.level === 'state' ? 'State Govt' : 'Central Govt'}
         </span>
         {s.deadline ? (
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-red-50 text-red-700">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-red/10 text-brand-red">
             Closes {formatDeadline(s.deadline)}
           </span>
         ) : (
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-paper-2 text-muted border border-line">
             Dates on portal
           </span>
         )}
       </div>
       <Link href={`/scholarships/${s.slug}`} className="no-underline">
-        <h3 className="mb-1 text-lg font-bold text-gray-900 hover:text-primary transition-colors">{s.name}</h3>
+        <h3 className="mb-1 font-serif text-lg font-bold text-navy hover:text-brand-red transition-colors">{s.name}</h3>
       </Link>
-      {s.provider && <p className="mb-2 text-sm text-gray-500">{s.provider}</p>}
-      {s.benefitSummary && <p className="mb-3 line-clamp-2 text-sm text-gray-600 leading-relaxed">{s.benefitSummary}</p>}
+      {s.provider && <p className="mb-2 text-sm text-muted-2">{s.provider}</p>}
+      {s.benefitSummary && <p className="mb-3 line-clamp-2 text-sm text-muted leading-relaxed">{s.benefitSummary}</p>}
       {s.amountMax != null && s.amountMax > 0 && (
         <div className="mb-3 rounded-xl bg-primary-50 px-3 py-2">
           <span className="text-xs font-medium text-primary-700">Benefit up to</span>
@@ -137,7 +137,7 @@ export default async function ScholarshipsPage({
 
       <div className="text-center mb-8">
         <h1 className="heading-1 mb-3">Scholarship Finder</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg text-muted max-w-2xl mx-auto">
           Answer a few questions and see the scholarships you are eligible for, with the documents you
           need, how to apply, and a free reminder before each deadline. All free.
         </p>
@@ -148,7 +148,7 @@ export default async function ScholarshipsPage({
       {/* Eligibility form */}
       <form method="get" action="/scholarships" className="card grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 my-8">
         <label className="block">
-          <span className="text-sm font-medium text-gray-700">Class or course</span>
+          <span className="text-sm font-medium text-ink">Class or course</span>
           <select name="class" defaultValue={classLevel} className="input-field mt-1">
             <option value="">Any</option>
             {CLASS_LEVELS.map((c) => (
@@ -157,7 +157,7 @@ export default async function ScholarshipsPage({
           </select>
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-gray-700">Category</span>
+          <span className="text-sm font-medium text-ink">Category</span>
           <select name="category" defaultValue={category} className="input-field mt-1">
             <option value="">Any</option>
             {CATEGORIES.map((c) => (
@@ -166,7 +166,7 @@ export default async function ScholarshipsPage({
           </select>
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-gray-700">State</span>
+          <span className="text-sm font-medium text-ink">State</span>
           <select name="state" defaultValue={state} className="input-field mt-1">
             <option value="">Any</option>
             {STATES.map((st) => (
@@ -175,7 +175,7 @@ export default async function ScholarshipsPage({
           </select>
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-gray-700">Gender</span>
+          <span className="text-sm font-medium text-ink">Gender</span>
           <select name="gender" defaultValue={gender} className="input-field mt-1">
             <option value="">Any</option>
             {GENDERS.map((g) => (
@@ -184,7 +184,7 @@ export default async function ScholarshipsPage({
           </select>
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-gray-700">Family income (per year)</span>
+          <span className="text-sm font-medium text-ink">Family income (per year)</span>
           <input
             type="number"
             name="income"
@@ -204,7 +204,7 @@ export default async function ScholarshipsPage({
         <h2 className="heading-2 mb-1">
           {submitted ? 'Scholarships you may qualify for' : 'All scholarships'}
         </h2>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-muted-2 mb-6">
           {dbReady
             ? `${results.length} ${results.length === 1 ? 'scholarship' : 'scholarships'} listed. Verify final details on the official portal.`
             : 'Scholarship data is being set up. Please check back shortly.'}

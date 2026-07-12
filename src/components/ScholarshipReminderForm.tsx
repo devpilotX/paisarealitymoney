@@ -39,7 +39,7 @@ export default function ScholarshipReminderForm({ slug }: { slug: string }): Rea
   return (
     <form onSubmit={submit} className="space-y-3">
       <label className="block">
-        <span className="text-sm font-medium text-gray-700">Your email</span>
+        <span className="text-sm font-medium text-ink">Your email</span>
         <input
           type="email"
           required
@@ -50,7 +50,7 @@ export default function ScholarshipReminderForm({ slug }: { slug: string }): Rea
         />
       </label>
       <label className="block">
-        <span className="text-sm font-medium text-gray-700">Remind me</span>
+        <span className="text-sm font-medium text-ink">Remind me</span>
         <select
           value={days}
           onChange={(e) => setDays(Number(e.target.value))}
@@ -64,8 +64,8 @@ export default function ScholarshipReminderForm({ slug }: { slug: string }): Rea
       <button type="submit" className="btn-primary w-full" disabled={status === 'saving'}>
         {status === 'saving' ? 'Saving...' : 'Remind me before it closes'}
       </button>
-      {status === 'error' && <p className="text-red-600 text-sm">{message}</p>}
-      <p className="text-sm text-gray-500">
+      {status === 'error' && <p className="text-brand-red text-sm">{message}</p>}
+      <p className="text-sm text-muted-2">
         We only use your email for this reminder. Always verify dates on the official portal.
       </p>
     </form>

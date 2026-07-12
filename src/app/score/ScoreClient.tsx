@@ -21,17 +21,17 @@ const DEFAULT_FORM: OnboardingForm = {
 
 function Num({ label, value, onChange, prefix = '\u20B9' }: { label: string; value: number; onChange: (v: number) => void; prefix?: string }): React.ReactElement {
   return (
-    <label className="block"><span className="block text-xs text-gray-500 mb-0.5">{label}</span>
-      <div className="relative"><span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">{prefix}</span>
+    <label className="block"><span className="block text-xs text-muted-2 mb-0.5">{label}</span>
+      <div className="relative"><span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-2 text-xs">{prefix}</span>
         <input type="number" value={Number.isFinite(value) ? value : 0} min={0} onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
-          className="w-full pl-6 pr-2 py-2 border border-gray-300 rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary" />
+          className="w-full pl-6 pr-2 py-2 border border-line rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary" />
       </div>
     </label>
   );
 }
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }): React.ReactElement {
-  return (<label className="flex items-center gap-2 text-sm text-gray-800 min-h-[40px] cursor-pointer">
-    <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="w-5 h-5 rounded border-gray-300 accent-primary" />{label}</label>);
+  return (<label className="flex items-center gap-2 text-sm text-ink min-h-[40px] cursor-pointer">
+    <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="w-5 h-5 rounded border-line accent-primary" />{label}</label>);
 }
 
 export default function ScoreClient(): React.ReactElement {
@@ -83,16 +83,16 @@ export default function ScoreClient(): React.ReactElement {
         {beatsLine && <p className="text-sm text-primary font-medium mt-2">{beatsLine}</p>}
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto">
           {result.topActions.map((a, i) => (
-            <a key={i} href={a.link} className="block text-left rounded-lg border border-gray-200 p-3 no-underline hover:border-primary">
+            <a key={i} href={a.link} className="block text-left rounded-lg border border-line p-3 no-underline hover:border-primary">
               <span className="text-xs text-green-700 font-semibold">+{a.pointsRecoverable} pts</span>
-              <span className="block text-sm text-gray-800 mt-0.5">{a.label}</span>
+              <span className="block text-sm text-ink mt-0.5">{a.label}</span>
             </a>
           ))}
         </div>
         <div className="mt-4">
           <button type="button" onClick={save} disabled={saving} className="btn-primary">{saving ? 'Saving...' : 'Save my score'}</button>
           {saved && <a href={`/score/r/${saved.scoreId}`} className="ml-3 link-internal">Share / view result -&gt;</a>}
-          <p className="text-xs text-gray-400 mt-2">Saving keeps your history. Works logged-out; sign in to keep it across devices.</p>
+          <p className="text-xs text-muted-2 mt-2">Saving keeps your history. Works logged-out; sign in to keep it across devices.</p>
         </div>
         <EmailScore score={result.totalScore} band={result.band} pillars={PILLAR_NAMES.map(n => ({ name: PILLAR_LABEL[n], score: result.pillars[n].score }))} />
       </div>
@@ -103,9 +103,9 @@ export default function ScoreClient(): React.ReactElement {
         <div className="space-y-3">
           {PILLAR_NAMES.map((n: PillarName) => { const p = result.pillars[n]; return (
             <div key={n}>
-              <div className="flex justify-between text-sm mb-1"><span className="font-medium text-gray-800">{PILLAR_LABEL[n]}</span><span className="text-gray-500">{p.score}/100</span></div>
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-2 rounded-full bg-primary" style={{ width: `${p.score}%` }} /></div>
-              <p className="text-xs text-gray-500 mt-1">{p.reason}</p>
+              <div className="flex justify-between text-sm mb-1"><span className="font-medium text-ink">{PILLAR_LABEL[n]}</span><span className="text-muted-2">{p.score}/100</span></div>
+              <div className="h-2 bg-line/40 rounded-full overflow-hidden"><div className="h-2 rounded-full bg-primary" style={{ width: `${p.score}%` }} /></div>
+              <p className="text-xs text-muted-2 mt-1">{p.reason}</p>
             </div>
           ); })}
         </div>
@@ -127,17 +127,17 @@ export default function ScoreClient(): React.ReactElement {
           <Num label="Retirement age" value={form.retirementAge} onChange={(v) => set('retirementAge', v)} prefix="" />
           <Num label="Dependents" value={form.dependents} onChange={(v) => set('dependents', v)} prefix="" />
           <Num label="CIBIL (optional)" value={form.cibil ?? 0} onChange={(v) => set('cibil', v > 0 ? v : undefined)} prefix="" />
-          <label className="block"><span className="block text-xs text-gray-500 mb-0.5">City tier</span>
-            <select value={cityTier} onChange={(e) => setCityTier(e.target.value as CityTier)} className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary">
+          <label className="block"><span className="block text-xs text-muted-2 mb-0.5">City tier</span>
+            <select value={cityTier} onChange={(e) => setCityTier(e.target.value as CityTier)} className="w-full px-2 py-2 border border-line rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="metro">Metro</option><option value="tier1">Tier 1</option><option value="tier2">Tier 2</option><option value="tier3">Tier 3</option>
             </select>
           </label>
         </div>
         <div className="mt-3">
-          <span className="block text-xs text-gray-500 mb-1">Asset classes you hold</span>
+          <span className="block text-xs text-muted-2 mb-1">Asset classes you hold</span>
           <div className="flex flex-wrap gap-2">
             {ASSETS.map((a) => (
-              <button key={a} type="button" onClick={() => toggleAsset(a)} className={`text-xs px-3 py-1.5 rounded-full border ${form.assetClasses.includes(a) ? 'border-primary bg-primary-50 text-primary' : 'border-gray-300 text-gray-600'}`}>{a}</button>
+              <button key={a} type="button" onClick={() => toggleAsset(a)} className={`text-xs px-3 py-1.5 rounded-full border ${form.assetClasses.includes(a) ? 'border-primary bg-primary-50 text-primary' : 'border-line text-muted'}`}>{a}</button>
             ))}
           </div>
         </div>
@@ -177,16 +177,16 @@ function EmailScore({ score, band, pillars }: { score: number; band: string; pil
 
   return (
     <form onSubmit={send} className="mt-4 flex flex-col gap-2">
-      <p className="text-sm text-gray-600">Email me my result:</p>
+      <p className="text-sm text-muted">Email me my result:</p>
       <div className="flex gap-2">
         <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
-          className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-primary focus:outline-none" />
+          className="flex-1 px-3 py-2 text-sm border border-line rounded-lg focus:border-primary focus:outline-none" />
         <button type="submit" disabled={status === 'sending'} className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-800 disabled:opacity-60">
           {status === 'sending' ? '...' : 'Send'}
         </button>
       </div>
-      <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
-        <input type="checkbox" checked={subscribe} onChange={e => setSubscribe(e.target.checked)} className="rounded border-gray-300 accent-primary" />
+      <label className="flex items-center gap-2 text-xs text-muted-2 cursor-pointer">
+        <input type="checkbox" checked={subscribe} onChange={e => setSubscribe(e.target.checked)} className="rounded border-line accent-primary" />
         Also subscribe to the newsletter
       </label>
       {status === 'err' && <p className="text-xs text-red-600">Failed to send. Try again.</p>}

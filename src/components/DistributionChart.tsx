@@ -26,7 +26,7 @@ const PLOT_H = H - PAD_T - PAD_B;
 
 export default function DistributionChart({ histogram, prepayValue, median, probInvestBeats }: DistributionChartProps): React.ReactElement {
   if (histogram.length === 0) {
-    return <div className="text-sm text-gray-400 py-8 text-center">Adjust inputs to see the distribution.</div>;
+    return <div className="text-sm text-muted-2 py-8 text-center">Adjust inputs to see the distribution.</div>;
   }
 
   const dataMin = histogram[0]!.start;
