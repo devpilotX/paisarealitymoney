@@ -59,10 +59,10 @@ export default function SchemesPage(): React.ReactElement {
 
       <div className="text-center mb-8">
         <h1 className="heading-1 mb-3">Government Scheme Finder</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg text-muted max-w-2xl mx-auto">
           Fill a short form and we match you with central and state schemes you likely qualify for. Education, housing, business, healthcare, and more.
         </p>
-        <p className="text-sm text-gray-500 max-w-2xl mx-auto mt-3">
+        <p className="text-sm text-muted-2 max-w-2xl mx-auto mt-3">
           For the official national catalogue, cross-check results on{' '}
           <a href="https://www.myscheme.gov.in/" target="_blank" rel="noopener noreferrer" className="link-internal">
             myScheme.gov.in
@@ -75,15 +75,18 @@ export default function SchemesPage(): React.ReactElement {
 
       {/* Cross-link to the advanced quantified Smart Tool */}
       <Link href="/calculators/scheme-maximizer" className="block no-underline my-6">
-        <div className="rounded-xl border-2 border-primary bg-primary-50/50 p-5 transition-shadow hover:shadow-md">
+        <div className="rounded-[5px] border border-navy bg-navy/5 p-5 transition-shadow hover:shadow-md">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold bg-primary text-white px-2.5 py-1 rounded-full">★ New Smart Tool</span>
-            <span className="text-xs text-gray-500">Quantified · Conflict-resolved</span>
+            <span className="badge">
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z" /></svg>
+              New Smart Tool
+            </span>
+            <span className="text-xs text-muted-2">Quantified · Conflict-resolved</span>
           </div>
-          <h2 className="text-lg font-semibold text-gray-900">Want the total ₹ you can actually claim?</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            The new <strong>Scheme Benefit Maximizer</strong> doesn&apos;t just list schemes. it quantifies the rupee benefit of each,
-            resolves overlaps into your optimal set, and totals your annual + one-time benefit. <span className="text-primary font-medium">Try it →</span>
+          <h2 className="font-serif text-lg font-bold text-navy">Want the total ₹ you can actually claim?</h2>
+          <p className="text-sm text-muted mt-1">
+            The new <strong className="text-navy">Scheme Benefit Maximizer</strong> does not just list schemes. It quantifies the rupee benefit of each,
+            resolves overlaps into your optimal set, and totals your annual and one-time benefit. <span className="text-navy font-semibold">Try it</span>
           </p>
         </div>
       </Link>

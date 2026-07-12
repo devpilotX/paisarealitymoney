@@ -9,22 +9,55 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Primary is remapped to the new navy so every existing text-primary /
+        // bg-primary / border-primary across the site picks up the new design.
         primary: {
-          DEFAULT: '#007A78',
-          50: '#E6F5F5',
-          100: '#CCEBEa',
-          200: '#99D7D6',
-          300: '#66C3C1',
-          400: '#33AFAD',
-          500: '#007A78',
-          600: '#006260',
-          700: '#004A48',
-          800: '#003130',
-          900: '#001918',
+          DEFAULT: '#1C3A5E',
+          50: '#E9EEF3',
+          100: '#C8D4E0',
+          200: '#9DB0C6',
+          300: '#6E88A8',
+          400: '#47648B',
+          500: '#1C3A5E',
+          600: '#183350',
+          700: '#132A45',
+          800: '#0F2237',
+          900: '#0A1826',
+        },
+        // Newspaper / vintage palette (mirrors index.html :root)
+        paper: {
+          DEFAULT: '#F3EAD6',
+          2: '#EDE2C9',
+          3: '#E6D9BC',
+        },
+        navy: {
+          DEFAULT: '#1C3A5E',
+          deep: '#132A45',
+        },
+        brand: {
+          red: '#A62822',
+          'red-deep': '#8A2019',
+          yellow: '#E7B23B',
+          'yellow-soft': '#F0D089',
+        },
+        brown: {
+          DEFAULT: '#43301F',
+          2: '#5A4530',
+          line: '#7A6244',
+        },
+        ink: '#2B2216',
+        muted: {
+          DEFAULT: '#6D5E48',
+          2: '#8A7A61',
+        },
+        line: {
+          DEFAULT: '#CDB98E',
+          soft: '#DBCBA5',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Georgia', 'Times New Roman', 'Noto Serif', 'serif'],
       },
       fontSize: {
         base: ['16px', '24px'],
@@ -33,13 +66,20 @@ const config: Config = {
         '2xl': ['24px', '32px'],
         '3xl': ['28px', '36px'],
         '4xl': ['32px', '40px'],
+        '5xl': ['44px', '1.1'],
       },
       spacing: {
         '18': '4.5rem',
         '22': '5.5rem',
       },
       maxWidth: {
-        'content': '1200px',
+        'content': '1140px',
+      },
+      backgroundImage: {
+        'paper-dots': 'radial-gradient(rgba(120,98,68,.08) 1px, transparent 1px)',
+      },
+      backgroundSize: {
+        'dots-22': '22px 22px',
       },
     },
   },

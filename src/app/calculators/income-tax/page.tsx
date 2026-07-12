@@ -133,13 +133,13 @@ export default function IncomeTaxCalculatorPage(): React.ReactElement {
           <div className={`card ${result.betterRegime === 'New Regime' ? 'border-primary border-2' : ''}`}>
             <h3 className="text-base font-semibold mb-1">New Regime</h3>
             <p className="text-2xl font-bold text-primary">{formatINR(result.newTax)}</p>
-            <p className="text-xs text-gray-500 mt-1">Standard deduction Rs 75,000. No 80C/80D/HRA.</p>
+            <p className="text-xs text-muted-2 mt-1">Standard deduction Rs 75,000. No 80C/80D/HRA.</p>
             {result.betterRegime === 'New Regime' && <span className="inline-block mt-2 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded">Better for you</span>}
           </div>
           <div className={`card ${result.betterRegime === 'Old Regime' ? 'border-primary border-2' : ''}`}>
             <h3 className="text-base font-semibold mb-1">Old Regime</h3>
             <p className="text-2xl font-bold text-primary">{formatINR(result.oldTax)}</p>
-            <p className="text-xs text-gray-500 mt-1">With deductions: 80C, 80D, HRA, etc.</p>
+            <p className="text-xs text-muted-2 mt-1">With deductions: 80C, 80D, HRA, etc.</p>
             {result.betterRegime === 'Old Regime' && <span className="inline-block mt-2 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded">Better for you</span>}
           </div>
         </div>

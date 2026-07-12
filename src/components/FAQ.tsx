@@ -41,21 +41,21 @@ export default function FAQ({ items, title = 'Frequently Asked Questions' }: FAQ
           return (
             <div
               key={item.question}
-              className="border border-gray-200 rounded-lg overflow-hidden"
+              className="border border-line rounded-[5px] overflow-hidden"
             >
               <button
                 type="button"
                 onClick={() => toggleItem(index)}
                 className="w-full flex items-center justify-between px-5 py-4 text-left
-                           bg-white hover:bg-gray-50 transition-colors duration-200 ease-in-out
+                           bg-paper hover:bg-paper-2 transition-colors duration-200 ease-in-out
                            min-h-[44px]"
                 aria-expanded={isOpen}
               >
-                <span className="text-base font-medium text-gray-900 pr-4">
+                <span className="font-serif text-base font-bold text-navy pr-4">
                   {item.question}
                 </span>
                 <span
-                  className={`flex-shrink-0 w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                  className={`flex-shrink-0 w-5 h-5 text-brand-red transition-transform duration-200 ${
                     isOpen ? 'rotate-180' : ''
                   }`}
                   aria-hidden="true"

@@ -11,6 +11,11 @@ const SUBJECT_OPTIONS = [
   'Other',
 ];
 
+const FIELD_CLASS =
+  'w-full px-4 py-3 rounded-[5px] border border-line bg-paper text-sm text-ink ' +
+  'placeholder:text-muted-2 focus:border-navy focus:ring-2 focus:ring-navy/20 focus:outline-none ' +
+  'transition-colors duration-150';
+
 export default function ContactForm(): React.ReactElement {
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle');
   const [message, setMessage] = useState('');
@@ -57,8 +62,8 @@ export default function ContactForm(): React.ReactElement {
     <form data-dpx-contact onSubmit={onSubmit} className="space-y-5" noValidate>
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
-          <label htmlFor="pr-name" className="block text-sm font-medium text-gray-800 mb-1.5">
-            Your name <span className="text-red-500">*</span>
+          <label htmlFor="pr-name" className="block text-sm font-medium text-ink mb-1.5">
+            Your name <span className="text-brand-red">*</span>
           </label>
           <input
             id="pr-name"
@@ -67,15 +72,12 @@ export default function ContactForm(): React.ReactElement {
             type="text"
             autoComplete="name"
             placeholder="Rahul Kumar"
-            className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 bg-white text-sm
-                       placeholder:text-gray-400
-                       focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none
-                       transition-colors duration-150"
+            className={FIELD_CLASS}
           />
         </div>
         <div>
-          <label htmlFor="pr-email" className="block text-sm font-medium text-gray-800 mb-1.5">
-            Your email <span className="text-red-500">*</span>
+          <label htmlFor="pr-email" className="block text-sm font-medium text-ink mb-1.5">
+            Your email <span className="text-brand-red">*</span>
           </label>
           <input
             id="pr-email"
@@ -84,27 +86,21 @@ export default function ContactForm(): React.ReactElement {
             type="email"
             autoComplete="email"
             placeholder="rahul@example.com"
-            className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 bg-white text-sm
-                       placeholder:text-gray-400
-                       focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none
-                       transition-colors duration-150"
+            className={FIELD_CLASS}
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="pr-subject" className="block text-sm font-medium text-gray-800 mb-1.5">
-          What is this about? <span className="text-red-500">*</span>
+        <label htmlFor="pr-subject" className="block text-sm font-medium text-ink mb-1.5">
+          What is this about? <span className="text-brand-red">*</span>
         </label>
         <select
           id="pr-subject"
           name="subject"
           required
           defaultValue=""
-          className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 bg-white text-sm
-                     text-gray-700
-                     focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none
-                     transition-colors duration-150"
+          className={FIELD_CLASS}
         >
           <option value="" disabled>Select a reason</option>
           {SUBJECT_OPTIONS.map((opt) => (
@@ -114,8 +110,8 @@ export default function ContactForm(): React.ReactElement {
       </div>
 
       <div>
-        <label htmlFor="pr-message" className="block text-sm font-medium text-gray-800 mb-1.5">
-          Your message <span className="text-red-500">*</span>
+        <label htmlFor="pr-message" className="block text-sm font-medium text-ink mb-1.5">
+          Your message <span className="text-brand-red">*</span>
         </label>
         <textarea
           id="pr-message"
@@ -123,10 +119,7 @@ export default function ContactForm(): React.ReactElement {
           required
           rows={5}
           placeholder="Tell us what you need help with..."
-          className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 bg-white text-sm
-                     placeholder:text-gray-400 resize-y
-                     focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none
-                     transition-colors duration-150"
+          className={`${FIELD_CLASS} resize-y`}
         />
       </div>
 
@@ -137,22 +130,22 @@ export default function ContactForm(): React.ReactElement {
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="inline-flex items-center justify-center px-6 py-3 rounded-lg
-                     bg-primary text-white text-sm font-semibold min-h-[44px]
-                     transition-all duration-200 hover:bg-primary-800 hover:shadow-md
+          className="inline-flex items-center justify-center px-6 py-3 rounded-[3px]
+                     bg-navy text-paper text-sm font-bold min-h-[44px]
+                     transition-all duration-200 hover:bg-navy-deep hover:shadow-md
                      disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {status === 'sending' ? 'Sending...' : 'Send message'}
         </button>
         {message && (
-          <p className={`text-sm ${status === 'ok' ? 'text-green-700' : 'text-red-600'}`}>
+          <p className={`text-sm ${status === 'ok' ? 'text-green-700' : 'text-brand-red'}`}>
             {message}
           </p>
         )}
       </div>
 
-      <p className="text-xs text-gray-500 mt-2">
-        Or email us directly at <a href="mailto:connect@paisareality.com" className="text-primary hover:underline">connect@paisareality.com</a>
+      <p className="text-xs text-muted-2 mt-2">
+        Or email us directly at <a href="mailto:connect@paisareality.com" className="text-navy font-medium hover:text-brand-red">connect@paisareality.com</a>
       </p>
     </form>
   );

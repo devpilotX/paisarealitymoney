@@ -20,6 +20,7 @@ export default function NewBlogPage(): React.ReactElement {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [coverImage, setCoverImage] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('finance');
   const [tags, setTags] = useState('');
@@ -51,6 +52,7 @@ export default function NewBlogPage(): React.ReactElement {
             .split(',')
             .map((tag) => tag.trim())
             .filter(Boolean),
+          coverImage: coverImage || null,
           metaTitle: metaTitle || title.slice(0, 70),
           metaDescription: metaDescription || description.slice(0, 160),
           isPublished,
@@ -69,7 +71,7 @@ export default function NewBlogPage(): React.ReactElement {
     } finally {
       setSaving(false);
     }
-  }, [category, content, description, isPublished, metaDescription, metaTitle, router, tags, title]);
+  }, [category, content, coverImage, description, isPublished, metaDescription, metaTitle, router, tags, title]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -95,6 +97,16 @@ export default function NewBlogPage(): React.ReactElement {
               onChange={(event) => setDescription(event.target.value)}
               className="input-field h-20"
               placeholder="Brief summary for listing pages and SEO"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Cover image URL (thumbnail)</label>
+            <input
+              value={coverImage}
+              onChange={(event) => setCoverImage(event.target.value)}
+              className="input-field"
+              placeholder="https://.../cover.jpg (used for the social share image and listing thumbnail)"
             />
           </div>
 

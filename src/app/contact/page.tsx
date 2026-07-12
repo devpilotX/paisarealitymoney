@@ -21,28 +21,34 @@ export default function ContactPage(): React.ReactElement {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div className="p-5 rounded-xl border border-gray-200 text-center">
-            <div className="text-2xl mb-2">✉</div>
-            <h2 className="text-sm font-semibold text-gray-900 mb-1">Email</h2>
-            <a href="mailto:connect@paisareality.com" className="text-sm text-primary hover:underline break-all">
+          <div className="p-5 rounded-[5px] border border-line text-center">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-[5px] border border-line bg-paper-2 text-navy mb-3">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+            </span>
+            <h2 className="text-sm font-semibold text-navy mb-1">Email</h2>
+            <a href="mailto:connect@paisareality.com" className="text-sm text-navy hover:text-brand-red break-all">
               connect@paisareality.com
             </a>
           </div>
-          <div className="p-5 rounded-xl border border-gray-200 text-center">
-            <div className="text-2xl mb-2">⏱</div>
-            <h2 className="text-sm font-semibold text-gray-900 mb-1">Response time</h2>
-            <p className="text-sm text-gray-600">Within 48 hours on working days</p>
+          <div className="p-5 rounded-[5px] border border-line text-center">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-[5px] border border-line bg-paper-2 text-navy mb-3">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+            </span>
+            <h2 className="text-sm font-semibold text-navy mb-1">Response time</h2>
+            <p className="text-sm text-muted">Within 48 hours on working days</p>
           </div>
-          <div className="p-5 rounded-xl border border-gray-200 text-center">
-            <div className="text-2xl mb-2">🌐</div>
-            <h2 className="text-sm font-semibold text-gray-900 mb-1">Website</h2>
-            <a href="https://paisareality.com" className="text-sm text-primary hover:underline">
+          <div className="p-5 rounded-[5px] border border-line text-center">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-[5px] border border-line bg-paper-2 text-navy mb-3">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.5 3.5 6 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-6-3.5-9s1-6.5 3.5-9z" /></svg>
+            </span>
+            <h2 className="text-sm font-semibold text-navy mb-1">Website</h2>
+            <a href="https://paisareality.com" className="text-sm text-navy hover:text-brand-red">
               paisareality.com
             </a>
           </div>
         </div>
 
-        <div className="p-6 rounded-xl border border-gray-200 mb-10">
+        <div className="p-6 rounded-[5px] border border-line mb-10">
           <h2 className="heading-2 mb-4">Send a message</h2>
           <ContactForm />
         </div>

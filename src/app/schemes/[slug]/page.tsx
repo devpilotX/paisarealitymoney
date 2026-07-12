@@ -250,21 +250,21 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
           <span className="text-xs font-medium px-2 py-1 rounded-full bg-primary-50 text-primary">
             {scheme.category.charAt(0).toUpperCase() + scheme.category.slice(1)}
           </span>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-muted-2">
             {scheme.level === 'central' ? 'Central Government' : 'State Government'}
           </span>
-          {scheme.ministry && <span className="text-xs text-gray-500">| {scheme.ministry}</span>}
+          {scheme.ministry && <span className="text-xs text-muted-2">| {scheme.ministry}</span>}
         </div>
 
         <h1 className="heading-1 mb-4">{scheme.name}</h1>
-        {scheme.name_hi && <p className="text-lg text-gray-500 mb-4">{scheme.name_hi}</p>}
+        {scheme.name_hi && <p className="text-lg text-muted-2 mb-4">{scheme.name_hi}</p>}
 
         <AdBanner format="horizontal" />
 
         {/* Benefit Summary Card */}
         <div className="bg-primary-50 rounded-lg p-6 my-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">Key Benefit</h2>
-          <p className="text-base text-gray-800">{scheme.benefit_summary}</p>
+          <h2 className="font-serif text-lg font-bold text-navy mb-2">Key Benefit</h2>
+          <p className="text-base text-ink">{scheme.benefit_summary}</p>
           {scheme.benefit_amount_max && (
             <p className="text-xl font-bold text-primary mt-2">Up to Rs {formatNumber(scheme.benefit_amount_max)}</p>
           )}
@@ -284,15 +284,15 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <tbody>
-                {scheme.min_age !== null && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700 w-1/3">Age</td><td className="py-3 px-4 text-gray-900">{scheme.min_age}{scheme.max_age ? ` to ${scheme.max_age}` : '+'} years</td></tr>)}
-                {scheme.gender !== 'all' && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700">Gender</td><td className="py-3 px-4 text-gray-900">{scheme.gender.charAt(0).toUpperCase() + scheme.gender.slice(1)} only</td></tr>)}
-                {states.length > 0 && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700">States</td><td className="py-3 px-4 text-gray-900">{states.includes('all') ? 'All states' : states.join(', ')}</td></tr>)}
-                {categories.length > 0 && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700">Category</td><td className="py-3 px-4 text-gray-900">{categories.includes('all') ? 'All categories' : categories.map(c => c.toUpperCase()).join(', ')}</td></tr>)}
-                {scheme.max_income !== null && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700">Max Annual Income</td><td className="py-3 px-4 text-gray-900">Rs {formatNumber(scheme.max_income)}</td></tr>)}
-                {occupations.length > 0 && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700">Occupation</td><td className="py-3 px-4 text-gray-900">{occupations.join(', ')}</td></tr>)}
-                {scheme.education_min && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700">Min Education</td><td className="py-3 px-4 text-gray-900">{scheme.education_min}</td></tr>)}
-                {scheme.area !== 'all' && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700">Area</td><td className="py-3 px-4 text-gray-900">{scheme.area.charAt(0).toUpperCase() + scheme.area.slice(1)} only</td></tr>)}
-                {scheme.bpl_required && (<tr className="border-b border-gray-100"><td className="py-3 px-4 font-medium text-gray-700">BPL Required</td><td className="py-3 px-4 text-gray-900">Yes</td></tr>)}
+                {scheme.min_age !== null && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy w-1/3">Age</td><td className="py-3 px-4 text-ink">{scheme.min_age}{scheme.max_age ? ` to ${scheme.max_age}` : '+'} years</td></tr>)}
+                {scheme.gender !== 'all' && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy">Gender</td><td className="py-3 px-4 text-ink">{scheme.gender.charAt(0).toUpperCase() + scheme.gender.slice(1)} only</td></tr>)}
+                {states.length > 0 && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy">States</td><td className="py-3 px-4 text-ink">{states.includes('all') ? 'All states' : states.join(', ')}</td></tr>)}
+                {categories.length > 0 && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy">Category</td><td className="py-3 px-4 text-ink">{categories.includes('all') ? 'All categories' : categories.map(c => c.toUpperCase()).join(', ')}</td></tr>)}
+                {scheme.max_income !== null && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy">Max Annual Income</td><td className="py-3 px-4 text-ink">Rs {formatNumber(scheme.max_income)}</td></tr>)}
+                {occupations.length > 0 && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy">Occupation</td><td className="py-3 px-4 text-ink">{occupations.join(', ')}</td></tr>)}
+                {scheme.education_min && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy">Min Education</td><td className="py-3 px-4 text-ink">{scheme.education_min}</td></tr>)}
+                {scheme.area !== 'all' && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy">Area</td><td className="py-3 px-4 text-ink">{scheme.area.charAt(0).toUpperCase() + scheme.area.slice(1)} only</td></tr>)}
+                {scheme.bpl_required && (<tr className="border-b border-line/60"><td className="py-3 px-4 font-medium text-navy">BPL Required</td><td className="py-3 px-4 text-ink">Yes</td></tr>)}
               </tbody>
             </table>
           </div>
@@ -332,10 +332,10 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
             )}
           </div>
         {scheme.last_verified && (
-          <p className="text-xs text-gray-500 mt-3">Last verified: {formatDate(scheme.last_verified)}</p>
+          <p className="text-xs text-muted-2 mt-3">Last verified: {formatDate(scheme.last_verified)}</p>
         )}
         {scheme.source_url && (
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-muted-2 mt-2">
             Source: <a href={scheme.source_url} target="_blank" rel="noopener noreferrer" className="link-internal">Official reference</a>
           </p>
         )}

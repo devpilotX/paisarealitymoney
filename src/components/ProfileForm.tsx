@@ -107,8 +107,8 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
           className={`px-4 py-3 rounded-lg border-2 text-base font-medium text-center
                      transition-all duration-200 min-h-[44px]
                      ${selectedValue === opt.value
-                       ? 'border-primary bg-primary-50 text-primary'
-                       : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'}`}
+                       ? 'border-navy bg-navy/5 text-navy'
+                       : 'border-line bg-paper text-ink hover:border-muted-2'}`}
         >
           {opt.label}
         </button>
@@ -124,20 +124,20 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
           <div
             key={s.id}
             className={`flex-1 h-2 rounded-full transition-colors duration-200 ${
-              s.id <= step ? 'bg-primary' : 'bg-gray-200'
+              s.id <= step ? 'bg-navy' : 'bg-line/50'
             }`}
           />
         ))}
       </div>
-      <p className="text-sm text-gray-500 mb-1">Step {step} of 6</p>
+      <p className="text-sm text-muted-2 mb-1">Step {step} of 6</p>
       <h3 className="heading-3 mb-1">{STEPS[step - 1]?.title}</h3>
-      <p className="text-sm text-gray-500 mb-6">{STEPS[step - 1]?.description}</p>
+      <p className="text-sm text-muted-2 mb-6">{STEPS[step - 1]?.description}</p>
 
       {/* Step 1: Gender + Age */}
       {step === 1 && (
         <div className="space-y-6">
           <div>
-            <label className="block text-base font-medium text-gray-900 mb-3">Your Gender</label>
+            <label className="block text-base font-medium text-ink mb-3">Your Gender</label>
             {renderRadioGroup('gender', [
               { value: 'male', label: 'Male' },
               { value: 'female', label: 'Female' },
@@ -145,7 +145,7 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
             ], form.gender, (v) => updateField('gender', v))}
           </div>
           <div>
-            <label htmlFor="age" className="block text-base font-medium text-gray-900 mb-2">Your Age</label>
+            <label htmlFor="age" className="block text-base font-medium text-ink mb-2">Your Age</label>
             <input id="age" type="number" min="0" max="120" value={form.age} onChange={(e) => updateField('age', e.target.value)} className="input-field" placeholder="Enter your age (e.g. 25)" />
           </div>
         </div>
@@ -155,14 +155,14 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
       {step === 2 && (
         <div className="space-y-6">
           <div>
-            <label htmlFor="state" className="block text-base font-medium text-gray-900 mb-2">Your State</label>
+            <label htmlFor="state" className="block text-base font-medium text-ink mb-2">Your State</label>
             <select id="state" value={form.state} onChange={(e) => updateField('state', e.target.value)} className="input-field">
               <option value="">Select your state</option>
               {ALL_INDIAN_STATES.map((s) => (<option key={s} value={s}>{s}</option>))}
             </select>
           </div>
           <div>
-            <label className="block text-base font-medium text-gray-900 mb-3">Your Area Type</label>
+            <label className="block text-base font-medium text-ink mb-3">Your Area Type</label>
             {renderRadioGroup('area', [
               { value: 'urban', label: 'Urban (City/Town)' },
               { value: 'rural', label: 'Rural (Village)' },
@@ -175,7 +175,7 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
       {step === 3 && (
         <div className="space-y-6">
           <div>
-            <label className="block text-base font-medium text-gray-900 mb-3">Caste Category</label>
+            <label className="block text-base font-medium text-ink mb-3">Caste Category</label>
             {renderRadioGroup('category', [
               { value: 'general', label: 'General' },
               { value: 'obc', label: 'OBC' },
@@ -186,16 +186,16 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
           </div>
           <div className="space-y-3">
             <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
-              <input type="checkbox" checked={form.bpl} onChange={(e) => updateField('bpl', e.target.checked)} className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
-              <span className="text-base text-gray-900">Below Poverty Line (BPL) family</span>
+              <input type="checkbox" checked={form.bpl} onChange={(e) => updateField('bpl', e.target.checked)} className="w-5 h-5 rounded border-line text-navy focus:ring-navy" />
+              <span className="text-base text-ink">Below Poverty Line (BPL) family</span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
-              <input type="checkbox" checked={form.minority} onChange={(e) => updateField('minority', e.target.checked)} className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
-              <span className="text-base text-gray-900">Minority community</span>
+              <input type="checkbox" checked={form.minority} onChange={(e) => updateField('minority', e.target.checked)} className="w-5 h-5 rounded border-line text-navy focus:ring-navy" />
+              <span className="text-base text-ink">Minority community</span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
-              <input type="checkbox" checked={form.disability} onChange={(e) => updateField('disability', e.target.checked)} className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
-              <span className="text-base text-gray-900">Person with disability</span>
+              <input type="checkbox" checked={form.disability} onChange={(e) => updateField('disability', e.target.checked)} className="w-5 h-5 rounded border-line text-navy focus:ring-navy" />
+              <span className="text-base text-ink">Person with disability</span>
             </label>
           </div>
         </div>
@@ -205,12 +205,12 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
       {step === 4 && (
         <div className="space-y-6">
           <div>
-            <label htmlFor="income" className="block text-base font-medium text-gray-900 mb-2">Annual Family Income (Rs)</label>
+            <label htmlFor="income" className="block text-base font-medium text-ink mb-2">Annual Family Income (Rs)</label>
             <input id="income" type="number" min="0" value={form.income} onChange={(e) => updateField('income', e.target.value)} className="input-field" placeholder="e.g. 300000" />
-            <p className="text-xs text-gray-500 mt-1">Total income of your family per year. Enter 0 if no income.</p>
+            <p className="text-xs text-muted-2 mt-1">Total income of your family per year. Enter 0 if no income.</p>
           </div>
           <div>
-            <label className="block text-base font-medium text-gray-900 mb-3">Occupation</label>
+            <label className="block text-base font-medium text-ink mb-3">Occupation</label>
             {renderRadioGroup('occupation', [
               { value: 'employed', label: 'Employed' },
               { value: 'self_employed', label: 'Self Employed' },
@@ -229,7 +229,7 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
       {/* Step 5: Education */}
       {step === 5 && (
         <div>
-          <label className="block text-base font-medium text-gray-900 mb-3">Highest Education</label>
+          <label className="block text-base font-medium text-ink mb-3">Highest Education</label>
           {renderRadioGroup('education', [
             { value: 'none', label: 'No formal education' },
             { value: 'primary', label: 'Primary (1st-5th)' },
@@ -248,7 +248,7 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
       {step === 6 && (
         <div>
           <p className="text-body mb-4">We will now check your profile against active government schemes in the database and show you the ones you may be eligible for.</p>
-          <div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
+          <div className="bg-paper-2 border border-line rounded-[5px] p-4 space-y-2 text-sm">
             {form.gender && <p><strong>Gender:</strong> {form.gender}</p>}
             {form.age && <p><strong>Age:</strong> {form.age}</p>}
             {form.state && <p><strong>State:</strong> {form.state}</p>}
@@ -261,7 +261,7 @@ export default function ProfileForm({ onResults, onLoading }: ProfileFormProps):
             {form.minority && <p><strong>Minority:</strong> Yes</p>}
             {form.disability && <p><strong>Disability:</strong> Yes</p>}
           </div>
-          <p className="text-xs text-gray-500 mt-3">Your data is not stored. It is only used to find matching schemes.</p>
+          <p className="text-xs text-muted-2 mt-3">Your data is not stored. It is only used to find matching schemes.</p>
         </div>
       )}
 

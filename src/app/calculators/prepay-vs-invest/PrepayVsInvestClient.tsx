@@ -17,21 +17,21 @@ import {
 } from '@/lib/prepay-vs-invest';
 
 function StatCard({ label, value, sub, tone = 'default' }: { label: string; value: string; sub?: string; tone?: 'default' | 'good' | 'warn' | 'bad' }): React.ReactElement {
-  const toneClass = tone === 'good' ? 'text-green-700' : tone === 'warn' ? 'text-amber-700' : tone === 'bad' ? 'text-red-700' : 'text-primary';
+  const toneClass = tone === 'good' ? 'text-green-700' : tone === 'warn' ? 'text-brown' : tone === 'bad' ? 'text-brand-red' : 'text-navy';
   return (
     <div className="card">
-      <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">{label}</p>
       <p className={`text-2xl font-bold ${toneClass}`}>{value}</p>
-      {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
+      {sub && <p className="text-xs text-muted-2 mt-1">{sub}</p>}
     </div>
   );
 }
 
 function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }): React.ReactElement {
   return (
-    <div className={`flex justify-between gap-4 text-sm py-1 ${strong ? 'font-semibold border-t border-gray-200 pt-2 mt-1' : ''}`}>
-      <span className="text-gray-600">{label}</span>
-      <span className={strong ? 'text-gray-900' : 'font-medium text-gray-900'}>{value}</span>
+    <div className={`flex justify-between gap-4 text-sm py-1 ${strong ? 'font-semibold border-t border-line pt-2 mt-1' : ''}`}>
+      <span className="text-muted">{label}</span>
+      <span className={strong ? 'text-navy' : 'font-medium text-navy'}>{value}</span>
     </div>
   );
 }
@@ -89,7 +89,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
       return { title: `Invest the surplus. ${conf}% chance of higher net worth`, tone: 'bg-green-50 border-green-200', body: `On a risk-adjusted basis, investing your ₹${formatCompactINR(inputs.monthlySurplus)}/month beats prepaying. Investing finishes ahead in ${conf}% of 10,000 simulated futures.` };
     }
     if (analysis.verdict === 'prepay') {
-      return { title: `Prepay your loan. the safer win`, tone: 'bg-amber-50 border-amber-200', body: `Your guaranteed after-tax loan rate of ${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}% is hard to beat for the risk. Investing only wins in ${conf}% of scenarios. not enough to justify the risk at your risk-aversion setting.` };
+      return { title: `Prepay your loan. the safer win`, tone: 'bg-brand-yellow-soft/30 border-brand-yellow/50', body: `Your guaranteed after-tax loan rate of ${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}% is hard to beat for the risk. Investing only wins in ${conf}% of scenarios. not enough to justify the risk at your risk-aversion setting.` };
     }
     return { title: `Split it. invest ${Math.round(f * 100)}%, prepay ${Math.round((1 - f) * 100)}%`, tone: 'bg-primary-50 border-primary-100', body: `A hybrid maximises your risk-adjusted (certainty-equivalent) wealth: invest about ₹${formatCompactINR(investMonthly)}/month and prepay ₹${formatCompactINR(prepayMonthly)}/month. Investing alone wins in ${conf}% of futures.` };
   };
@@ -137,7 +137,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
           <h2 className="heading-2">The verdict</h2>
           {computing && (
-            <span className="text-sm text-gray-500 inline-flex items-center gap-2">
+            <span className="text-sm text-muted-2 inline-flex items-center gap-2">
               <span className="inline-block w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" aria-hidden="true" />
               Simulating {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} scenarios…
             </span>
@@ -148,7 +148,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
           <>
             <div className={`card mb-6 ${v.tone}`}>
               <h3 className="text-lg font-bold mb-1">{v.title}</h3>
-              <p className="text-sm text-gray-700">{v.body}</p>
+              <p className="text-sm text-ink">{v.body}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-6">
@@ -170,7 +170,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
             {/* Distribution */}
             <div className="card mb-6">
               <h3 className="text-base font-semibold mb-1">Net-worth distribution: invest vs prepay</h3>
-              <p className="text-xs text-gray-500 mb-3">
+              <p className="text-xs text-muted-2 mb-3">
                 After-tax outcomes of investing across {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} simulated futures. Bars right of the red line beat the guaranteed prepay outcome; bars left fall short.
               </p>
               <DistributionChart histogram={analysis.investHistogram} prepayValue={analysis.prepayValue} median={analysis.investDistribution.p50} probInvestBeats={analysis.probInvestBeatsPrepay} />
@@ -183,62 +183,62 @@ export default function PrepayVsInvestClient(): React.ReactElement {
               <h3 className="text-base font-semibold mb-3">What prepaying does to your loan</h3>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-gray-500 border-b border-gray-200">
+                  <tr className="text-left text-muted-2 border-b border-line">
                     <th className="py-2 font-medium">&nbsp;</th>
                     <th className="py-2 font-medium text-right">Without prepay</th>
                     <th className="py-2 font-medium text-right">With full prepay</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-gray-100"><td className="py-2 text-gray-600">Monthly EMI</td><td className="py-2 text-right">{formatINR(Math.round(analysis.emi))}</td><td className="py-2 text-right">{formatINR(Math.round(analysis.emi))}</td></tr>
-                  <tr className="border-b border-gray-100"><td className="py-2 text-gray-600">Total interest paid</td><td className="py-2 text-right">{formatINR(Math.round(analysis.amortNoPrepay.totalInterest))}</td><td className="py-2 text-right">{formatINR(Math.round(analysis.amortWithPrepay.totalInterest))}</td></tr>
-                  <tr className="border-b border-gray-100"><td className="py-2 text-gray-600">Loan cleared in</td><td className="py-2 text-right">{(analysis.amortNoPrepay.payoffMonths / 12).toFixed(1)} yrs</td><td className="py-2 text-right">{(analysis.amortWithPrepay.payoffMonths / 12).toFixed(1)} yrs</td></tr>
+                  <tr className="border-b border-line/60"><td className="py-2 text-muted">Monthly EMI</td><td className="py-2 text-right">{formatINR(Math.round(analysis.emi))}</td><td className="py-2 text-right">{formatINR(Math.round(analysis.emi))}</td></tr>
+                  <tr className="border-b border-line/60"><td className="py-2 text-muted">Total interest paid</td><td className="py-2 text-right">{formatINR(Math.round(analysis.amortNoPrepay.totalInterest))}</td><td className="py-2 text-right">{formatINR(Math.round(analysis.amortWithPrepay.totalInterest))}</td></tr>
+                  <tr className="border-b border-line/60"><td className="py-2 text-muted">Loan cleared in</td><td className="py-2 text-right">{(analysis.amortNoPrepay.payoffMonths / 12).toFixed(1)} yrs</td><td className="py-2 text-right">{(analysis.amortWithPrepay.payoffMonths / 12).toFixed(1)} yrs</td></tr>
                 </tbody>
               </table>
-              <div className="mt-3 text-sm text-gray-700">
+              <div className="mt-3 text-sm text-ink">
                 Prepaying saves <strong>{formatINR(Math.round(analysis.interestSaved))}</strong> in interest{analysis.effectiveRate.shieldApplies ? <> (<strong>{formatINR(Math.round(analysis.afterTaxInterestSaved))}</strong> after losing the tax shield)</> : null} and clears the loan <strong>{(analysis.tenureCutMonths / 12).toFixed(1)} years</strong> early.
               </div>
             </div>
 
             {/* Show working */}
             <div className="card my-6">
-              <button type="button" onClick={() => setShowWorking((s) => !s)} className="w-full flex items-center justify-between text-left font-semibold text-gray-900 min-h-[44px]" aria-expanded={showWorking}>
+              <button type="button" onClick={() => setShowWorking((s) => !s)} className="w-full flex items-center justify-between text-left font-semibold text-navy min-h-[44px]" aria-expanded={showWorking}>
                 <span>Show the after-tax math</span>
                 <span className={`transition-transform ${showWorking ? 'rotate-180' : ''}`} aria-hidden="true">▾</span>
               </button>
               {showWorking && (
                 <div className="mt-4 space-y-5 text-sm">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">1. Effective after-tax loan rate (the prepay "return")</h4>
+                    <h4 className="font-semibold text-navy mb-1">1. Effective after-tax loan rate (the prepay "return")</h4>
                     <Row label="Nominal loan rate" value={`${analysis.effectiveRate.nominalRatePct.toFixed(2)}%`} />
                     {analysis.effectiveRate.shieldApplies ? (
                       <>
                         <Row label="Avg. annual Section 24(b) tax saved" value={formatINR(Math.round(analysis.effectiveRate.avgAnnualShield))} />
                         <Row label="Effective after-tax loan rate" value={`${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}%`} strong />
-                        <p className="text-gray-500 text-xs mt-1">The shield only reduces the rate for interest under the ₹2L cap. Prepaying also gives up some of this deduction. that loss is netted off the interest saved.</p>
+                        <p className="text-muted-2 text-xs mt-1">The shield only reduces the rate for interest under the ₹2L cap. Prepaying also gives up some of this deduction. that loss is netted off the interest saved.</p>
                       </>
                     ) : (
-                      <p className="text-gray-500 text-xs mt-1">No Section 24(b) shield in the new regime (or not claimed), so the effective rate equals the nominal {analysis.effectiveRate.nominalRatePct.toFixed(2)}%.</p>
+                      <p className="text-muted-2 text-xs mt-1">No Section 24(b) shield in the new regime (or not claimed), so the effective rate equals the nominal {analysis.effectiveRate.nominalRatePct.toFixed(2)}%.</p>
                     )}
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">2. Investing the surplus (after capital-gains tax)</h4>
+                    <h4 className="font-semibold text-navy mb-1">2. Investing the surplus (after capital-gains tax)</h4>
                     <Row label="Total surplus invested (cost basis)" value={formatINR(Math.round(analysis.investedPrincipal))} />
                     <Row label="Median outcome (after tax)" value={formatINR(Math.round(analysis.investDistribution.p50))} />
                     <Row label="Expected outcome (after tax)" value={formatINR(Math.round(analysis.investDistribution.mean))} />
                     <Row label="Pessimistic (10th percentile)" value={formatINR(Math.round(analysis.investDistribution.p10))} />
                     <Row label="Optimistic (90th percentile)" value={formatINR(Math.round(analysis.investDistribution.p90))} />
-                    <p className="text-gray-500 text-xs mt-1">{inputs.vehicle === 'debt' ? 'Debt gains taxed at your slab rate.' : 'Equity/hybrid gains: 12.5% LTCG over the ₹1.25L exemption (20% STCG if held under a year).'}</p>
+                    <p className="text-muted-2 text-xs mt-1">{inputs.vehicle === 'debt' ? 'Debt gains taxed at your slab rate.' : 'Equity/hybrid gains: 12.5% LTCG over the ₹1.25L exemption (20% STCG if held under a year).'}</p>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">3. Risk-adjusted hybrid split (certainty-equivalent wealth)</h4>
+                    <h4 className="font-semibold text-navy mb-1">3. Risk-adjusted hybrid split (certainty-equivalent wealth)</h4>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
-                        <thead><tr className="text-left text-gray-500 border-b border-gray-200"><th className="py-1.5 font-medium">Invest %</th><th className="py-1.5 font-medium text-right">Expected wealth</th><th className="py-1.5 font-medium text-right">Certainty-equivalent</th></tr></thead>
+                        <thead><tr className="text-left text-muted-2 border-b border-line"><th className="py-1.5 font-medium">Invest %</th><th className="py-1.5 font-medium text-right">Expected wealth</th><th className="py-1.5 font-medium text-right">Certainty-equivalent</th></tr></thead>
                         <tbody>
                           {analysis.hybridCurve.filter((_, i) => i % 4 === 0).map((pt) => (
-                            <tr key={pt.investFraction} className={`border-b border-gray-100 ${Math.abs(pt.investFraction - f) < 0.001 ? 'bg-primary-50 font-semibold' : ''}`}>
-                              <td className="py-1.5 text-gray-700">{Math.round(pt.investFraction * 100)}%</td>
+                            <tr key={pt.investFraction} className={`border-b border-line/60 ${Math.abs(pt.investFraction - f) < 0.001 ? 'bg-primary-50 font-semibold' : ''}`}>
+                              <td className="py-1.5 text-ink">{Math.round(pt.investFraction * 100)}%</td>
                               <td className="py-1.5 text-right">{formatCompactINR(pt.expectedWealth)}</td>
                               <td className="py-1.5 text-right">{formatCompactINR(pt.certaintyEquivalent)}</td>
                             </tr>
@@ -246,7 +246,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
                         </tbody>
                       </table>
                     </div>
-                    <p className="text-gray-500 text-xs mt-1">Certainty-equivalent applies CRRA utility (risk aversion γ = {inputs.riskAversion}). The split with the highest certainty-equivalent is your risk-adjusted optimum: <strong>{Math.round(f * 100)}% invest</strong>.</p>
+                    <p className="text-muted-2 text-xs mt-1">Certainty-equivalent applies CRRA utility (risk aversion γ = {inputs.riskAversion}). The split with the highest certainty-equivalent is your risk-adjusted optimum: <strong>{Math.round(f * 100)}% invest</strong>.</p>
                   </div>
                 </div>
               )}

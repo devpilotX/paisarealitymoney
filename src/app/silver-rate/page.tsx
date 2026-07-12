@@ -67,19 +67,19 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
         <div className="overflow-x-auto my-8">
           <h2 className="heading-2 mb-4">Silver Price Today Across Indian Cities</h2>
           <table className="w-full border-collapse">
-            <thead><tr className="border-b-2 border-gray-200 bg-gray-50">
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">City</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Per Gram</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Per Kg</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Change</th>
+            <thead><tr className="border-b border-line bg-paper-2">
+              <th className="text-left py-3 px-4 text-sm font-semibold text-navy">City</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Per Gram</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Per Kg</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Change</th>
             </tr></thead>
             <tbody>
               {prices.map((row) => {
-                const cc = row.change_amount > 0 ? 'text-green-600' : row.change_amount < 0 ? 'text-red-600' : 'text-gray-500';
+                const cc = row.change_amount > 0 ? 'price-up' : row.change_amount < 0 ? 'price-down' : 'price-neutral';
                 const ar = row.change_amount > 0 ? '\u25B2' : row.change_amount < 0 ? '\u25BC' : '';
                 return (
-                  <tr key={row.city_slug} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
-                    <td className="py-3 px-4"><Link href={`/silver-rate/${row.city_slug}`} className="text-primary font-medium no-underline hover:underline">{row.city_name}</Link><span className="text-xs text-gray-500 ml-1">{row.state}</span></td>
+                  <tr key={row.city_slug} className="border-b border-line/60 hover:bg-paper-2 transition-colors duration-200">
+                    <td className="py-3 px-4"><Link href={`/silver-rate/${row.city_slug}`} className="text-navy font-medium no-underline hover:text-brand-red">{row.city_name}</Link><span className="text-xs text-muted-2 ml-1">{row.state}</span></td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.silver_per_gram)}</td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.silver_per_kg)}</td>
                     <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>{ar} {row.change_amount === 0 ? '-' : formatINR(Math.abs(row.change_amount))}</td>

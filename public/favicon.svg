@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Paisa Reality">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#EDE2C9" stroke="#CDB98E" stroke-width="2.5"/>
+  <text x="32" y="33" text-anchor="middle" dominant-baseline="central" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="32">
+    <tspan fill="#1C3A5E">P</tspan><tspan fill="#A62822">R</tspan>
+  </text>
+</svg>

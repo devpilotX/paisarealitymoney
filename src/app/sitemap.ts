@@ -18,6 +18,11 @@ interface BankSitemapRow extends QueryResultRow {
   slug: string;
 }
 
+interface ScholarshipSitemapRow extends QueryResultRow {
+  slug: string;
+  updated_at: string | Date | null;
+}
+
 function stateNameToSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
@@ -168,6 +173,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  const scholarshipRows = await query<ScholarshipSitemapRow>(
+    'SELECT slug, updated_at FROM scholarships WHERE active = TRUE ORDER BY updated_at DESC'
+  ).catch(() => [] as ScholarshipSitemapRow[]);
+
+  const scholarshipPages: MetadataRoute.Sitemap = scholarshipRows.map((s) => ({
+    url: `${BASE_URL}/scholarships/${s.slug}`,
+    lastModified: toIsoDate(s.updated_at, now),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
   const blogPages = await getAllPostsAsync(true)
     .then((posts) => posts.map((post) => ({
       url: `${BASE_URL}/newsletter/${post.slug}`,
@@ -191,6 +207,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...categoryPages,
     ...statePages,
     ...schemePages,
+    ...scholarshipPages,
     ...blogPages,
     ...bankPages,
     ...goldCityPages,

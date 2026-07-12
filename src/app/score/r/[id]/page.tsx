@@ -31,13 +31,13 @@ export default async function PublicScorePage({ params }: { params: Promise<{ id
     <div className="container-main py-10 max-w-2xl">
       <div className="card text-center">
         <ScoreGauge score={s.totalScore} band={s.band} />
-        <p className="text-gray-600 mt-2">A Money Health Score on Paisa Reality</p>
+        <p className="text-muted mt-2">A Money Health Score on Paisa Reality</p>
 
         <div className="mt-6 text-left">
           <h2 className="heading-3 mb-2">Top things to improve</h2>
           <ul className="space-y-2">
             {s.topActions.map((a, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+              <li key={i} className="flex items-start gap-2 text-sm text-ink">
                 <span className="text-green-700 font-semibold">+{a.pointsRecoverable}</span><span>{a.label}</span>
               </li>
             ))}
@@ -48,7 +48,7 @@ export default async function PublicScorePage({ params }: { params: Promise<{ id
           <Link href="/score" className="btn-primary no-underline">Calculate my own score</Link>
           <ShareScore text={shareText(s.totalScore)} />
         </div>
-        <p className="text-xs text-gray-400 mt-4">Educational only, not financial advice. No personal financial details are shown on this page.</p>
+        <p className="text-xs text-muted-2 mt-4">Educational only, not financial advice. No personal financial details are shown on this page.</p>
       </div>
     </div>
   );

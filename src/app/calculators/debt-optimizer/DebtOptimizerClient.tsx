@@ -42,16 +42,16 @@ function months(n: number): string {
 function NumField({ label, value, onChange, prefix, suffix, step = 1, min = 0 }: { label: string; value: number; onChange: (v: number) => void; prefix?: string; suffix?: string; step?: number; min?: number }): React.ReactElement {
   return (
     <label className="block">
-      <span className="block text-xs text-gray-500 mb-0.5">{label}</span>
+      <span className="block text-xs text-muted-2 mb-0.5">{label}</span>
       <div className="relative">
-        {prefix && <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">{prefix}</span>}
+        {prefix && <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-2 text-xs">{prefix}</span>}
         <input
           type="number" value={Number.isFinite(value) ? value : 0}
           onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
           min={min} step={step}
-          className={`w-full px-2 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary min-h-[40px] ${prefix ? 'pl-6' : ''} ${suffix ? 'pr-7' : ''}`}
+          className={`w-full px-2 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary min-h-[40px] ${prefix ? 'pl-6' : ''} ${suffix ? 'pr-7' : ''}`}
         />
-        {suffix && <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">{suffix}</span>}
+        {suffix && <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-2 text-xs">{suffix}</span>}
       </div>
     </label>
   );
@@ -102,14 +102,14 @@ export default function DebtOptimizerClient(): React.ReactElement {
         </div>
         <div className="space-y-4">
           {inputs.loans.map((l) => (
-            <div key={l.id} className="border border-gray-200 rounded-lg p-3">
+            <div key={l.id} className="border border-line rounded-lg p-3">
               <div className="flex items-center gap-2 mb-2">
-                <input type="text" value={l.name} onChange={(e) => updateLoan(l.id, { name: e.target.value })} aria-label="Loan name" className="flex-1 px-2 py-2 border border-gray-300 rounded-lg text-sm font-medium min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary" />
-                <select value={l.type} onChange={(e) => updateLoan(l.id, { type: e.target.value as LoanType })} aria-label="Loan type" className="px-2 py-2 border border-gray-300 rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="text" value={l.name} onChange={(e) => updateLoan(l.id, { name: e.target.value })} aria-label="Loan name" className="flex-1 px-2 py-2 border border-line rounded-lg text-sm font-medium min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary" />
+                <select value={l.type} onChange={(e) => updateLoan(l.id, { type: e.target.value as LoanType })} aria-label="Loan type" className="px-2 py-2 border border-line rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary">
                   {LOAN_TYPES.map((t) => <option key={t} value={t}>{loanTypeLabel(t)}</option>)}
                 </select>
                 {inputs.loans.length > 1 && (
-                  <button type="button" onClick={() => removeLoan(l.id)} aria-label={`Remove ${l.name}`} className="text-gray-400 hover:text-red-600 px-2 min-h-[40px] text-lg">, </button>
+                  <button type="button" onClick={() => removeLoan(l.id)} aria-label={`Remove ${l.name}`} className="text-muted-2 hover:text-red-600 px-2 min-h-[40px] text-lg">, </button>
                 )}
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -128,26 +128,26 @@ export default function DebtOptimizerClient(): React.ReactElement {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <NumField label="Total monthly budget for all debt" value={inputs.monthlyBudget} onChange={(v) => setInputs((p) => ({ ...p, monthlyBudget: v }))} prefix="₹" step={1000} />
           <label className="block">
-            <span className="block text-xs text-gray-500 mb-0.5">Tax regime</span>
-            <select value={inputs.taxRegime} onChange={(e) => setInputs((p) => ({ ...p, taxRegime: e.target.value as 'old' | 'new' }))} className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary">
+            <span className="block text-xs text-muted-2 mb-0.5">Tax regime</span>
+            <select value={inputs.taxRegime} onChange={(e) => setInputs((p) => ({ ...p, taxRegime: e.target.value as 'old' | 'new' }))} className="w-full px-2 py-2 border border-line rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="new">New regime (no loan-interest deductions)</option>
               <option value="old">Old regime (Sec 24(b) + 80E available)</option>
             </select>
           </label>
           {inputs.taxRegime === 'old' && (
             <label className="block">
-              <span className="block text-xs text-gray-500 mb-0.5">Your marginal tax rate</span>
-              <select value={String(inputs.marginalSlabPct)} onChange={(e) => setInputs((p) => ({ ...p, marginalSlabPct: Number(e.target.value) }))} className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary">
+              <span className="block text-xs text-muted-2 mb-0.5">Your marginal tax rate</span>
+              <select value={String(inputs.marginalSlabPct)} onChange={(e) => setInputs((p) => ({ ...p, marginalSlabPct: Number(e.target.value) }))} className="w-full px-2 py-2 border border-line rounded-lg text-sm min-h-[40px] focus:outline-none focus:ring-2 focus:ring-primary">
                 {SLAB_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </label>
           )}
           <label className="block">
-            <span className="block text-xs text-gray-500 mb-0.5">Target debt-free date (optional)</span>
+            <span className="block text-xs text-muted-2 mb-0.5">Target debt-free date (optional)</span>
             <div className="flex items-center gap-2">
               <input type="checkbox" checked={useTarget} onChange={(e) => setUseTarget(e.target.checked)} className="w-4 h-4 accent-primary" aria-label="Enable target payoff date" />
-              <input type="number" value={targetMonths} onChange={(e) => setTargetMonths(parseInt(e.target.value) || 1)} min={1} disabled={!useTarget} className="w-24 px-2 py-2 border border-gray-300 rounded-lg text-sm min-h-[40px] disabled:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary" />
-              <span className="text-sm text-gray-500">months</span>
+              <input type="number" value={targetMonths} onChange={(e) => setTargetMonths(parseInt(e.target.value) || 1)} min={1} disabled={!useTarget} className="w-24 px-2 py-2 border border-line rounded-lg text-sm min-h-[40px] disabled:bg-paper-2 focus:outline-none focus:ring-2 focus:ring-primary" />
+              <span className="text-sm text-muted-2">months</span>
             </div>
           </label>
         </div>
@@ -155,8 +155,8 @@ export default function DebtOptimizerClient(): React.ReactElement {
 
       {/* Warnings */}
       {analysis.warnings.length > 0 && (
-        <div className="rounded-lg bg-amber-50 border border-amber-200 p-4 mb-6">
-          {analysis.warnings.map((w, i) => <p key={i} className="text-sm text-amber-800">{w}</p>)}
+        <div className="rounded-lg bg-brand-yellow-soft/30 border border-brand-yellow/50 p-4 mb-6">
+          {analysis.warnings.map((w, i) => <p key={i} className="text-sm text-brown">{w}</p>)}
         </div>
       )}
 
@@ -164,7 +164,7 @@ export default function DebtOptimizerClient(): React.ReactElement {
       {rec.clearedAll && (
         <div className="card mb-6 bg-green-50 border-green-200">
           <h3 className="text-lg font-bold mb-1">Pay them in this order: {analysis.ranking.map((r) => r.name).join(' → ')}</h3>
-          <p className="text-sm text-gray-700">
+          <p className="text-sm text-ink">
             The <strong>tax-aware plan</strong> clears all your debt in <strong>{months(rec.months)}</strong> and saves
             <strong> {formatINR(Math.round(analysis.interestSavedVsMinimums))}</strong> in interest versus paying only the minimums
             {analysis.monthsSavedVsMinimums > 0 ? <>. and gets you debt-free <strong>{months(analysis.monthsSavedVsMinimums)}</strong> sooner</> : null}.
@@ -185,8 +185,8 @@ export default function DebtOptimizerClient(): React.ReactElement {
                 <h3 className="text-sm font-semibold">{s.label.split(' (')[0]}</h3>
               </div>
               <p className="text-2xl font-bold text-primary">{s.clearedAll ? months(s.months) : ', '}</p>
-              <p className="text-xs text-gray-500 mt-1">Total interest: {s.clearedAll ? formatCompactINR(s.totalInterest) : 'n/a'}</p>
-              {inputs.taxRegime === 'old' && s.totalShield > 0 && <p className="text-xs text-gray-500">After-tax: {formatCompactINR(s.afterTaxInterest)}</p>}
+              <p className="text-xs text-muted-2 mt-1">Total interest: {s.clearedAll ? formatCompactINR(s.totalInterest) : 'n/a'}</p>
+              {inputs.taxRegime === 'old' && s.totalShield > 0 && <p className="text-xs text-muted-2">After-tax: {formatCompactINR(s.afterTaxInterest)}</p>}
               {isRec && <span className="inline-block mt-2 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded">Recommended</span>}
             </div>
           );
@@ -196,7 +196,7 @@ export default function DebtOptimizerClient(): React.ReactElement {
       {/* Timeline */}
       <div className="card mb-6">
         <h3 className="text-base font-semibold mb-1">Debt payoff timeline</h3>
-        <p className="text-xs text-gray-500 mb-3">Total outstanding balance over time. A steeper drop means faster freedom.</p>
+        <p className="text-xs text-muted-2 mb-3">Total outstanding balance over time. A steeper drop means faster freedom.</p>
         <PayoffTimelineChart series={series} />
       </div>
 
@@ -205,10 +205,10 @@ export default function DebtOptimizerClient(): React.ReactElement {
       {/* Tax-adjusted ranking */}
       <div className="card my-6 overflow-x-auto">
         <h3 className="text-base font-semibold mb-1">Tax-adjusted ranking. what to attack first</h3>
-        <p className="text-xs text-gray-500 mb-3">The effective rate is the true cost after Indian tax deductions. Highest effective rate gets your surplus first.</p>
+        <p className="text-xs text-muted-2 mb-3">The effective rate is the true cost after Indian tax deductions. Highest effective rate gets your surplus first.</p>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-gray-500 border-b border-gray-200">
+            <tr className="text-left text-muted-2 border-b border-line">
               <th className="py-2 font-medium">#</th>
               <th className="py-2 font-medium">Loan</th>
               <th className="py-2 font-medium text-right">Balance</th>
@@ -218,18 +218,18 @@ export default function DebtOptimizerClient(): React.ReactElement {
           </thead>
           <tbody>
             {analysis.ranking.map((r, i) => (
-              <tr key={r.id} className="border-b border-gray-100">
-                <td className="py-2 text-gray-500">{i + 1}</td>
-                <td className="py-2 text-gray-800">{r.name} <span className="text-xs text-gray-400">({loanTypeLabel(r.type)})</span></td>
+              <tr key={r.id} className="border-b border-line/60">
+                <td className="py-2 text-muted-2">{i + 1}</td>
+                <td className="py-2 text-ink">{r.name} <span className="text-xs text-muted-2">({loanTypeLabel(r.type)})</span></td>
                 <td className="py-2 text-right">{formatCompactINR(r.balance)}</td>
                 <td className="py-2 text-right">{r.nominalRatePct.toFixed(2)}%</td>
-                <td className={`py-2 text-right font-semibold ${r.effectiveRatePct < r.nominalRatePct ? 'text-green-700' : 'text-gray-900'}`}>{r.effectiveRatePct.toFixed(2)}%</td>
+                <td className={`py-2 text-right font-semibold ${r.effectiveRatePct < r.nominalRatePct ? 'text-green-700' : 'text-navy'}`}>{r.effectiveRatePct.toFixed(2)}%</td>
               </tr>
             ))}
           </tbody>
         </table>
         {inputs.taxRegime === 'old' && (
-          <p className="text-xs text-gray-500 mt-2">Green effective rates are below nominal thanks to Section 24(b) (home, ₹2L cap) or Section 80E (education, full interest). This can reorder which loan you should clear first.</p>
+          <p className="text-xs text-muted-2 mt-2">Green effective rates are below nominal thanks to Section 24(b) (home, ₹2L cap) or Section 80E (education, full interest). This can reorder which loan you should clear first.</p>
         )}
       </div>
 
@@ -240,8 +240,8 @@ export default function DebtOptimizerClient(): React.ReactElement {
           <ol className="space-y-2">
             {rec.payoffOrder.map((id, i) => (
               <li key={id} className="flex justify-between text-sm">
-                <span className="text-gray-700">{i + 1}. {loanNameById[id]}</span>
-                <span className="font-medium text-gray-900">cleared by month {rec.perLoanPayoffMonth[id]} ({months(rec.perLoanPayoffMonth[id] ?? 0)})</span>
+                <span className="text-ink">{i + 1}. {loanNameById[id]}</span>
+                <span className="font-medium text-navy">cleared by month {rec.perLoanPayoffMonth[id]} ({months(rec.perLoanPayoffMonth[id] ?? 0)})</span>
               </li>
             ))}
           </ol>

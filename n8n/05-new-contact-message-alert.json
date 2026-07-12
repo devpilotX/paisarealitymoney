@@ -1,0 +1,79 @@
+{
+  "name": "Paisa Reality - 05 New Contact Message Alert",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "minutes", "minutesInterval": 10 } ] }
+      },
+      "id": "schedule05",
+      "name": "Every 10 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT count(*)::int AS n, COALESCE(string_agg(name || ' <' || email || '>', ', '), '') AS senders FROM contact_messages WHERE created_at > NOW() - INTERVAL '10 minutes'",
+        "options": {}
+      },
+      "id": "pg05",
+      "name": "Recent messages",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [500, 300],
+      "credentials": {
+        "postgres": { "id": "pr-postgres", "name": "Paisa Reality Postgres" }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond-new",
+              "leftValue": "={{ $json.n }}",
+              "rightValue": 0,
+              "operator": { "type": "number", "operation": "gt" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if05",
+      "name": "Any new?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"from\": $env.FROM_EMAIL, \"to\": [$env.ADMIN_EMAIL], \"subject\": $json.n + \" new contact message(s) on Paisa Reality\", \"html\": \"<p>You have \" + $json.n + \" new message(s) from: \" + $json.senders + \".</p><p>Read them in the admin Messages tab.</p>\" } }}",
+        "options": {}
+      },
+      "id": "alert05",
+      "name": "Email admin (Resend)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1020, 220],
+      "credentials": {
+        "httpHeaderAuth": { "id": "resend-api", "name": "Resend API" }
+      }
+    }
+  ],
+  "connections": {
+    "Every 10 minutes": { "main": [ [ { "node": "Recent messages", "type": "main", "index": 0 } ] ] },
+    "Recent messages": { "main": [ [ { "node": "Any new?", "type": "main", "index": 0 } ] ] },
+    "Any new?": { "main": [ [ { "node": "Email admin (Resend)", "type": "main", "index": 0 } ], [] ] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "pinData": {}
+}

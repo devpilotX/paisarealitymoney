@@ -80,14 +80,14 @@ export default function PPFCalculatorPage(): React.ReactElement {
         <div className="my-8 overflow-x-auto">
           <h2 className="heading-2 mb-4">Year-wise PPF Growth</h2>
           <table className="w-full border-collapse">
-            <thead><tr className="border-b-2 border-gray-200 bg-gray-50">
+            <thead><tr className="border-b-2 border-line bg-paper-2">
               <th className="text-left py-3 px-4 text-sm font-semibold">Year</th>
               <th className="text-right py-3 px-4 text-sm font-semibold">Interest (Year)</th>
               <th className="text-right py-3 px-4 text-sm font-semibold">Balance</th>
             </tr></thead>
             <tbody>
               {result.schedule.map((row) => (
-                <tr key={row.year} className="border-b border-gray-100">
+                <tr key={row.year} className="border-b border-line/60">
                   <td className="py-2 px-4 text-sm">{row.year}</td>
                   <td className="py-2 px-4 text-sm text-right">{formatINR(row.interest)}</td>
                   <td className="py-2 px-4 text-sm text-right font-medium">{formatINR(row.balance)}</td>

@@ -66,7 +66,7 @@ export default function CitySelector({
 
   return (
     <div className="relative w-full max-w-md" ref={containerRef}>
-      <label htmlFor="city-search" className="block text-sm font-medium text-gray-700 mb-1">
+      <label htmlFor="city-search" className="block text-sm font-medium text-ink mb-1">
         Select City
       </label>
       <input
@@ -85,7 +85,7 @@ export default function CitySelector({
 
       {isOpen && filteredCities.length > 0 && (
         <ul
-          className="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg
+          className="absolute z-40 w-full mt-1 bg-paper border border-line rounded-[5px] shadow-lg
                      max-h-60 overflow-y-auto"
           role="listbox"
         >
@@ -95,15 +95,15 @@ export default function CitySelector({
                 type="button"
                 onClick={() => handleSelect(city)}
                 className={`w-full text-left px-4 py-3 text-sm transition-colors duration-200
-                           hover:bg-primary-50 hover:text-primary min-h-[44px]
-                           ${city.slug === currentSlug ? 'bg-primary-50 text-primary font-medium' : 'text-gray-900'}`}
+                           hover:bg-paper-2 hover:text-navy min-h-[44px]
+                           ${city.slug === currentSlug ? 'bg-paper-2 text-navy font-medium' : 'text-ink'}`}
                 role="option"
                 aria-selected={city.slug === currentSlug}
               >
                 <span className="font-medium">{city.name}</span>
-                <span className="text-gray-500 ml-2">{city.state}</span>
+                <span className="text-muted-2 ml-2">{city.state}</span>
                 {city.isMetro && (
-                  <span className="ml-2 text-xs bg-primary-50 text-primary px-1.5 py-0.5 rounded">Metro</span>
+                  <span className="ml-2 text-xs font-bold bg-brand-yellow-soft/70 text-brown px-1.5 py-0.5 rounded-[3px]">Metro</span>
                 )}
               </button>
             </li>
@@ -112,8 +112,8 @@ export default function CitySelector({
       )}
 
       {isOpen && filteredCities.length === 0 && searchTerm.trim() && (
-        <div className="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4">
-          <p className="text-sm text-gray-500 text-center">No cities found for "{searchTerm}"</p>
+        <div className="absolute z-40 w-full mt-1 bg-paper border border-line rounded-[5px] shadow-lg p-4">
+          <p className="text-sm text-muted-2 text-center">No cities found for "{searchTerm}"</p>
         </div>
       )}
     </div>

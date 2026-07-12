@@ -94,7 +94,7 @@ export default function SuccessGauge({ probability, target, label }: SuccessGaug
         <text x={CX - R} y={CY + 22} textAnchor="middle" fontSize="10" fill="#9ca3af">0%</text>
         <text x={CX + R} y={CY + 22} textAnchor="middle" fontSize="10" fill="#9ca3af">100%</text>
       </svg>
-      {label && <p className="text-center text-sm text-gray-500 mt-1">{label}</p>}
+      {label && <p className="text-center text-sm text-muted-2 mt-1">{label}</p>}
     </div>
   );
 }

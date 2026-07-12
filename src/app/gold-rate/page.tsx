@@ -109,25 +109,25 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
           <h2 className="heading-2 mb-4">Gold Price Today Across Indian Cities</h2>
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b-2 border-gray-200 bg-gray-50">
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">City</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">24K (per gram)</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">22K (per gram)</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">24K (per 10g)</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Change</th>
+              <tr className="border-b border-line bg-paper-2">
+                <th className="text-left py-3 px-4 text-sm font-semibold text-navy">City</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-navy">24K (per gram)</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-navy">22K (per gram)</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-navy">24K (per 10g)</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Change</th>
               </tr>
             </thead>
             <tbody>
               {prices.map((row) => {
-                const changeColor = row.change_amount > 0 ? 'text-green-600' : row.change_amount < 0 ? 'text-red-600' : 'text-gray-500';
+                const changeColor = row.change_amount > 0 ? 'price-up' : row.change_amount < 0 ? 'price-down' : 'price-neutral';
                 const arrow = row.change_amount > 0 ? '\u25B2' : row.change_amount < 0 ? '\u25BC' : '';
                 return (
-                  <tr key={row.city_slug} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
+                  <tr key={row.city_slug} className="border-b border-line/60 hover:bg-paper-2 transition-colors duration-200">
                     <td className="py-3 px-4">
-                      <Link href={`/gold-rate/${row.city_slug}`} className="text-primary font-medium no-underline hover:underline">
+                      <Link href={`/gold-rate/${row.city_slug}`} className="text-navy font-medium no-underline hover:text-brand-red">
                         {row.city_name}
                       </Link>
-                      <span className="text-xs text-gray-500 ml-1">{row.state}</span>
+                      <span className="text-xs text-muted-2 ml-1">{row.state}</span>
                     </td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.gold_24k_per_gram)}</td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.gold_22k_per_gram)}</td>

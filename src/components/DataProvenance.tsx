@@ -15,10 +15,10 @@ interface DataProvenanceProps {
  */
 export default function DataProvenance({ asOf, source, className = '' }: DataProvenanceProps): React.ReactElement {
   return (
-    <p className={`text-xs text-gray-500 ${className}`}>
+    <p className={`text-xs text-muted-2 ${className}`}>
       {asOf ? <>Data verified as of {formatDate(asOf)}. </> : null}
       {source ? <>Source: {source}. </> : null}
-      <Link href="/methodology" className="underline hover:text-gray-700">
+      <Link href="/methodology" className="underline hover:text-brand-red">
         How we verify prices
       </Link>
     </p>

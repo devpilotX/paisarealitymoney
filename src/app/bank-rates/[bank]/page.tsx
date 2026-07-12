@@ -101,7 +101,7 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
           <h1 className="heading-1 mb-2">{bank.name} Interest Rates</h1>
-          <p className="text-sm text-gray-500">{typeLabel[bank.type] ?? bank.type}</p>
+          <p className="text-sm text-muted-2">{typeLabel[bank.type] ?? bank.type}</p>
           <RatesAsOf bankSlug={bank.slug} className="mt-2" />
         </div>
         {bank.website && (

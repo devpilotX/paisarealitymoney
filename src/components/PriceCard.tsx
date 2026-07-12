@@ -26,17 +26,17 @@ export default function PriceCard({
 
   return (
     <div className="card">
-      <p className={`text-sm font-medium text-gray-500 mb-1 ${
+      <p className={`text-sm font-medium text-muted-2 mb-1 ${
         size === 'large' ? 'text-base' : ''
       }`}>
         {label}
       </p>
-      <p className={`font-bold text-gray-900 ${
+      <p className={`font-serif font-bold text-navy ${
         size === 'large' ? 'text-3xl sm:text-4xl' : 'text-xl sm:text-2xl'
       }`}>
         {formatINR(price)}
       </p>
-      <p className="text-xs text-gray-500 mb-2">{unit}</p>
+      <p className="text-xs text-muted-2 mb-2">{unit}</p>
       <div className={`flex items-center gap-1 text-sm font-medium ${changeColor}`}>
         {arrow && <span className="text-xs">{arrow}</span>}
         <span>

@@ -39,11 +39,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: post.description,
       url,
       siteName: 'Paisa Reality',
+      images: post.coverImage ? [{ url: post.coverImage }] : undefined,
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.description,
+      images: post.coverImage ? [post.coverImage] : undefined,
     },
   };
 }
@@ -96,6 +98,7 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
+    ...(post.coverImage ? { image: [post.coverImage] } : {}),
     author: { '@type': 'Organization', name: 'Paisa Reality', url: 'https://paisareality.com' },
     datePublished: post.date,
     dateModified: post.updatedAt,
@@ -120,9 +123,13 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
           {post.category}
         </span>
         <h1 className="heading-1 mb-4">{post.title}</h1>
-        <p className="text-sm text-gray-500 mb-8">
+        <p className="text-sm text-muted-2 mb-8">
           {formatDate(post.date)} - {post.readTime} - By {post.author}
         </p>
+        {post.coverImage && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={post.coverImage} alt={post.title} className="w-full h-auto rounded-[6px] border border-line mb-8" />
+        )}
         <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: htmlContent }} />
         <div className="mt-8 pt-6 border-t">
           <ShareButton url={`/newsletter/${post.slug}`} title={post.title} />
@@ -136,7 +143,7 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
             {related.map((relatedPost) => (
               <a key={relatedPost.slug} href={`/newsletter/${relatedPost.slug}`} className="card hover:shadow-md">
                 <h3 className="font-medium text-primary">{relatedPost.title}</h3>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-muted-2 mt-1">
                   {formatDate(relatedPost.date)} - {relatedPost.readTime}
                 </p>
               </a>

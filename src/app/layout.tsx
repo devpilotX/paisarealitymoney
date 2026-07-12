@@ -85,7 +85,11 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   icons: {
-    icon: [{ url: '/favicon.ico' }, { url: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
     apple: '/icon-192.png',
   },
 };
@@ -94,7 +98,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#007A78',
+  themeColor: '#1C3A5E',
 };
 
 export default function RootLayout({
@@ -139,7 +143,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
-      <body className="font-sans bg-white text-gray-900 antialiased flex flex-col min-h-screen">
+      <body className="font-sans bg-paper text-ink antialiased flex flex-col min-h-screen">
         <Script id="sw-killswitch" strategy="afterInteractive">
   {`if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));if(window.caches){caches.keys().then(k=>k.forEach(n=>caches.delete(n)))}}`}
 </Script>

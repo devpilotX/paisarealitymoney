@@ -6,7 +6,7 @@ const PW = W - PAD_L - PAD_R, PH = H - PAD_T - PAD_B, MIN = 300, MAX = 900;
 
 /** SVG line of total score over time with faint band-threshold guides. Accessible (role=img). */
 export default function ScoreLineChart({ points }: { points: readonly HistoryPoint[] }): React.ReactElement {
-  if (points.length < 2) return <div className="text-sm text-gray-400 py-8 text-center">Not enough history yet.</div>;
+  if (points.length < 2) return <div className="text-sm text-muted-2 py-8 text-center">Not enough history yet.</div>;
   const n = points.length;
   const x = (i: number): number => PAD_L + (i / (n - 1)) * PW;
   const y = (s: number): number => PAD_T + (1 - (Math.min(MAX, Math.max(MIN, s)) - MIN) / (MAX - MIN)) * PH;

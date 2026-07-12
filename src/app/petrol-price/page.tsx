@@ -71,19 +71,19 @@ export default async function PetrolPricePage(): Promise<React.ReactElement> {
         <div className="overflow-x-auto my-8">
           <h2 className="heading-2 mb-4">Petrol Price Today in Major Cities</h2>
           <table className="w-full border-collapse">
-            <thead><tr className="border-b-2 border-gray-200 bg-gray-50">
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">City</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Petrol (per litre)</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Diesel (per litre)</th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Change</th>
+            <thead><tr className="border-b border-line bg-paper-2">
+              <th className="text-left py-3 px-4 text-sm font-semibold text-navy">City</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Petrol (per litre)</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Diesel (per litre)</th>
+              <th className="text-right py-3 px-4 text-sm font-semibold text-navy">Change</th>
             </tr></thead>
             <tbody>
               {prices.map((row) => {
-                const cc = row.petrol_change > 0 ? 'text-green-600' : row.petrol_change < 0 ? 'text-red-600' : 'text-gray-500';
+                const cc = row.petrol_change > 0 ? 'price-up' : row.petrol_change < 0 ? 'price-down' : 'price-neutral';
                 const ar = row.petrol_change > 0 ? '\u25B2' : row.petrol_change < 0 ? '\u25BC' : '';
                 return (
-                  <tr key={row.city_slug} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-4"><Link href={`/petrol-price/${row.city_slug}`} className="text-primary font-medium no-underline hover:underline">{row.city_name}</Link><span className="text-xs text-gray-500 ml-1">{row.state}</span></td>
+                  <tr key={row.city_slug} className="border-b border-line/60 hover:bg-paper-2 transition-colors">
+                    <td className="py-3 px-4"><Link href={`/petrol-price/${row.city_slug}`} className="text-navy font-medium no-underline hover:text-brand-red">{row.city_name}</Link><span className="text-xs text-muted-2 ml-1">{row.state}</span></td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.petrol_price)}</td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.diesel_price)}</td>
                     <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>{ar} {row.petrol_change === 0 ? 'No change' : formatINR(Math.abs(row.petrol_change))}</td>

@@ -120,17 +120,19 @@ export default function SmartToolsPage(): React.ReactElement {
           <Link
             key={tool.href}
             href={tool.href}
-            className="relative block rounded-xl border-2 border-primary/30 bg-primary-50/30 p-6 no-underline group
-                       transition-all duration-200 hover:border-primary hover:shadow-md"
+            className="card no-underline group flex flex-col"
           >
             <div className="flex items-start justify-end mb-3">
-              <span className="text-xs font-semibold bg-primary text-white px-2.5 py-1 rounded-full">{tool.tag}</span>
+              <span className="badge-soft">{tool.tag}</span>
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-200">
+            <h2 className="font-serif text-lg font-bold text-navy mb-2 group-hover:text-brand-red transition-colors duration-200">
               {tool.title}
             </h2>
-            <p className="text-sm text-gray-600 mb-3">{tool.description}</p>
-            <span className="text-sm font-medium text-primary">Open tool</span>
+            <p className="text-sm text-muted mb-3">{tool.description}</p>
+            <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold text-navy">
+              Open tool
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </span>
           </Link>
         ))}
       </div>
@@ -141,14 +143,14 @@ export default function SmartToolsPage(): React.ReactElement {
         <FAQ items={SMART_TOOLS_FAQS} />
       </section>
 
-      <section className="mt-8 pt-6 border-t border-gray-200">
-        <h2 className="text-base font-semibold text-gray-800 mb-3">Related pages</h2>
+      <section className="mt-8 pt-6 border-t border-line">
+        <h2 className="font-serif text-base font-bold text-navy mb-3">Related pages</h2>
         <div className="flex flex-wrap gap-3">
-          <Link href="/calculators" className="text-sm text-primary no-underline hover:underline">Basic Calculators</Link>
-          <Link href="/score" className="text-sm text-primary no-underline hover:underline">Money Health Score</Link>
-          <Link href="/schemes" className="text-sm text-primary no-underline hover:underline">Government Schemes</Link>
-          <Link href="/bank-rates" className="text-sm text-primary no-underline hover:underline">Bank Rates</Link>
-          <Link href="/gold-rate" className="text-sm text-primary no-underline hover:underline">Gold Rate Today</Link>
+          <Link href="/calculators" className="text-sm text-navy no-underline hover:text-brand-red">Basic Calculators</Link>
+          <Link href="/score" className="text-sm text-navy no-underline hover:text-brand-red">Money Health Score</Link>
+          <Link href="/schemes" className="text-sm text-navy no-underline hover:text-brand-red">Government Schemes</Link>
+          <Link href="/bank-rates" className="text-sm text-navy no-underline hover:text-brand-red">Bank Rates</Link>
+          <Link href="/gold-rate" className="text-sm text-navy no-underline hover:text-brand-red">Gold Rate Today</Link>
         </div>
       </section>
     </div>

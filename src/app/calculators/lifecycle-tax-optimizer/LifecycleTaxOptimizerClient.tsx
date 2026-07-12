@@ -15,9 +15,9 @@ import {
 function StatCard({ label, value, sub, highlight }: { label: string; value: string; sub?: string; highlight?: boolean }): React.ReactElement {
   return (
     <div className={`card ${highlight ? 'border-primary border-2' : ''}`}>
-      <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">{label}</p>
       <p className={`text-2xl font-bold ${highlight ? 'text-green-700' : 'text-primary'}`}>{value}</p>
-      {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
+      {sub && <p className="text-xs text-muted-2 mt-1">{sub}</p>}
       {highlight && <span className="inline-block mt-2 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded">Lowest lifetime tax</span>}
     </div>
   );
@@ -95,7 +95,7 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
               : `Start in the new regime, then switch to old around age ${analysis.crossoverAge}`)
             : `As a business, lock into the ${analysis.years[0]?.chosenRegime === 'old' ? 'old' : 'new'} regime`}
         </h2>
-        <p className="text-sm text-gray-700">
+        <p className="text-sm text-ink">
           Optimising your regime choice over {inputs.horizonYears} years saves an estimated
           <strong> {formatINR(Math.round(analysis.totalSavedVsWorseStaticNPV))}</strong> (present value) versus the worse fixed strategy
           {analysis.crossoverYearOffset !== null && analysis.switchingAllowed ? <>, with the <strong>crossover in year {analysis.crossoverYearOffset + 1}</strong> (age {analysis.crossoverAge}) once your deductions outweigh the new regime&apos;s lower rates</> : null}.
@@ -114,19 +114,19 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
         <h3 className="text-base font-semibold mb-2">This year&apos;s recommended tax-saving mix</h3>
         {analysis.years[0]?.chosenRegime === 'old' ? (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="text-sm"><span className="text-gray-500">Section 80C</span><div className="font-semibold">{formatINR(Math.round(analysis.recommendedFirstYearMix.ded80C))}</div></div>
-            <div className="text-sm"><span className="text-gray-500">NPS 80CCD(1B)</span><div className="font-semibold">{formatINR(Math.round(analysis.recommendedFirstYearMix.ded80CCD1B))}</div></div>
-            <div className="text-sm"><span className="text-gray-500">Health 80D</span><div className="font-semibold">{formatINR(Math.round(analysis.recommendedFirstYearMix.ded80D))}</div></div>
+            <div className="text-sm"><span className="text-muted-2">Section 80C</span><div className="font-semibold">{formatINR(Math.round(analysis.recommendedFirstYearMix.ded80C))}</div></div>
+            <div className="text-sm"><span className="text-muted-2">NPS 80CCD(1B)</span><div className="font-semibold">{formatINR(Math.round(analysis.recommendedFirstYearMix.ded80CCD1B))}</div></div>
+            <div className="text-sm"><span className="text-muted-2">Health 80D</span><div className="font-semibold">{formatINR(Math.round(analysis.recommendedFirstYearMix.ded80D))}</div></div>
           </div>
         ) : (
-          <p className="text-sm text-gray-600">You&apos;re in the <strong>new regime</strong> this year, so tax-saving lock-ins (80C, 80CCD(1B)) give no benefit. keep that money liquid or in unconstrained investments. Health cover (80D) and employer NPS (80CCD(2)) still make sense for non-tax reasons.</p>
+          <p className="text-sm text-muted">You&apos;re in the <strong>new regime</strong> this year, so tax-saving lock-ins (80C, 80CCD(1B)) give no benefit. keep that money liquid or in unconstrained investments. Health cover (80D) and employer NPS (80CCD(2)) still make sense for non-tax reasons.</p>
         )}
       </div>
 
       {/* Chart */}
       <div className="card my-6">
         <h3 className="text-base font-semibold mb-1">Cumulative tax paid over time</h3>
-        <p className="text-xs text-gray-500 mb-3">Lower is better. The optimal line tracks whichever regime is cheaper each year.</p>
+        <p className="text-xs text-muted-2 mb-3">Lower is better. The optimal line tracks whichever regime is cheaper each year.</p>
         <PayoffTimelineChart series={series} xLabel="Years from now" xTickStepOverride={inputs.horizonYears <= 15 ? 3 : 5} emptyMessage="Adjust inputs to see the projection." />
       </div>
 
@@ -137,7 +137,7 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
         <h3 className="text-base font-semibold mb-3">Year-by-year projection</h3>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-gray-500 border-b border-gray-200">
+            <tr className="text-left text-muted-2 border-b border-line">
               <th className="py-2 font-medium">Year</th>
               <th className="py-2 font-medium">Age</th>
               <th className="py-2 font-medium text-right">Income</th>
@@ -149,13 +149,13 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
           </thead>
           <tbody>
             {tableRows.map((r) => (
-              <tr key={r.yearOffset} className="border-b border-gray-100">
-                <td className="py-2 text-gray-500">{r.yearOffset + 1}</td>
-                <td className="py-2 text-gray-700">{r.age}</td>
+              <tr key={r.yearOffset} className="border-b border-line/60">
+                <td className="py-2 text-muted-2">{r.yearOffset + 1}</td>
+                <td className="py-2 text-ink">{r.age}</td>
                 <td className="py-2 text-right">{formatCompactINR(r.grossIncome)}</td>
-                <td className={`py-2 text-right ${r.chosenRegime === 'old' ? 'font-semibold text-primary' : 'text-gray-500'}`}>{formatCompactINR(r.oldTax)}</td>
-                <td className={`py-2 text-right ${r.chosenRegime === 'new' ? 'font-semibold text-primary' : 'text-gray-500'}`}>{formatCompactINR(r.newTax)}</td>
-                <td className="py-2 text-center"><span className={`text-xs font-medium px-2 py-0.5 rounded ${r.chosenRegime === 'old' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}`}>{r.chosenRegime === 'old' ? 'Old' : 'New'}</span></td>
+                <td className={`py-2 text-right ${r.chosenRegime === 'old' ? 'font-semibold text-primary' : 'text-muted-2'}`}>{formatCompactINR(r.oldTax)}</td>
+                <td className={`py-2 text-right ${r.chosenRegime === 'new' ? 'font-semibold text-primary' : 'text-muted-2'}`}>{formatCompactINR(r.newTax)}</td>
+                <td className="py-2 text-center"><span className={`text-xs font-medium px-2 py-0.5 rounded ${r.chosenRegime === 'old' ? 'bg-brand-yellow-soft/70 text-brown' : 'bg-navy/10 text-navy'}`}>{r.chosenRegime === 'old' ? 'Old' : 'New'}</span></td>
                 <td className="py-2 text-right">{formatCompactINR(r.postTaxIncome)}</td>
               </tr>
             ))}

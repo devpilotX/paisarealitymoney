@@ -39,7 +39,7 @@ function StructureTable({ label, structure, highlight }: { label: string; struct
       <div className="space-y-2">
         {rows.map(r => (
           <div key={r.name} className="flex justify-between text-sm">
-            <span className="text-gray-600">{r.name}</span>
+            <span className="text-muted">{r.name}</span>
             <span className="font-medium">{formatINR(r.value)}</span>
           </div>
         ))}
@@ -135,13 +135,13 @@ export default function SalaryOptimizerPage(): React.ReactElement {
           <div className={`card ${result.bestRegime === 'old' ? 'border-primary border-2' : ''}`}>
             <h3 className="text-base font-semibold mb-1">Old Regime</h3>
             <p className="text-2xl font-bold text-primary">{formatINR(result.oldRegimeResult.tax)}</p>
-            <p className="text-xs text-gray-500 mt-1">Annual tax with optimal structure</p>
+            <p className="text-xs text-muted-2 mt-1">Annual tax with optimal structure</p>
             {result.bestRegime === 'old' && <span className="inline-block mt-2 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded">Recommended</span>}
           </div>
           <div className={`card ${result.bestRegime === 'new' ? 'border-primary border-2' : ''}`}>
             <h3 className="text-base font-semibold mb-1">New Regime</h3>
             <p className="text-2xl font-bold text-primary">{formatINR(result.newRegimeResult.tax)}</p>
-            <p className="text-xs text-gray-500 mt-1">Annual tax with optimal structure</p>
+            <p className="text-xs text-muted-2 mt-1">Annual tax with optimal structure</p>
             {result.bestRegime === 'new' && <span className="inline-block mt-2 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded">Recommended</span>}
           </div>
         </div>
@@ -159,13 +159,13 @@ export default function SalaryOptimizerPage(): React.ReactElement {
           <div className="card mt-4">
             <h3 className="text-base font-semibold mb-3">Deductions Applied</h3>
             <div className="space-y-2">
-              {result.oldRegimeResult.deductions.standardDeduction > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Standard Deduction</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.standardDeduction)}</span></div>}
-              {result.oldRegimeResult.deductions.hraExemption > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">HRA Exemption (Sec 10(13A))</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.hraExemption)}</span></div>}
-              {result.oldRegimeResult.deductions.section80C > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 80C</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80C)}</span></div>}
-              {result.oldRegimeResult.deductions.section80CCD2 > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 80CCD(2). NPS</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80CCD2)}</span></div>}
-              {result.oldRegimeResult.deductions.section80D > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 80D. Health Insurance</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80D)}</span></div>}
-              {result.oldRegimeResult.deductions.section24b > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">Section 24(b). Home Loan Interest</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section24b)}</span></div>}
-              {result.oldRegimeResult.deductions.ltaExemption > 0 && <div className="flex justify-between text-sm"><span className="text-gray-600">LTA Exemption (Sec 10(5))</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.ltaExemption)}</span></div>}
+              {result.oldRegimeResult.deductions.standardDeduction > 0 && <div className="flex justify-between text-sm"><span className="text-muted">Standard Deduction</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.standardDeduction)}</span></div>}
+              {result.oldRegimeResult.deductions.hraExemption > 0 && <div className="flex justify-between text-sm"><span className="text-muted">HRA Exemption (Sec 10(13A))</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.hraExemption)}</span></div>}
+              {result.oldRegimeResult.deductions.section80C > 0 && <div className="flex justify-between text-sm"><span className="text-muted">Section 80C</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80C)}</span></div>}
+              {result.oldRegimeResult.deductions.section80CCD2 > 0 && <div className="flex justify-between text-sm"><span className="text-muted">Section 80CCD(2). NPS</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80CCD2)}</span></div>}
+              {result.oldRegimeResult.deductions.section80D > 0 && <div className="flex justify-between text-sm"><span className="text-muted">Section 80D. Health Insurance</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section80D)}</span></div>}
+              {result.oldRegimeResult.deductions.section24b > 0 && <div className="flex justify-between text-sm"><span className="text-muted">Section 24(b). Home Loan Interest</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.section24b)}</span></div>}
+              {result.oldRegimeResult.deductions.ltaExemption > 0 && <div className="flex justify-between text-sm"><span className="text-muted">LTA Exemption (Sec 10(5))</span><span className="font-medium">{formatINR(result.oldRegimeResult.deductions.ltaExemption)}</span></div>}
             </div>
           </div>
         )}
@@ -173,10 +173,10 @@ export default function SalaryOptimizerPage(): React.ReactElement {
         {/* Monthly take-home estimate */}
         <div className="card mt-4 bg-primary-50">
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-gray-900">Estimated Monthly Take-Home</span>
+            <span className="font-semibold text-navy">Estimated Monthly Take-Home</span>
             <span className="text-xl font-bold text-primary">{formatINR(Math.round(winner.takeHome / 12))}</span>
           </div>
-          <p className="text-xs text-gray-500 mt-1">After tax and EPF deduction. Excludes variable pay, bonuses, reimbursements.</p>
+          <p className="text-xs text-muted-2 mt-1">After tax and EPF deduction. Excludes variable pay, bonuses, reimbursements.</p>
         </div>
       </div>
 

@@ -40,9 +40,9 @@ export default async function NewsletterPage(): Promise<React.ReactElement> {
       <p className="text-body mb-8">Money tips, price updates, and financial guides for every Indian.</p>
 
       {posts.length === 0 ? (
-        <div className="bg-gray-50 rounded-lg p-12 text-center">
-          <p className="text-xl text-gray-500 mb-2">Newsletter posts coming soon.</p>
-          <p className="text-gray-400">
+        <div className="bg-paper-2 rounded-lg p-12 text-center">
+          <p className="text-xl text-muted-2 mb-2">Newsletter posts coming soon.</p>
+          <p className="text-muted-2">
             We are working on helpful financial articles. Check back soon.
           </p>
         </div>
@@ -60,8 +60,8 @@ export default async function NewsletterPage(): Promise<React.ReactElement> {
               <h2 className="text-lg font-semibold group-hover:text-primary transition-colors mb-2">
                 {post.title}
               </h2>
-              <p className="text-sm text-gray-600 mb-4 line-clamp-2">{post.description}</p>
-              <p className="text-xs text-gray-400">
+              <p className="text-sm text-muted mb-4 line-clamp-2">{post.description}</p>
+              <p className="text-xs text-muted-2">
                 {formatDate(post.date)} - {post.readTime}
               </p>
             </Link>

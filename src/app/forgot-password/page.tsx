@@ -31,15 +31,15 @@ export default function ForgotPasswordPage(): React.ReactElement {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="card space-y-5">
-            <p className="text-sm text-gray-600">Enter your email and we will send you a link to reset your password.</p>
+            <p className="text-sm text-muted">Enter your email and we will send you a link to reset your password.</p>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-ink mb-1">Email</label>
               <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} className="input-field" required />
             </div>
             <button type="submit" disabled={loading} className="btn-primary w-full">
               {loading ? 'Sending...' : 'Send Reset Link'}
             </button>
-            <p className="text-sm text-center text-gray-500">
+            <p className="text-sm text-center text-muted-2">
               Remember your password? <Link href="/login" className="link-internal">Log in</Link>
             </p>
           </form>

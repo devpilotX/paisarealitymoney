@@ -93,8 +93,8 @@ export default function DebtOptimizerPage(): React.ReactElement {
       <Breadcrumb items={[{ label: 'Calculators', href: '/calculators' }, { label: 'Debt Optimizer' }]} />
 
       <div className="inline-flex items-center gap-2 mb-2">
-        <span className="text-xs font-semibold bg-primary-50 text-primary-700 px-2.5 py-1 rounded-full border border-primary-100">★ Smart Tool</span>
-        <span className="text-xs text-gray-500">Tax-aware · Deterministic · 100% in-browser</span>
+        <span className="badge"><svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z" /></svg> Smart Tool</span>
+        <span className="text-xs text-muted-2">Tax-aware · Deterministic · 100% in-browser</span>
       </div>
       <h1 className="heading-1 mb-3">Multi-Loan Debt Repayment Optimizer</h1>
       <p className="text-body mb-6 max-w-3xl">

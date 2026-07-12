@@ -71,20 +71,20 @@ function AccountContent(): React.ReactElement {
     setVerifyMsg(d.success ? 'Verification email sent. Check your inbox.' : (d.error || 'Failed.'));
   }, []);
 
-  if (loading) return <p className="text-center text-gray-500">Loading...</p>;
+  if (loading) return <p className="text-center text-muted-2">Loading...</p>;
   if (!user) return <div />;
 
   return (
     <>
-      {verifyMsg && <div className="mb-4 p-3 rounded-lg bg-teal-50 text-teal-800 text-sm">{verifyMsg}</div>}
+      {verifyMsg && <div className="mb-4 p-3 rounded-lg bg-navy/5 text-navy text-sm">{verifyMsg}</div>}
 
       <div className="card mb-6">
         <h2 className="text-lg font-semibold mb-4">Profile</h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-ink mb-1">Email</label>
             <div className="flex items-center gap-2">
-              <input value={user.email} disabled className="input-field bg-gray-50 flex-1" />
+              <input value={user.email} disabled className="input-field bg-paper-2 flex-1" />
               {user.email_verified
                 ? <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Verified</span>
                 : <><span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Not verified</span>
@@ -92,20 +92,20 @@ function AccountContent(): React.ReactElement {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <label className="block text-sm font-medium text-ink mb-1">Full Name</label>
             <input value={fullName} onChange={e => setFullName(e.target.value)} className="input-field" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+              <label className="block text-sm font-medium text-ink mb-1">Phone</label>
               <input value={phone} onChange={e => setPhone(e.target.value)} className="input-field" placeholder="Optional" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+              <label className="block text-sm font-medium text-ink mb-1">City</label>
               <input value={city} onChange={e => setCity(e.target.value)} className="input-field" placeholder="Optional" />
             </div>
           </div>
-          {profileMsg && <p className={`text-sm ${profileMsg.includes('updated') ? 'text-green-700' : 'text-red-600'}`}>{profileMsg}</p>}
+          {profileMsg && <p className={`text-sm ${profileMsg.includes('updated') ? 'text-green-700' : 'text-brand-red'}`}>{profileMsg}</p>}
           <button onClick={() => void saveProfile()} className="btn-primary">Save Changes</button>
         </div>
       </div>
@@ -116,7 +116,7 @@ function AccountContent(): React.ReactElement {
           <input type="password" placeholder="Current password" value={curPw} onChange={e => setCurPw(e.target.value)} className="input-field" />
           <input type="password" placeholder="New password (min 8 chars)" value={newPw} onChange={e => setNewPw(e.target.value)} className="input-field" />
           <input type="password" placeholder="Confirm new password" value={confirmPw} onChange={e => setConfirmPw(e.target.value)} className="input-field" />
-          {pwMsg && <p className={`text-sm ${pwMsg.includes('changed') ? 'text-green-700' : 'text-red-600'}`}>{pwMsg}</p>}
+          {pwMsg && <p className={`text-sm ${pwMsg.includes('changed') ? 'text-green-700' : 'text-brand-red'}`}>{pwMsg}</p>}
           <button onClick={() => void changePw()} className="btn-primary">Update Password</button>
         </div>
       </div>
@@ -124,9 +124,9 @@ function AccountContent(): React.ReactElement {
       <div className="card">
         <h2 className="text-lg font-semibold mb-4">Account Info</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-          <div><span className="text-gray-500">Plan:</span> <span className="font-medium">{user.plan === 'premium' ? 'Premium' : 'Free'}</span></div>
-          <div><span className="text-gray-500">Member since:</span> <span className="font-medium">{user.created_at ? new Date(user.created_at).toLocaleDateString('en-IN') : 'N/A'}</span></div>
-          <div><span className="text-gray-500">Last login:</span> <span className="font-medium">{user.last_login_at ? new Date(user.last_login_at).toLocaleString('en-IN') : 'N/A'}</span></div>
+          <div><span className="text-muted-2">Plan:</span> <span className="font-medium">{user.plan === 'premium' ? 'Premium' : 'Free'}</span></div>
+          <div><span className="text-muted-2">Member since:</span> <span className="font-medium">{user.created_at ? new Date(user.created_at).toLocaleDateString('en-IN') : 'N/A'}</span></div>
+          <div><span className="text-muted-2">Last login:</span> <span className="font-medium">{user.last_login_at ? new Date(user.last_login_at).toLocaleString('en-IN') : 'N/A'}</span></div>
         </div>
       </div>
     </>
@@ -136,12 +136,12 @@ function AccountContent(): React.ReactElement {
 export default function AccountPage(): React.ReactElement {
   return (
     <div className="container-main py-6">
-      <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+      <div className="flex items-center gap-2 text-sm text-muted-2 mb-6">
         <Link href="/dashboard" className="hover:text-primary">Dashboard</Link>
-        <span>/</span><span className="text-gray-900">Account</span>
+        <span>/</span><span className="text-navy">Account</span>
       </div>
       <h1 className="heading-1 mb-6">My Account</h1>
-      <Suspense fallback={<p className="text-center text-gray-500">Loading...</p>}>
+      <Suspense fallback={<p className="text-center text-muted-2">Loading...</p>}>
         <AccountContent />
       </Suspense>
     </div>

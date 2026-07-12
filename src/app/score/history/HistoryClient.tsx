@@ -7,7 +7,7 @@ import { scoreDelta, pillarTrends, bandCrossingUp, type HistoryPoint, type Direc
 import { PILLAR_NAMES, PILLAR_LABEL, type PillarName } from '@/lib/score-config';
 
 const ARROW: Record<Direction, string> = { up: '\u25B2', down: '\u25BC', flat: '\u25AC' };
-const ARROW_CLS: Record<Direction, string> = { up: 'text-green-600', down: 'text-red-600', flat: 'text-gray-400' };
+const ARROW_CLS: Record<Direction, string> = { up: 'text-green-700', down: 'text-brand-red', flat: 'text-muted-2' };
 
 type State = { kind: 'loading' } | { kind: 'unauth' } | { kind: 'error' } | { kind: 'ok'; points: HistoryPoint[] };
 
@@ -27,21 +27,21 @@ export default function HistoryClient(): React.ReactElement {
     return () => { active = false; };
   }, []);
 
-  if (state.kind === 'loading') return <p className="text-gray-500">Loading...</p>;
+  if (state.kind === 'loading') return <p className="text-muted-2">Loading...</p>;
   if (state.kind === 'unauth') return (
-    <div className="card text-center"><p className="text-gray-700 mb-3">Sign in to keep and track your score history across devices.</p>
+    <div className="card text-center"><p className="text-ink mb-3">Sign in to keep and track your score history across devices.</p>
       <Link href="/login" className="btn-primary no-underline">Sign in</Link></div>
   );
   if (state.kind === 'error') return <p className="text-red-600">Could not load your history. Please try again.</p>;
 
   const { points } = state;
   if (points.length === 0) return (
-    <div className="card text-center"><p className="text-gray-700 mb-3">No saved scores yet.</p><Link href="/score" className="btn-primary no-underline">Calculate your score</Link></div>
+    <div className="card text-center"><p className="text-ink mb-3">No saved scores yet.</p><Link href="/score" className="btn-primary no-underline">Calculate your score</Link></div>
   );
   if (points.length === 1) return (
     <div className="card text-center">
-      <p className="text-2xl font-bold text-primary mb-1">{points[0]!.totalScore}<span className="text-base font-normal text-gray-500"> / 900</span></p>
-      <p className="text-gray-700 mb-3">That&apos;s your first snapshot. Refine an input or use a tool, then come back to watch your score move.</p>
+      <p className="text-2xl font-bold text-primary mb-1">{points[0]!.totalScore}<span className="text-base font-normal text-muted-2"> / 900</span></p>
+      <p className="text-ink mb-3">That&apos;s your first snapshot. Refine an input or use a tool, then come back to watch your score move.</p>
       <Link href="/calculators/budget-optimizer" className="btn-secondary no-underline">Use a money tool</Link>
     </div>
   );
@@ -61,7 +61,7 @@ export default function HistoryClient(): React.ReactElement {
 
       <div className="card">
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-          <div><span className="text-3xl font-bold text-primary">{latest.totalScore}</span><span className="text-gray-500"> / 900 &middot; {latest.band}</span></div>
+          <div><span className="text-3xl font-bold text-primary">{latest.totalScore}</span><span className="text-muted-2"> / 900 &middot; {latest.band}</span></div>
           {delta && delta.direction !== 'flat' && (
             <span className={`text-sm font-semibold ${delta.direction === 'up' ? 'text-green-700' : 'text-red-700'}`}>
               {delta.direction === 'up' ? '\u2191' : '\u2193'} {delta.direction === 'up' ? '+' : ''}{delta.delta} since last snapshot
@@ -75,8 +75,8 @@ export default function HistoryClient(): React.ReactElement {
         <h2 className="heading-3 mb-3">Pillar movement vs last snapshot</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {PILLAR_NAMES.map((n: PillarName) => { const d = trends[n] ?? 'flat'; return (
-            <div key={n} className="flex items-center justify-between text-sm border border-gray-100 rounded-lg px-3 py-2">
-              <span className="text-gray-700">{PILLAR_LABEL[n]}</span><span className={`font-semibold ${ARROW_CLS[d]}`}>{ARROW[d]}</span>
+            <div key={n} className="flex items-center justify-between text-sm border border-line/60 rounded-lg px-3 py-2">
+              <span className="text-ink">{PILLAR_LABEL[n]}</span><span className={`font-semibold ${ARROW_CLS[d]}`}>{ARROW[d]}</span>
             </div>
           ); })}
         </div>
