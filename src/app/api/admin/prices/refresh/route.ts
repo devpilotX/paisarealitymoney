@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { verifyAdmin } from '@/lib/admin-auth';
 import { cacheClearAll } from '@/lib/cache';
 import { checkPriceAlerts } from '@/lib/price-alerts';
+import { revalidatePriceRoutes } from '@/lib/revalidate-prices';
 import {
   updateFuelPricesLive,
   updateGoldPricesLive,
@@ -29,11 +30,13 @@ export async function POST(): Promise<NextResponse> {
     lpg: await updateLpgPricesLive(),
   };
   cacheClearAll();
+  const revalidatedRoutes = revalidatePriceRoutes();
   const userAlerts = await checkPriceAlerts();
 
   return NextResponse.json({
     success: Object.values(results).every((r) => r.success),
     duration: `${Date.now() - startTime}ms`,
+    revalidatedRoutes,
     userAlerts,
     results,
   });
