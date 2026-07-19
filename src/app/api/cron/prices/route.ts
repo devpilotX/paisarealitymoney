@@ -3,6 +3,7 @@ import { cacheClearAll } from '@/lib/cache';
 import { execute, query } from '@/lib/db';
 import { escapeHtml, getAppUrl, sendAdminAlert, sendEmail } from '@/lib/email';
 import { checkPriceAlerts } from '@/lib/price-alerts';
+import { revalidatePriceRoutes } from '@/lib/revalidate-prices';
 import { getDueScholarshipReminders, markReminderSent, type DueReminder } from '@/lib/scholarships';
 import { FUEL_STALE_AFTER_DAYS, LPG_STALE_AFTER_DAYS } from '@/lib/fuel-data';
 import {
@@ -110,6 +111,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   cacheClearAll();
 
+  // Purge the ISR full-route cache for every price page so the freshly written
+  // prices show up on the very next request instead of after a lazy regen.
+  const revalidatedRoutes = revalidatePriceRoutes();
+
   // Fresh prices are in — evaluate user price alerts against them.
   const userAlerts = await checkPriceAlerts();
 
@@ -146,6 +151,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     success: Object.values(results).every((result) => result.success),
     duration: `${Date.now() - startTime}ms`,
     updatedAt: new Date().toISOString(),
+    revalidatedRoutes,
     problems,
     alerted,
     scholarshipReminders,
