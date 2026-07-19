@@ -48,7 +48,9 @@ const config: Config = {
         ink: '#2B2216',
         muted: {
           DEFAULT: '#6D5E48',
-          2: '#8A7A61',
+          // Darkened from #8A7A61 to meet WCAG AA (4.5:1) on the paper
+          // background. #756547 gives ~4.7:1 for small secondary text.
+          2: '#756547',
         },
         line: {
           DEFAULT: '#CDB98E',
