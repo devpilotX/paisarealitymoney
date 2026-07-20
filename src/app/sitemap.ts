@@ -126,20 +126,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: cityPriority,
   }));
 
-  // Hindi mirror pages — they carry reciprocal hreflang with the English
-  // versions, so list them for discovery too.
-  const hindiStaticPages: MetadataRoute.Sitemap = [
-    { url: `${BASE_URL}/hi`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/hi/gold-rate`, lastModified: now, changeFrequency: 'daily', priority: 0.7 },
-    { url: `${BASE_URL}/hi/schemes`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-  ];
-
-  const hindiGoldCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
-    url: `${BASE_URL}/hi/gold-rate/${city.slug}`,
-    lastModified: now,
-    changeFrequency: 'daily' as const,
-    priority: 0.6,
-  }));
+  // NOTE: /hi (Hindi) pages are intentionally noindex,nofollow (see
+  // src/app/hi/layout.tsx: the site is English-only for search). They must NOT
+  // appear in the sitemap or in hreflang, otherwise Google reports "Submitted
+  // URL marked noindex" and the hreflang clusters break. Keep them out.
 
   const categoryPages: MetadataRoute.Sitemap = SCHEME_CATEGORIES.map((category) => ({
     url: `${BASE_URL}/category/${category.slug}`,
@@ -164,13 +154,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: toIsoDate(scheme.updated_at, now),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
-  }));
-
-  const hindiSchemePages: MetadataRoute.Sitemap = schemeRows.map((scheme) => ({
-    url: `${BASE_URL}/hi/schemes/${scheme.slug}`,
-    lastModified: toIsoDate(scheme.updated_at, now),
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
   }));
 
   const scholarshipRows = await query<ScholarshipSitemapRow>(
@@ -214,8 +197,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...silverCityPages,
     ...petrolCityPages,
     ...dieselCityPages,
-    ...hindiStaticPages,
-    ...hindiGoldCityPages,
-    ...hindiSchemePages,
   ];
 }
