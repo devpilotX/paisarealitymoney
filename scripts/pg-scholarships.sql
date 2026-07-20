@@ -662,3 +662,70 @@ UPDATE scholarships SET
   meta_title = 'Jnanabhumi Scholarship AP 2026: Eligibility & Apply',
   meta_description = 'AP Jnanabhumi (Vidya Deevena) gives fee reimbursement and maintenance scholarships to Andhra Pradesh students. Check eligibility, documents and how to apply.'
   WHERE slug = 'ap-jnanabhumi';
+
+
+-- Next-tier scholarship SEO metadata (idempotent; impressions >= ~30 in GSC 90d).
+UPDATE scholarships SET
+  meta_title = 'MahaDBT Scholarship 2026: Maharashtra Post-Matric',
+  meta_description = 'MahaDBT is the Maharashtra single-window portal for post-matric scholarships across SC, ST, OBC, EWS and minority schemes. Check eligibility and how to apply.'
+  WHERE slug = 'mahadbt-maharashtra';
+
+UPDATE scholarships SET
+  meta_title = 'Glow and Lovely Scholarship 2026: Apply Online',
+  meta_description = 'Glow and Lovely Careers gives financial help to women aged 15 to 30 in undergraduate or postgraduate study, up to about Rs 50,000. Check eligibility and apply.'
+  WHERE slug = 'glow-lovely-careers';
+
+UPDATE scholarships SET
+  meta_title = 'Post-Matric Scholarship for OBC 2026: Apply',
+  meta_description = 'The post-matric scholarship for OBC students gives fee support and an allowance in class 11 and above. Check eligibility, income limit and how to apply.'
+  WHERE slug = 'post-matric-obc';
+
+UPDATE scholarships SET
+  meta_title = 'Digital Gujarat Scholarship 2026: Apply Online',
+  meta_description = 'Digital Gujarat is the state portal for pre-matric and post-matric scholarships across SC, ST, OBC and EWS categories. Check eligibility and how to apply.'
+  WHERE slug = 'gujarat-digital';
+
+UPDATE scholarships SET
+  meta_title = 'Uttarakhand Post-Matric Scholarship 2026',
+  meta_description = 'Uttarakhand post-matric scholarships for SC, ST, OBC and minority students via the Social Welfare portal. Check eligibility, income limit and how to apply.'
+  WHERE slug = 'uttarakhand-post-matric';
+
+UPDATE scholarships SET
+  meta_title = 'Dr Ambedkar Post-Matric EBC Scholarship 2026',
+  meta_description = 'The Dr Ambedkar post-matric scholarship gives fee support and an allowance to EBC students in class 11 and above. Check eligibility and how to apply.'
+  WHERE slug = 'dr-ambedkar-ebc-post-matric';
+
+UPDATE scholarships SET
+  meta_title = 'Reliance Foundation UG Scholarship 2026: Apply',
+  meta_description = 'Reliance Foundation gives up to about Rs 2 lakh with mentoring to first-year undergraduate students with family income under Rs 15 lakh. Check how to apply.'
+  WHERE slug = 'reliance-foundation-ug';
+
+UPDATE scholarships SET
+  meta_title = 'PM YASASVI Scholarship 2026: Eligibility & Apply',
+  meta_description = 'PM YASASVI supports OBC, EBC and DNT students in classes 9 to 12 who clear the entrance test. Check eligibility, the exam and how to apply on NSP.'
+  WHERE slug = 'pm-yasasvi';
+
+UPDATE scholarships SET
+  meta_title = 'CBSE Single Girl Child Scholarship 2026',
+  meta_description = 'The CBSE Merit Scholarship for Single Girl Child supports girls who scored well in the class 10 board and continue in class 11 and 12. Check how to apply.'
+  WHERE slug = 'cbse-single-girl-child';
+
+UPDATE scholarships SET
+  meta_title = 'Narotam Sekhsaria Scholarship 2026: Apply',
+  meta_description = 'The Narotam Sekhsaria Foundation gives an interest-free loan scholarship for postgraduate study in India or abroad. Check eligibility and how to apply.'
+  WHERE slug = 'narotam-sekhsaria';
+
+UPDATE scholarships SET
+  meta_title = 'Vidyadhan Scholarship 2026: Eligibility & Apply',
+  meta_description = 'Vidyadhan gives merit-cum-means scholarships to students from low-income families from class 11 through their undergraduate degree. Check how to apply.'
+  WHERE slug = 'vidyadhan';
+
+UPDATE scholarships SET
+  meta_title = 'Kotak Kanya Scholarship 2026: Eligibility & Apply',
+  meta_description = 'Kotak Kanya gives Rs 1.5 lakh a year to girl students in the first year of a professional degree, with family income up to Rs 6 lakh. Check how to apply.'
+  WHERE slug = 'kotak-kanya';
+
+UPDATE scholarships SET
+  meta_title = 'Haryana Post-Matric Scholarship 2026: Apply',
+  meta_description = 'Haryana post-matric scholarships for SC, OBC, EBC and minority students via the state portal. Check eligibility, income limit and how to apply online.'
+  WHERE slug = 'haryana-post-matric';
