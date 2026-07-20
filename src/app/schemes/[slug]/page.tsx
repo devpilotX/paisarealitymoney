@@ -105,7 +105,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         canonical: url,
         languages: {
           'en-IN': url,
-          'hi-IN': `https://paisareality.com/hi/schemes/${scheme.slug}`,
           'x-default': url,
         },
       },

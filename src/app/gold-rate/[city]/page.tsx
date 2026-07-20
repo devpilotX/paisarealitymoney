@@ -52,7 +52,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     canonical: url,
     languages: {
       'en-IN': url,
-      'hi-IN': `https://paisareality.com/hi/gold-rate/${city.slug}`,
       'x-default': url,
     },
   };

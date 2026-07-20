@@ -12,7 +12,6 @@ export const metadata: Metadata = {
     canonical: 'https://paisareality.com',
     languages: {
       'en-IN': 'https://paisareality.com',
-      'hi-IN': 'https://paisareality.com/hi',
       'x-default': 'https://paisareality.com',
     },
   },
