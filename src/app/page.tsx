@@ -5,7 +5,7 @@ import FAQ from '@/components/FAQ';
 import AdSlot from '@/components/AdSlot';
 
 export const metadata: Metadata = {
-  title: 'Money Health Score and Smart Tools | Paisa Reality',
+  title: 'Paisa Reality: Money Health Score, Smart Tools & Live Prices',
   description:
     'Check your free Money Health Score and 10 smart tools for retirement, debt, and tax. Plus daily gold and fuel prices, government schemes, calculators, and bank rates.',
   alternates: {
@@ -186,7 +186,8 @@ export default function HomePage(): React.ReactElement {
         <div className="container-main relative py-12 sm:py-16">
           <div className="grid lg:grid-cols-[1.05fr_.95fr] gap-10 items-center">
             <div>
-              <h1 className="font-serif font-bold text-navy leading-[1.12] text-[clamp(29px,4vw,44px)]">
+              <span className="eyebrow">Paisa Reality</span>
+              <h1 className="font-serif font-bold text-navy leading-[1.12] text-[clamp(29px,4vw,44px)] mt-1.5">
                 Get the government schemes and <span className="mark">scholarships</span> your family has a right to.
               </h1>
               <p className="font-sans text-[16.5px] leading-relaxed text-muted max-w-[490px] mt-4">
