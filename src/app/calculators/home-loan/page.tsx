@@ -18,6 +18,9 @@ const HL_FAQS = [
   { question: 'What documents are needed for a home loan?', answer: 'Lenders usually ask for identity and address proof, PAN, income proof (salary slips and bank statements, or ITR if you are self-employed), and the property papers. Keeping these ready in advance speeds up approval and disbursal.' },
   { question: 'Should I prepay my home loan or invest the money?', answer: 'It depends on your loan rate after tax, the return you expect from investing, and your comfort with risk. Our Prepay vs Invest tool runs both paths with real numbers and shows which is likely to leave you better off.' },
   { question: 'What is a home loan balance transfer?', answer: 'A balance transfer moves your outstanding loan to a new lender offering a lower rate. It can cut your interest cost, but factor in processing fees and charges. It helps most early in the loan, when interest is the biggest part of each EMI.' },
+  { question: 'How is home loan EMI calculated?', answer: 'EMI uses the formula EMI = P x r x (1+r)^n / ((1+r)^n - 1), where P is the loan amount, r is the monthly interest rate, and n is the number of monthly instalments. For example, a Rs 40 lakh loan at 8.5% over 20 years gives an EMI of about Rs 34,713 and a total repayment of roughly Rs 83.3 lakh. Move the sliders above to see your own EMI instantly.' },
+  { question: 'What is the difference between fixed and floating home loan interest rates?', answer: 'A fixed rate stays the same for the whole tenure, so your EMI never changes. A floating rate moves with the RBI repo rate and the lender benchmark, so your EMI or tenure changes when rates change. Floating rates usually start lower and most home loans in India are floating, while fixed rates cost a little more but give you certainty.' },
+  { question: 'What credit score do I need for a home loan?', answer: 'Most banks look for a CIBIL score of 750 or above for the best home loan rates. Scores between 700 and 750 can still get approved, often at a slightly higher rate, while below 650 approval becomes harder. Checking your score and clearing existing dues before you apply improves both your eligibility and the rate you are offered.' },
 ];
 
 export default function HomeLoanCalculatorPage(): React.ReactElement {
@@ -49,6 +52,7 @@ export default function HomeLoanCalculatorPage(): React.ReactElement {
 
   const calcLinks = [
     { href: '/calculators/emi', label: 'EMI Calculator' },
+    { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest' },
     { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
     { href: '/bank-rates/home-loan-rates', label: 'Compare Home Loan Rates' },
     { href: '/schemes/pm-awas-yojana', label: 'PM Awas Yojana' },
@@ -94,6 +98,15 @@ export default function HomeLoanCalculatorPage(): React.ReactElement {
         <h2 className="heading-2 mb-4">Home Loan Planning Tips</h2>
         <p className="text-body mb-4">Save at least 20% of the property value as down payment to avoid paying PMI (Private Mortgage Insurance) and to get better interest rates. Your EMI should not exceed 40-50% of your monthly income to maintain a healthy financial life.</p>
         <p className="text-body mb-4">Home loan interest up to Rs 2 lakh per year is deductible under Section 24(b) of the Income Tax Act. Principal repayment up to Rs 1.5 lakh qualifies under Section 80C. First-time home buyers can get additional deduction under Section 80EEA. Check if you qualify for PM Awas Yojana subsidy.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">How home loan EMI is calculated, with an example</h2>
+        <p className="text-body mb-4">Your EMI is fixed at the start using the formula EMI = P x r x (1+r)^n / ((1+r)^n - 1), where P is the loan amount, r is the monthly interest rate, and n is the number of monthly instalments. Take the calculator defaults above: a Rs 50 lakh property with a 20% down payment of Rs 10 lakh leaves a Rs 40 lakh loan. At 8.5% over 20 years the EMI works out to about Rs 34,713, the total repayment is roughly Rs 83.3 lakh, and the interest alone is about Rs 43.3 lakh, which is more than the Rs 40 lakh you originally borrowed. That is why the interest rate and tenure matter so much.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">Fixed vs floating home loan interest rates</h2>
+        <p className="text-body mb-4">A fixed-rate home loan keeps the same rate and EMI for the whole tenure, giving certainty but usually at a slightly higher rate. A floating-rate loan is linked to the RBI repo rate and the lender benchmark, so when rates fall your EMI or tenure falls, and when rates rise they go up. Most home loans in India are floating. If you expect rates to drop or plan to prepay, floating usually works out cheaper; if you want a predictable EMI, a fixed rate gives peace of mind.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">How to reduce your total home loan interest</h2>
+        <p className="text-body mb-4">Because interest is the largest part of your early EMIs, small changes save a lot. A bigger down payment shrinks both the loan and the interest. A shorter tenure raises the EMI but cuts total interest sharply. Regular part-prepayments, especially in the first ten years, go straight against the principal. And if another lender offers a materially lower rate, a balance transfer can help, as long as the fees are lower than the interest you save. Use the Prepay vs Invest tool to check whether prepaying or investing that money leaves you better off.</p>
       </article>
 
       <ShareButton url="/calculators/home-loan" title="Home Loan Calculator - Paisa Reality" />

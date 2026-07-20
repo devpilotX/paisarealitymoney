@@ -32,9 +32,9 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   if (!s) {
     return pageMetadata({ title: 'Scholarship', description: 'Scholarship details.', path: `/scholarships/${slug}` });
   }
-  const desc = (s.benefitSummary ?? `${s.name} eligibility, documents and how to apply.`).slice(0, 160);
+  const desc = (s.metaDescription ?? s.benefitSummary ?? `${s.name} eligibility, documents and how to apply.`).slice(0, 160);
   return pageMetadata({
-    title: `${s.name}: Eligibility, Documents and How to Apply`,
+    title: s.metaTitle ?? `${s.name}: Eligibility, Documents and How to Apply`,
     description: desc,
     path: `/scholarships/${slug}`,
   });

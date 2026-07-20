@@ -30,6 +30,11 @@ CREATE TABLE IF NOT EXISTS scholarships (
 CREATE INDEX IF NOT EXISTS idx_scholarships_active ON scholarships (active, deadline);
 CREATE INDEX IF NOT EXISTS idx_scholarships_level ON scholarships (level, state);
 
+-- Optional per-page SEO overrides (additive, idempotent). When NULL, the page
+-- falls back to its default generated title/description.
+ALTER TABLE scholarships ADD COLUMN IF NOT EXISTS meta_title TEXT;
+ALTER TABLE scholarships ADD COLUMN IF NOT EXISTS meta_description TEXT;
+
 CREATE TABLE IF NOT EXISTS scholarship_reminders (
   id             SERIAL PRIMARY KEY,
   email          TEXT NOT NULL,
@@ -599,3 +604,61 @@ ON CONFLICT (slug) DO UPDATE SET
   benefit_summary = EXCLUDED.benefit_summary, eligibility_summary = EXCLUDED.eligibility_summary,
   documents = EXCLUDED.documents, how_to_apply = EXCLUDED.how_to_apply, official_url = EXCLUDED.official_url,
   last_verified = EXCLUDED.last_verified, updated_at = NOW();
+
+
+-- ============================================================================
+-- Per-page SEO metadata for high-impression pages (idempotent; safe to re-run).
+-- These override the default generated title/description on scholarship pages.
+-- Titles render verbatim (root layout title template is '%s'), so no brand
+-- suffix. Query-matched from Search Console. NULL rows keep the default.
+-- Not part of the INSERT ON CONFLICT set, so re-running the seeds preserves them.
+-- ============================================================================
+UPDATE scholarships SET
+  meta_title = 'SVMCM Scholarship 2026: Eligibility & Apply Online',
+  meta_description = 'SVMCM (Swami Vivekananda Merit-cum-Means Scholarship) gives monthly aid to West Bengal students from class 11 to PhD. Check eligibility and how to apply.'
+  WHERE slug = 'wb-svmcm';
+
+UPDATE scholarships SET
+  meta_title = 'e-Grantz Scholarship 2026: Last Date & Apply Online',
+  meta_description = 'Kerala e-Grantz is the state portal for post-matric scholarships. Check the 2026 last date, eligibility and how to apply online through your institution.'
+  WHERE slug = 'kerala-egrantz';
+
+UPDATE scholarships SET
+  meta_title = 'NMMS Scholarship 2026: Eligibility & Apply Online',
+  meta_description = 'NMMS gives Rs 12,000 a year to meritorious students from low-income families in classes 9 to 12. Check eligibility, the exam and how to apply on the NSP portal.'
+  WHERE slug = 'nmms';
+
+UPDATE scholarships SET
+  meta_title = 'PMRF 2026: Eligibility, Stipend & How to Apply',
+  meta_description = 'PMRF gives PhD scholars at IITs, IISc, IISERs and NITs about Rs 70,000-80,000 a month plus a research grant. Check eligibility, entry modes and how to apply.'
+  WHERE slug = 'pmrf';
+
+UPDATE scholarships SET
+  meta_title = 'Punjab Post-Matric Scholarship 2026: Apply Online',
+  meta_description = 'Punjab post-matric scholarship gives fee support and freeship to SC and OBC students in class 11 and above. Check eligibility, income limit and how to apply.'
+  WHERE slug = 'punjab-post-matric';
+
+UPDATE scholarships SET
+  meta_title = 'HP ePASS Scholarship 2026: Eligibility & Apply',
+  meta_description = 'HP ePASS is the Himachal Pradesh portal for post-matric scholarships across SC, ST, OBC and minority students. Check eligibility, documents and how to apply.'
+  WHERE slug = 'hp-hpepass';
+
+UPDATE scholarships SET
+  meta_title = 'Rajasthan Post-Matric Scholarship 2026: Apply',
+  meta_description = 'Rajasthan post-matric scholarships for SC, ST, OBC, EBC, EWS and minority students via the SSO portal. Check eligibility, income limit and how to apply online.'
+  WHERE slug = 'rajasthan-sje';
+
+UPDATE scholarships SET
+  meta_title = 'Sitaram Jindal Scholarship 2026: Eligibility & Apply',
+  meta_description = 'Sitaram Jindal Foundation gives a monthly scholarship of about Rs 500 to Rs 3,200 to students from class 11 to postgraduate. Check eligibility and how to apply.'
+  WHERE slug = 'sitaram-jindal';
+
+UPDATE scholarships SET
+  meta_title = 'PMSS Scholarship 2026: Ex-Servicemen Wards, Apply',
+  meta_description = 'PMSS gives a monthly scholarship to wards and widows of ex-servicemen in professional degree courses. Check eligibility, the last date and how to apply.'
+  WHERE slug = 'pmss-exservicemen';
+
+UPDATE scholarships SET
+  meta_title = 'Jnanabhumi Scholarship AP 2026: Eligibility & Apply',
+  meta_description = 'AP Jnanabhumi (Vidya Deevena) gives fee reimbursement and maintenance scholarships to Andhra Pradesh students. Check eligibility, documents and how to apply.'
+  WHERE slug = 'ap-jnanabhumi';
