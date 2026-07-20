@@ -15,12 +15,14 @@ const PPF_RATE = 7.1;
 const PPF_TENURE = 15;
 
 const PPF_FAQS = [
-  { question: 'What is the current PPF interest rate?', answer: `The current PPF interest rate is ${PPF_RATE}% per annum (as of FY 2025-26). The rate is reviewed quarterly by the government. Interest is compounded annually and credited on 31st March each year.` },
+  { question: 'What is the current PPF interest rate?', answer: `The current PPF interest rate is ${PPF_RATE}% per annum (as of FY 2026-27). The rate is reviewed quarterly by the government. Interest is compounded annually and credited on 31st March each year.` },
   { question: 'How much can I invest in PPF per year?', answer: 'You can invest between Rs 500 and Rs 1.5 lakh in a PPF account in a financial year. Anything above Rs 1.5 lakh earns no interest and gets no tax benefit. You can deposit it as a lump sum or in up to 12 instalments across the year.' },
   { question: 'What is the PPF lock-in period?', answer: 'PPF has a mandatory lock-in period of 15 years. Partial withdrawals are allowed from the 7th year onwards (up to 50% of the balance at the end of the 4th year). Premature closure is allowed after 5 years in special cases like serious illness or higher education.' },
   { question: 'Can I extend my PPF account after 15 years?', answer: 'Yes. After maturity you can extend the account in blocks of 5 years, with or without further contributions. The balance keeps earning the prevailing PPF rate, and during an extension you can make one partial withdrawal each year.' },
   { question: 'What are the tax benefits of PPF?', answer: 'PPF enjoys EEE (Exempt-Exempt-Exempt) tax status. The annual deposit up to Rs 1.5 lakh qualifies for deduction under Section 80C. The interest earned is completely tax-free. The maturity amount is also tax-free. This makes PPF one of the most tax-efficient investments.' },
   { question: 'Is PPF better than ELSS for saving tax?', answer: 'Both qualify under Section 80C. PPF is fully safe with a fixed government rate and a 15 year lock-in, while ELSS invests in equity with a 3 year lock-in and higher but market-linked returns. PPF suits safety, ELSS suits long-term growth, and many people use both. This is general information, not advice.' },
+  { question: 'Can I open a PPF account at the post office?', answer: 'Yes. PPF can be opened at any post office or at authorised banks such as SBI, HDFC, and ICICI. The rules, the Rs 1.5 lakh annual limit, the 15 year term, and the government interest rate are identical everywhere, so your maturity value is the same whether you use a post office or a bank.' },
+  { question: 'Can I take a loan against my PPF account?', answer: 'Yes. You can take a loan against your PPF balance from the 3rd to the 6th financial year, before partial withdrawals become available from the 7th year. The loan is a small percentage of your balance and carries a low interest rate over the PPF rate.' },
 ];
 
 export default function PPFCalculatorPage(): React.ReactElement {
@@ -52,6 +54,7 @@ export default function PPFCalculatorPage(): React.ReactElement {
     { href: '/calculators/sip', label: 'SIP Calculator' },
     { href: '/calculators/nps', label: 'NPS Calculator' },
     { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
+    { href: '/interest-rates', label: 'Small Savings Rates' },
   ];
 
   return (
@@ -105,6 +108,15 @@ export default function PPFCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">PPF is a government-backed long-term savings scheme with a 15-year lock-in period. It is one of the safest investment options in India as it is backed by the Government of India. The interest rate is set by the government every quarter based on government bond yields.</p>
         <p className="text-body mb-4">You can invest a minimum of Rs 500 and a maximum of Rs 1,50,000 per financial year. PPF accounts can be opened at post offices, SBI, and other nationalized banks. You can also open a PPF account online through net banking with select banks.</p>
         <p className="text-body mb-4">The biggest advantage of PPF is its EEE tax status: your deposits (up to Rs 1.5 lakh) are deductible under Section 80C, the interest earned is tax-free, and the maturity amount is also tax-free. No other fixed-income investment offers this triple tax benefit.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">PPF at the post office and banks</h2>
+        <p className="text-body mb-4">You can open a PPF account at any post office or at banks such as SBI, HDFC, and ICICI. A post office PPF account and a bank PPF account follow the exact same rules and the same government interest rate, so your maturity value is identical wherever you open it. Many banks let you open and manage PPF online through net banking.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">Loan and partial withdrawal from PPF</h2>
+        <p className="text-body mb-4">You can take a loan against your PPF balance between the 3rd and 6th financial years, and partial withdrawals are allowed from the 7th year onwards. This makes PPF more flexible than it first appears, while the 15 year term keeps it a strong long-term, tax-free savings tool.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">Example: Rs 1.5 lakh a year for 15 years</h2>
+        <p className="text-body mb-4">If you invest the full Rs 1,50,000 every year at the current {PPF_RATE}% rate, you deposit Rs 22,50,000 over 15 years and the account matures to roughly Rs 40,68,000, so the tax-free interest alone is about Rs 18,18,000. Change the yearly deposit in the calculator above to see your own maturity value.</p>
       </article>
 
       <ShareButton url="/calculators/ppf" title="PPF Calculator - Paisa Reality" />

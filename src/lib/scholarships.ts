@@ -50,6 +50,8 @@ export interface ScholarshipRow extends QueryResultRow {
   opens_on: string | null;
   deadline: string | null;
   last_verified: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
 }
 
 export interface Scholarship {
@@ -73,6 +75,8 @@ export interface Scholarship {
   opensOn: string | null;
   deadline: string | null;
   lastVerified: string | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
 }
 
 export interface EligibilityProfile {
@@ -105,13 +109,15 @@ function toScholarship(r: ScholarshipRow): Scholarship {
     opensOn: r.opens_on,
     deadline: r.deadline,
     lastVerified: r.last_verified,
+    metaTitle: r.meta_title,
+    metaDescription: r.meta_description,
   };
 }
 
 const SELECT_COLS = `id, slug, name, provider, level, state, categories, gender, class_levels,
   income_max, amount_min, amount_max, benefit_summary, eligibility_summary, documents,
   how_to_apply, official_url, opens_on::text AS opens_on, deadline::text AS deadline,
-  last_verified::text AS last_verified`;
+  last_verified::text AS last_verified, meta_title, meta_description`;
 
 export async function getAllScholarships(): Promise<Scholarship[]> {
   const rows = await query<ScholarshipRow>(

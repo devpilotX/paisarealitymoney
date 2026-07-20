@@ -18,6 +18,9 @@ const FD_FAQS = [
   { question: 'Can I break my FD before maturity?', answer: 'Yes, most FDs allow premature withdrawal, but the bank usually pays a slightly lower interest rate and may charge a small penalty. If you might need the money soon, consider a shorter tenure or splitting the amount across a few smaller FDs so you break only what you need.' },
   { question: 'What is a tax-saving FD?', answer: 'A tax-saving FD has a 5 year lock-in, and the deposit qualifies for a deduction up to Rs 1.5 lakh under Section 80C. The interest is still taxable. You cannot withdraw it early or take a loan against it during the lock-in period.' },
   { question: 'What is the difference between simple and compound interest on FD?', answer: 'Simple interest is calculated only on the original deposit amount. Compound interest is calculated on the deposit plus accumulated interest. Most banks offer compound interest on FDs, which means your effective return is higher. Quarterly compounding is most common.' },
+  { question: 'Do senior citizens get higher FD interest rates?', answer: 'Yes. Senior citizens aged 60 and above usually get an extra 0.25% to 0.50% over the regular FD rate, and some small finance banks offer more. Enter the higher rate in the calculator to see your maturity amount. Interest above Rs 50,000 a year attracts TDS unless you submit Form 15H.' },
+  { question: 'How is FD maturity calculated, with an example?', answer: 'Maturity uses A = P(1 + r/n)^(nt). For a Rs 5,00,000 deposit at 7% for 5 years with quarterly compounding, the maturity is about Rs 7,07,000 and the interest earned is about Rs 2,07,000. Change any input above to see your own numbers.' },
+  { question: 'Can I get monthly interest from a fixed deposit?', answer: 'Yes. A non-cumulative FD pays interest monthly or quarterly to your account, which suits people who want a regular income. A cumulative FD instead reinvests the interest and pays it all at maturity, giving a higher final amount. This calculator shows the cumulative maturity value.' },
 ];
 
 export default function FDCalculatorPage(): React.ReactElement {
@@ -48,6 +51,7 @@ export default function FDCalculatorPage(): React.ReactElement {
     { href: '/calculators/ppf', label: 'PPF Calculator' },
     { href: '/calculators/sip', label: 'SIP Calculator' },
     { href: '/calculators/emi', label: 'EMI Calculator' },
+    { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
     { href: '/bank-rates/fd-rates', label: 'Compare FD Rates' },
   ];
 
@@ -84,9 +88,17 @@ export default function FDCalculatorPage(): React.ReactElement {
       <InArticleAd />
 
       <article className="max-w-3xl my-8">
-        <h2 className="heading-2 mb-4">How FD Calculator Works</h2>
-        <p className="text-body mb-4">This calculator uses the compound interest formula: A = P(1 + r/n)^(nt), where P is the principal, r is the annual interest rate, n is the compounding frequency per year, and t is the number of years. Quarterly compounding is the most common frequency used by Indian banks.</p>
-        <p className="text-body mb-4">Senior citizens usually get 0.25% to 0.50% higher interest rates on FDs. Some banks offer special FD schemes with higher rates for specific tenures. Always compare FD rates across banks before investing.</p>
+        <h2 className="heading-2 mb-4">How the FD Calculator Works</h2>
+        <p className="text-body mb-4">This calculator uses the compound interest formula A = P(1 + r/n)^(nt), where P is the principal, r is the annual interest rate, n is the compounding frequency per year, and t is the number of years. Quarterly compounding is the most common frequency used by Indian banks. For example, Rs 5,00,000 at 7% for 5 years with quarterly compounding matures to about Rs 7,07,000, of which roughly Rs 2,07,000 is interest.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">FD interest rates for senior citizens</h2>
+        <p className="text-body mb-4">Senior citizens aged 60 and above usually earn 0.25% to 0.50% more than the regular FD rate, and a few small finance banks pay even higher. If you are a senior citizen, add that extra rate in the calculator above to see your higher maturity value. Interest above Rs 50,000 a year attracts TDS unless you submit Form 15H.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">Tax-saving FD vs regular FD</h2>
+        <p className="text-body mb-4">A regular FD can be booked for any tenure from 7 days to 10 years and can be broken early if you need the money. A tax-saving FD has a fixed 5 year lock-in and lets you claim up to Rs 1.5 lakh under Section 80C, but it cannot be withdrawn early. In both cases the interest is taxable as per your income slab.</p>
+
+        <h2 className="heading-2 mt-8 mb-4">Monthly income vs cumulative FD</h2>
+        <p className="text-body mb-4">A cumulative FD reinvests the interest and pays it all at maturity, which is what this calculator shows. A non-cumulative FD pays interest out monthly or quarterly, which suits retirees who want a regular income, but the final value is slightly lower because the interest is not compounded. Always compare the latest FD rates across banks before you book.</p>
       </article>
 
       <ShareButton url="/calculators/fd" title="FD Calculator - Paisa Reality" />
