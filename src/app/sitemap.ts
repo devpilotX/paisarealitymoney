@@ -33,11 +33,16 @@ function toIsoDate(value: string | Date | null, fallback: string): string {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date().toISOString();
+  // lastmod policy: static / rarely-changing pages get a STABLE date (bump it
+  // on a real content or layout change) instead of "now" on every crawl, which
+  // makes Google distrust lastmod. Pages that genuinely refresh daily (the home
+  // page and the live price hubs + city pages) use today's date.
+  const now = '2026-07-20';
+  const dailyUpdated = new Date().toISOString().slice(0, 10);
 
   const staticPages: MetadataRoute.Sitemap = [
     // Flagship
-    { url: BASE_URL, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
+    { url: BASE_URL, lastModified: dailyUpdated, changeFrequency: 'daily', priority: 1.0 },
     { url: `${BASE_URL}/score`, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${BASE_URL}/smart-tools`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     // Smart Tools
@@ -52,10 +57,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/calculators/scheme-maximizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE_URL}/calculators/salary-optimizer`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     // Rate hubs
-    { url: `${BASE_URL}/gold-rate`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/silver-rate`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/petrol-price`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/diesel-price`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/gold-rate`, lastModified: dailyUpdated, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/silver-rate`, lastModified: dailyUpdated, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/petrol-price`, lastModified: dailyUpdated, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/diesel-price`, lastModified: dailyUpdated, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/lpg-price`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     // Calculators hub + basic calculators
     { url: `${BASE_URL}/calculators`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
@@ -100,28 +105,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const cityPriority = 0.7;
   const goldCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
     url: `${BASE_URL}/gold-rate/${city.slug}`,
-    lastModified: now,
+    lastModified: dailyUpdated,
     changeFrequency: 'daily' as const,
     priority: cityPriority,
   }));
 
   const silverCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
     url: `${BASE_URL}/silver-rate/${city.slug}`,
-    lastModified: now,
+    lastModified: dailyUpdated,
     changeFrequency: 'daily' as const,
     priority: cityPriority,
   }));
 
   const petrolCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
     url: `${BASE_URL}/petrol-price/${city.slug}`,
-    lastModified: now,
+    lastModified: dailyUpdated,
     changeFrequency: 'daily' as const,
     priority: cityPriority,
   }));
 
   const dieselCityPages: MetadataRoute.Sitemap = CITIES.map((city) => ({
     url: `${BASE_URL}/diesel-price/${city.slug}`,
-    lastModified: now,
+    lastModified: dailyUpdated,
     changeFrequency: 'daily' as const,
     priority: cityPriority,
   }));
