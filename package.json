@@ -21,6 +21,7 @@
     "db:migrate-price-integrity": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-price-integrity.ts",
     "db:migrate-alerts": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-alerts.ts",
     "db:migrate-scholarships": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-scholarships.ts",
+    "db:migrate-prices-hub": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-prices-hub.ts",
     "db:migrate-ads": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-ads.ts"
   },
   "dependencies": {
