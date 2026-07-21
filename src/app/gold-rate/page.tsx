@@ -13,6 +13,8 @@ import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
+import NationalRateHeadline from '@/components/NationalRateHeadline';
+import { getNationalSnapshot, getNationalSeries } from '@/lib/national-prices';
 
 export const metadata = pageMetadata({
   title: 'Gold Rate Today in India: Latest 22K & 24K Prices',
@@ -82,6 +84,11 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
     console.error('Failed to fetch gold prices:', error);
   }
 
+  const [national, series] = await Promise.all([
+    getNationalSnapshot('gold').catch(() => null),
+    getNationalSeries('gold', 90).catch(() => []),
+  ]);
+
   const cityLinks = CITIES.slice(0, 20).map((c) => ({
     href: `/gold-rate/${c.slug}`,
     label: `Gold Rate in ${c.name}`,
@@ -95,7 +102,21 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
       <Breadcrumb items={[{ label: 'Gold Rate Today' }]} />
 
       <h1 className="heading-1 mb-2">Gold Rate Today in India</h1>
-      <p className="text-body mb-6">Latest available 22K and 24K gold prices for {priceDate}. Verify with your jeweller before buying.</p>
+      <p className="text-body mb-6">
+        {national?.k24PerGram != null ? (
+          <>
+            The gold rate today in India is <strong>{formatINR(national.k24PerGram)} per gram</strong> for 24K
+            {national.k22PerGram != null ? (
+              <> and <strong>{formatINR(national.k22PerGram)} per gram</strong> for 22K</>
+            ) : null}
+            , as of {priceDate} (average across 50+ cities). Below are today&apos;s rates for major Indian cities. Verify with your jeweller before buying.
+          </>
+        ) : (
+          <>Latest available 22K and 24K gold prices for {priceDate}. Verify with your jeweller before buying.</>
+        )}
+      </p>
+
+      <NationalRateHeadline metal="gold" snapshot={national} series={series} priceDate={priceDate} cityCount={50} />
 
       <AdBanner format="horizontal" />
 

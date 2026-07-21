@@ -13,6 +13,8 @@ import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
+import NationalRateHeadline from '@/components/NationalRateHeadline';
+import { getNationalSnapshot, getNationalSeries } from '@/lib/national-prices';
 
 export const metadata = pageMetadata({
   title: 'Silver Rate Today in India: Price per Gram & Kg',
@@ -51,6 +53,11 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
     priceDate = prices[0]?.price_date ? formatDate(prices[0].price_date) : 'Today';
   } catch (error) { console.error('Failed to fetch silver prices:', error); }
 
+  const [national, series] = await Promise.all([
+    getNationalSnapshot('silver').catch(() => null),
+    getNationalSeries('silver', 90).catch(() => []),
+  ]);
+
   const cityLinks = CITIES.slice(0, 20).map((c) => ({ href: `/silver-rate/${c.slug}`, label: `Silver Rate in ${c.name}`, description: c.state }));
 
   const ldSchema = datasetSchema({ name: 'Silver Rate Today in India', description: 'Daily silver prices per gram and per kilogram across major Indian cities.', path: '/silver-rate' });
@@ -59,7 +66,18 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
       <script id="silverhub-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Silver Rate Today' }]} />
       <h1 className="heading-1 mb-2">Silver Rate Today in India</h1>
-      <p className="text-body mb-6">Latest available silver prices per gram and per kg for {priceDate}. Verify with your jeweller before buying.</p>
+      <p className="text-body mb-6">
+        {national?.perKg != null ? (
+          <>
+            The silver rate today in India is <strong>{formatINR(national.perKg)} per kg</strong>
+            {national.perGram != null ? <> ({formatINR(national.perGram)} per gram)</> : null}
+            , as of {priceDate} (average across 50+ cities). Below are today&apos;s rates for major Indian cities. Verify with your jeweller before buying.
+          </>
+        ) : (
+          <>Latest available silver prices per gram and per kg for {priceDate}. Verify with your jeweller before buying.</>
+        )}
+      </p>
+      <NationalRateHeadline metal="silver" snapshot={national} series={series} priceDate={priceDate} cityCount={50} />
       <AdBanner format="horizontal" />
       <div className="my-6"><CitySelector basePath="/silver-rate" placeholder="Search city for silver rate..." /></div>
 
