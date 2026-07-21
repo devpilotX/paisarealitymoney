@@ -33,9 +33,13 @@ interface RelatedSchemeRow extends QueryResultRow {
   slug: string; name: string; benefit_summary: string; category: string;
 }
 
-function parseJsonArray(str: string | null): string[] {
-  if (!str) return [];
-  try { const p = JSON.parse(str); return Array.isArray(p) ? p.filter((i): i is string => typeof i === 'string') : []; }
+function parseJsonArray(value: unknown): string[] {
+  // pg returns jsonb columns as already-parsed JS arrays; older rows / other
+  // callers may pass a JSON string. Handle both so scheme content (states,
+  // categories, occupations, documents) always renders.
+  if (Array.isArray(value)) return value.filter((i): i is string => typeof i === 'string');
+  if (typeof value !== 'string' || !value) return [];
+  try { const p = JSON.parse(value); return Array.isArray(p) ? p.filter((i): i is string => typeof i === 'string') : []; }
   catch { return []; }
 }
 
