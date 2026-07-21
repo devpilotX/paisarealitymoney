@@ -104,12 +104,18 @@ export async function fetchExchangeRate(): Promise<ExchangeRate> {
 }
 
 /**
- * Landed-cost conversion. Import duty on gold and silver has been 6% (5% BCD
- * + 1% AIDC) since the July 2024 budget — the old 15%/7.5% values inflated
- * gold ~8% above the real market. The market-premium factor captures the
- * spread between duty-adjusted parity and published Indian dealer rates;
- * calibrate it against GoodReturns city rates whenever it drifts. All four
- * knobs are env-tunable so a budget change never needs a code deploy.
+ * Landed-cost conversion. India's gold and silver customs duty is 15%
+ * (10% BCD + 5% AIDC) since 13 May 2026, up from the 6% (5% BCD + 1% AIDC)
+ * that applied from the July 2024 budget. We deliberately keep the duty knob
+ * below the statutory rate because Indian retail gold does not pass the full
+ * duty through to the counter; the market-premium factor then captures the
+ * observed spread between duty-adjusted parity and published dealer rates.
+ * Gold: GOLD_MARKET_PREMIUM=0.04, calibrated 21 Jul 2026 (Mumbai 24k about
+ * Rs 14,290 vs published dealer Rs 14,280 to 14,350). Silver premium 0.175,
+ * calibrated 3 Jul 2026. Duty and premium are entangled by this calibration:
+ * do not raise the duty knob without re-fitting the premium to current dealer
+ * rates, or prices drift high. All knobs are env-tunable so a re-fit never
+ * needs a code deploy.
  */
 export function internationalToIndianGold24k(usdPerOz: number, usdToInr: number): number {
   const importDuty = Number.parseFloat(process.env.GOLD_IMPORT_DUTY || '0.06');
