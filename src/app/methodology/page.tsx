@@ -32,7 +32,7 @@ export default function MethodologyPage(): React.ReactElement {
           </p>
           <ul className="list-disc pl-6 text-body space-y-2 mb-3">
             <li>Convert the USD per troy ounce spot price to INR per gram.</li>
-            <li>Add import duty (6% since the July 2024 budget) and 3% GST.</li>
+            <li>Add import duty and 3% GST. India&apos;s gold and silver customs duty is 15% since 13 May 2026 (10% basic customs duty plus 5% AIDC).</li>
             <li>
               For silver, add the Indian market premium: physical silver in India has traded well above
               international parity since the 2025 silver squeeze, so we apply a premium calibrated against

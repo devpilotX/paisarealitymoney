@@ -152,7 +152,7 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
           Gold has been a preferred investment and gift in India for centuries. Whether you are buying gold for a wedding, as an investment, or for making jewellery, knowing the current rate helps you make a better decision.
         </p>
         <p className="text-body mb-4">
-          The gold rate in India is influenced by several factors. The international gold price (set in US dollars per troy ounce) is the starting point. This price is then adjusted for the Indian rupee exchange rate, import duty (6% since the July 2024 budget), and GST (3%). Local demand and supply in each city also cause small differences in price.
+          The gold rate in India is influenced by several factors. The international gold price (set in US dollars per troy ounce) is the starting point. This price is then adjusted for the Indian rupee exchange rate, import duty (15% since May 2026: 10% basic customs duty plus 5% AIDC), and GST (3%). Local demand and supply in each city also cause small differences in price.
         </p>
         <p className="text-body mb-4">
           On this page, you can see today's gold rate for 50 major Indian cities. Click on any city to see detailed price history, a 30-day price chart, and a breakdown of 22K, 24K, and 18K gold prices.

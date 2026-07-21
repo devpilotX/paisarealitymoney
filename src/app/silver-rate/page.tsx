@@ -95,7 +95,7 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
 
       <article className="max-w-3xl my-8">
         <h2 className="heading-2 mb-4">Understanding Silver Prices in India</h2>
-        <p className="text-body mb-4">Silver is one of the most popular precious metals in India, used for jewellery, coins, utensils, and religious items. The silver rate in India is determined by the international silver price (set in US dollars per troy ounce), converted to Indian rupees, plus import duty and GST.</p>
+        <p className="text-body mb-4">Silver is one of the most popular precious metals in India, used for jewellery, coins, utensils, and religious items. The silver rate in India is determined by the international silver price (set in US dollars per troy ounce), converted to Indian rupees, plus import duty (15% since May 2026: 10% basic customs duty plus 5% AIDC) and 3% GST.</p>
         <p className="text-body mb-4">India is one of the world's largest consumers of silver. Demand peaks during the wedding season (October to February) and during festivals like Dhanteras and Diwali. Industrial demand for silver is also growing as India expands its solar energy and electronics manufacturing.</p>
         <p className="text-body mb-4">When buying silver jewellery or items, remember that the purity matters. Standard silver jewellery in India is 92.5% pure (called Sterling Silver or 925 silver). Some items may be 99.9% pure silver. Always check for BIS hallmark to verify purity.</p>
       </article>
