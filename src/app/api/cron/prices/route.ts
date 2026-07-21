@@ -5,6 +5,7 @@ import { escapeHtml, getAppUrl, sendAdminAlert, sendEmail } from '@/lib/email';
 import { checkPriceAlerts } from '@/lib/price-alerts';
 import { revalidatePriceRoutes } from '@/lib/revalidate-prices';
 import { checkMetalDrift } from '@/lib/price-drift';
+import { refreshNationalDaily } from '@/lib/national-prices';
 import { getDueScholarshipReminders, markReminderSent, type DueReminder } from '@/lib/scholarships';
 import { FUEL_STALE_AFTER_DAYS, LPG_STALE_AFTER_DAYS } from '@/lib/fuel-data';
 import {
@@ -109,6 +110,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     fuel: await updateFuelPricesLive(),
     lpg: await updateLpgPricesLive(),
   };
+
+  // Roll up the national gold/silver averages for the prices hub (best-effort).
+  try {
+    await refreshNationalDaily();
+  } catch (err) {
+    console.error('refreshNationalDaily failed:', err instanceof Error ? err.message : err);
+  }
 
   cacheClearAll();
 
