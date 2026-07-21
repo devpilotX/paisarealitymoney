@@ -729,3 +729,60 @@ UPDATE scholarships SET
   meta_title = 'Haryana Post-Matric Scholarship 2026: Apply',
   meta_description = 'Haryana post-matric scholarships for SC, OBC, EBC and minority students via the state portal. Check eligibility, income limit and how to apply online.'
   WHERE slug = 'haryana-post-matric';
+
+
+
+-- ============================================================================
+-- Expansion batch 6 (additive, idempotent). Verified private/foundation
+-- scholarships, official portals confirmed via search on 2026-07-21.
+-- ============================================================================
+INSERT INTO scholarships
+  (slug, name, provider, level, state, categories, gender, class_levels, income_max, amount_min, amount_max,
+   benefit_summary, eligibility_summary, documents, how_to_apply, official_url, deadline, last_verified)
+VALUES
+  ('santoor-womens', 'Santoor Women''s Scholarship', 'Wipro Consumer Care and Wipro Cares', 'central', NULL,
+   '{all}', 'female', '{undergraduate}', NULL, 24000, 24000,
+   'About Rs 24,000 per year for young women from underprivileged families to pursue graduation, covering fees and study costs.',
+   'Young woman who passed Class 10 and Class 12 from a government school or junior college and is starting a full-time graduate degree; offered in Andhra Pradesh, Karnataka, Telangana and Chhattisgarh.',
+   '{Class 10 and 12 marksheets, Admission proof, Income proof, Bank passbook, Aadhaar}',
+   'Apply online with the required documents on the official Santoor Scholarships portal during the annual window.',
+   'https://www.santoorscholarships.com', NULL, '2026-07-21'),
+
+  ('tata-capital-pankh', 'Tata Capital Pankh Scholarship', 'Tata Capital', 'central', NULL,
+   '{all}', 'all', '{class-11-12,diploma,undergraduate}', 250000, 10000, 100000,
+   'Merit-cum-means scholarship of Rs 10,000 to Rs 1,00,000, covering up to 80 percent of tuition, for students from low-income families.',
+   'Indian student from class 11 up to a professional degree with at least 60 percent marks and family income up to Rs 2.5 lakh a year.',
+   '{Marksheets, Admission proof, Income proof, Fee receipt, Bank passbook, Aadhaar}',
+   'Apply online on the Tata Capital Pankh scholarship portal when applications open, usually from September each year.',
+   'https://www.tatacapital.com/sustainability/education.html', NULL, '2026-07-21'),
+
+  ('colgate-keep-india-smiling', 'Colgate Keep India Smiling Foundation Scholarship', 'Colgate-Palmolive India', 'central', NULL,
+   '{all}', 'all', '{undergraduate,postgraduate}', NULL, NULL, NULL,
+   'Financial support for meritorious students from low-income families in higher education, including STEM, engineering and dental (BDS and MDS) courses, with skills and career guidance.',
+   'Meritorious student from a financially weaker family pursuing an eligible higher-education course; specific marks and income criteria apply by category and year.',
+   '{Marksheets, Admission proof, Income proof, Bank passbook, Aadhaar}',
+   'Apply online through the Colgate Keep India Smiling Foundation Scholarship portal during the annual application window.',
+   'https://www.colgate.com/en-in/smile-karo-aur-shuru-ho-jao/foundation-scholarship', NULL, '2026-07-21')
+ON CONFLICT (slug) DO UPDATE SET
+  name = EXCLUDED.name, provider = EXCLUDED.provider, level = EXCLUDED.level, state = EXCLUDED.state,
+  categories = EXCLUDED.categories, gender = EXCLUDED.gender, class_levels = EXCLUDED.class_levels,
+  income_max = EXCLUDED.income_max, amount_min = EXCLUDED.amount_min, amount_max = EXCLUDED.amount_max,
+  benefit_summary = EXCLUDED.benefit_summary, eligibility_summary = EXCLUDED.eligibility_summary,
+  documents = EXCLUDED.documents, how_to_apply = EXCLUDED.how_to_apply, official_url = EXCLUDED.official_url,
+  last_verified = EXCLUDED.last_verified, updated_at = NOW();
+
+-- SEO metadata for batch 6 (idempotent).
+UPDATE scholarships SET
+  meta_title = 'Santoor Women''s Scholarship 2026: Apply Online',
+  meta_description = 'Santoor Women''s Scholarship gives about Rs 24,000 a year to young women from government schools to pursue graduation. Check eligibility and how to apply.'
+  WHERE slug = 'santoor-womens';
+
+UPDATE scholarships SET
+  meta_title = 'Tata Capital Pankh Scholarship 2026: Apply',
+  meta_description = 'Tata Capital Pankh gives Rs 10,000 to Rs 1,00,000, up to 80% of tuition, to students from low-income families. Check eligibility and how to apply online.'
+  WHERE slug = 'tata-capital-pankh';
+
+UPDATE scholarships SET
+  meta_title = 'Colgate Keep India Smiling Scholarship 2026',
+  meta_description = 'Colgate Keep India Smiling gives financial support to meritorious students from low-income families in STEM, engineering and dental courses. Check how to apply.'
+  WHERE slug = 'colgate-keep-india-smiling';
