@@ -12,7 +12,7 @@
  * precedence over this baseline. See price-providers.ts for the merge order.
  */
 
-export const FUEL_BASELINE_AS_OF = '2026-07-02';
+export const FUEL_BASELINE_AS_OF = '2026-07-21';
 export const FUEL_BASELINE_SOURCE = 'OMC published rates (IOCL/BPCL/HPCL) via GoodReturns and CarDekho';
 
 export interface FuelRate {
