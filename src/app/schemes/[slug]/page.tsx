@@ -158,11 +158,28 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
     scheme = rows[0];
 
     if (scheme) {
-      relatedSchemes = await query<RelatedSchemeRow>(`SELECT slug, name, benefit_summary, category FROM schemes
-         WHERE category = $1 AND slug != $2 AND is_active = TRUE
-         ORDER BY benefit_amount_max DESC LIMIT 6`,
-        [scheme.category, scheme.slug]
-      );
+      const relStates = parseJsonArray(scheme.states);
+      const primaryState = relStates.length > 0 && !relStates.includes('all') ? relStates[0] : null;
+      if (primaryState) {
+        // State schemes: prefer same-state relations (topical cluster), then same category.
+        // states::text LIKE works whether the column is jsonb or text; the quoted
+        // pattern avoids partial-name false matches (e.g. "Bengal" in "West Bengal").
+        relatedSchemes = await query<RelatedSchemeRow>(
+          `SELECT slug, name, benefit_summary, category FROM schemes
+             WHERE slug != $2 AND is_active = TRUE
+               AND (category = $1 OR states::text LIKE $3)
+           ORDER BY (states::text LIKE $3) DESC, (category = $1) DESC, benefit_amount_max DESC NULLS LAST
+           LIMIT 8`,
+          [scheme.category, scheme.slug, `%"${primaryState}"%`]
+        );
+      } else {
+        relatedSchemes = await query<RelatedSchemeRow>(
+          `SELECT slug, name, benefit_summary, category FROM schemes
+             WHERE category = $1 AND slug != $2 AND is_active = TRUE
+           ORDER BY benefit_amount_max DESC NULLS LAST LIMIT 8`,
+          [scheme.category, scheme.slug]
+        );
+      }
     }
   } catch (error) { console.error('Failed to load scheme:', error); }
 
