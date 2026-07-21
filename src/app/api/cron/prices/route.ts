@@ -4,6 +4,7 @@ import { execute, query } from '@/lib/db';
 import { escapeHtml, getAppUrl, sendAdminAlert, sendEmail } from '@/lib/email';
 import { checkPriceAlerts } from '@/lib/price-alerts';
 import { revalidatePriceRoutes } from '@/lib/revalidate-prices';
+import { checkMetalDrift } from '@/lib/price-drift';
 import { getDueScholarshipReminders, markReminderSent, type DueReminder } from '@/lib/scholarships';
 import { FUEL_STALE_AFTER_DAYS, LPG_STALE_AFTER_DAYS } from '@/lib/fuel-data';
 import {
@@ -119,6 +120,25 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const userAlerts = await checkPriceAlerts();
 
   const problems = collectAlerts(results);
+
+  // Self-policing accuracy: flag when our computed metal rates drift from an
+  // independent published dealer benchmark (fail-open; never blocks the cron).
+  try {
+    const [gRows, sRows] = await Promise.all([
+      query<QueryResultRow & { g: string | null }>(
+        `SELECT AVG(gold_24k_per_gram)::numeric(12,2) AS g FROM gold_prices WHERE price_date = (SELECT MAX(price_date) FROM gold_prices)`
+      ),
+      query<QueryResultRow & { s: string | null }>(
+        `SELECT AVG(silver_per_gram)::numeric(12,2) AS s FROM silver_prices WHERE price_date = (SELECT MAX(price_date) FROM silver_prices)`
+      ),
+    ]);
+    const ourGold = gRows[0]?.g != null ? Number(gRows[0].g) : null;
+    const ourSilver = sRows[0]?.s != null ? Number(sRows[0].s) : null;
+    problems.push(...(await checkMetalDrift(ourGold, ourSilver)));
+  } catch {
+    // fail-open: drift monitoring must never break the price cron
+  }
+
   if (userAlerts.errors.length > 0) {
     problems.push(`Price alerts: ${userAlerts.errors.length} error(s), first: ${userAlerts.errors[0]}`);
   }
