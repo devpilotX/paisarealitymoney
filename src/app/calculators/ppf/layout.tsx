@@ -5,26 +5,27 @@ import Script from 'next/script';
 export const metadata = pageMetadata({
   title: 'PPF Calculator India: Public Provident Fund Returns',
   description:
-    'Calculate your PPF maturity amount, yearly interest and total returns over 15 years. See how yearly deposits grow at the current PPF interest rate.',
+    'Calculate your PPF maturity for monthly or yearly deposits. Set the interest rate, extend the term in 5-year blocks to 30 years, and see year-by-year growth at the current PPF rate.',
   path: '/calculators/ppf',
-  keywords: ['ppf calculator india', 'public provident fund calculator', 'ppf maturity calculator', 'ppf interest calculator'],
+  keywords: ['ppf calculator india', 'public provident fund calculator', 'ppf maturity calculator', 'ppf interest calculator', 'ppf calculator monthly'],
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const appSchema = calculatorSchema({
     name: 'PPF Calculator India',
     path: '/calculators/ppf',
-    description: 'Calculate PPF maturity amount, yearly interest and total returns over 15 years.',
-    featureList: ['15 year maturity', 'Yearly interest', 'Current PPF rate', 'Free, no login'],
+    description: 'Calculate PPF maturity for monthly or yearly deposits, with an adjustable interest rate and a term of 15 to 30 years.',
+    featureList: ['Monthly or yearly deposits', 'Adjustable interest rate', 'Extend up to 30 years', 'Year-by-year breakdown', 'Free, no login'],
   });
   const guideSchema = howToSchema({
     name: 'How to calculate PPF returns',
-    description: 'Estimate your PPF maturity in three steps.',
+    description: 'Estimate your PPF maturity in a few steps.',
     path: '/calculators/ppf',
     steps: [
-      { name: 'Enter yearly deposit', text: 'Enter how much you deposit each year.' },
-      { name: 'Set the rate', text: 'The current PPF interest rate is applied.' },
-      { name: 'See returns', text: 'View your maturity amount and total interest.' },
+      { name: 'Choose frequency', text: 'Pick monthly or yearly deposits.' },
+      { name: 'Enter your deposit', text: 'Set how much you invest each month or year.' },
+      { name: 'Set rate and tenure', text: 'Adjust the interest rate and choose a term of 15 to 30 years.' },
+      { name: 'See returns', text: 'View your maturity amount, total interest and year-by-year growth.' },
     ],
   });
   return (
