@@ -730,6 +730,33 @@ UPDATE scholarships SET
   meta_description = 'Haryana post-matric scholarships for SC, OBC, EBC and minority students via the state portal. Check eligibility, income limit and how to apply online.'
   WHERE slug = 'haryana-post-matric';
 
+-- Batch 3 SEO metadata (folded in from scripts/seo-ctr-meta.sql, applied 2026-07-24).
+-- GSC-verified high-impression pages that were on the generic fallback title.
+UPDATE scholarships SET
+  meta_title = 'OPJEMS Scholarship 2026: Eligibility & How to Apply',
+  meta_description = 'OPJEMS (O.P. Jindal Engineering and Management Scholarship) rewards top engineering and management students. Check eligibility, amount and how to apply.'
+  WHERE slug = 'opjems';
+
+UPDATE scholarships SET
+  meta_title = 'AICTE Pragati Scholarship for Girls 2026: Rs 50,000',
+  meta_description = 'AICTE Pragati Scholarship gives girl students up to Rs 50,000 a year for AICTE-approved technical courses. Check eligibility, documents and how to apply.'
+  WHERE slug = 'pragati-girls';
+
+UPDATE scholarships SET
+  meta_title = 'Telangana ePASS Scholarship 2026: Eligibility & Apply',
+  meta_description = 'Telangana ePASS is the post-matric scholarship and fee reimbursement portal for SC, ST, BC and minority students. Check eligibility and how to apply.'
+  WHERE slug = 'telangana-epass';
+
+UPDATE scholarships SET
+  meta_title = 'TN Post-Matric Scholarship (ADW) 2026: Eligibility',
+  meta_description = 'The Tamil Nadu Adi Dravidar and Tribal Welfare post-matric scholarship gives SC, SCA and ST students fee support. Check eligibility and how to apply.'
+  WHERE slug = 'tn-adw-post-matric';
+
+UPDATE scholarships SET
+  meta_title = 'Vidyasaarathi Scholarship 2026: Eligibility & Apply',
+  meta_description = 'Vidyasaarathi hosts many corporate and institutional scholarships for school, college and diploma students in India. Check eligibility and how to apply.'
+  WHERE slug = 'vidyasaarathi';
+
 
 
 -- ============================================================================
