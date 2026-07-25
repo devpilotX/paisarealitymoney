@@ -18,6 +18,37 @@ jumping positions.
 
 ---
 
+## Verified, not deployed
+
+### Batch 2 — length-aware metadata templates (commit `ff89943`, branch `seo/metadata-templates`)
+Fixes the *fallback* templates for pages with no hand-written override. Does not
+touch the 39 scheme and 31 scholarship overrides, so nothing already approved
+changes. New `buildRecordTitle` / `buildRecordDescription` in `src/lib/seo.ts`,
+wired into `/schemes/[slug]` and `/scholarships/[slug]`.
+
+Measured against the seed sources, not estimated (re-verified 2026-07-25 23:55):
+
+| | before | after |
+|---|---|---|
+| scheme titles over 60 | 242 of 312 | 10 |
+| longest scheme title | 108 | 78 |
+| scheme descriptions truncated mid-sentence | 253 | 0 |
+| scholarship titles over 60 | 31 of 31 | 2 |
+| longest scholarship title | 120 | 79 |
+
+The 12 remaining long titles are names that alone exceed 60 characters
+(`National Pension Scheme for Traders and Self-Employed (Laghu Vyapari
+Maandhan)` is 78). Abbreviating them would mean inventing a name, so they stay
+intact. "Apply Online" is claimed only where `apply_url` exists (0 false claims).
+
+Gates: `npm run typecheck` exit 0, `npm test` 16 suites (new
+`tests/seo-metadata.test.ts`, 28 assertions), `npm run build` exit 0 with
+368/368 pages. **Needs owner authorization to push, merge and deploy.** Scheme
+and scholarship pages are SSG, so this is inert until a rebuild on the VPS. It
+is code-only: no reseed, no migration.
+
+---
+
 ## Infrastructure debt (logged, not built)
 
 ### Atomic releases via symlink switch
