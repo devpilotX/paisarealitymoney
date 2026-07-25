@@ -1,0 +1,113 @@
+# seo/ROADMAP.md
+
+## Shipped
+
+### Batch 1 — hubs and internal links (deployed 2026-07-25 21:40 IST)
+Merged as `6747853` (PR #2). Downtime 22 s. Restart count unchanged at 14
+(no `EADDRINUSE`). Live gates: sitemap **772**, `/schemes` **351** crawlable
+scheme links, `/state` **36**, `/category` **14**. Structural diff vs the
+pre-deploy baseline: 11 of 11 UI markers unchanged, only the two declared
+changes present. Zero new runtime errors.
+
+Expected effect and honest timing: this fixes *discovery and link equity*, not
+ranking directly. 343 scheme pages went from sitemap-only discovery to being
+linked from their own hub. Google must recrawl before anything moves. Realistic
+window to see impression change in Search Console: **2–6 weeks**, and the
+mechanism is more pages becoming eligible to rank at all, not existing pages
+jumping positions.
+
+---
+
+## Infrastructure debt (logged, not built)
+
+### Atomic releases via symlink switch
+Swapping `.next` directories in place is a workaround. It has three flaws we
+hit or nearly hit tonight:
+1. A build in the live directory can be served before review (this happened;
+   recovered).
+2. `.next/required-server-files.json` and `required-server-files.js` record the
+   absolute build path in `appDir`, `config.outputFileTracingRoot` and
+   `config.turbopack.root`. Moving the directory requires patching all three,
+   which we now do by hand.
+3. There is a real, if short, window where `.next` does not match the running
+   process.
+
+Correct long-term shape:
+```
+/opt/releases/<sha>/          # full checkout + node_modules + .next
+/opt/paisareality-current ->  # symlink, switched atomically
+```
+Build in the release dir (so the recorded absolute path is already correct and
+never needs patching), then `ln -sfn` the symlink and reload. Rollback is a
+symlink flip — instant, no rebuild, no copy. **Do not build this reactively
+mid-SEO-work.** Schedule it as its own change.
+
+### Standing build location
+`/opt/paisareality-build` is a permanent `git worktree` on the deploy branch,
+owned by `mcpagent`. Keep it. `/opt` is not writable by `mcpagent`, so the
+directory itself had to be created with `sudo mkdir` + `chown`.
+
+### Host contention
+Shared 4-core box. `quantsys.backtest.runstudy` holds a full core for hours at
+a time. Always build with `nice -n 19 ionice -c3`, detached via `nohup`, and
+poll the log. A build that takes 22 s locally took 65 s of compile plus queueing
+here. RAM is not the constraint (23 GiB total, ~20 GiB free).
+
+### Port map on this host — check before binding anything
+| port | process |
+|---|---|
+| 3000 | **paisareality** (next-server v16.2.10, `/opt/paisareality`) ← nginx upstream |
+| 3001 | node (PID 1488) |
+| 3006 | devpilotx-business (next-server v15.5.20) |
+| 3010 | docker-proxy |
+| 8100 | node (PID 1471, localhost only) |
+
+3900 was used for verification. The two Next servers never collided — different
+ports. The Jul 24 `EADDRINUSE :::3000` was paisareality colliding with its own
+outgoing instance during a PM2 restart, which the stop → poll → start sequence
+now prevents.
+
+---
+
+## Next, in priority order
+
+### 1. Scheme + scholarship title/meta rewrite (O4) — strings need approval
+The ~60 pages already ranking in the top 15. Pure metadata, deliverable through
+the **admin panel** with no deploy: `meta_title`/`meta_description` are DB
+columns with override priority, already in use on 39 of 351 schemes and 31 of
+62 scholarships.
+
+Formula must be **qualifier-led, not amount-led** — see steering §9.
+`benefit_amount_max` is populated on only 70/351, is semantically mixed
+(₹1,400 to ₹20 crore), has no unit column, and is NULL on 9 of the 10
+highest-impression pages. Build on the 100%-coverage fields instead:
+`benefit_summary`, `category`, `level`, `states`.
+
+### 2. Fix the remaining O1 punch list
+`/bank-rates` (was unknown to Google — now linked and resubmitted), `/about`
+(discovered, not indexed — likely thin; needs real E-E-A-T content on a YMYL
+site), one newsletter post. Re-inspect after the recrawl.
+
+### 3. Re-pull Search Console 2026-07-28
+Confirmation only, not a gate. Settles whether the 2026-07-20..22 decline
+(998 → 349 → 85 → 33) was processing lag. `dataState: final` returned
+byte-identical rows to `all`, so that test was inconclusive.
+
+### 4. [ADMIN] data population — unblocks two dead SEO plays
+- `schemes.deadline`: **0/351**. Blocks every "last date" query, and
+  `e grantz scholarship 2026 last date` ranks #1 with 0 clicks.
+- `scholarships.deadline` / `opens_on`: **0/62**.
+- `schemes.benefit_amount_max`: 281/351 missing, and there is no unit column —
+  adding one would make amount-led titles viable.
+
+### 5. Formal decision: reverse the `/hi` noindex (hindi-unlock)
+Deferred by agreement until after this deploy. Evidence for reopening it is now
+strong: regional-language results dominate the SERPs we care about (Malayalam
+for `aswasakiranam`, Hindi for `palanhar yojana`, Marathi for `lek ladki`), and
+`schemes.name_hi` is populated on **351/351**. Raise as a data-backed decision,
+not a code change.
+
+### 6. Mobile-vs-desktop split on scheme pages
+Desktop 2,489 impressions at position 24.9 and 0.4% CTR; mobile 1,598 at
+position 14.2 and 1.4% CTR. Mobile ranks ~10 positions better and converts
+3.5× better. Worth investigating as its own question.
