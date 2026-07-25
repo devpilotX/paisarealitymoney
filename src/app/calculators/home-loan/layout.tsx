@@ -5,7 +5,7 @@ import Script from 'next/script';
 export const metadata = pageMetadata({
   title: 'Home Loan EMI Calculator India: Payment Breakup',
   description:
-    'Calculate your home loan EMI, total interest and year-wise payment schedule. Compare different loan amounts, tenures and interest rates for Indian home loans.',
+    'Calculate your home loan EMI, total interest and year-wise payment schedule. Compare loan amounts, tenures and interest rates for Indian home loans.',
   path: '/calculators/home-loan',
   keywords: ['home loan emi calculator india', 'home loan calculator', 'housing loan emi calculator', 'home loan interest calculator'],
 });

@@ -7,7 +7,7 @@ import { pageMetadata } from '@/lib/seo';
 export const metadata = pageMetadata({
   title: 'Smart Tools: Free Advanced Financial Calculators',
   description:
-    'Free advanced money tools: retirement planner, loan prepay vs invest, debt optimizer, tax regime optimizer, budget planner, tax harvesting, gold planner, scheme maximizer, salary optimizer.',
+    'Free advanced money tools: retirement planner, prepay vs invest, debt optimizer, tax regime optimizer, budget planner, gold planner and more.',
   path: '/smart-tools',
   keywords: ['smart financial tools', 'advanced financial calculators', 'monte carlo retirement calculator', 'debt payoff calculator', 'tax regime optimizer'],
 });

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: '%s',
   },
   description:
-    'Paisa Reality helps you check your free Money Health Score, use 9 smart financial tools, track live rates, find government schemes, and compare bank rates in India.',
+    'Check your free Money Health Score, use smart financial tools, track live gold and fuel rates, find government schemes and compare bank rates.',
   keywords: [
     'money health score',
     'financial health score india',
