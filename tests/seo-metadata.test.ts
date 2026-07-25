@@ -36,6 +36,58 @@ test('buildRecordTitle: richest suffix that fits is chosen', () => {
     `29-char name still fits the benefits suffix (got "${buildRecordTitle(MEDIUM)}")`);
 });
 
+/*
+ * The ladder descends by information value. Suffix lengths, for reference:
+ *   " 2026: Eligibility & Apply Online" 33   " 2026: Eligibility & Apply" 26
+ *   " 2026: Eligibility & Benefits"     29   " 2026: How to Apply"        19
+ *   " 2026: Eligibility"                18   " 2026"                      5
+ * Synthetic names of an exact length are used so each rung is pinned.
+ */
+const nameOf = (len: number) => 'N'.repeat(len);
+
+test('buildRecordTitle: each apply rung fires at the length where it fits', () => {
+  const cases: Array<[number, string]> = [
+    [20, ' 2026: Eligibility & Apply Online'],
+    [30, ' 2026: Eligibility & Apply'],
+    [38, ' 2026: How to Apply'],
+    [42, ' 2026: Eligibility'],
+    [43, ' 2026'],
+  ];
+  for (const [len, suffix] of cases) {
+    const t = buildRecordTitle(nameOf(len), { canApplyOnline: true });
+    assert(t === `${nameOf(len)}${suffix}`, `name of ${len} gets "${suffix.trim()}" (got "${t.slice(len)}")`);
+    assert(t.length <= TITLE_LIMIT, `and still fits (${t.length})`);
+  }
+});
+
+test('buildRecordTitle: each non-apply rung fires at the length where it fits', () => {
+  const cases: Array<[number, string]> = [
+    [25, ' 2026: Eligibility & Benefits'],
+    [35, ' 2026: Eligibility'],
+    [43, ' 2026'],
+  ];
+  for (const [len, suffix] of cases) {
+    const t = buildRecordTitle(nameOf(len));
+    assert(t === `${nameOf(len)}${suffix}`, `name of ${len} gets "${suffix.trim()}" (got "${t.slice(len)}")`);
+    assert(t.length <= TITLE_LIMIT, `and still fits (${t.length})`);
+  }
+});
+
+test('buildRecordTitle: a page without an apply URL never mentions applying', () => {
+  for (let len = 5; len <= 70; len += 5) {
+    const t = buildRecordTitle(nameOf(len));
+    assert(!/Apply/i.test(t), `name of ${len} carries no apply wording (got "${t.slice(len)}")`);
+  }
+});
+
+test('buildRecordTitle: keeps a real qualifier wherever one fits', () => {
+  // 42 is the longest name that still leaves room for " 2026: Eligibility".
+  for (const len of [16, 25, 30, 35, 40, 42]) {
+    const t = buildRecordTitle(nameOf(len));
+    assert(/Eligibility/.test(t), `name of ${len} keeps a qualifier rather than only the year`);
+  }
+});
+
 test('buildRecordTitle: never exceeds the limit unless the name alone does', () => {
   for (const n of [SHORT, MEDIUM, LONG, LONGEST]) {
     const t = buildRecordTitle(n);

@@ -44,6 +44,10 @@ interface PageSeoInput {
  *   longest title   : 108 -> 78
  *   descriptions truncated : 253 -> 0
  *
+ * Fitting alone is not the goal, so the suffix ladder descends by information
+ * value. Titles carrying a real qualifier rather than just the year:
+ *   91 of 312 -> 207   (bare name plus year: 205 -> 84)
+ *
  * Scholarships (62 rows, 34 overrides, 31 template-driven) improve the same
  * way: titles over 60 went 31 -> 2, longest 120 -> 79.
  * ---------------------------------------------------------------------------
@@ -59,16 +63,29 @@ export const DESCRIPTION_LIMIT = 155;
  * that still fits. Falls back to the bare name rather than truncating it,
  * because a clipped scheme name is worse than a plain one.
  *
- * "Apply Online" is only ever claimed when the record actually has an
- * application URL — most schemes only link out to an official portal.
+ * The ladder descends by information value, not just by length, so a page
+ * keeps a real qualifier ("Eligibility", "How to Apply") wherever there is
+ * room for one. A bare name plus year is the last resort.
+ *
+ * Apply wording is only ever used when the record actually has an application
+ * URL. Most schemes only link out to an official portal, so claiming "Apply
+ * Online" on those pages would misrepresent them.
  */
 export function buildRecordTitle(name: string, opts: { canApplyOnline?: boolean; year?: string } = {}): string {
   const year = opts.year ?? '2026';
-  const candidates = [
-    ...(opts.canApplyOnline ? [` ${year}: Eligibility & Apply Online`] : []),
-    ` ${year}: Eligibility & Benefits`,
-    ` ${year}`,
-  ];
+  const candidates = opts.canApplyOnline
+    ? [
+        ` ${year}: Eligibility & Apply Online`,
+        ` ${year}: Eligibility & Apply`,
+        ` ${year}: How to Apply`,
+        ` ${year}: Eligibility`,
+        ` ${year}`,
+      ]
+    : [
+        ` ${year}: Eligibility & Benefits`,
+        ` ${year}: Eligibility`,
+        ` ${year}`,
+      ];
   for (const suffix of candidates) {
     if (name.length + suffix.length <= TITLE_LIMIT) return `${name}${suffix}`;
   }
