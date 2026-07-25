@@ -2,7 +2,7 @@ import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 
 export const metadata = pageMetadata({
-  title: 'Disclaimer',
+  title: 'Disclaimer: Information Only, Not Financial Advice',
   description: 'Important disclaimer about information on Paisa Reality. We are an informational website, not a financial advisor.',
   path: '/disclaimer',
 });

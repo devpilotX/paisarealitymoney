@@ -2,7 +2,7 @@ import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 
 export const metadata = pageMetadata({
-  title: 'Terms of Service',
+  title: 'Terms of Service: Using Paisa Reality',
   description: 'Terms of service for using Paisa Reality. Read our acceptable use policy, limitations, and governing law.',
   path: '/terms',
 });

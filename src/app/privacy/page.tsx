@@ -2,7 +2,7 @@ import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 
 export const metadata = pageMetadata({
-  title: 'Privacy Policy',
+  title: 'Privacy Policy: How We Handle Your Data',
   description: 'Privacy policy for Paisa Reality. Learn what data we collect, how we use it, and your rights.',
   path: '/privacy',
 });

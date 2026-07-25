@@ -4,7 +4,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 
 export const metadata = pageMetadata({
-  title: 'About Us',
+  title: 'About Paisa Reality: Who We Are and How We Work',
   description: 'Paisa Reality is a free financial information platform for India: daily prices, government schemes, calculators and bank rate comparison.',
   path: '/about',
 });
