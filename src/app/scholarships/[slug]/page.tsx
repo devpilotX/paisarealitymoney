@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 import ScholarshipReminderForm from '@/components/ScholarshipReminderForm';
-import { pageMetadata } from '@/lib/seo';
+import { pageMetadata, buildRecordTitle, buildRecordDescription } from '@/lib/seo';
 import { formatNumber } from '@/lib/constants';
 import { getScholarshipBySlug, type Scholarship } from '@/lib/scholarships';
 import { breadcrumbSchema, scholarshipSchema } from '@/lib/schema';
@@ -32,10 +32,12 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   if (!s) {
     return pageMetadata({ title: 'Scholarship', description: 'Scholarship details.', path: `/scholarships/${slug}` });
   }
-  const desc = (s.metaDescription ?? s.benefitSummary ?? `${s.name} eligibility, documents and how to apply.`).slice(0, 160);
+  // Length-aware metadata (see src/lib/seo.ts). The previous template put 31 of
+  // 62 titles over 60 chars (max 120) and sliced descriptions at 160 with no
+  // ellipsis, cutting them mid-word. Hand-written overrides always win.
   return pageMetadata({
-    title: s.metaTitle ?? `${s.name}: Eligibility, Documents and How to Apply`,
-    description: desc,
+    title: s.metaTitle?.trim() || buildRecordTitle(s.name),
+    description: s.metaDescription?.trim() || buildRecordDescription(s.benefitSummary, s.name),
     path: `/scholarships/${slug}`,
   });
 }
