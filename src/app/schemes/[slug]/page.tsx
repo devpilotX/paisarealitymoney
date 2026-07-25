@@ -81,14 +81,20 @@ function buildEligibilitySummary(scheme: SchemeDetailRow): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const rows = await query<SchemeDetailRow>(`SELECT slug, name, name_hi, category, benefit_summary, meta_title, meta_description
+    const rows = await query<SchemeDetailRow>(`SELECT slug, name, name_hi, category, benefit_summary, apply_url, meta_title, meta_description
        FROM schemes WHERE slug = $1 AND is_active = TRUE LIMIT 1`,
       [slug]
     );
     const scheme = rows[0];
     if (!scheme) return { title: 'Scheme Not Found', robots: { index: false } };
     const url = `https://paisareality.com/schemes/${scheme.slug}`;
-    const title = scheme.meta_title || `${scheme.name} - Eligibility, Benefits & Apply Online 2026`;
+    // Accuracy: only 36 of 351 schemes actually have an apply_url. Promising
+    // "Apply Online" on the other 315 misrepresents the page — those pages only
+    // link out to the official portal. Keep the claim where it is true.
+    const defaultSuffix = scheme.apply_url
+      ? ' - Eligibility, Benefits & Apply Online 2026'
+      : ' - Eligibility & Benefits 2026';
+    const title = scheme.meta_title || `${scheme.name}${defaultSuffix}`;
     const rawDescription = scheme.meta_description || `${scheme.benefit_summary} Check eligibility, required documents, and how to apply for ${scheme.name}.`;
     const description = rawDescription.length > 160 ? `${rawDescription.slice(0, 157).trimEnd()}...` : rawDescription;
     const keywords = [

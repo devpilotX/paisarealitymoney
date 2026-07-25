@@ -77,6 +77,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Schemes hub + bank rates (hub + sub-pages)
     { url: `${BASE_URL}/schemes`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/scholarships`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    // Hub parents for the state and category families. These previously did not
+    // exist (both returned 404), leaving 36 state + 14 category pages with no
+    // hub parent and no link path from the top of the site.
+    { url: `${BASE_URL}/state`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE_URL}/category`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/bank-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/bank-rates/fd-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/bank-rates/savings-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
