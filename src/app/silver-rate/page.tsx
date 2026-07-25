@@ -10,6 +10,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import CitySelector from '@/components/CitySelector';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
+import NextStep from '@/components/NextStep';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
@@ -119,6 +120,11 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
       </article>
 
       <ShareButton url="/silver-rate" title="Silver Rate Today in India" />
+      <NextStep
+        title="Waiting for a better price?"
+        text="Set a free alert and we will email you when silver reaches the rate you want in your city. It needs a free account and takes a minute."
+        links={[{ href: '/dashboard/alerts', label: 'Set a price alert', primary: true }]}
+      />
       <InternalLinks title="Silver Rate in Major Cities" links={cityLinks} columns={3} />
       <FAQ items={SILVER_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

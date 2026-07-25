@@ -14,6 +14,7 @@ import CitySelector from '@/components/CitySelector';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
+import NextStep from '@/components/NextStep';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
@@ -188,6 +189,14 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
 
       <ShareButton url={`/gold-rate/${city.slug}`} title={`Gold Rate in ${city.name} Today`} />
 
+      <NextStep
+        title="Planning a gold purchase?"
+        text="See what your budget buys at today's rate with the gold planner, or set a free alert and we will email you when gold reaches the price you are waiting for."
+        links={[
+          { href: '/calculators/gold-planner', label: 'Open the gold planner', primary: true },
+          { href: '/dashboard/alerts', label: 'Set a price alert' },
+        ]}
+      />
       <InternalLinks title={`Gold Rate in Other Cities`} links={cityLinks} columns={3} />
 
       <FAQ items={faqs} />

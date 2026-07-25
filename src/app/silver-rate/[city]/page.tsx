@@ -14,6 +14,7 @@ import CitySelector from '@/components/CitySelector';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
+import NextStep from '@/components/NextStep';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
 import InArticleAd from '@/components/InArticleAd';
@@ -103,6 +104,11 @@ export default async function SilverRateCityPage({ params }: PageProps): Promise
       </article>
 
       <ShareButton url={`/silver-rate/${city.slug}`} title={`Silver Rate in ${city.name} Today`} />
+      <NextStep
+        title="Waiting for a better price?"
+        text="Set a free alert and we will email you when silver reaches the rate you want in your city. It needs a free account and takes a minute."
+        links={[{ href: '/dashboard/alerts', label: 'Set a price alert', primary: true }]}
+      />
       <InternalLinks title="Silver Rate in Other Cities" links={cityLinks} columns={3} />
       <FAQ items={faqs} />
       <AdBanner format="horizontal" className="mt-8" />
