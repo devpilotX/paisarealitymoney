@@ -4,6 +4,7 @@ import { ALL_INDIAN_STATES } from '@/lib/cities';
 import { SCHEME_CATEGORIES } from '@/lib/constants';
 import { query } from '@/lib/db';
 import { getAllPostsAsync } from '@/lib/blog';
+import { resolveLastModified, TEMPLATE_UPDATED } from '@/lib/sitemap-dates';
 import type { QueryResultRow } from 'pg';
 
 
@@ -28,8 +29,11 @@ function stateNameToSlug(name: string): string {
 }
 
 function toIsoDate(value: string | Date | null, fallback: string): string {
-  if (!value) return fallback;
-  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
+  // Later of the row and the template date, clamped to now. See
+  // src/lib/sitemap-dates.ts for why: lastmod describes the page, and on
+  // 2026-07-26 every scheme and scholarship page changed without its row
+  // changing, so using updated_at alone kept claiming 20 July.
+  return resolveLastModified(value, fallback);
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -37,7 +41,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // on a real content or layout change) instead of "now" on every crawl, which
   // makes Google distrust lastmod. Pages that genuinely refresh daily (the home
   // page and the live price hubs + city pages) use today's date.
-  const now = '2026-07-20';
+  //
+  // Bumped from 2026-07-20 to 2026-07-26, which is a real content change and not
+  // a routine deploy: titles and descriptions were rewritten across the site, a
+  // social card was added to 717 pages that had none, every scheme and
+  // scholarship page gained a "last date to apply" answer, and scholarship pages
+  // gained a full FAQ section.
+  const now = TEMPLATE_UPDATED;
   const dailyUpdated = new Date().toISOString().slice(0, 10);
 
   const staticPages: MetadataRoute.Sitemap = [
