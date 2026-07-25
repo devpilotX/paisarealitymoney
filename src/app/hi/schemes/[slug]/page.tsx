@@ -4,6 +4,7 @@ import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
 
 import { formatNumber } from '@/lib/constants';
+import { parseJsonArray } from '@/lib/json-array';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 import ShareButton from '@/components/ShareButton';
@@ -43,7 +44,11 @@ export default async function HindiSchemeDetailPage({ params }: PageProps): Prom
   } catch (error) { console.error('Hindi scheme error:', error); }
   if (!scheme) notFound();
 
-  const docs = (() => { try { const p = JSON.parse(scheme.documents_required ?? '[]'); return Array.isArray(p) ? p : []; } catch { return []; } })();
+  // Was JSON.parse on a jsonb column, which pg already returns parsed, so it
+  // threw and returned [] and Hindi readers never saw the documents list. The
+  // English route hit the same bug and was fixed on 2026-07-21; this one kept a
+  // copy of the broken version until 2026-07-26. Shared helper now.
+  const docs = parseJsonArray(scheme.documents_required);
 
   return (
     <div className="container-main py-6">

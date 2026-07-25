@@ -215,6 +215,35 @@ for `aswasakiranam`, Hindi for `palanhar yojana`, Marathi for `lek ladki`), and
 `schemes.name_hi` is populated on **351/351**. Raise as a data-backed decision,
 not a code change.
 
+### 5. Formal decision: reverse the `/hi` noindex (hindi-unlock) — DECIDED 2026-07-26: NO, keep noindex
+
+Measured the actual pages rather than reasoning from `name_hi` coverage, and the
+premise of this item turns out to be wrong.
+
+`/hi/schemes/pm-kisan` live: **294 words total, 175 Devanagari characters against
+1,400 Latin characters, so about 11% Hindi.** The title and section headings are
+translated; the body is the English `description` and `benefit_summary`, because
+`description_hi` falls back to `description`. There are only three `/hi` routes
+at all (`/hi`, `/hi/schemes/[slug]`, `/hi/gold-rate/[city]`).
+
+So indexing this would add roughly 400 thin pages that mostly duplicate the
+English ones under Hindi titles. On a domain with almost no authority that is the
+textbook way to dilute a site, and it risks the scheme pages that currently earn
+all the traffic. A Hindi *name* is not a Hindi *page*.
+
+What would change the answer: real translated bodies, meaning `description_hi`,
+eligibility, how-to-apply and documents populated per scheme. That is a genuine
+content project of roughly 351 times 300 words, and machine translation of YMYL
+financial guidance without human review is not acceptable. Revisit only with real
+translations, and even then start with the ten pages that already rank.
+
+Fixed while measuring: `/hi/schemes/[slug]` still carried the old
+`JSON.parse(documents_required)` bug that the English route shed on 2026-07-21,
+so Hindi readers saw no Documents Required section at all. The parser now lives
+in `src/lib/json-array.ts` with tests, used by both routes, precisely so the two
+copies cannot drift apart again. No SEO effect, since these pages are noindex,
+but it was a real content loss for the readers who do use them.
+
 ### 6. Mobile-vs-desktop split on scheme pages
 Desktop 2,489 impressions at position 24.9 and 0.4% CTR; mobile 1,598 at
 position 14.2 and 1.4% CTR. Mobile ranks ~10 positions better and converts
