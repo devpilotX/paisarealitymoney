@@ -5,7 +5,7 @@ import Script from 'next/script';
 export const metadata = pageMetadata({
   title: 'SIP Calculator India: Mutual Fund Returns & Growth',
   description:
-    'Free SIP calculator for India. See how much your monthly SIP investment grows over time with the power of compounding across different amounts, durations and expected returns.',
+    'Free SIP calculator for India. See how much your monthly SIP grows over time with compounding, across amounts, durations and expected returns.',
   path: '/calculators/sip',
   keywords: ['sip calculator india', 'mutual fund sip calculator', 'sip returns calculator', 'monthly sip calculator', 'sip calculator with inflation'],
 });

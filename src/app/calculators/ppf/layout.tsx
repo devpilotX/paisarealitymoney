@@ -5,7 +5,7 @@ import Script from 'next/script';
 export const metadata = pageMetadata({
   title: 'PPF Calculator India: Public Provident Fund Returns',
   description:
-    'Calculate your PPF maturity for monthly or yearly deposits. Set the interest rate, extend the term in 5-year blocks to 30 years, and see year-by-year growth at the current PPF rate.',
+    'Calculate PPF maturity for monthly or yearly deposits. Set the interest rate, extend in 5-year blocks to 30 years, and see year-by-year growth.',
   path: '/calculators/ppf',
   keywords: ['ppf calculator india', 'public provident fund calculator', 'ppf maturity calculator', 'ppf interest calculator', 'ppf calculator monthly'],
 });

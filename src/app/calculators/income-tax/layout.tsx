@@ -3,9 +3,9 @@ import { calculatorSchema, howToSchema } from '@/lib/schema';
 import Script from 'next/script';
 
 export const metadata = pageMetadata({
-  title: 'Income Tax Calculator FY 2026-27 (AY 2027-28): Old vs New Regime',
+  title: 'Income Tax Calculator FY 2026-27: Old vs New Regime',
   description:
-    'Free income tax calculator for FY 2026-27 and FY 2025-26. Compare the old vs new tax regime and instantly see which one saves you more based on your salary, deductions, and exemptions.',
+    'Free income tax calculator for FY 2026-27 and FY 2025-26. Compare the old and new regime and see which one saves more on your salary and deductions.',
   path: '/calculators/income-tax',
   keywords: [
     'income tax calculator india', 'income tax calculator fy 2026-27', 'old vs new tax regime calculator',

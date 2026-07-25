@@ -7,7 +7,7 @@ import AdSlot from '@/components/AdSlot';
 export const metadata: Metadata = {
   title: 'Paisa Reality: Money Health Score, Smart Tools & Live Prices',
   description:
-    'Check your free Money Health Score and 10 smart tools for retirement, debt, and tax. Plus daily gold and fuel prices, government schemes, calculators, and bank rates.',
+    'Check your free Money Health Score and smart tools for retirement, debt and tax, plus daily gold and fuel prices, schemes, calculators and bank rates.',
   alternates: {
     canonical: 'https://paisareality.com',
     languages: {

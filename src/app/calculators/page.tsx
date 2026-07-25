@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
   title: 'Free Financial Calculators: EMI, SIP, FD, PPF, Tax',
-  description: 'Free financial calculators for EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA and inflation. Instant results in your browser. No signup needed.',
+  description: 'Free financial calculators for EMI, SIP, FD, PPF, income tax, home loan, NPS, gratuity, HRA and inflation. Instant results, no signup needed.',
   path: '/calculators',
   keywords: ['financial calculators india', 'emi calculator', 'sip calculator', 'fd calculator', 'income tax calculator'],
 });

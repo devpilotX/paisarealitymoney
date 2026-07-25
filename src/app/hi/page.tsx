@@ -4,7 +4,7 @@ import AdBanner from '@/components/AdBanner';
 import FAQ from '@/components/FAQ';
 
 export const metadata: Metadata = {
-  title: 'Paisa Reality - सोने का भाव, सरकारी योजनाएं, कैलकुलेटर, बैंक दरें',
+  title: 'Paisa Reality: सोने का भाव, सरकारी योजनाएं, कैलकुलेटर',
   description: 'सोने का भाव, चांदी का रेट, पेट्रोल कीमत देखें। सरकारी योजनाएं खोजें। मुफ्त EMI, SIP, FD कैलकुलेटर।',
   alternates: { canonical: 'https://paisareality.com/hi', languages: { 'en-IN': 'https://paisareality.com' } },
 };

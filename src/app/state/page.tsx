@@ -14,7 +14,7 @@ import { ALL_INDIAN_STATES } from '@/lib/cities';
 export const metadata = pageMetadata({
   title: 'Government Schemes by State: All 36 States and UTs',
   description:
-    'Find central and state government schemes for your state. Browse all 36 Indian states and union territories, each with eligibility, benefits and official application links.',
+    'Find central and state government schemes for your state. Browse all 36 states and union territories with eligibility, benefits and official links.',
   path: '/state',
 });
 

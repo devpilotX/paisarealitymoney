@@ -30,7 +30,9 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   const { slug } = await params;
   const s = await load(slug);
   if (!s) {
-    return pageMetadata({ title: 'Scholarship', description: 'Scholarship details.', path: `/scholarships/${slug}` });
+    // An unknown slug 404s, so keep it out of the index rather than shipping a
+    // placeholder description. Matches the schemes route.
+    return { title: 'Scholarship Not Found', robots: { index: false } };
   }
   // Length-aware metadata (see src/lib/seo.ts). The previous template put 31 of
   // 62 titles over 60 chars (max 120) and sliced descriptions at 160 with no

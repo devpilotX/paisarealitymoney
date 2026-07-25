@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getSchemesByState } from '@/lib/matcher';
+import { pageMetadata, fitTitle } from '@/lib/seo';
 import type { MatchedScheme } from '@/lib/matcher';
 import { ALL_INDIAN_STATES } from '@/lib/cities';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -30,17 +31,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const stateName = stateSlugToName(slug);
   if (!stateName) return { title: 'State Not Found' };
-  return {
-    title: `Government Schemes in ${stateName} - Complete List`,
+  return pageMetadata({
+    // Two long union territory names pushed the old fixed suffix to 74 chars
+    // (live crawl 2026-07-26), so fit the suffix to the name.
+    title: fitTitle(`Government Schemes in ${stateName}`, [
+      ': Complete List 2026',
+      ': Complete List',
+      ' 2026',
+      '',
+    ]),
     description: `Find all central and state government schemes available in ${stateName}. Check eligibility, benefits, and how to apply.`,
-    alternates: { canonical: `https://paisareality.com/state/${slug}` },
+    path: `/state/${slug}`,
     keywords: [
       `${stateName} government schemes`,
       `${stateName} yojana list`,
       `schemes in ${stateName}`,
       'government schemes india',
     ],
-  };
+  });
 }
 
 export const revalidate = 3600;
