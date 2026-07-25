@@ -115,9 +115,67 @@ export default function RealReturnPage(): React.ReactElement {
           are pitched with totals: <em>&quot;invest 6 lakh in total, receive 14 lakh!&quot;</em>. Totals feel large
           because the money comes back decades later. The honest measure is the <strong>annual rate</strong> that
           links your payments to your payouts, respecting when each one happens. That rate is called the internal
-          rate of return (IRR or XIRR), it is the same arithmetic Excel and mutual funds use, and for typical
-          traditional plans it lands between 4% and 6% — below inflation, and well below PPF&apos;s guaranteed,
-          tax-free 7.1%.
+          rate of return (IRR or XIRR), it is the same arithmetic Excel and mutual funds use, and across the five
+          structures computed below it lands between 2.84% and 5.95%, every one of them below inflation and well
+          below PPF&apos;s guaranteed, tax-free 7.1%.
+        </p>
+
+        <h2>What five typical structures actually return</h2>
+        <p>
+          Rather than argue from memory, we ran five structures of the kind that actually get pitched through the
+          same engine that powers the checker above. Every number below is computed, not quoted, and the script
+          that produces them lives in the repository, so anyone can reproduce or challenge them.
+        </p>
+        <div className="not-prose my-6 overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-line text-left">
+                <th className="py-2 pr-3 font-semibold">Structure</th>
+                <th className="py-2 pr-3 font-semibold">You pay</th>
+                <th className="py-2 pr-3 font-semibold">You get</th>
+                <th className="py-2 pr-3 font-semibold">Multiple</th>
+                <th className="py-2 pr-3 font-semibold">Annual return</th>
+                <th className="py-2 pr-3 font-semibold">Same money in PPF</th>
+                <th className="py-2 font-semibold">Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['Endowment, Rs 50,000 a year for 20 years', 'Rs 10,00,000', 'Rs 18,00,000', '1.80x', '5.31%', 'Rs 22,19,429', 'Rs 4,19,429'],
+                ['Endowment, Rs 1,00,000 a year for 15, held 25', 'Rs 15,00,000', 'Rs 25,00,000', '1.67x', '2.84%', 'Rs 53,85,261', 'Rs 28,85,261'],
+                ['Money-back, Rs 40,000 a year for 20 years', 'Rs 8,00,000', 'Rs 11,00,000', '1.38x', '4.12%', 'Rs 17,75,544', 'Rs 6,75,544'],
+                ['ULIP style, Rs 1,20,000 a year for 10, held 15', 'Rs 12,00,000', 'Rs 22,00,000', '1.83x', '5.81%', 'Rs 25,14,006', 'Rs 3,14,006'],
+                ['Single premium, Rs 5,00,000 doubling in 12 years', 'Rs 5,00,000', 'Rs 10,00,000', '2.00x', '5.95%', 'Rs 11,38,790', 'Rs 1,38,790'],
+              ].map((row) => (
+                <tr key={row[0]} className="border-b border-line align-top">
+                  {row.map((cell, i) => (
+                    <td key={i} className={`py-2 ${i < row.length - 1 ? 'pr-3' : ''} ${i === 4 ? 'font-semibold text-brand-red' : ''}`}>
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p>
+          All five land below inflation, and all five land below PPF. Each one is sold on the multiple in the
+          fourth column, which looks generous, while the annual return sits between 2.84% and 5.95%. The
+          &quot;double your money in 12 years&quot; pitch works out to 5.95% a year. The 15-year paying plan held
+          for 25 years returns 2.84%, which is worse than a savings account, and the same payments into PPF would
+          have reached about Rs 53.85 lakh instead of Rs 25 lakh.
+        </p>
+        <p>
+          One caveat matters, and it is not a defence of these products. An endowment policy also carries life
+          cover, so this is not a pure investment comparison. That is precisely the point: a term plan buys far
+          more cover for a fraction of the premium, which leaves the rest of your money free to earn PPF or market
+          returns. Separating the savings part is the only way to see what the bundling costs you.
+        </p>
+        <p className="text-sm text-muted-2">
+          Assumptions: PPF 7.1%, FD 6.5% and inflation 6%, the same rates this checker uses throughout. The five
+          structures are illustrative and are not attributed to any insurer, because we have not audited a specific
+          company&apos;s benefit illustration. Real policies vary with the bonuses an insurer declares, so run your
+          own numbers above. Method and code: <code>scripts/mis-selling-study.ts</code> in the project repository.
         </p>
 
         <h2>Why nobody shows you this number</h2>
