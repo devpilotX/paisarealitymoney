@@ -18,7 +18,38 @@ jumping positions.
 
 ---
 
-## Verified, not deployed
+### Batches 2 and 3 — metadata quality across all 772 pages (deployed 2026-07-26, live source `bce4adc`)
+Deployed from the standing build worktree so the live `.next` was never mid-build:
+build in `/opt/paisareality-build`, patch the two files that record the absolute
+build path, then `mv` the directory in and restart. Restart count 14 to 16 over
+two deploys, no `EADDRINUSE`, zero new entries in the pm2 error log.
+
+Verified by crawling all 772 sitemap URLs before and after, same script both
+times (`node scripts/seo-audit.mjs`):
+
+| | before | after |
+|---|---|---|
+| titles over 60 chars | 297 | 14 |
+| longest title | 120 | 79 |
+| descriptions over 155 | 314 | 15 |
+| descriptions cut mid-sentence with an ellipsis | 253 | 0 |
+| pages with no `og:image` | 717 | 0 |
+| non-200 responses | 0 | 0 |
+| missing canonical, missing H1, duplicate H1, no JSON-LD, image without alt | 0 | 0 |
+
+The 14 remaining long titles are scheme and scholarship names that exceed 60
+chars on their own, plus two editorial newsletter titles at 68 and 69. The 15
+remaining long descriptions are hand-written database values between 156 and
+160, inside the range Google actually displays. Both are honest floors, not
+defects: shortening either would mean inventing an abbreviation or rewriting
+copy that was tuned for CTR.
+
+Still thin and worth real content when there is time: `/guides` at 245 words and
+`/pricing` at 284.
+
+---
+
+## Detail on the shipped metadata work
 
 ### Batch 3 — findings from a full live crawl of all 772 sitemap URLs (2026-07-26)
 Crawled every URL in the sitemap over HTTPS and checked status, title, meta
@@ -57,7 +88,7 @@ Known and deliberately not changed: `/guides` (245 words) and `/pricing` (284
 words) are thin, and two newsletter titles run 68 to 69 chars. Those are
 editorial content, fixable in the admin panel without a deploy.
 
-### Batch 2 — length-aware metadata templates (commit `ff89943`, branch `seo/metadata-templates`)
+### Batch 2 detail — length-aware metadata templates
 Fixes the *fallback* templates for pages with no hand-written override. Does not
 touch the 39 scheme and 31 scholarship overrides, so nothing already approved
 changes. New `buildRecordTitle` / `buildRecordDescription` in `src/lib/seo.ts`,
@@ -88,7 +119,8 @@ intact. "Apply Online" is claimed only where `apply_url` exists (0 false claims)
 
 Gates: `npm run typecheck` exit 0, `npm test` 16 suites (new
 `tests/seo-metadata.test.ts`, 28 assertions), `npm run build` exit 0 with
-368/368 pages. **Needs owner authorization to push, merge and deploy.** Scheme
+368/368 pages. Shipped on 2026-07-26 in the deploy described above. It is
+code-only: no reseed, no migration. Scheme
 and scholarship pages are SSG, so this is inert until a rebuild on the VPS. It
 is code-only: no reseed, no migration.
 
