@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
 import { buildRecordTitle, buildRecordDescription, SOCIAL_IMAGE } from '@/lib/seo';
 import { deadlineAnswer, deadlineLine, deadlineQuestion } from '@/lib/deadlines';
+import { parseJsonArray as parseJsonArrayShared } from '@/lib/json-array';
 import type { QueryResultRow } from 'pg';
 
 import { formatNumber, formatDate } from '@/lib/constants';
@@ -37,13 +38,10 @@ interface RelatedSchemeRow extends QueryResultRow {
 }
 
 function parseJsonArray(value: unknown): string[] {
-  // pg returns jsonb columns as already-parsed JS arrays; older rows / other
-  // callers may pass a JSON string. Handle both so scheme content (states,
-  // categories, occupations, documents) always renders.
-  if (Array.isArray(value)) return value.filter((i): i is string => typeof i === 'string');
-  if (typeof value !== 'string' || !value) return [];
-  try { const p = JSON.parse(value); return Array.isArray(p) ? p.filter((i): i is string => typeof i === 'string') : []; }
-  catch { return []; }
+  // Kept as a thin alias so the many call sites below read unchanged. The
+  // implementation lives in src/lib/json-array.ts because the Hindi route needs
+  // the same behaviour and its own copy had drifted back to the broken version.
+  return parseJsonArrayShared(value);
 }
 
 function titleCase(value: string): string {
