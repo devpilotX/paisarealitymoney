@@ -61,14 +61,18 @@ Set these in `.env`. Only the variable names are listed here. Never commit real 
 | `CRON_SECRET` | Shared secret to protect cron endpoints |
 | `RESEND_API_KEY` | Resend API key for transactional email |
 | `RESEND_WEBHOOK_SECRET` | Verifies Resend webhook calls |
-| `RAZORPAY_KEY_ID` | Razorpay key id |
+| `RAZORPAY_KEY_ID` | Razorpay key id. **Revenue critical:** a `rzp_test_` key collects no real money |
 | `RAZORPAY_KEY_SECRET` | Razorpay key secret |
 | `RAZORPAY_WEBHOOK_SECRET` | Verifies Razorpay webhook calls |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics measurement id |
-| `NEXT_PUBLIC_ADSENSE_PUB_ID` | Google AdSense publisher id |
-| `NEXT_PUBLIC_ADSENSE_DEFAULT_SLOT` | Default AdSense slot id |
-| `NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT` | In-article AdSense slot id |
+| `NEXT_PUBLIC_ADSENSE_PUB_ID` | AdSense publisher id, numeric part only. **Revenue critical:** no ad loads without it |
+| `NEXT_PUBLIC_ADSENSE_DEFAULT_SLOT` | Default ad unit id. Blank disables every `<AdBanner>` placement |
+| `NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT` | In-article ad unit id. Blank disables in-article placements |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console verification token |
+
+Every `NEXT_PUBLIC_*` value is inlined at **build time**, so changing one needs a
+rebuild, not just a restart. See [Monetization](#monetization) before assuming ads
+are running.
 
 ## Scripts
 
@@ -79,6 +83,7 @@ Set these in `.env`. Only the variable names are listed here. Never commit real 
 | `npm run start` | Start the production server |
 | `npm run typecheck` | TypeScript strict check |
 | `npm test` | Run every unit test suite (DB-free, also runs in CI) |
+| `node scripts/seo-audit.mjs` | Crawl the live sitemap and report metadata problems (add `--limit N` for a sample) |
 | `npm run db:migrate-pg` | Create PostgreSQL tables for the Money Health Score |
 | `npm run db:migrate-price-integrity` | Add fuel/LPG provenance columns, price_overrides, and system_meta tables |
 | `npm run db:migrate-alerts` | Create the price_alerts table |
@@ -118,11 +123,48 @@ deploy/                Deployment configuration (Nginx)
 
 The admin dashboard is served only on the admin subdomain (`admin.paisareality.com`). On the main domain, any `/admin` request returns 404. Admin authentication reads `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the environment; if the password is not set, login fails closed.
 
+## Monetization
+
+Three independent revenue paths. Each one can be fully wired in code and still
+earn nothing if its configuration is missing, so the server audits all three at
+startup and prints a `[monetization]` report. Check it with
+`pm2 logs paisareality --lines 50 | grep monetization` after any deploy.
+
+**1. Google AdSense.** `<AdBanner>` sits in 110 placements across 60 pages, and
+`AdSlot` prefers a house creative when one is active. Two things must be true for
+an ad to appear:
+
+- `NEXT_PUBLIC_ADSENSE_PUB_ID` set, which loads the AdSense library. Auto ads need
+  nothing more than this, and are switched on in the AdSense dashboard.
+- At least one of `NEXT_PUBLIC_ADSENSE_DEFAULT_SLOT` or
+  `NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT` set to an ad unit id from the dashboard,
+  which is what makes the manual `<ins>` placements render. With both blank,
+  `AdBanner` returns `null` everywhere.
+
+Both slot variables were blank from launch until 2026-07-26, so the site served
+zero ads for its first two months. Worse, the loader itself used to be gated on a
+slot id being present, which meant the bundler eliminated the AdSense script as
+dead code and Auto ads could not work either. The gate now depends on the
+publisher id alone. `/ads.txt` is already correct and must stay served.
+
+**2. Razorpay premium.** Requires live keys. A `rzp_test_` key produces a working
+checkout that collects nothing, which is reported as a startup blocker.
+
+**3. Self-hosted ad manager.** Create creatives at `/admin/ads` with a schedule and
+priority; `AdSlot` serves the highest-priority active creative and falls back to
+AdSense when there is none. Impressions and clicks are recorded per creative.
+
+Configuration is audited by `src/lib/monetization.ts`, reported by
+`src/instrumentation.ts`, and covered by `tests/monetization.test.ts`.
+
 ## SEO
 
 - Dynamic `sitemap.xml` covering all public pages, including every scheme page
 - `robots.txt` that allows public pages and disallows admin, dashboard, and API paths
-- Per-page metadata: title, description, canonical, OpenGraph, and Twitter cards
+- Per-page metadata: title, description, canonical, OpenGraph, and Twitter cards, all built through `pageMetadata` in `src/lib/seo.ts` so every page carries a social card
+- Length-aware metadata for database-driven pages: `buildRecordTitle` and `buildRecordDescription` fit the suffix to the 60 and 155 character limits Google displays, falling back to the bare record name rather than clipping it, and only claiming "Apply Online" when the record actually has an application URL. `fitTitle` does the same for the bank and state hubs.
+- Two guards run in `npm test`: `tests/seo-metadata.test.ts` pins the title ladder rung by rung, and `tests/seo-static-metadata.test.ts` walks every page and layout file and fails on any hand-written title over 60 chars or description outside 70 to 155.
+- `node scripts/seo-audit.mjs` crawls every URL in the live sitemap and reports status, title and description lengths, canonical, robots, H1 count, JSON-LD, `og:image`, image alt text and word count. Run it before and after a deploy and diff the two reports to prove a change helped.
 - JSON-LD: WebSite, Organization, BreadcrumbList, FAQPage, and GovernmentService for scheme pages, plus Article, FinancialProduct, Dataset, WebApplication, and HowTo built from reusable helpers in `src/lib/schema.ts`
 - Visible FAQ sections with structured data on tool, calculator, scheme, and guide pages
 - Thin auth pages (login, signup, password reset, unsubscribe) marked `noindex` to focus crawl budget on content pages
@@ -131,12 +173,43 @@ The admin dashboard is served only on the admin subdomain (`admin.paisareality.c
 
 Production runs the app with PM2 behind Nginx, with Cloudflare in front.
 
-1. On the server, pull the latest code: `git pull origin main`
-2. Install dependencies: `npm install`
-3. Run database migrations or the additive scheme seed only when needed. The price-integrity release requires a one-time `npm run db:migrate-price-integrity` before restart.
-4. Build: `NODE_OPTIONS="--max-old-space-size=4096" npm run build`
-5. Restart the process: `pm2 restart paisareality --update-env && pm2 save`
-6. Nginx config for the main domain and the admin subdomain lives in `deploy/nginx/`
+Build in the standing worktree at `/opt/paisareality-build` rather than in the live
+directory, so the running site never serves a half-written `.next`. The live
+directory holds the `main` branch, so the build worktree checks the commit out
+detached.
+
+```bash
+# 1. build the release, off the critical path (shared 4-core box)
+cd /opt/paisareality-build
+git fetch origin && git checkout --detach <sha>
+nohup sh -c 'NODE_OPTIONS=--max-old-space-size=4096 nice -n 19 ionice -c3 \
+  npm run build > build.log 2>&1; echo EXIT=$? >> build.log' &
+# poll build.log for EXIT=0. Roughly 100 s, and it emits every page from the live DB.
+
+# 2. the build records its own absolute path in two files, so rewrite them
+sed -i 's#/opt/paisareality-build#/opt/paisareality#g' \
+  .next/required-server-files.js .next/required-server-files.json
+grep -rl /opt/paisareality-build .next   # must return nothing
+
+# 3. record a rollback point, update the source, swap the build in
+cd /opt/paisareality
+git rev-parse HEAD > /tmp/paisa_rollback_$(date +%s).txt
+git pull --ff-only origin main
+mv .next .next.prev-$(date +%s)
+mv /opt/paisareality-build/.next .next
+
+# 4. restart, then verify
+pm2 restart paisareality --update-env && pm2 save
+pm2 logs paisareality --lines 50 | grep monetization
+```
+
+Downtime is the restart only, a few seconds. To roll back, move a `.next.prev-*`
+directory back into place and restart; no rebuild needed.
+
+Run database migrations or the additive seeds only when a release needs them.
+Scheme and scholarship pages are statically generated, so changing a `meta_title`
+in the database requires a reseed **and** a rebuild before it shows up. Nginx config
+for the main domain and the admin subdomain lives in `deploy/nginx/`.
 
 ## Disclaimer
 
