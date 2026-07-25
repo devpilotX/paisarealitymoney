@@ -18,6 +18,82 @@ jumping positions.
 
 ---
 
+## Verified, not deployed
+
+### Batch 3 — findings from a full live crawl of all 772 sitemap URLs (2026-07-26)
+Crawled every URL in the sitemap over HTTPS and checked status, title, meta
+description, canonical, robots, H1 count, JSON-LD, og tags, image alt text and
+word count. The technical baseline came back clean: **0** non-200, **0** redirect
+hops, **0** missing or duplicate titles, **0** missing descriptions, **0** missing
+or mismatched canonicals, **0** accidental noindex, **0** pages without an H1,
+**0** pages with several H1s, **0** pages without JSON-LD, **0** images without
+alt text, **0** uncompressed responses.
+
+Everything found was metadata quality, and all of it is now fixed:
+
+| finding | before | after |
+|---|---|---|
+| pages with no `og:image` at all | 717 of 772 | 0 |
+| titles over 60 on hand-written pages | 24 | 0 |
+| descriptions over 155 on hand-written pages | 18 | 0 |
+| `/bank-rates/[slug]` titles over 60 | 18 of 51 | 0 |
+| root error boundary (`global-error.tsx`) | missing | added |
+
+`og:image` was the biggest miss: `app/opengraph-image` only auto-attached to the
+home page and the category hubs, so 717 pages shared no social card. It is now
+set explicitly in `pageMetadata`, which every page routes through.
+
+The two long `/state/[slug]` titles and the 18 `/bank-rates/[slug]` titles now
+use `fitTitle`, the same fit-the-suffix approach as the record builders. The
+unknown-scholarship fallback returns `noindex` instead of a placeholder
+description, matching the schemes route.
+
+New guard: `tests/seo-static-metadata.test.ts` walks all 106 page and layout
+files, extracts every literal title and description from their metadata blocks,
+and fails if any exceeds 60 or 155 chars or drops under 70. That is what stops
+this class of regression coming back.
+
+Known and deliberately not changed: `/guides` (245 words) and `/pricing` (284
+words) are thin, and two newsletter titles run 68 to 69 chars. Those are
+editorial content, fixable in the admin panel without a deploy.
+
+### Batch 2 — length-aware metadata templates (commit `ff89943`, branch `seo/metadata-templates`)
+Fixes the *fallback* templates for pages with no hand-written override. Does not
+touch the 39 scheme and 31 scholarship overrides, so nothing already approved
+changes. New `buildRecordTitle` / `buildRecordDescription` in `src/lib/seo.ts`,
+wired into `/schemes/[slug]` and `/scholarships/[slug]`.
+
+Measured against the seed sources, not estimated (re-verified 2026-07-25 23:55):
+
+| | before | after |
+|---|---|---|
+| scheme titles over 60 | 242 of 312 | 10 |
+| longest scheme title | 108 | 78 |
+| scheme titles carrying a qualifier, not just the year | 91 of 312 | 207 |
+| scheme descriptions truncated mid-sentence | 253 | 0 |
+| scholarship titles over 60 | 31 of 31 | 2 |
+| longest scholarship title | 120 | 79 |
+
+Fitting is not the whole goal. Reviewing the real output showed 205 of 312
+titles landing on a bare name plus year, so the suffix ladder now descends by
+information value (`Eligibility & Apply Online` → `Eligibility & Apply` →
+`How to Apply` → `Eligibility` → year) and apply wording is used only where
+`apply_url` exists. Bare-year titles fell 205 → 84 without pushing a single
+extra page over 60.
+
+The 12 remaining long titles are names that alone exceed 60 characters
+(`National Pension Scheme for Traders and Self-Employed (Laghu Vyapari
+Maandhan)` is 78). Abbreviating them would mean inventing a name, so they stay
+intact. "Apply Online" is claimed only where `apply_url` exists (0 false claims).
+
+Gates: `npm run typecheck` exit 0, `npm test` 16 suites (new
+`tests/seo-metadata.test.ts`, 28 assertions), `npm run build` exit 0 with
+368/368 pages. **Needs owner authorization to push, merge and deploy.** Scheme
+and scholarship pages are SSG, so this is inert until a rebuild on the VPS. It
+is code-only: no reseed, no migration.
+
+---
+
 ## Infrastructure debt (logged, not built)
 
 ### Atomic releases via symlink switch

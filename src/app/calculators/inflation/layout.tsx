@@ -5,7 +5,7 @@ import Script from 'next/script';
 export const metadata = pageMetadata({
   title: 'Inflation Calculator India: Future Cost of Living',
   description:
-    'Calculate how inflation will increase the cost of things over time. See what today money will be worth in the future, or what a future expense costs in today terms.',
+    'Calculate how inflation raises the cost of things over time. See what money today will be worth in future, or a future expense in current terms.',
   path: '/calculators/inflation',
   keywords: ['inflation calculator india', 'future value calculator', 'cost of living calculator', 'inflation impact calculator'],
 });

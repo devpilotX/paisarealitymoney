@@ -20,7 +20,7 @@ export const dynamic = 'force-dynamic';
 export const metadata = pageMetadata({
   title: 'Scholarship Finder: Find Scholarships You Qualify For',
   description:
-    'Answer a few questions and see the government scholarships you are eligible for, with documents, how to apply, deadlines, and a free reminder before each one closes.',
+    'Answer a few questions to see the government scholarships you qualify for, with documents, how to apply, deadlines and a free closing reminder.',
   path: '/scholarships',
 });
 
