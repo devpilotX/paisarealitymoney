@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
-import { buildRecordTitle, buildRecordDescription } from '@/lib/seo';
+import { buildRecordTitle, buildRecordDescription, SOCIAL_IMAGE } from '@/lib/seo';
 import type { QueryResultRow } from 'pg';
 
 import { formatNumber, formatDate } from '@/lib/constants';
@@ -123,11 +123,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         url,
         siteName: 'Paisa Reality',
         locale: 'en_IN',
+        images: [SOCIAL_IMAGE],
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
+        images: [SOCIAL_IMAGE.url],
       },
       robots: {
         index: true,

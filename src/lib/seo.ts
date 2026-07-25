@@ -119,7 +119,7 @@ export function buildRecordDescription(summary: string | null | undefined, fallb
  * pages emitting no og:image at all. Setting it explicitly here covers every
  * page that goes through this helper.
  */
-const SOCIAL_IMAGE = { url: absoluteUrl('/opengraph-image'), width: 1200, height: 630, alt: SITE_NAME };
+export const SOCIAL_IMAGE = { url: absoluteUrl('/opengraph-image'), width: 1200, height: 630, alt: SITE_NAME };
 
 /**
  * Returns a consistent Metadata object with a self-referencing canonical,
