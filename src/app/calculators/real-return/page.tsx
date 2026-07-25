@@ -10,7 +10,7 @@ import RealReturnClient from './RealReturnClient';
 export const metadata = pageMetadata({
   title: 'Real Return Checker: What Is That Policy Actually Paying?',
   description:
-    'Paste any investment pitch — LIC endowment, money-back plan, ULIP, "double your money" scheme — and see its REAL annual return (XIRR), compared with FD, PPF, and inflation. Free, private, educational.',
+    'Paste any investment pitch, from an LIC endowment to a ULIP, and see its real annual return (XIRR) next to FD, PPF and inflation. Free and private.',
   path: '/calculators/real-return',
   keywords: [
     'real return calculator', 'endowment policy return calculator', 'lic policy irr calculator',

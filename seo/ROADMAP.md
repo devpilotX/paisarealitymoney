@@ -20,6 +20,43 @@ jumping positions.
 
 ## Verified, not deployed
 
+### Batch 3 — findings from a full live crawl of all 772 sitemap URLs (2026-07-26)
+Crawled every URL in the sitemap over HTTPS and checked status, title, meta
+description, canonical, robots, H1 count, JSON-LD, og tags, image alt text and
+word count. The technical baseline came back clean: **0** non-200, **0** redirect
+hops, **0** missing or duplicate titles, **0** missing descriptions, **0** missing
+or mismatched canonicals, **0** accidental noindex, **0** pages without an H1,
+**0** pages with several H1s, **0** pages without JSON-LD, **0** images without
+alt text, **0** uncompressed responses.
+
+Everything found was metadata quality, and all of it is now fixed:
+
+| finding | before | after |
+|---|---|---|
+| pages with no `og:image` at all | 717 of 772 | 0 |
+| titles over 60 on hand-written pages | 24 | 0 |
+| descriptions over 155 on hand-written pages | 18 | 0 |
+| `/bank-rates/[slug]` titles over 60 | 18 of 51 | 0 |
+| root error boundary (`global-error.tsx`) | missing | added |
+
+`og:image` was the biggest miss: `app/opengraph-image` only auto-attached to the
+home page and the category hubs, so 717 pages shared no social card. It is now
+set explicitly in `pageMetadata`, which every page routes through.
+
+The two long `/state/[slug]` titles and the 18 `/bank-rates/[slug]` titles now
+use `fitTitle`, the same fit-the-suffix approach as the record builders. The
+unknown-scholarship fallback returns `noindex` instead of a placeholder
+description, matching the schemes route.
+
+New guard: `tests/seo-static-metadata.test.ts` walks all 106 page and layout
+files, extracts every literal title and description from their metadata blocks,
+and fails if any exceeds 60 or 155 chars or drops under 70. That is what stops
+this class of regression coming back.
+
+Known and deliberately not changed: `/guides` (245 words) and `/pricing` (284
+words) are thin, and two newsletter titles run 68 to 69 chars. Those are
+editorial content, fixable in the admin panel without a deploy.
+
 ### Batch 2 — length-aware metadata templates (commit `ff89943`, branch `seo/metadata-templates`)
 Fixes the *fallback* templates for pages with no hand-written override. Does not
 touch the 39 scheme and 31 scholarship overrides, so nothing already approved

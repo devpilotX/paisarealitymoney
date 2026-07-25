@@ -15,7 +15,7 @@ export const revalidate = 3600;
 export const metadata = pageMetadata({
   title: 'Government Scheme Categories: Browse by Type',
   description:
-    'Browse Indian government schemes by category: education, housing, business, agriculture, healthcare, pension, insurance and more. Eligibility and official links on every page.',
+    'Browse Indian government schemes by category: education, housing, business, agriculture, healthcare, pension and insurance, with official links.',
   path: '/category',
 });
 

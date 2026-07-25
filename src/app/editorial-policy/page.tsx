@@ -3,9 +3,9 @@ import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
 
 export const metadata = pageMetadata({
-  title: 'Editorial Policy: How Paisa Reality Creates and Reviews Content',
+  title: 'Editorial Policy: How We Create and Review Content',
   description:
-    'Our editorial standards: how money guides are researched, reviewed, and updated, how we handle corrections, and how the site makes money without charging you.',
+    'Our editorial standards: how money guides are researched, reviewed and updated, how we handle corrections, and how the site makes money.',
   path: '/editorial-policy',
   keywords: ['editorial policy', 'paisa reality editorial standards', 'content review policy'],
 });

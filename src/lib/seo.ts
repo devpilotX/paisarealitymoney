@@ -59,6 +59,18 @@ export const TITLE_LIMIT = 60;
 export const DESCRIPTION_LIMIT = 155;
 
 /**
+ * Pick the first suffix that keeps the whole title within TITLE_LIMIT, and
+ * fall back to the bare base rather than clipping it. Pass suffixes in
+ * descending order of information value, richest first.
+ */
+export function fitTitle(base: string, suffixes: string[]): string {
+  for (const suffix of suffixes) {
+    if (base.length + suffix.length <= TITLE_LIMIT) return `${base}${suffix}`;
+  }
+  return base;
+}
+
+/**
  * Build a title that fits within TITLE_LIMIT by choosing the richest suffix
  * that still fits. Falls back to the bare name rather than truncating it,
  * because a clipped scheme name is worse than a plain one.
@@ -73,7 +85,7 @@ export const DESCRIPTION_LIMIT = 155;
  */
 export function buildRecordTitle(name: string, opts: { canApplyOnline?: boolean; year?: string } = {}): string {
   const year = opts.year ?? '2026';
-  const candidates = opts.canApplyOnline
+  return fitTitle(name, opts.canApplyOnline
     ? [
         ` ${year}: Eligibility & Apply Online`,
         ` ${year}: Eligibility & Apply`,
@@ -85,11 +97,7 @@ export function buildRecordTitle(name: string, opts: { canApplyOnline?: boolean;
         ` ${year}: Eligibility & Benefits`,
         ` ${year}: Eligibility`,
         ` ${year}`,
-      ];
-  for (const suffix of candidates) {
-    if (name.length + suffix.length <= TITLE_LIMIT) return `${name}${suffix}`;
-  }
-  return name;
+      ]);
 }
 
 /**
@@ -106,9 +114,16 @@ export function buildRecordDescription(summary: string | null | undefined, fallb
 }
 
 /**
+ * The site-wide social card. app/opengraph-image only auto-attaches to the
+ * routes that inherit it directly: a live crawl on 2026-07-26 found 717 of 772
+ * pages emitting no og:image at all. Setting it explicitly here covers every
+ * page that goes through this helper.
+ */
+const SOCIAL_IMAGE = { url: absoluteUrl('/opengraph-image'), width: 1200, height: 630, alt: SITE_NAME };
+
+/**
  * Returns a consistent Metadata object with a self-referencing canonical,
- * OpenGraph, and Twitter card, all using absolute URLs. The default social
- * image is supplied site-wide by app/opengraph-image, so no image is set here.
+ * OpenGraph, and Twitter card, all using absolute URLs.
  */
 export function pageMetadata({
   title,
@@ -131,11 +146,13 @@ export function pageMetadata({
       siteName: SITE_NAME,
       type: ogType,
       locale: 'en_IN',
+      images: [SOCIAL_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [SOCIAL_IMAGE.url],
     },
   };
 

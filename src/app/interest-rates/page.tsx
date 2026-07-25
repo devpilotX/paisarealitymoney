@@ -26,7 +26,7 @@ import {
 export const metadata = pageMetadata({
   title: 'PPF, SSY, NSC, SCSS Interest Rates Jul-Sep 2026 + Repo Rate',
   description:
-    'Official small savings interest rates for July to September 2026: PPF 7.1%, SSY 8.2%, SCSS 8.2%, NSC 7.7%, KVP, post office deposits. Plus the current RBI repo rate and EPF rate, with tax notes.',
+    'Official small savings rates for July to September 2026: PPF 7.1%, SSY 8.2%, SCSS 8.2%, NSC 7.7%, KVP and post office deposits, plus the repo rate.',
   path: '/interest-rates',
   keywords: [
     'ppf interest rate 2026', 'sukanya samriddhi interest rate', 'scss interest rate', 'nsc interest rate',

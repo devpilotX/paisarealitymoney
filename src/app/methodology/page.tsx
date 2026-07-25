@@ -5,7 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 export const metadata = pageMetadata({
   title: 'Data Methodology: How We Source and Verify Every Number',
   description:
-    'Exactly how Paisa Reality computes gold, silver, fuel, and LPG prices, where bank rates and scheme details come from, how often data updates, and how to report an error.',
+    'How we compute gold, silver, fuel and LPG prices, where bank rates and scheme data come from, how often they update, and how to report an error.',
   path: '/methodology',
   keywords: ['paisa reality methodology', 'how gold rate is calculated', 'data sources', 'price verification'],
 });

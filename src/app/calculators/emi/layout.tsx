@@ -5,7 +5,7 @@ import Script from 'next/script';
 export const metadata = pageMetadata({
   title: 'EMI Calculator India: Home, Personal & Car Loan EMI',
   description:
-    'Free EMI calculator for India. Calculate your monthly EMI for a home loan, personal loan or car loan. Enter amount, interest rate and tenure to see total interest and full payment breakup.',
+    'Free EMI calculator for India. Enter loan amount, interest rate and tenure to see your monthly EMI, total interest and the full payment breakup.',
   path: '/calculators/emi',
   keywords: ['emi calculator india', 'loan emi calculator', 'home loan emi calculator', 'car loan emi calculator', 'personal loan emi'],
 });

@@ -5,7 +5,7 @@ import AdBanner from '@/components/AdBanner';
 
 export const metadata = pageMetadata({
   title: 'About Us',
-  description: 'Paisa Reality is a free financial information platform for India. Daily prices, government schemes, calculators, and bank rate comparison. Learn who we are and what we do.',
+  description: 'Paisa Reality is a free financial information platform for India: daily prices, government schemes, calculators and bank rate comparison.',
   path: '/about',
 });
 
