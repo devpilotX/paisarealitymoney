@@ -4,7 +4,7 @@ import AdBanner from '@/components/AdBanner';
 import ContactForm from '@/components/ContactForm';
 
 export const metadata = pageMetadata({
-  title: 'Contact Us',
+  title: 'Contact Paisa Reality: Questions and Corrections',
   description: 'Get in touch with the Paisa Reality team. Report errors, suggest features, or ask questions. We reply within 48 hours.',
   path: '/contact',
 });
