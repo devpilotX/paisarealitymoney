@@ -23,13 +23,11 @@ export async function register(): Promise<void> {
       NODE_ENV: process.env.NODE_ENV,
     });
     const report = formatMonetizationReport(status);
-    if (status.issues.some((i) => i.severity === 'blocker')) {
-      console.error(report);
-    } else if (status.issues.length > 0) {
-      console.warn(report);
-    } else {
-      console.log(report);
-    }
+    // Always stdout, never stderr. pm2 sends stderr to paisareality-error.log,
+    // which is the file used to answer "did this deploy break anything". A
+    // configuration notice does not belong in it. The severity is in the text,
+    // so `pm2 logs paisareality | grep monetization` still shows everything.
+    console.log(report);
   } catch {
     // Never block startup on a diagnostic.
   }
