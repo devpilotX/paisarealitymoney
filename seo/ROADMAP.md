@@ -32,9 +32,17 @@ Measured against the seed sources, not estimated (re-verified 2026-07-25 23:55):
 |---|---|---|
 | scheme titles over 60 | 242 of 312 | 10 |
 | longest scheme title | 108 | 78 |
+| scheme titles carrying a qualifier, not just the year | 91 of 312 | 207 |
 | scheme descriptions truncated mid-sentence | 253 | 0 |
 | scholarship titles over 60 | 31 of 31 | 2 |
 | longest scholarship title | 120 | 79 |
+
+Fitting is not the whole goal. Reviewing the real output showed 205 of 312
+titles landing on a bare name plus year, so the suffix ladder now descends by
+information value (`Eligibility & Apply Online` → `Eligibility & Apply` →
+`How to Apply` → `Eligibility` → year) and apply wording is used only where
+`apply_url` exists. Bare-year titles fell 205 → 84 without pushing a single
+extra page over 60.
 
 The 12 remaining long titles are names that alone exceed 60 characters
 (`National Pension Scheme for Traders and Self-Employed (Laghu Vyapari
