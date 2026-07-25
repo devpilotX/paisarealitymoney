@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
 import { buildRecordTitle, buildRecordDescription, SOCIAL_IMAGE } from '@/lib/seo';
@@ -367,8 +368,31 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
         )}
       </section>
 
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 my-6">
-          <p className="text-sm text-yellow-800">
+        {/*
+          Next step. Scheme pages are the highest-traffic group on the site and
+          they used to dead-end: either an outbound government link or another
+          scheme page. Someone reading about one scheme almost always wants to
+          know what else they qualify for, and the finder answers exactly that.
+          Live data on 2026-07-26 showed the imbalance plainly: traffic arriving
+          on these pages against 2 score computations and 1 registered user in
+          two months.
+        */}
+        <section className="callout-navy my-8">
+          <h2 className="heading-3 mb-2">Check what else you qualify for</h2>
+          <p className="text-body mb-4">
+            Most households qualify for more than one scheme. Answer a few questions about age,
+            income, state and occupation to see every central and state scheme you match. It is free
+            and needs no account.
+          </p>
+          <Link href="/schemes" className="btn-primary no-underline">
+            Open the scheme finder
+          </Link>
+        </section>
+
+        {/* Palette: this box was still on Tailwind default yellow, the one place
+            the editorial reskin missed, on all 351 scheme pages. */}
+        <div className="callout my-6">
+          <p className="text-sm">
             <strong>Disclaimer:</strong> This information is sourced from official government websites and is provided for reference only. Eligibility criteria and benefits may change. Always verify details on the official website before applying.
           </p>
         </div>
