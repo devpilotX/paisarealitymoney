@@ -4,6 +4,9 @@ import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 import ScholarshipReminderForm from '@/components/ScholarshipReminderForm';
 import { pageMetadata, buildRecordTitle, buildRecordDescription } from '@/lib/seo';
+import FAQ from '@/components/FAQ';
+import { faqSchema } from '@/lib/schema';
+import { deadlineAnswer, deadlineQuestion, hasDeadline } from '@/lib/deadlines';
 import { formatNumber } from '@/lib/constants';
 import { getScholarshipBySlug, type Scholarship } from '@/lib/scholarships';
 import { breadcrumbSchema, scholarshipSchema } from '@/lib/schema';
@@ -50,6 +53,56 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
   if (!s) notFound();
 
   const ldDescription = (s.benefitSummary ?? `${s.name}: eligibility, documents and how to apply.`).slice(0, 200);
+
+  /*
+   * Scholarship detail pages had no FAQ section and no FAQPage data, while
+   * scheme pages have had both for a while. That cost them the "last date",
+   * "how much", "who is eligible" and "which documents" queries, which is most
+   * of what a scholarship searcher actually asks. Every answer below comes from
+   * a recorded field or says plainly that the value is not recorded.
+   */
+  const level = s.level === 'state' ? 'state government' : 'central government';
+  const faqs = [
+    {
+      question: `What is ${s.name}?`,
+      answer: s.benefitSummary
+        ?? `${s.name} is a ${level} scholarship${s.provider ? ` offered by ${s.provider}` : ''}.`,
+    },
+    {
+      question: `Who is eligible for ${s.name}?`,
+      answer: s.eligibilitySummary
+        ?? `Eligibility for ${s.name} depends on your course level, category and family income. The official portal lists the current criteria.`,
+    },
+    ...(s.amountMax != null && s.amountMax > 0
+      ? [{
+          question: `How much does ${s.name} pay?`,
+          answer: s.amountMin != null && s.amountMin > 0 && s.amountMin !== s.amountMax
+            ? `${s.name} pays between Rs ${formatNumber(s.amountMin)} and Rs ${formatNumber(s.amountMax)}, depending on your course and category.`
+            : `${s.name} pays up to Rs ${formatNumber(s.amountMax)}, depending on your course and category.`,
+        }]
+      : []),
+    {
+      question: `How do I apply for ${s.name}?`,
+      answer: s.howToApply
+        ?? `Apply on the official portal${s.officialUrl ? ` at ${s.officialUrl}` : ''}. Keep your documents scanned and ready before you start.`,
+    },
+    {
+      question: `What documents are required for ${s.name}?`,
+      answer: s.documents.length > 0
+        ? `You typically need: ${s.documents.join(', ')}.`
+        : 'The official portal lists the current document requirements, which vary by state and category.',
+    },
+    {
+      question: deadlineQuestion(s.name),
+      answer: deadlineAnswer({
+        name: s.name,
+        deadline: s.deadline,
+        lastVerified: s.lastVerified,
+        kind: 'scholarship',
+      }),
+    },
+  ];
+
   const jsonLd = [
     breadcrumbSchema([{ label: 'Scholarships', href: '/scholarships' }, { label: s.name }]),
     scholarshipSchema({
@@ -60,6 +113,7 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
       amount: s.amountMax,
       officialUrl: s.officialUrl,
     }),
+    faqSchema(faqs),
   ];
 
   return (
@@ -144,12 +198,16 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
           <div className="card lg:sticky lg:top-24">
             <h2 className="font-serif text-xl font-bold text-navy">Do not miss the deadline</h2>
             <p className="mt-1 mb-4 text-sm text-muted">
-              We will email you a reminder before this scholarship closes. Free, one email.
+              {hasDeadline({ name: s.name, deadline: s.deadline, kind: 'scholarship' })
+                ? 'We will email you a reminder before this scholarship closes. Free, one email.'
+                : 'Dates for this cycle are not announced yet. Leave your email and we will send one reminder once a closing date is recorded. Free, one email.'}
             </p>
             <ScholarshipReminderForm slug={s.slug} />
           </div>
         </aside>
       </div>
+
+      <FAQ items={faqs} />
 
       <AdBanner format="horizontal" className="mt-10 mb-8" />
     </div>

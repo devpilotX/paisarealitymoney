@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
 import { buildRecordTitle, buildRecordDescription, SOCIAL_IMAGE } from '@/lib/seo';
+import { deadlineAnswer, deadlineLine, deadlineQuestion } from '@/lib/deadlines';
 import type { QueryResultRow } from 'pg';
 
 import { formatNumber, formatDate } from '@/lib/constants';
@@ -219,6 +220,17 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
       answer: documents.length > 0 ? `You typically need: ${documents.join(', ')}.` : 'Refer to the official scheme portal for the latest list of required documents.',
     },
     {
+      // "last date" is a large high-intent query class the site was invisible for.
+      // See src/lib/deadlines.ts: the answer never states a date we have not verified.
+      question: deadlineQuestion(scheme.name),
+      answer: deadlineAnswer({
+        name: scheme.name,
+        deadline: scheme.deadline,
+        lastVerified: scheme.last_verified,
+        kind: 'scheme',
+      }),
+    },
+    {
       question: `Is ${scheme.name} a central or state government scheme?`,
       answer: scheme.level === 'central'
         ? `${scheme.name} is a central government scheme${scheme.ministry ? ` administered by the ${scheme.ministry}` : ''}.`
@@ -361,6 +373,14 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
         {scheme.last_verified && (
           <p className="text-xs text-muted-2 mt-3">Last verified: {formatDate(scheme.last_verified)}</p>
         )}
+        <p className="text-sm text-ink mt-3">
+          {deadlineLine({
+            name: scheme.name,
+            deadline: scheme.deadline,
+            lastVerified: scheme.last_verified,
+            kind: 'scheme',
+          })}
+        </p>
         {scheme.source_url && (
           <p className="text-xs text-muted-2 mt-2">
             Source: <a href={scheme.source_url} target="_blank" rel="noopener noreferrer" className="link-internal">Official reference</a>
