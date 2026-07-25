@@ -210,4 +210,47 @@ export async function getSchemesByState(state: string): Promise<MatchedScheme[]>
   return schemes.map((s) => mapSchemeRow(s, 50));
 }
 
-export default { matchSchemes, getSchemesByCategory, getSchemesByState };
+/**
+ * SEO: flat directory of every active scheme, for the crawlable list on the
+ * /schemes hub. Googlebot cannot complete the 6-step finder form, so without
+ * this the 351 scheme pages have no internal link path from their own hub
+ * (measured: 8 crawlable links for 351 children, vs /scholarships at 62/62).
+ *
+ * Deliberately narrow: only the four columns the list renders. Fails soft to
+ * an empty array so a database problem degrades the list instead of 500ing
+ * the page, matching the convention in src/app/sitemap.ts.
+ */
+export interface SchemeDirectoryEntry {
+  slug: string;
+  name: string;
+  category: string;
+  benefitSummary: string | null;
+}
+
+interface SchemeDirectoryRow extends QueryResultRow {
+  slug: string;
+  name: string;
+  category: string;
+  benefit_summary: string | null;
+}
+
+export async function getSchemeDirectory(): Promise<SchemeDirectoryEntry[]> {
+  try {
+    const rows = await query<SchemeDirectoryRow>(
+      `SELECT slug, name, category, benefit_summary
+         FROM schemes
+        WHERE is_active = true
+        ORDER BY name`
+    );
+    return rows.map((r) => ({
+      slug: r.slug,
+      name: r.name,
+      category: r.category,
+      benefitSummary: r.benefit_summary,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export default { matchSchemes, getSchemesByCategory, getSchemesByState, getSchemeDirectory };
