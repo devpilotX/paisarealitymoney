@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
+import { buildRecordTitle, buildRecordDescription } from '@/lib/seo';
 import type { QueryResultRow } from 'pg';
 
 import { formatNumber, formatDate } from '@/lib/constants';
@@ -88,15 +89,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const scheme = rows[0];
     if (!scheme) return { title: 'Scheme Not Found', robots: { index: false } };
     const url = `https://paisareality.com/schemes/${scheme.slug}`;
-    // Accuracy: only 36 of 351 schemes actually have an apply_url. Promising
-    // "Apply Online" on the other 315 misrepresents the page — those pages only
-    // link out to the official portal. Keep the claim where it is true.
-    const defaultSuffix = scheme.apply_url
-      ? ' - Eligibility, Benefits & Apply Online 2026'
-      : ' - Eligibility & Benefits 2026';
-    const title = scheme.meta_title || `${scheme.name}${defaultSuffix}`;
-    const rawDescription = scheme.meta_description || `${scheme.benefit_summary} Check eligibility, required documents, and how to apply for ${scheme.name}.`;
-    const description = rawDescription.length > 160 ? `${rawDescription.slice(0, 157).trimEnd()}...` : rawDescription;
+    // Length-aware metadata: fit the suffix to the space Google displays rather
+    // than appending blindly. Hand-written database overrides always win.
+    const title = scheme.meta_title?.trim() || buildRecordTitle(scheme.name, {
+      canApplyOnline: Boolean(scheme.apply_url),
+    });
+    const description = scheme.meta_description?.trim() || buildRecordDescription(scheme.benefit_summary, scheme.name);
     const keywords = [
       scheme.name,
       scheme.name_hi,
