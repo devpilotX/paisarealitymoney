@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { LRUCache } from 'lru-cache';
 import { SYSTEM_PROMPT, guidedReply } from '@/lib/assistant-knowledge';
+import { MAX_OUTPUT_TOKENS, geminiModelChain, readGeminiReply } from '@/lib/assistant-reply';
 
 export const runtime = 'nodejs';
 
@@ -16,14 +17,12 @@ function clientIp(req: NextRequest): string {
 }
 
 /**
- * Model fallback chain. gemini-1.5-flash is deprecated (Google retired the
- * 1.5 series for new API projects), so default to current models and let
- * GEMINI_MODEL pin a specific one without a code change.
+ * Model fallback chain. Pinned ids rot, and the previous pair
+ * ['gemini-2.5-flash', 'gemini-2.0-flash'] is now entirely dead: 404 and 429
+ * respectively. See src/lib/assistant-reply.ts for the measurements.
  */
 function geminiModels(): string[] {
-  const pinned = process.env.GEMINI_MODEL?.trim();
-  const chain = ['gemini-2.5-flash', 'gemini-2.0-flash'];
-  return pinned ? [pinned, ...chain.filter((m) => m !== pinned)] : chain;
+  return geminiModelChain(process.env.GEMINI_MODEL);
 }
 
 async function callGemini(message: string, history: ChatTurn[], apiKey: string): Promise<string | null> {
@@ -45,17 +44,13 @@ async function callGemini(message: string, history: ChatTurn[], apiKey: string):
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
             contents,
-            generationConfig: { temperature: 0.4, maxOutputTokens: 400 },
+            generationConfig: { temperature: 0.4, maxOutputTokens: MAX_OUTPUT_TOKENS },
           }),
         },
       );
       if (!res.ok) continue;
-      const data = (await res.json()) as {
-        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-      };
-      const parts = data.candidates?.[0]?.content?.parts ?? [];
-      const text = parts.map((p) => p.text ?? '').join('').trim();
-      if (text.length > 0) return text;
+      const reply = readGeminiReply(await res.json());
+      if (reply) return reply;
     } catch {
       // try the next model in the chain
     }
