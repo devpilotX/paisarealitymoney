@@ -21,7 +21,10 @@ function req(path, { method = 'GET', body, headers = {}, cookie, host } = {}) {
   const h = { ...headers };
   if (payload !== undefined) { h['content-type'] = 'application/json'; h['content-length'] = Buffer.byteLength(payload); }
   if (cookie) h.cookie = cookie;
-  if (host) h.host = host;
+  if (host) {
+    // Over HTTPS the name must match SNI too, so point the URL at the host itself.
+    if (url.protocol === 'https:') url.hostname = host; else h.host = host;
+  }
   const lib = url.protocol === 'https:' ? https : http;
   return new Promise((resolve, reject) => {
     const r = lib.request(url, { method, headers: h }, (res) => {
