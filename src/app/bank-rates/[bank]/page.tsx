@@ -3,6 +3,7 @@ import { pageMetadata, fitTitle } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
+import BankInsight from '@/components/BankInsight';
 
 import Breadcrumb from '@/components/Breadcrumb';
 import BankRateTable from '@/components/BankRateTable';
@@ -88,7 +89,7 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
   }));
 
   const faqs = [
-    { question: `What is ${bank.name} FD rate?`, answer: fdRates.length > 0 ? `${bank.name} offers FD rates from ${Math.min(...fdRates.map(r => Number(r.generalRate))).toFixed(2)}% to ${Math.max(...fdRates.map(r => Number(r.generalRate))).toFixed(2)}% depending on tenure. Senior citizens get additional 0.25% to 0.50%.` : `FD rates for ${bank.name} are being updated.` },
+    { question: `What is ${bank.name} FD rate?`, answer: fdRates.length > 0 ? `${bank.name} offers FD rates from ${Math.min(...fdRates.map(r => Number(r.generalRate))).toFixed(2)}% to ${Math.max(...fdRates.map(r => Number(r.generalRate))).toFixed(2)}% depending on tenure.${(() => { const d = fdRates.filter((r) => r.seniorCitizenRate).map((r) => Number(r.seniorCitizenRate) - Number(r.generalRate)); return d.length ? ` Senior citizens get ${Math.min(...d).toFixed(2)} to ${Math.max(...d).toFixed(2)} percentage points more.` : ''; })()}` : `FD rates for ${bank.name} are not listed yet.` },
     { question: `Is ${bank.name} safe for deposits?`, answer: `All bank deposits in India are insured by DICGC (Deposit Insurance and Credit Guarantee Corporation) up to Rs 5 lakh per depositor per bank. ${bank.name} is a ${typeLabel[bank.type] ?? bank.type} regulated by the Reserve Bank of India.` },
     { question: `How to open an account in ${bank.name}?`, answer: `You can open an account by visiting any ${bank.name} branch with your Aadhaar card, PAN card, and address proof. Many banks also offer online account opening through their website or mobile app.${bank.website ? ` Visit ${bank.website} for more details.` : ''}` },
   ];
@@ -150,13 +151,18 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
         </div>
       )}
 
-      <article className="max-w-3xl my-8">
-        <h2 className="heading-2 mb-4">About {bank.name}</h2>
-        <p className="text-body mb-4">{bank.name} is a {typeLabel[bank.type]?.toLowerCase() ?? bank.type} in India regulated by the Reserve Bank of India. All deposits are insured up to Rs 5 lakh per depositor by DICGC.</p>
-        <p className="text-body mb-4">Interest rates shown above are sourced from the bank's official website and are updated regularly. Rates may change without prior notice. Always verify the latest rates on the bank's official website or by visiting the nearest branch before making any financial decision.</p>
-        {bank.website && (
-          <p className="text-body mb-4">Official website: <a href={bank.website} target="_blank" rel="noopener noreferrer" className="link-internal">{bank.website}</a></p>
-        )}
+      <BankInsight slug={bank.slug} />
+
+      <article className="max-w-3xl my-10 prose">
+        <h2>Before you open a deposit or take a loan</h2>
+        <p>
+          {`Deposits at ${bank.name} are covered by DICGC insurance up to ₹5 lakh per depositor, counting principal and interest together across all your accounts at this bank. Above that, spreading money across banks keeps each part covered.`}
+        </p>
+        <p>
+          The loan rates above are starting rates. The rate you are offered depends on your credit score, income and the loan amount,
+          and home loans at most banks are linked to the RBI repo rate, so they move when the repo rate changes.
+          Check the current figure on the bank&apos;s site or at a branch before you sign.
+        </p>
       </article>
 
       <ShareButton url={`/bank-rates/${bank.slug}`} title={`${bank.name} Interest Rates`} />
