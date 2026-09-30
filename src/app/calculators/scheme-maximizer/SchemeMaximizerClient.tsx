@@ -91,7 +91,7 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {/* Headline */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-8">
         <div className="card bg-green-50 border-green-200 sm:col-span-2">
-          <p className="text-sm text-muted mb-1">Your total benefit (conflict-resolved optimal set)</p>
+          <p className="text-sm text-muted mb-1">Your total benefit, with overlapping schemes counted once</p>
           <p className="text-3xl font-bold text-green-700">{formatINR(a.totalAnnualBenefit)}<span className="text-base font-normal text-muted-2">/year</span></p>
           {a.totalOneTimeBenefit > 0 && <p className="text-sm text-muted mt-1">plus <strong>{formatINR(a.totalOneTimeBenefit)}</strong> in one-time benefits</p>}
         </div>

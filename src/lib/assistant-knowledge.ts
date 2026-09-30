@@ -82,7 +82,7 @@ const INTENTS: Intent[] = [
   },
   {
     keywords: ['silver'],
-    reply: 'We track the latest silver rate per gram and per kg for 50+ cities.',
+    reply: 'We track the latest silver rate per gram and per kg for 50 cities.',
     links: [{ label: 'Silver Rate Today', href: '/silver-rate' }],
   },
   {

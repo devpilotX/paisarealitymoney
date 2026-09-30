@@ -79,14 +79,14 @@ export default async function DieselPricePage(): Promise<React.ReactElement> {
             </tr></thead>
             <tbody>
               {prices.map((row) => {
-                const cc = row.diesel_change > 0 ? 'price-up' : row.diesel_change < 0 ? 'price-down' : 'price-neutral';
-                const ar = row.diesel_change > 0 ? '\u25B2' : row.diesel_change < 0 ? '\u25BC' : '';
+                const cc = Number(row.diesel_change) > 0 ? 'price-up' : Number(row.diesel_change) < 0 ? 'price-down' : 'price-neutral';
+                const ar = Number(row.diesel_change) > 0 ? '\u25B2' : Number(row.diesel_change) < 0 ? '\u25BC' : '';
                 return (
                   <tr key={row.city_slug} className="border-b border-line/60 hover:bg-paper-2 transition-colors">
                     <td className="py-3 px-4"><Link href={`/diesel-price/${row.city_slug}`} className="text-navy font-medium no-underline hover:text-brand-red">{row.city_name}</Link><span className="text-xs text-muted-2 ml-1">{row.state}</span></td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.diesel_price)}</td>
                     <td className="py-3 px-4 text-right font-medium text-muted">{formatINR(row.petrol_price)}</td>
-                    <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>{ar} {row.diesel_change === 0 ? 'No change' : formatINR(Math.abs(row.diesel_change))}</td>
+                    <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>{Number(row.diesel_change) === 0 ? 'No change' : <>{ar} {formatINR(Math.abs(Number(row.diesel_change)))}</>}</td>
                   </tr>
                 );
               })}

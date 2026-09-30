@@ -68,7 +68,7 @@ const jsonLd = {
   featureList: [
     'Eligibility across age, income, occupation, category, area, BPL, disability',
     'Quantified annual rupee benefit per scheme',
-    'Conflict-resolved optimal benefit total',
+    'Total benefit, with overlapping schemes counted once',
     'One-time vs recurring benefit separation',
     'Near-miss diagnostics',
     'Official link + last-verified date per scheme',
@@ -90,7 +90,7 @@ export default function SchemeMaximizerPage(): React.ReactElement {
 
       <div className="inline-flex items-center gap-2 mb-2">
         <span className="badge"><svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z" /></svg> Smart Tool</span>
-        <span className="text-xs text-muted-2">Quantified · Conflict-resolved · 100% in-browser</span>
+        <span className="text-xs text-muted-2">Runs in your browser</span>
       </div>
       <h1 className="heading-1 mb-3">Government Scheme Benefit Maximizer</h1>
       <p className="text-body mb-6 max-w-3xl">

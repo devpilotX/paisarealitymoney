@@ -70,7 +70,7 @@ const SMART_TOOLS: SmartTool[] = [
   },
   {
     title: 'Government Scheme Benefit Maximizer',
-    description: 'Total rupee benefit of every central scheme you qualify for. Conflict-resolved, with step-by-step instructions on how to claim each one.',
+    description: 'Total rupee benefit of every central scheme you qualify for. Overlapping schemes are counted once, with steps to claim each one.',
     href: '/calculators/scheme-maximizer',
     tag: 'Quantified',
   },

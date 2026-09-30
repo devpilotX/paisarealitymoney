@@ -110,7 +110,7 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<boolea
     <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">Welcome, ${escapeHtml(name)}!</h2>
     <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Your Paisa Reality account is set up. Here is what you can use right away:</p>
     <ul style="font-size:15px;color:#374151;line-height:2;padding-left:20px;margin:0 0 16px;">
-      <li>Daily gold, silver, petrol, diesel, and LPG prices for 50+ cities</li>
+      <li>Gold, silver, petrol and diesel prices for 50 cities, and LPG for every state</li>
       <li>10 Smart Tools that run Monte Carlo simulations in your browser</li>
       <li>11 financial calculators (EMI, SIP, FD, tax, and more)</li>
       <li>Government scheme finder matched to your profile</li>

@@ -86,11 +86,11 @@ export default function SchemeFinderClient({ schemeCount }: SchemeFinderClientPr
           <div className="flex items-center gap-2 mb-1">
             <span className="badge">
               <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z" /></svg>
-              New Smart Tool
+              Smart tool
             </span>
-            <span className="text-xs text-muted-2">Quantified · Conflict-resolved</span>
+            
           </div>
-          <h2 className="font-serif text-lg font-bold text-navy">Want the total ₹ you can actually claim?</h2>
+          <h2 className="font-serif text-lg font-bold text-navy">How much could you actually receive?</h2>
           <p className="text-sm text-muted mt-1">
             The new <strong className="text-navy">Scheme Benefit Maximizer</strong> does not just list schemes. It quantifies the rupee benefit of each,
             resolves overlaps into your optimal set, and totals your annual and one-time benefit. <span className="text-navy font-semibold">Try it</span>

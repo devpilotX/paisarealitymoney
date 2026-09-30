@@ -110,7 +110,7 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
             {national.k22PerGram != null ? (
               <> and <strong>{formatINR(national.k22PerGram)} per gram</strong> for 22K</>
             ) : null}
-            , as of {priceDate} (average across 50+ cities). Below are today&apos;s rates for major Indian cities. Verify with your jeweller before buying.
+            , as of {priceDate}, averaged across the 50 cities we track. Below are today&apos;s rates for major Indian cities. Verify with your jeweller before buying.
           </>
         ) : (
           <>Latest available 22K and 24K gold prices for {priceDate}. Verify with your jeweller before buying.</>
@@ -141,8 +141,8 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
             </thead>
             <tbody>
               {prices.map((row) => {
-                const changeColor = row.change_amount > 0 ? 'price-up' : row.change_amount < 0 ? 'price-down' : 'price-neutral';
-                const arrow = row.change_amount > 0 ? '\u25B2' : row.change_amount < 0 ? '\u25BC' : '';
+                const changeColor = Number(row.change_amount) > 0 ? 'price-up' : Number(row.change_amount) < 0 ? 'price-down' : 'price-neutral';
+                const arrow = Number(row.change_amount) > 0 ? '\u25B2' : Number(row.change_amount) < 0 ? '\u25BC' : '';
                 return (
                   <tr key={row.city_slug} className="border-b border-line/60 hover:bg-paper-2 transition-colors duration-200">
                     <td className="py-3 px-4">
@@ -155,7 +155,7 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.gold_22k_per_gram)}</td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.gold_24k_per_10gram)}</td>
                     <td className={`py-3 px-4 text-right text-sm font-medium ${changeColor}`}>
-                      {arrow} {row.change_amount === 0 ? '-' : `${formatINR(Math.abs(row.change_amount))}`}
+                      {Number(row.change_amount) === 0 ? 'No change' : <>{arrow} {formatINR(Math.abs(Number(row.change_amount)))}</>}
                     </td>
                   </tr>
                 );
