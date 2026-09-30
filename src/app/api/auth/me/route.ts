@@ -23,7 +23,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     if (!user) return unauthorizedResponse('User not found.');
     return NextResponse.json({ success: true, user });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    console.error('auth/me error:', error instanceof Error ? error.message : 'Unknown');
+    return NextResponse.json({ success: false, error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

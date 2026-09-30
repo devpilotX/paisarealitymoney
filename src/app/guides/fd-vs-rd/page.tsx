@@ -29,6 +29,8 @@ export default function Page(): React.ReactElement {
     headline: 'FD vs RD: Which Deposit Is Right for You',
     description: 'A simple comparison of fixed deposits and recurring deposits for Indian savers.',
     path: '/guides/fd-vs-rd',
+    datePublished: '2026-06-30',
+    dateModified: '2026-06-30',
   });
   return (
     <div className="container-main py-6">

@@ -14,6 +14,8 @@
 
 export const FUEL_BASELINE_AS_OF = '2026-07-21';
 export const FUEL_BASELINE_SOURCE = 'OMC published rates (IOCL/BPCL/HPCL) via GoodReturns and CarDekho';
+/** LPG was re-verified separately: domestic unchanged since June 2026, commercial revised 1 Sep 2026. */
+export const LPG_BASELINE_AS_OF = '2026-09-30';
 
 export interface FuelRate {
   petrol: number;
@@ -32,12 +34,12 @@ export const STATE_FUEL: Record<string, FuelRate> = {
   Assam: { petrol: 106.55, diesel: 97.98 },
   Bihar: { petrol: 115.06, diesel: 101.07 },
   Chandigarh: { petrol: 101.54, diesel: 89.47 },
-  Chhattisgarh: { petrol: 108.06, diesel: 101.32 },
+  Chhattisgarh: { petrol: 108.3, diesel: 101.55 },
   Delhi: { petrol: 102.12, diesel: 95.2 },
   Gujarat: { petrol: 101.83, diesel: 97.92 },
   Haryana: { petrol: 103.32, diesel: 95.96 },
   'Himachal Pradesh': { petrol: 101.29, diesel: 93.36 },
-  'Jammu & Kashmir': { petrol: 100.32, diesel: 86.65 },
+  'Jammu & Kashmir': { petrol: 104.13, diesel: 92.81 },
   Jharkhand: { petrol: 105.62, diesel: 100.77 },
   Karnataka: { petrol: 110.98, diesel: 98.91 },
   Kerala: { petrol: 114.01, diesel: 102.9 },
@@ -68,7 +70,18 @@ export const CITY_FUEL_PUBLISHED: Record<string, Partial<FuelRate>> = {
   chandigarh: { petrol: 101.54, diesel: 89.47 },
   bhubaneswar: { petrol: 108.97 },
   noida: { petrol: 101.96 },
-  raipur: { petrol: 108.06, diesel: 101.32 },
+  raipur: { petrol: 108.3, diesel: 101.55 },
+  jammu: { petrol: 104.13, diesel: 92.81 },
+  srinagar: { petrol: 107.95, diesel: 96.14 },
+};
+
+/**
+ * States the live feed does not publish, so their baseline is what readers see.
+ * These are re-verified by hand and carry their own date instead of FUEL_BASELINE_AS_OF.
+ */
+export const STATE_FUEL_VERIFIED_ON: Record<string, string> = {
+  'Jammu & Kashmir': '2026-09-30',
+  Chhattisgarh: '2026-09-30',
 };
 
 /** Fallback when a city's state is somehow missing from STATE_FUEL. */
@@ -89,39 +102,39 @@ export function resolveCityFuel(citySlug: string, state: string): FuelRate {
 
 /** Published 14.2 kg domestic and 19 kg commercial cylinder rates by state/UT. */
 export const STATE_LPG: Record<string, LpgRate> = {
-  'Andaman & Nicobar Islands': { domestic: 1018.0, commercial: null },
-  'Andhra Pradesh': { domestic: 966.5, commercial: null },
+  'Andaman & Nicobar Islands': { domestic: 1018.0, commercial: 3218.0 },
+  'Andhra Pradesh': { domestic: 966.5, commercial: 2932.5 },
   'Arunachal Pradesh': { domestic: 1007.5, commercial: null },
   Assam: { domestic: 991.0, commercial: null },
-  Bihar: { domestic: 1031.5, commercial: null },
-  Chandigarh: { domestic: 951.5, commercial: null },
+  Bihar: { domestic: 1031.5, commercial: 3029.0 },
+  Chandigarh: { domestic: 951.5, commercial: 2769.5 },
   Chhattisgarh: { domestic: 1013.0, commercial: null },
-  Delhi: { domestic: 942.0, commercial: 2930.0 },
+  Delhi: { domestic: 942.0, commercial: 2747.5 },
   Goa: { domestic: 956.0, commercial: null },
   Gujarat: { domestic: 949.5, commercial: null },
   Haryana: { domestic: 943.5, commercial: null },
   'Himachal Pradesh': { domestic: 987.5, commercial: null },
   'Jammu & Kashmir': { domestic: 993.5, commercial: null },
   Jharkhand: { domestic: 999.5, commercial: null },
-  Karnataka: { domestic: 944.5, commercial: 3021.0 },
-  Kerala: { domestic: 951.0, commercial: null },
+  Karnataka: { domestic: 944.5, commercial: 2831.0 },
+  Kerala: { domestic: 951.0, commercial: 2784.0 },
   'Madhya Pradesh': { domestic: 947.5, commercial: null },
-  Maharashtra: { domestic: 941.5, commercial: 2885.5 },
+  Maharashtra: { domestic: 941.5, commercial: 2701.0 },
   Manipur: { domestic: 1093.5, commercial: null },
   Meghalaya: { domestic: 1009.0, commercial: null },
-  Mizoram: { domestic: 1094.0, commercial: null },
-  Nagaland: { domestic: 961.0, commercial: null },
-  Odisha: { domestic: 968.0, commercial: null },
-  Puducherry: { domestic: 954.0, commercial: null },
-  Punjab: { domestic: 983.0, commercial: null },
-  Rajasthan: { domestic: 945.5, commercial: null },
-  Sikkim: { domestic: 1094.5, commercial: null },
-  'Tamil Nadu': { domestic: 957.5, commercial: 3106.0 },
-  Telangana: { domestic: 994.0, commercial: 3191.0 },
-  Tripura: { domestic: 1102.5, commercial: null },
-  'Uttar Pradesh': { domestic: 979.5, commercial: null },
-  Uttarakhand: { domestic: 961.0, commercial: null },
-  'West Bengal': { domestic: 968.0, commercial: 3081.5 },
+  Mizoram: { domestic: 1094.0, commercial: 3228.5 },
+  Nagaland: { domestic: 961.0, commercial: 2860.0 },
+  Odisha: { domestic: 968.0, commercial: 2919.0 },
+  Puducherry: { domestic: 954.0, commercial: 2915.0 },
+  Punjab: { domestic: 983.0, commercial: 2855.0 },
+  Rajasthan: { domestic: 945.5, commercial: 2776.0 },
+  Sikkim: { domestic: 1094.5, commercial: 3260.0 },
+  'Tamil Nadu': { domestic: 957.5, commercial: 2916.5 },
+  Telangana: { domestic: 994.0, commercial: 2996.0 },
+  Tripura: { domestic: 1102.5, commercial: 3242.0 },
+  'Uttar Pradesh': { domestic: 979.5, commercial: 2870.0 },
+  Uttarakhand: { domestic: 961.0, commercial: 2800.0 },
+  'West Bengal': { domestic: 968.0, commercial: 2884.0 },
 };
 
 /** How old fuel data may get before the daily cron emails an admin alert. */

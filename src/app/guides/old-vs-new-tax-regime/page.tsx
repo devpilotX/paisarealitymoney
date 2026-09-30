@@ -29,6 +29,8 @@ export default function Page(): React.ReactElement {
     headline: 'Old vs New Tax Regime FY 2026-27: Which One Saves You More',
     description: 'A simple guide to choosing between the old and new income tax regime in India.',
     path: '/guides/old-vs-new-tax-regime',
+    datePublished: '2026-06-30',
+    dateModified: '2026-06-30',
   });
   return (
     <div className="container-main py-6">

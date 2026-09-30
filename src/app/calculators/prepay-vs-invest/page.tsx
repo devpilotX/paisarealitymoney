@@ -21,17 +21,17 @@ const FAQS = [
   {
     question: 'Should I prepay my home loan or invest the money?',
     answer:
-      'It depends on three things: your effective after-tax loan rate, the return and risk of your investment, and how much risk you can stomach. Prepaying gives a guaranteed return equal to your loan rate; investing offers a higher expected return but with uncertainty. This tool runs 10,000 simulations to tell you the probability that investing beats prepaying, the return you would need to break even, and the split between the two that maximises your risk-adjusted wealth. rather than a naive "loan rate vs FD rate" comparison.',
+      'It depends on three things: your effective after-tax loan rate, the return and risk of your investment, and how much risk you can stomach. Prepaying gives a guaranteed return equal to your loan rate; investing offers a higher expected return but with uncertainty. This tool runs 10,000 simulations to tell you the probability that investing beats prepaying, the return you would need to break even, and the split between the two that maximises your risk-adjusted wealth, rather than a naive "loan rate vs FD rate" comparison.',
   },
   {
     question: 'Why is prepaying called a "risk-free return"?',
     answer:
-      'Every rupee of principal you prepay avoids the interest you would have paid on it. guaranteed, regardless of what markets do. So prepaying earns you a certain return equal to your loan\'s interest rate. That is why the loan rate is the benchmark the risky investment has to beat. The only adjustment is tax: if you claim the Section 24(b) interest deduction, prepaying gives up part of that deduction, which lowers the effective guaranteed rate.',
+      'Every rupee of principal you prepay avoids the interest you would have paid on it, guaranteed, regardless of what markets do. So prepaying earns you a certain return equal to your loan\'s interest rate. That is why the loan rate is the benchmark the risky investment has to beat. The only adjustment is tax: if you claim the Section 24(b) interest deduction, prepaying gives up part of that deduction, which lowers the effective guaranteed rate.',
   },
   {
     question: 'How does the tax shield (Section 24(b)) change the maths?',
     answer:
-      'Under the OLD regime, interest on a self-occupied home loan is deductible up to ₹2 lakh a year. That makes holding the loan cheaper, so the effective after-tax loan rate is lower than the headline rate. which makes investing relatively more attractive. The shield only applies to interest within the ₹2 lakh cap, and not at all under the NEW regime, where the deduction is disallowed. The tool computes your effective rate accordingly and shows the working.',
+      'Under the OLD regime, interest on a self-occupied home loan is deductible up to ₹2 lakh a year. That makes holding the loan cheaper, so the effective after-tax loan rate is lower than the headline rate, which makes investing relatively more attractive. The shield only applies to interest within the ₹2 lakh cap, and not at all under the NEW regime, where the deduction is disallowed. The tool computes your effective rate accordingly and shows the working.',
   },
   {
     question: 'What is the "breakeven return"?',
@@ -41,7 +41,7 @@ const FAQS = [
   {
     question: 'What does the recommended hybrid split mean?',
     answer:
-      'You do not have to choose all-or-nothing. The tool evaluates every split. from 100% prepay to 100% invest. and finds the one that maximises your certainty-equivalent wealth, a risk-adjusted measure based on CRRA utility. A risk-neutral person is pushed to the higher-expected option; a risk-averse person is pushed toward a blend that protects the downside. The result is a concrete plan like "invest 60%, prepay 40%".',
+      'You do not have to choose all-or-nothing. The tool evaluates every split, from 100% prepay to 100% invest, and finds the one that maximises your certainty-equivalent wealth, a risk-adjusted measure based on CRRA utility. A risk-neutral person is pushed to the higher-expected option; a risk-averse person is pushed toward a blend that protects the downside. The result is a concrete plan like "invest 60%, prepay 40%".',
   },
   {
     question: 'Is capital-gains tax included on the investment side?',
@@ -51,7 +51,7 @@ const FAQS = [
   {
     question: 'Does this account for the risk of investing, not just the average?',
     answer:
-      'Yes. that is the whole point. Instead of assuming one average return, it simulates 10,000 possible market paths and shows the full distribution of outcomes. You see the probability that investing actually beats prepaying, the pessimistic 10th-percentile outcome, and a risk-adjusted recommendation. A higher average return with high volatility may still lose to a guaranteed loan rate once risk is priced in.',
+      'Yes, that is the whole point. Instead of assuming one average return, it simulates 10,000 possible market paths and shows the full distribution of outcomes. You see the probability that investing actually beats prepaying, the pessimistic 10th-percentile outcome, and a risk-adjusted recommendation. A higher average return with high volatility may still lose to a guaranteed loan rate once risk is priced in.',
   },
   {
     question: 'Is my data sent anywhere?',
@@ -112,7 +112,7 @@ export default function PrepayVsInvestPage(): React.ReactElement {
         <h2>Prepay home loan or invest? The right way to decide</h2>
         <p>
           It is one of the most common money questions in India: you have a home loan and some spare cash each month, so
-          should you throw it at the loan or invest it? Most calculators answer with a naive comparison. &ldquo;if your
+          should you throw it at the loan or invest it? Most calculators answer with a naive comparison: &ldquo;if your
           investment returns more than your loan rate, invest.&rdquo; That is dangerously incomplete, because it ignores
           two things that change the answer entirely: <strong>tax</strong> and <strong>risk</strong>.
         </p>
@@ -120,22 +120,22 @@ export default function PrepayVsInvestPage(): React.ReactElement {
         <h2>Prepaying is a guaranteed, risk-free return</h2>
         <p>
           When you prepay ₹1 of principal, you avoid all the future interest on that rupee. That is a
-          <strong> guaranteed return equal to your loan&rsquo;s interest rate</strong>. no market risk, no uncertainty.
+          <strong> guaranteed return equal to your loan&rsquo;s interest rate</strong>, no market risk, no uncertainty.
           If your home loan is at 9%, prepaying is like earning a risk-free 9%. The only wrinkle is tax: under the old
           regime, home-loan interest on a self-occupied property is deductible up to ₹2 lakh a year under Section 24(b).
           If you claim it, holding the loan is cheaper than it looks, so the <strong>effective after-tax loan rate</strong>
-          is lower. and prepaying saves you a little less. Under the new regime there is no such deduction, so the
+          is lower, and prepaying saves you a little less. Under the new regime there is no such deduction, so the
           effective rate equals the headline rate. This tool computes that effective rate precisely and shows the working.
         </p>
 
-        <h2>Investing is a risky return. so we simulate it</h2>
+        <h2>Investing is a risky return, so we simulate it</h2>
         <p>
-          Equity might average 12% over the long run, but it does not deliver 12% every year. it swings. A single
+          Equity might average 12% over the long run, but it does not deliver 12% every year; it swings. A single
           &ldquo;average return&rdquo; hides the very real chance that your investment underperforms over your specific
           horizon. So instead of one number, this tool runs a <strong>Monte Carlo simulation of 10,000 possible market
           paths</strong> using your chosen asset&rsquo;s return and volatility, applies the correct
           <strong> capital-gains tax</strong> (12.5% equity LTCG above ₹1.25 lakh, or slab rate for debt), and produces a
-          full <strong>distribution of after-tax outcomes</strong>. You see not just the average, but the spread. and the
+          full <strong>distribution of after-tax outcomes</strong>. You see not just the average, but the spread, and the
           probability that investing actually ends up ahead of the guaranteed prepay outcome.
         </p>
 
@@ -144,12 +144,12 @@ export default function PrepayVsInvestPage(): React.ReactElement {
           The optimizer reports the <strong>probability that investing beats prepaying</strong> (for example, &ldquo;73%
           chance of higher net worth&rdquo;), the <strong>breakeven return</strong> your investment must clear to tie, and
           a <strong>risk-adjusted recommendation</strong>. The risk adjustment uses CRRA utility and your risk-aversion
-          setting to compute the <strong>certainty-equivalent</strong> of each strategy. the guaranteed amount you would
+          setting to compute the <strong>certainty-equivalent</strong> of each strategy, the guaranteed amount you would
           accept instead of the risky one. It then finds the <strong>hybrid split</strong> (part prepay, part invest) that
           maximises that certainty-equivalent, so the advice fits how much risk you can actually live with.
         </p>
 
-        <h2>When prepaying usually wins. and when investing does</h2>
+        <h2>When prepaying usually wins, and when investing does</h2>
         <p>
           Prepaying tends to win when your loan rate is high, you are in the new regime (no interest deduction), your
           investment is conservative (debt), your horizon is short, or you are highly risk-averse. Investing tends to win
@@ -163,7 +163,7 @@ export default function PrepayVsInvestPage(): React.ReactElement {
         <p>
           Start with the verdict and the probability. If investing wins comfortably (say, &gt;70%) and you are
           comfortable with risk, lean invest. If it is a coin-flip, or you value certainty, the recommended hybrid split
-          is a sensible middle path. and prepaying part of the loan still cuts your tenure and total interest, which the
+          is a sensible middle path, and prepaying part of the loan still cuts your tenure and total interest, which the
           amortization table makes concrete. Treat the output as a decision aid, not a guarantee: markets are uncertain,
           and this tool is built to quantify that uncertainty honestly rather than wish it away.
         </p>

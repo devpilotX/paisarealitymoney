@@ -316,7 +316,7 @@ export function analyzeDebt(inputs: DebtInputs): DebtAnalysis {
   const sumMinimums = inputs.loans.reduce((s, l) => s + (l.balance > 0 ? l.minPayment : 0), 0);
   const budgetShortfall = Math.max(0, sumMinimums - inputs.monthlyBudget);
   if (budgetShortfall > 0) {
-    warnings.push(`Your budget is ₹${Math.round(budgetShortfall).toLocaleString('en-IN')} short of the total minimum payments (₹${Math.round(sumMinimums).toLocaleString('en-IN')}/month). Increase the budget. unpaid minimums let balances grow.`);
+    warnings.push(`Your budget is ₹${Math.round(budgetShortfall).toLocaleString('en-IN')} short of the total minimum payments (₹${Math.round(sumMinimums).toLocaleString('en-IN')}/month). Increase the budget; unpaid minimums let balances grow.`);
   }
 
   const budget = Math.max(inputs.monthlyBudget, 0);
@@ -355,7 +355,7 @@ export function analyzeDebt(inputs: DebtInputs): DebtAnalysis {
   if (inputs.targetPayoffMonths && inputs.targetPayoffMonths > 0) {
     targetBudget = solveBudgetForTarget(inputs, inputs.targetPayoffMonths, sumMinimums);
     if (targetBudget === null) {
-      warnings.push(`A payoff in ${inputs.targetPayoffMonths} months is not achievable. it would require clearing more than the full balance immediately.`);
+      warnings.push(`A payoff in ${inputs.targetPayoffMonths} months is not achievable; it would require clearing more than the full balance immediately.`);
     }
   }
 

@@ -15,6 +15,7 @@ import {
   updateSilverPricesLive,
   type UpdateResult,
 } from '@/lib/price-providers';
+import { secretMatches } from '@/lib/secret-compare';
 import type { QueryResultRow } from 'pg';
 
 export const dynamic = 'force-dynamic';
@@ -96,11 +97,22 @@ function scholarshipReminderHtml(r: DueReminder): string {
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  const secret = request.nextUrl.searchParams.get('secret');
-  const cronSecret = process.env.CRON_SECRET;
-
-  if (!cronSecret || secret !== cronSecret) {
+  // Header preferred (keeps the secret out of access logs); query string still accepted.
+  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
+  const secret = bearer || request.nextUrl.searchParams.get('secret') || '';
+  if (!secretMatches(secret, process.env.CRON_SECRET)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Lapsed premium plans go back to free (the webhook sets plan_expires_at).
+  let premiumExpired = 0;
+  try {
+    const res = await execute(
+      "UPDATE users SET plan = 'free' WHERE plan = 'premium' AND plan_expires_at IS NOT NULL AND plan_expires_at < NOW()"
+    );
+    premiumExpired = res.rowCount ?? 0;
+  } catch (err) {
+    console.error('premium expiry sweep failed:', err instanceof Error ? err.message : err);
   }
 
   const startTime = Date.now();
@@ -183,6 +195,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     problems,
     alerted,
     scholarshipReminders,
+    premiumExpired,
     userAlerts,
     results,
   });

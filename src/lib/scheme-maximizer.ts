@@ -17,7 +17,7 @@
  * eligibility and amounts with the official source before applying.
  */
 
-export const DATASET_VERSION = '2025-06-21';
+export const DATASET_VERSION = '2026-09-30';
 
 // ---------------------------------------------------------------------------
 // Profile & types
@@ -125,7 +125,7 @@ export const SCHEMES: Scheme[] = [
     predicates: { occupations: ['farmer'], requiresLandholding: true },
     quantify: () => 6000, valuationNote: '₹2,000 × 3 instalments a year, direct cash transfer.',
     howToApply: 'Register at pmkisan.gov.in or your local revenue office / CSC with land records and Aadhaar.',
-    applyLink: 'https://pmkisan.gov.in', source: 'pmkisan.gov.in', lastVerified: '2025-06-21',
+    applyLink: 'https://pmkisan.gov.in', source: 'pmkisan.gov.in', lastVerified: '2026-09-30',
   },
   {
     id: 'pmjay', name: 'Ayushman Bharat (PM-JAY)', category: 'healthcare', level: 'central',
@@ -141,7 +141,7 @@ export const SCHEMES: Scheme[] = [
     predicates: { minAge: 18, maxAge: 70 },
     quantify: () => 500, valuationNote: '₹2L accident cover for a ₹20 premium; valued at ~₹500/yr equivalent private accident cover.',
     howToApply: 'Enable auto-debit of ₹20/yr from your bank savings account.',
-    applyLink: 'https://www.jansuraksha.gov.in', source: 'jansuraksha.gov.in', lastVerified: '2025-06-21',
+    applyLink: 'https://www.jansuraksha.gov.in', source: 'jansuraksha.gov.in', lastVerified: '2026-09-30',
   },
   {
     id: 'pmjjby', name: 'PM Jeevan Jyoti Bima Yojana', category: 'insurance', level: 'central',
@@ -149,23 +149,23 @@ export const SCHEMES: Scheme[] = [
     predicates: { minAge: 18, maxAge: 50 },
     quantify: () => 2000, valuationNote: '₹2L life cover for ₹436; valued at ~₹2,000/yr equivalent term premium.',
     howToApply: 'Enrol via your bank; ₹436/yr auto-debited from your savings account.',
-    applyLink: 'https://www.jansuraksha.gov.in', source: 'jansuraksha.gov.in', lastVerified: '2025-06-21',
+    applyLink: 'https://www.jansuraksha.gov.in', source: 'jansuraksha.gov.in', lastVerified: '2026-09-30',
   },
   {
-    id: 'mgnrega', name: 'MGNREGA (100 days work)', category: 'employment', level: 'central',
+    id: 'mgnrega', name: 'VB-G RAM G (formerly MGNREGA, 125 days work)', category: 'employment', level: 'central',
     benefitType: 'cash', benefitKind: 'recurring',
     predicates: { area: 'rural', occupations: ['unemployed', 'daily_wage', 'farmer', 'homemaker'] },
-    quantify: () => 24000, valuationNote: 'Up to 100 days of work; valued at ~₹24,000/yr (≈80 days × ~₹300 typical wage).',
-    howToApply: 'Apply for a job card at your Gram Panchayat; demand work in writing.',
-    applyLink: 'https://nrega.nic.in', source: 'nrega.nic.in', lastVerified: '2025-06-21',
+    quantify: () => 24000, valuationNote: 'Up to 125 days of work a year since 1 July 2026; valued at ~₹24,000/yr (≈80 days actually worked × ~₹300 typical wage).',
+    howToApply: 'Use your e-KYC verified job card, or register at your Gram Panchayat; demand work in writing and keep the receipt.',
+    applyLink: 'https://rural.gov.in', source: 'pib.gov.in (VB-G RAM G Act, 2025)', lastVerified: '2026-09-30',
   },
   {
     id: 'pm-svanidhi', name: 'PM SVANidhi (street vendor)', category: 'business', level: 'central',
     benefitType: 'interest-subvention', benefitKind: 'recurring',
     predicates: { area: 'urban', occupations: ['self_employed', 'daily_wage', 'business'] },
-    quantify: () => 2100, valuationNote: '7% interest subvention on a working-capital loan (~₹30k) plus digital-payment cashback.',
+    quantify: () => 2100, valuationNote: '7% interest subvention on working-capital loans of ₹15k, ₹25k and ₹50k in turn, plus digital-payment cashback.',
     howToApply: 'Apply at pmsvanidhi.mohua.gov.in or a bank/ULB with your vending certificate.',
-    applyLink: 'https://pmsvanidhi.mohua.gov.in', source: 'pmsvanidhi.mohua.gov.in', lastVerified: '2025-06-21',
+    applyLink: 'https://pmsvanidhi.mohua.gov.in', source: 'pmsvanidhi.mohua.gov.in', lastVerified: '2026-09-30',
   },
   {
     id: 'kisan-credit-card', name: 'Kisan Credit Card', category: 'agriculture', level: 'central',
@@ -173,7 +173,7 @@ export const SCHEMES: Scheme[] = [
     predicates: { occupations: ['farmer'], requiresLandholding: true },
     quantify: () => 9000, valuationNote: 'Interest subvention (effective ~4% vs ~9%) on crop credit up to ₹3L ≈ ₹9,000/yr saved.',
     howToApply: 'Apply at any bank branch with land documents and Aadhaar.',
-    applyLink: 'https://pmkisan.gov.in/Documents/KCC.pdf', source: 'agriwelfare.gov.in', lastVerified: '2025-06-21',
+    applyLink: 'https://pmkisan.gov.in/Documents/KCC.pdf', source: 'pib.gov.in (MISS 2025-26)', lastVerified: '2026-09-30',
   },
   {
     id: 'pm-fasal-bima', name: 'PM Fasal Bima Yojana', category: 'agriculture', level: 'central',
@@ -187,7 +187,7 @@ export const SCHEMES: Scheme[] = [
     id: 'nsp-scholarship', name: 'National Scholarship (post-matric)', category: 'education', level: 'central',
     benefitType: 'scholarship', benefitKind: 'recurring',
     predicates: { occupations: ['student'], categories: ['sc', 'st', 'obc', 'ews'], maxIncome: 800000, minAge: 14 },
-    quantify: () => 12000, valuationNote: 'Maintenance allowance + fees; varies by course. valued at ~₹12,000/yr.',
+    quantify: () => 12000, valuationNote: 'Maintenance allowance + fees; varies by course, valued at ~₹12,000/yr.',
     howToApply: 'Apply at scholarships.gov.in (window usually Jul to Nov) with income & caste certificates.',
     applyLink: 'https://scholarships.gov.in', source: 'scholarships.gov.in', lastVerified: '2025-06-21',
   },
@@ -237,21 +237,21 @@ export const SCHEMES: Scheme[] = [
   },
   // ---- One-time benefits ----
   {
-    id: 'pmay-urban', name: 'PM Awas Yojana. Urban', category: 'housing', level: 'central',
+    id: 'pmay-urban', name: 'PM Awas Yojana (Urban)', category: 'housing', level: 'central',
     benefitType: 'subsidy', benefitKind: 'one-time',
-    predicates: { area: 'urban', maxIncome: 1800000, minAge: 21 },
-    quantify: () => 267000, valuationNote: 'Credit-linked interest subsidy of up to ₹2.67L on a home loan (one-time).',
+    predicates: { area: 'urban', maxIncome: 900000, minAge: 21 },
+    quantify: () => 180000, valuationNote: 'PMAY-U 2.0 interest subsidy of up to ₹1.80L on a home loan for incomes up to ₹9L (one-time).',
     howToApply: 'Apply at pmaymis.gov.in or a CSC with Aadhaar & income proof.',
-    applyLink: 'https://pmay-urban.gov.in', source: 'pmay-urban.gov.in', lastVerified: '2025-06-21',
+    applyLink: 'https://pmay-urban.gov.in', source: 'pmay-urban.gov.in', lastVerified: '2026-09-30',
     conflictsWith: ['pmay-gramin'],
   },
   {
-    id: 'pmay-gramin', name: 'PM Awas Yojana. Gramin', category: 'housing', level: 'central',
+    id: 'pmay-gramin', name: 'PM Awas Yojana (Gramin)', category: 'housing', level: 'central',
     benefitType: 'subsidy', benefitKind: 'one-time',
     predicates: { area: 'rural', requiresBPL: true },
     quantify: () => 130000, valuationNote: '₹1.20L to 1.30L grant to build a pucca rural house (one-time).',
     howToApply: 'Identified via SECC data; apply through your Gram Panchayat if not listed.',
-    applyLink: 'https://pmayg.nic.in', source: 'pmayg.nic.in', lastVerified: '2025-06-21',
+    applyLink: 'https://pmayg.nic.in', source: 'pmayg.nic.in', lastVerified: '2026-09-30',
     conflictsWith: ['pmay-urban'],
   },
   {
@@ -292,30 +292,30 @@ export const SCHEMES: Scheme[] = [
     predicates: { gender: 'female', minAge: 19, maxAge: 45 },
     quantify: () => 5000, valuationNote: '₹5,000 maternity cash benefit for the first living child (one-time).',
     howToApply: 'Register at your Anganwadi/health centre with your MCP card & bank details.',
-    applyLink: 'https://pmmvy.wcd.gov.in', source: 'wcd.nic.in', lastVerified: '2025-06-21',
+    applyLink: 'https://pmmvy.wcd.gov.in', source: 'wcd.nic.in', lastVerified: '2026-09-30',
   },
   // ---- Facilitation (₹0 direct grant. access/credit, shown but not summed) ----
   {
     id: 'mudra', name: 'PM MUDRA Yojana', category: 'business', level: 'central',
     benefitType: 'loan-access', benefitKind: 'facilitation',
     predicates: { occupations: ['self_employed', 'business'], minAge: 18 },
-    quantify: () => 0, valuationNote: 'Collateral-free business loan up to ₹10L. The loan itself is NOT a benefit. only access; counted as ₹0.',
+    quantify: () => 0, valuationNote: 'Collateral-free business loan up to ₹20L (Tarun Plus). The loan itself is not a benefit, only access, so it counts as ₹0.',
     howToApply: 'Apply at any bank/NBFC/MFI with a business plan and KYC.',
-    applyLink: 'https://www.mudra.org.in', source: 'mudra.org.in', lastVerified: '2025-06-21',
+    applyLink: 'https://www.mudra.org.in', source: 'mudra.org.in', lastVerified: '2026-09-30',
   },
   {
     id: 'stand-up-india', name: 'Stand-Up India', category: 'business', level: 'central',
     benefitType: 'loan-access', benefitKind: 'facilitation',
     predicates: { occupations: ['self_employed', 'business'], minAge: 18, categories: ['sc', 'st'] },
-    quantify: () => 0, valuationNote: 'Loan of ₹10L to ₹1Cr for SC/ST & women entrepreneurs. Loan access, not a grant. counted as ₹0.',
+    quantify: () => 0, valuationNote: 'Loan of ₹10L to ₹1Cr for SC/ST & women entrepreneurs. Loan access, not a grant, so it counts as ₹0.',
     howToApply: 'Apply at standupmitra.in or your bank with a business plan.',
-    applyLink: 'https://www.standupmitra.in', source: 'standupmitra.in', lastVerified: '2025-06-21',
+    applyLink: 'https://www.standupmitra.in', source: 'standupmitra.in', lastVerified: '2026-09-30',
   },
   {
     id: 'apy', name: 'Atal Pension Yojana', category: 'pension', level: 'central',
     benefitType: 'pension', benefitKind: 'facilitation',
     predicates: { minAge: 18, maxAge: 40 },
-    quantify: () => 0, valuationNote: 'Guaranteed ₹1k to 5k/mo pension from 60. funded by your own contributions, so counted as ₹0 free benefit.',
+    quantify: () => 0, valuationNote: 'Guaranteed ₹1k to 5k/mo pension from 60, funded by your own contributions, so it counts as ₹0 free benefit.',
     howToApply: 'Enrol at your bank; monthly contribution auto-debited.',
     applyLink: 'https://www.npscra.nsdl.co.in', source: 'npscra.nsdl.co.in', lastVerified: '2025-06-21',
   },
@@ -324,7 +324,7 @@ export const SCHEMES: Scheme[] = [
     benefitType: 'insurance', benefitKind: 'recurring',
     predicates: { minAge: 10 },
     quantify: () => 300, valuationNote: 'Zero-balance account with ₹2L accident cover (RuPay); valued at ~₹300/yr.',
-    howToApply: 'Open at any bank with Aadhaar. no minimum balance.',
+    howToApply: 'Open at any bank with Aadhaar; no minimum balance.',
     applyLink: 'https://pmjdy.gov.in', source: 'pmjdy.gov.in', lastVerified: '2025-06-21',
   },
 ];

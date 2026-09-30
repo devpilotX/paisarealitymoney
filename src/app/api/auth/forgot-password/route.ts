@@ -2,10 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { query, execute } from '@/lib/db';
 import { sendPasswordReset } from '@/lib/email';
 import { sanitizeEmail } from '@/lib/sanitize';
+import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit';
 import type { QueryResultRow } from 'pg';
 import crypto from 'crypto';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const rateCheck = checkRateLimit(request, 'forgot-password', RATE_LIMITS.auth);
+  if (!rateCheck.allowed) return rateLimitResponse(rateCheck.resetIn);
+
   try {
     const body = await request.json() as Record<string, unknown>;
     const email = sanitizeEmail(body.email);
@@ -15,6 +19,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       'SELECT id FROM users WHERE lower(email) = lower($1) LIMIT 1', [email]
     );
     if (rows[0]) {
+      // Only the newest link works: retire any earlier ones first.
+      await execute('UPDATE password_reset_tokens SET used = true WHERE user_id = $1 AND used = false', [rows[0].id]);
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
       await execute(

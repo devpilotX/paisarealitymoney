@@ -29,7 +29,7 @@ Live: https://paisareality.com
 | Database | PostgreSQL |
 | Auth | JWT and bcrypt |
 | Payments | Razorpay |
-| Email | Resend |
+| Email | SMTP via nodemailer (Hostinger mail) |
 | PDF | @react-pdf/renderer |
 | Content | marked and sanitize-html |
 | Caching | lru-cache |
@@ -59,8 +59,8 @@ Set these in `.env`. Only the variable names are listed here. Never commit real 
 | `JWT_SECRET` | Secret for signing admin and auth tokens |
 | `AUTH_SECRET` | Secret for user session handling |
 | `CRON_SECRET` | Shared secret to protect cron endpoints |
-| `RESEND_API_KEY` | Resend API key for transactional email |
-| `RESEND_WEBHOOK_SECRET` | Verifies Resend webhook calls |
+| `SMTP_HOST`, `SMTP_PORT` | Mail server for every email the site sends (Hostinger: `smtp.hostinger.com`, `465`) |
+| `SMTP_USER`, `SMTP_PASSWORD` | Mailbox login, also the sender address (`noreply@paisareality.com`) |
 | `RAZORPAY_KEY_ID` | Razorpay key id. **Revenue critical:** a `rzp_test_` key collects no real money |
 | `RAZORPAY_KEY_SECRET` | Razorpay key secret |
 | `RAZORPAY_WEBHOOK_SECRET` | Verifies Razorpay webhook calls |
@@ -83,7 +83,8 @@ are running.
 | `npm run start` | Start the production server |
 | `npm run typecheck` | TypeScript strict check |
 | `npm test` | Run every unit test suite (DB-free, also runs in CI) |
-| `node scripts/seo-audit.mjs` | Crawl the live sitemap and report metadata problems (add `--limit N` for a sample) |
+| `node scripts/seo-audit.mjs` | Crawl the live sitemap and report metadata problems (add `--limit N` for a sample, `--origin http://localhost:3100` to audit a local build) |
+| `node scripts/link-audit.mjs` | Check every internal link on every sitemap page (same `--limit` and `--origin` flags) |
 | `npm run db:migrate-pg` | Create PostgreSQL tables for the Money Health Score |
 | `npm run db:migrate-price-integrity` | Add fuel/LPG provenance columns, price_overrides, and system_meta tables |
 | `npm run db:migrate-alerts` | Create the price_alerts table |
@@ -92,11 +93,14 @@ are running.
 | `npm run db:seed-schemes` | Seed the base set of government schemes |
 | `npm run db:seed-schemes-expansion` | Add and refresh government schemes (additive and idempotent, safe to re-run) |
 | `npm run db:seed-schemes-expansion-2` | Second additive scheme expansion batch (idempotent) |
-| `npm run db:seed-banks` | Seed banks and rates |
+| `npm run db:seed-banks` | Seed banks and rates (same as `db:seed-banks-expansion`) |
 | `npm run db:seed-banks-expansion` | Add more banks and rates (additive) |
-| `npm run db:seed-all` | Run the cities, prices, schemes, and banks seeds in sequence |
+| `npm run db:migrate-dedupe-schemes` | Deactivate duplicate scheme slugs listed in `src/lib/scheme-redirects.json` (never deletes; the old URLs 301 to the canonical slug) |
+| `npm run db:seed-all` | Bootstrap an empty database: cities, prices, all scheme seeds, banks |
 
-The scheme seed uses `INSERT ... ON CONFLICT (slug) DO UPDATE`, so it only adds new schemes and refreshes existing ones. It never deletes data.
+The scheme seeds use `INSERT ... ON CONFLICT (slug)`, so they only add new schemes and refresh existing ones. They never delete data. `last_verified` comes from the dataset (`DATASET_VERIFIED_ON`, or a per-record `verified_on`), not from the day the seed runs.
+
+`db:seed-prices` writes synthetic price history for local development. It refuses to run against a database that already has prices unless `ALLOW_SYNTHETIC_PRICES=1` is set, so never set that on production. Real prices come from the daily cron.
 
 ## Project structure
 
@@ -161,6 +165,7 @@ Configuration is audited by `src/lib/monetization.ts`, reported by
 
 - Dynamic `sitemap.xml` covering all public pages, including every scheme page
 - `robots.txt` that allows public pages and disallows admin, dashboard, and API paths
+- `/llms.txt` for language-model crawlers: a plain-text map of the site with scheme, scholarship and bank counts read from the database
 - Per-page metadata: title, description, canonical, OpenGraph, and Twitter cards, all built through `pageMetadata` in `src/lib/seo.ts` so every page carries a social card
 - Length-aware metadata for database-driven pages: `buildRecordTitle` and `buildRecordDescription` fit the suffix to the 60 and 155 character limits Google displays, falling back to the bare record name rather than clipping it, and only claiming "Apply Online" when the record actually has an application URL. `fitTitle` does the same for the bank and state hubs.
 - Two guards run in `npm test`: `tests/seo-metadata.test.ts` pins the title ladder rung by rung, and `tests/seo-static-metadata.test.ts` walks every page and layout file and fails on any hand-written title over 60 chars or description outside 70 to 155.

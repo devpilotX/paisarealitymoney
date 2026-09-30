@@ -20,7 +20,7 @@ WHERE slug = 'cm-health-insurance-tamil-nadu';
 
 UPDATE schemes SET
   meta_title = 'National Career Service (NCS): Free Job Portal 2026',
-  meta_description = 'National Career Service (NCS) offers free job matching, career counselling and training for job seekers in India. Register and search jobs on the NCS portal.'
+  meta_description = 'National Career Service (NCS) offers free job matching, career counselling and training for job seekers in India. Register and search jobs on NCS.'
 WHERE slug = 'national-career-service';
 
 UPDATE scholarships SET

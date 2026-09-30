@@ -278,25 +278,25 @@ function buildActionList(ctx: {
   if (ctx.isDeficit) {
     out.push(`You are spending ${inr(ctx.deficitAmount)} more than you earn each month. This is the first thing to fix.`);
     const top = ctx.overspendFlags[0];
-    if (top) out.push(`Start with ${top.label}: it is ${inr(top.overBy)} above benchmark. trimming it closes most of the gap.`);
+    if (top) out.push(`Start with ${top.label}: it is ${inr(top.overBy)} above benchmark, so trimming it closes most of the gap.`);
     out.push('Pause discretionary SIPs only after cutting wants; never borrow to invest.');
     return out;
   }
 
   if (ctx.overspendFlags.length > 0) {
     const top = ctx.overspendFlags.slice(0, 2).map((f) => `${f.label} (${inr(f.overBy)} over)`).join(' and ');
-    out.push(`Trim your biggest overspends. ${top}. to free up cash.`);
+    out.push(`Trim your biggest overspends, ${top}, to free up cash.`);
   }
   if (ctx.efGap > 0) {
     out.push(ctx.efMonthsToFill === Infinity
-      ? 'Build an emergency fund, but you have no surplus yet. cut wants first.'
+      ? 'Build an emergency fund, but you have no surplus yet, so cut wants first.'
       : `Fill your emergency-fund gap of ${inr(ctx.efGap)} first (~${ctx.efMonthsToFill} months at your current surplus) before locking money into long-term investments.`);
   }
   if (ctx.currentSavingsRate < ctx.recommendedSavingsRate) {
     out.push(`Push your savings rate from ${Math.round(ctx.currentSavingsRate * 100)}% toward the recommended ${Math.round(ctx.recommendedSavingsRate * 100)}% by redirecting the surplus above.`);
   }
   if (ctx.status === 'excellent') {
-    out.push(`You are saving more than your target. Put the extra to work. step up SIPs, prepay high-interest debt, or invest for long-term goals.`);
+    out.push(`You are saving more than your target. Put the extra to work: step up SIPs, prepay high-interest debt, or invest for long-term goals.`);
   }
   if (out.length === 0) out.push('Your budget looks balanced. Keep automating savings on payday.');
   return out;

@@ -15,7 +15,8 @@ import {
   type EligibilityProfile,
 } from '@/lib/scholarships';
 
-export const dynamic = 'force-dynamic';
+// Cached and regenerated hourly like the scheme pages, so crawlers get a fast static response.
+export const revalidate = 3600;
 
 export const metadata = pageMetadata({
   title: 'Scholarship Finder: Find Scholarships You Qualify For',

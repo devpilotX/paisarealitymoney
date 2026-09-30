@@ -26,15 +26,23 @@ function getLimiter(name: string, maxItems: number): LRUCache<string, RateLimitE
   return limiter;
 }
 
-function getClientIp(request: NextRequest): string {
+/**
+ * Client IP for rate limiting.
+ *
+ * In production nginx resolves the visitor address from CF-Connecting-IP, but only
+ * for connections that come from Cloudflare's published ranges (ngx_http_realip),
+ * and overwrites X-Real-IP with it. So X-Real-IP is the one header a client cannot
+ * forge. The first X-Forwarded-For entry is client-supplied and is never trusted;
+ * the last entry is what the nearest proxy saw, which is the safe fallback.
+ */
+export function getClientIp(request: NextRequest): string {
+  const realIp = request.headers.get('x-real-ip');
+  if (realIp) return realIp.trim();
   const forwarded = request.headers.get('x-forwarded-for');
   if (forwarded) {
-    const firstIp = forwarded.split(',')[0];
-    return firstIp ? firstIp.trim() : 'unknown';
-  }
-  const realIp = request.headers.get('x-real-ip');
-  if (realIp) {
-    return realIp.trim();
+    const hops = forwarded.split(',').map((s) => s.trim()).filter(Boolean);
+    const last = hops[hops.length - 1];
+    if (last) return last;
   }
   return 'unknown';
 }

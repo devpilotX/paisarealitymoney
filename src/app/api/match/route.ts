@@ -68,8 +68,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       schemes: matched,
     }, { status: 200 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Match API error:', message);
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    console.error('Match API error:', error instanceof Error ? error.message : 'Unknown');
+    return NextResponse.json({ success: false, error: 'Could not match schemes right now. Please try again.' }, { status: 500 });
   }
 }

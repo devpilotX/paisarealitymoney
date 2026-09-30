@@ -101,8 +101,9 @@ export default function AdminPage(): React.ReactElement {
   }, [loadStats]);
 
   const handleLogout = useCallback(() => {
-    document.cookie = 'admin_token=; path=/; max-age=0';
-    setLoggedIn(false);
+    fetch('/api/admin/auth', { method: 'DELETE' })
+      .catch(() => {})
+      .finally(() => setLoggedIn(false));
   }, []);
 
   if (checking) {

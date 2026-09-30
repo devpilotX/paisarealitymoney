@@ -22,7 +22,7 @@ interface SmartTool {
 const SMART_TOOLS: SmartTool[] = [
   {
     title: 'Real Return Checker',
-    description: '"Pay 50,000 a year, get 14 lakh!" — but what does it ACTUALLY pay? Type in any policy or scheme pitch and see its true annual return vs FD, PPF, and inflation.',
+    description: '"Pay 50,000 a year, get 14 lakh!" But what does it ACTUALLY pay? Type in any policy or scheme pitch and see its true annual return vs FD, PPF, and inflation.',
     href: '/calculators/real-return',
     tag: 'Mis-selling shield',
   },

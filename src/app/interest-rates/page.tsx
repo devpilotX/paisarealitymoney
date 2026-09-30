@@ -53,7 +53,7 @@ const FAQS = [
   {
     question: 'What is the RBI repo rate and why does it matter to me?',
     answer:
-      'The repo rate, currently 5.25%, is the rate at which banks borrow from the RBI. Most floating-rate home loans are directly linked to it, so when the repo rate falls your EMI falls at the next reset, and when it rises your EMI rises. FD rates also loosely track it. The next MPC meeting is on 3 to 5 August 2026.',
+      `The repo rate, currently 5.25%, is the rate at which banks borrow from the RBI. Most floating-rate home loans are directly linked to it, so when the repo rate falls your EMI falls at the next reset, and when it rises your EMI rises. FD rates also loosely track it. The next MPC meeting is on ${RBI_NEXT_MPC}.`,
   },
   {
     question: 'Is the EPF rate better than PPF?',

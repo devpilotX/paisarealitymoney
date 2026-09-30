@@ -612,6 +612,8 @@ ON CONFLICT (slug) DO UPDATE SET
 -- Titles render verbatim (root layout title template is '%s'), so no brand
 -- suffix. Query-matched from Search Console. NULL rows keep the default.
 -- Not part of the INSERT ON CONFLICT set, so re-running the seeds preserves them.
+UPDATE scholarships SET meta_title = 'Merit-cum-Means Scholarship for Minorities 2026' WHERE slug = 'merit-cum-means-minority' AND meta_title IS NULL;
+UPDATE scholarships SET meta_title = 'Central Sector Scholarship 2026: College and University' WHERE slug = 'central-sector' AND meta_title IS NULL;
 -- ============================================================================
 UPDATE scholarships SET
   meta_title = 'SVMCM Scholarship 2026: Eligibility & Apply Online',
@@ -625,32 +627,32 @@ UPDATE scholarships SET
 
 UPDATE scholarships SET
   meta_title = 'NMMS Scholarship 2026: Eligibility & Apply Online',
-  meta_description = 'NMMS gives Rs 12,000 a year to meritorious students from low-income families in classes 9 to 12. Check eligibility, the exam and how to apply on the NSP portal.'
+  meta_description = 'NMMS gives Rs 12,000 a year to meritorious students from low-income families in classes 9 to 12. Check eligibility, the exam and how to apply on NSP.'
   WHERE slug = 'nmms';
 
 UPDATE scholarships SET
   meta_title = 'PMRF 2026: Eligibility, Stipend & How to Apply',
-  meta_description = 'PMRF gives PhD scholars at IITs, IISc, IISERs and NITs about Rs 70,000-80,000 a month plus a research grant. Check eligibility, entry modes and how to apply.'
+  meta_description = 'PMRF gives PhD scholars at IITs, IISc, IISERs and NITs about Rs 70,000-80,000 a month plus a research grant. Check eligibility and how to apply.'
   WHERE slug = 'pmrf';
 
 UPDATE scholarships SET
   meta_title = 'Punjab Post-Matric Scholarship 2026: Apply Online',
-  meta_description = 'Punjab post-matric scholarship gives fee support and freeship to SC and OBC students in class 11 and above. Check eligibility, income limit and how to apply.'
+  meta_description = 'Punjab post-matric scholarship gives fee support and freeship to SC and OBC students in class 11 and above. Check the income limit and how to apply.'
   WHERE slug = 'punjab-post-matric';
 
 UPDATE scholarships SET
   meta_title = 'HP ePASS Scholarship 2026: Eligibility & Apply',
-  meta_description = 'HP ePASS is the Himachal Pradesh portal for post-matric scholarships across SC, ST, OBC and minority students. Check eligibility, documents and how to apply.'
+  meta_description = 'HP ePASS is the Himachal Pradesh portal for post-matric scholarships for SC, ST, OBC and minority students. Check eligibility, documents and how to apply.'
   WHERE slug = 'hp-hpepass';
 
 UPDATE scholarships SET
   meta_title = 'Rajasthan Post-Matric Scholarship 2026: Apply',
-  meta_description = 'Rajasthan post-matric scholarships for SC, ST, OBC, EBC, EWS and minority students via the SSO portal. Check eligibility, income limit and how to apply online.'
+  meta_description = 'Rajasthan post-matric scholarships for SC, ST, OBC, EBC, EWS and minority students via the SSO portal. Check eligibility, income limit and how to apply.'
   WHERE slug = 'rajasthan-sje';
 
 UPDATE scholarships SET
   meta_title = 'Sitaram Jindal Scholarship 2026: Eligibility & Apply',
-  meta_description = 'Sitaram Jindal Foundation gives a monthly scholarship of about Rs 500 to Rs 3,200 to students from class 11 to postgraduate. Check eligibility and how to apply.'
+  meta_description = 'Sitaram Jindal Foundation gives a monthly scholarship of about Rs 500 to Rs 3,200 to students from class 11 to postgraduate. Check eligibility and apply.'
   WHERE slug = 'sitaram-jindal';
 
 UPDATE scholarships SET
@@ -660,19 +662,19 @@ UPDATE scholarships SET
 
 UPDATE scholarships SET
   meta_title = 'Jnanabhumi Scholarship AP 2026: Eligibility & Apply',
-  meta_description = 'AP Jnanabhumi (Vidya Deevena) gives fee reimbursement and maintenance scholarships to Andhra Pradesh students. Check eligibility, documents and how to apply.'
+  meta_description = 'AP Jnanabhumi (Vidya Deevena) gives fee reimbursement and maintenance scholarships to Andhra Pradesh students. Check eligibility and how to apply.'
   WHERE slug = 'ap-jnanabhumi';
 
 
 -- Next-tier scholarship SEO metadata (idempotent; impressions >= ~30 in GSC 90d).
 UPDATE scholarships SET
   meta_title = 'MahaDBT Scholarship 2026: Maharashtra Post-Matric',
-  meta_description = 'MahaDBT is the Maharashtra single-window portal for post-matric scholarships across SC, ST, OBC, EWS and minority schemes. Check eligibility and how to apply.'
+  meta_description = 'MahaDBT is the Maharashtra single-window portal for post-matric scholarships for SC, ST, OBC, EWS and minority students. Check eligibility and apply.'
   WHERE slug = 'mahadbt-maharashtra';
 
 UPDATE scholarships SET
   meta_title = 'Glow and Lovely Scholarship 2026: Apply Online',
-  meta_description = 'Glow and Lovely Careers gives financial help to women aged 15 to 30 in undergraduate or postgraduate study, up to about Rs 50,000. Check eligibility and apply.'
+  meta_description = 'Glow and Lovely Careers gives women aged 15 to 30 in undergraduate or postgraduate study up to about Rs 50,000. Check eligibility and how to apply.'
   WHERE slug = 'glow-lovely-careers';
 
 UPDATE scholarships SET
@@ -697,7 +699,7 @@ UPDATE scholarships SET
 
 UPDATE scholarships SET
   meta_title = 'Reliance Foundation UG Scholarship 2026: Apply',
-  meta_description = 'Reliance Foundation gives up to about Rs 2 lakh with mentoring to first-year undergraduate students with family income under Rs 15 lakh. Check how to apply.'
+  meta_description = 'Reliance Foundation gives up to about Rs 2 lakh with mentoring to first-year undergraduates with family income under Rs 15 lakh. Check how to apply.'
   WHERE slug = 'reliance-foundation-ug';
 
 UPDATE scholarships SET
@@ -811,5 +813,5 @@ UPDATE scholarships SET
 
 UPDATE scholarships SET
   meta_title = 'Colgate Keep India Smiling Scholarship 2026',
-  meta_description = 'Colgate Keep India Smiling gives financial support to meritorious students from low-income families in STEM, engineering and dental courses. Check how to apply.'
+  meta_description = 'Colgate Keep India Smiling supports meritorious students from low-income families in STEM, engineering and dental courses. Check how to apply.'
   WHERE slug = 'colgate-keep-india-smiling';

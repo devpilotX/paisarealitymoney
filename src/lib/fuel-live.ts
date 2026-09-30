@@ -22,6 +22,7 @@ export const FUEL_LIVE_SOURCE = 'OMC daily published rates via CarDekho';
 /** CarDekho state names that differ from our STATE_FUEL keys. */
 const STATE_NAME_MAP: Record<string, string> = {
   'Jammu and Kashmir': 'Jammu & Kashmir',
+  'Jammu And Kashmir': 'Jammu & Kashmir',
   Pondicherry: 'Puducherry',
 };
 

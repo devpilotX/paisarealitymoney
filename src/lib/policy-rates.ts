@@ -8,7 +8,8 @@
  *
  * Verified 3 July 2026 against the 30 June 2026 DEA notification (unchanged
  * for the 9th straight quarter), the June 2026 MPC outcome, and the EPFO
- * circular of 1 July 2026.
+ * circular of 1 July 2026. RBI block re-checked 30 September 2026 against the
+ * 5 August 2026 MPC outcome (all rates unchanged).
  */
 
 export const SMALL_SAVINGS_QUARTER = 'July to September 2026 (Q2 FY 2026-27)';
@@ -117,8 +118,9 @@ export interface PolicyRate {
   note: string;
 }
 
-export const RBI_RATES_AS_OF = '2026-06-06';
-export const RBI_NEXT_MPC = '3 to 5 August 2026';
+// 3 to 5 August 2026 MPC held every rate and kept the neutral stance.
+export const RBI_RATES_AS_OF = '2026-08-05';
+export const RBI_NEXT_MPC = '5 to 7 October 2026';
 
 export const RBI_RATES: PolicyRate[] = [
   { name: 'Repo rate', ratePct: 5.25, note: 'The rate banks borrow at from RBI; home loan EBLR rates track this' },

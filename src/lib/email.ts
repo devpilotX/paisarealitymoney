@@ -1,13 +1,47 @@
-import { Resend } from 'resend';
+import nodemailer, { type Transporter } from 'nodemailer';
 
-const FROM_EMAIL = 'Paisa Reality <noreply@paisareality.com>';
+const SMTP_USER = process.env.SMTP_USER || '';
+const FROM_EMAIL = process.env.MAIL_FROM || `Paisa Reality <${SMTP_USER || 'noreply@paisareality.com'}>`;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'connect@paisareality.com';
 const APP_URL = (process.env.APP_URL || 'http://localhost:3000').replace(/\/$/, '');
 
-function getResendClient(): Resend {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) throw new Error('RESEND_API_KEY is not configured.');
-  return new Resend(apiKey);
+let transporter: Transporter | null = null;
+
+/** One pooled SMTP connection per server process (Hostinger mail by default). */
+function getTransport(): Transporter {
+  if (transporter) return transporter;
+  const host = process.env.SMTP_HOST;
+  const pass = process.env.SMTP_PASSWORD;
+  if (!host || !SMTP_USER || !pass) throw new Error('SMTP_HOST, SMTP_USER and SMTP_PASSWORD must be set.');
+  const port = Number.parseInt(process.env.SMTP_PORT || '465', 10);
+  transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure: port === 465, // 465 is implicit TLS; 587 upgrades with STARTTLS
+    auth: { user: SMTP_USER, pass },
+    pool: true,
+    maxConnections: 2,
+    connectionTimeout: 15_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 30_000,
+  });
+  return transporter;
+}
+
+/** Plain-text alternative, so the message is not HTML-only (spam filters score that). */
+function htmlToText(html: string): string {
+  return html
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<a [^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi, '$2 ($1)')
+    .replace(/<(br|\/p|\/h[1-6]|\/li|\/tr|\/div)[^>]*>/gi, '\n')
+    .replace(/<li[^>]*>/gi, '- ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;|&zwnj;/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;|&rsquo;/g, "'")
+    .replace(/&middot;/g, '·').replace(/&mdash;/g, '-').replace(/&#8377;/g, '₹')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n\s*\n\s*\n+/g, '\n\n')
+    .trim();
 }
 
 function emailLayout(content: string, preheader = ''): string {
@@ -32,7 +66,7 @@ ${preheaderHtml}
 ${footLink('/gold-rate', 'Gold Rate')} &nbsp;&middot;&nbsp; ${footLink('/interest-rates', 'Interest Rates')} &nbsp;&middot;&nbsp; ${footLink('/calculators', 'Calculators')} &nbsp;&middot;&nbsp; ${footLink('/schemes', 'Schemes')} &nbsp;&middot;&nbsp; ${footLink('/score', 'Health Score')}
 </p>
 <p style="font-size:12px;color:#6b7280;margin:0;">Paisa Reality &middot; <a href="${APP_URL}" style="color:#6b7280;">paisareality.com</a></p>
-<p style="font-size:11px;color:#9ca3af;margin:6px 0 0;line-height:1.5;">Free financial information for India. Not investment advice &mdash; verify with official sources before acting.<br>You received this email because of your account or activity on our website.</p>
+<p style="font-size:11px;color:#9ca3af;margin:6px 0 0;line-height:1.5;">Free financial information for India. Not investment advice. Verify with official sources before acting.<br>You received this email because of your account or activity on our website.</p>
 </td></tr>
 </table>
 </td></tr></table>
@@ -49,18 +83,21 @@ export function escapeHtml(text: string): string {
 
 export function getAppUrl(): string { return APP_URL; }
 
-export async function sendEmail({ to, subject, html, replyTo }: { to: string; subject: string; html: string; replyTo?: string }): Promise<{ ok: boolean; id?: string; error?: string }> {
+export async function sendEmail({ to, subject, html, replyTo, headers }: { to: string; subject: string; html: string; replyTo?: string; headers?: Record<string, string> }): Promise<{ ok: boolean; id?: string; error?: string }> {
   try {
-    const resend = getResendClient();
-    const res = await resend.emails.send({
+    const info = await getTransport().sendMail({
       from: FROM_EMAIL,
-      to: [to],
+      to,
       subject,
       html,
-      ...(replyTo ? { reply_to: replyTo } : {}),
+      text: htmlToText(html),
+      ...(replyTo ? { replyTo } : {}),
+      ...(headers ? { headers } : {}),
     });
-    if (res.error) { console.error('Email error:', res.error); return { ok: false, error: res.error.message }; }
-    return { ok: true, id: res.data?.id };
+    if (info.rejected && info.rejected.length > 0) {
+      return { ok: false, error: `Rejected by server: ${info.rejected.join(', ')}` };
+    }
+    return { ok: true, id: info.messageId };
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
     console.error('Email send failed:', msg);
@@ -187,6 +224,14 @@ export async function sendAdminAlert(subject: string, lines: string[]): Promise<
   `);
   const r = await sendEmail({ to: ADMIN_EMAIL, subject: `[Paisa Reality Alert] ${subject}`, html });
   return r.ok;
+}
+
+/** List-Unsubscribe headers for newsletter mail. Gmail and Yahoo require one-click unsubscribe for bulk senders. */
+export function unsubscribeHeaders(unsubscribeToken: string): Record<string, string> {
+  return {
+    'List-Unsubscribe': `<${APP_URL}/api/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}>, <mailto:contact@paisareality.com?subject=unsubscribe>`,
+    'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+  };
 }
 
 /** Wrap HTML body with email layout + unsubscribe footer for newsletter broadcasts */

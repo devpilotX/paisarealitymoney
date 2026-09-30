@@ -5,15 +5,27 @@ import AdBanner from '@/components/AdBanner';
 import ScholarshipReminderForm from '@/components/ScholarshipReminderForm';
 import { pageMetadata, buildRecordTitle, buildRecordDescription } from '@/lib/seo';
 import FAQ from '@/components/FAQ';
-import { faqSchema } from '@/lib/schema';
 import { deadlineAnswer, deadlineQuestion, hasDeadline } from '@/lib/deadlines';
 import { formatNumber } from '@/lib/constants';
 import { getScholarshipBySlug, type Scholarship } from '@/lib/scholarships';
-import { breadcrumbSchema, scholarshipSchema } from '@/lib/schema';
+import { scholarshipSchema } from '@/lib/schema';
+import { query } from '@/lib/db';
+import type { QueryResultRow } from 'pg';
 
-export const dynamic = 'force-dynamic';
+// Cached and regenerated hourly like the scheme pages, so crawlers get a fast static response.
+export const revalidate = 3600;
 
 interface RouteParams { params: Promise<{ slug: string }>; }
+
+/** Pre-render every active scholarship at build time, like the scheme pages. */
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+  try {
+    const rows = await query<QueryResultRow & { slug: string }>('SELECT slug FROM scholarships WHERE active = TRUE ORDER BY slug');
+    return rows.map((row) => ({ slug: row.slug }));
+  } catch {
+    return [];
+  }
+}
 
 function formatDeadline(iso: string): string {
   const d = new Date(`${iso}T00:00:00`);
@@ -103,8 +115,10 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
     },
   ];
 
+  // BreadcrumbList and FAQPage are emitted by the <Breadcrumb> and <FAQ>
+  // components themselves; adding them here too produced two of each per page,
+  // which Search Console reports as a duplicate FAQPage error.
   const jsonLd = [
-    breadcrumbSchema([{ label: 'Scholarships', href: '/scholarships' }, { label: s.name }]),
     scholarshipSchema({
       name: s.name,
       description: ldDescription,
@@ -113,7 +127,6 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
       amount: s.amountMax,
       officialUrl: s.officialUrl,
     }),
-    faqSchema(faqs),
   ];
 
   return (

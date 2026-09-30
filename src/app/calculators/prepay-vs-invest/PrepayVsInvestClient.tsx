@@ -45,10 +45,10 @@ const SLAB_OPTIONS = [
 ];
 
 function riskLabel(g: number): string {
-  if (g <= 0) return 'None. maximise expected ₹';
+  if (g <= 0) return 'None, maximise expected ₹';
   if (g <= 2) return 'Low';
   if (g <= 5) return 'Moderate';
-  return 'High. protect the downside';
+  return 'High, protect the downside';
 }
 
 export default function PrepayVsInvestClient(): React.ReactElement {
@@ -86,12 +86,12 @@ export default function PrepayVsInvestClient(): React.ReactElement {
     if (!analysis) return { title: '', tone: '', body: '' };
     const conf = Math.round(analysis.probInvestBeatsPrepay * 100);
     if (analysis.verdict === 'invest') {
-      return { title: `Invest the surplus. ${conf}% chance of higher net worth`, tone: 'bg-green-50 border-green-200', body: `On a risk-adjusted basis, investing your ₹${formatCompactINR(inputs.monthlySurplus)}/month beats prepaying. Investing finishes ahead in ${conf}% of 10,000 simulated futures.` };
+      return { title: `Invest the surplus, ${conf}% chance of higher net worth`, tone: 'bg-green-50 border-green-200', body: `On a risk-adjusted basis, investing your ₹${formatCompactINR(inputs.monthlySurplus)}/month beats prepaying. Investing finishes ahead in ${conf}% of 10,000 simulated futures.` };
     }
     if (analysis.verdict === 'prepay') {
-      return { title: `Prepay your loan. the safer win`, tone: 'bg-brand-yellow-soft/30 border-brand-yellow/50', body: `Your guaranteed after-tax loan rate of ${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}% is hard to beat for the risk. Investing only wins in ${conf}% of scenarios. not enough to justify the risk at your risk-aversion setting.` };
+      return { title: `Prepay your loan, the safer win`, tone: 'bg-brand-yellow-soft/30 border-brand-yellow/50', body: `Your guaranteed after-tax loan rate of ${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}% is hard to beat for the risk. Investing only wins in ${conf}% of scenarios, not enough to justify the risk at your risk-aversion setting.` };
     }
-    return { title: `Split it. invest ${Math.round(f * 100)}%, prepay ${Math.round((1 - f) * 100)}%`, tone: 'bg-primary-50 border-primary-100', body: `A hybrid maximises your risk-adjusted (certainty-equivalent) wealth: invest about ₹${formatCompactINR(investMonthly)}/month and prepay ₹${formatCompactINR(prepayMonthly)}/month. Investing alone wins in ${conf}% of futures.` };
+    return { title: `Split it: invest ${Math.round(f * 100)}%, prepay ${Math.round((1 - f) * 100)}%`, tone: 'bg-primary-50 border-primary-100', body: `A hybrid maximises your risk-adjusted (certainty-equivalent) wealth: invest about ₹${formatCompactINR(investMonthly)}/month and prepay ₹${formatCompactINR(prepayMonthly)}/month. Investing alone wins in ${conf}% of futures.` };
   };
 
   const v = verdictText();
@@ -128,7 +128,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
           <CalcSelect id="claim" label="Claim Section 24(b) interest deduction? (self-occupied)" value={inputs.claimSec24b ? 'yes' : 'no'} onChange={(x) => set('claimSec24b', x === 'yes')} options={[{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }]} />
         )}
 
-        <CalcSlider id="risk" label="Your risk aversion" value={inputs.riskAversion} onChange={(x) => set('riskAversion', x)} min={0} max={10} step={1} displayValue={`${inputs.riskAversion}. ${riskLabel(inputs.riskAversion)}`} />
+        <CalcSlider id="risk" label="Your risk aversion" value={inputs.riskAversion} onChange={(x) => set('riskAversion', x)} min={0} max={10} step={1} displayValue={`${inputs.riskAversion}: ${riskLabel(inputs.riskAversion)}`} />
         <CalcSlider id="penalty" label="Prepayment penalty (usually 0% on floating loans)" value={inputs.prepaymentPenaltyPct} onChange={(x) => set('prepaymentPenaltyPct', x)} min={0} max={5} step={0.5} suffix="%" />
       </Calculator>
 
@@ -156,8 +156,8 @@ export default function PrepayVsInvestClient(): React.ReactElement {
                 <SuccessGauge probability={analysis.probInvestBeatsPrepay} target={0.5} label="Chance investing beats prepaying" />
               </div>
               <div className="space-y-3">
-                <StatCard label="Prepay. guaranteed value" value={formatCompactINR(analysis.prepayValue)} sub={`Risk-free at ${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}% effective after-tax loan rate`} />
-                <StatCard label="Invest. expected value" value={formatCompactINR(analysis.investDistribution.mean)} sub={`Median ${formatCompactINR(analysis.investDistribution.p50)} · 10th to 90th: ${formatCompactINR(analysis.investDistribution.p10)} to ${formatCompactINR(analysis.investDistribution.p90)}`} tone="good" />
+                <StatCard label="Prepay: guaranteed value" value={formatCompactINR(analysis.prepayValue)} sub={`Risk-free at ${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}% effective after-tax loan rate`} />
+                <StatCard label="Invest: expected value" value={formatCompactINR(analysis.investDistribution.mean)} sub={`Median ${formatCompactINR(analysis.investDistribution.p50)} · 10th to 90th: ${formatCompactINR(analysis.investDistribution.p10)} to ${formatCompactINR(analysis.investDistribution.p90)}`} tone="good" />
               </div>
             </div>
 
@@ -215,7 +215,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
                       <>
                         <Row label="Avg. annual Section 24(b) tax saved" value={formatINR(Math.round(analysis.effectiveRate.avgAnnualShield))} />
                         <Row label="Effective after-tax loan rate" value={`${analysis.effectiveRate.effectiveAfterTaxRatePct.toFixed(2)}%`} strong />
-                        <p className="text-muted-2 text-xs mt-1">The shield only reduces the rate for interest under the ₹2L cap. Prepaying also gives up some of this deduction. that loss is netted off the interest saved.</p>
+                        <p className="text-muted-2 text-xs mt-1">The shield only reduces the rate for interest under the ₹2L cap. Prepaying also gives up some of this deduction; that loss is netted off the interest saved.</p>
                       </>
                     ) : (
                       <p className="text-muted-2 text-xs mt-1">No Section 24(b) shield in the new regime (or not claimed), so the effective rate equals the nominal {analysis.effectiveRate.nominalRatePct.toFixed(2)}%.</p>
@@ -254,7 +254,7 @@ export default function PrepayVsInvestClient(): React.ReactElement {
 
             <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-xs text-yellow-800">
-                <strong>Educational estimate, not financial, tax or investment advice.</strong> Outcomes are simulated scenarios based on your assumptions, not predictions or a recommendation to buy or sell any security. Market returns are uncertain and past performance does not guarantee future results. Tax rules are modelled for FY 2025-26 and simplified. verify Section 24(b), capital-gains and surcharge specifics with a qualified professional before acting.
+                <strong>Educational estimate, not financial, tax or investment advice.</strong> Outcomes are simulated scenarios based on your assumptions, not predictions or a recommendation to buy or sell any security. Market returns are uncertain and past performance does not guarantee future results. Tax rules are modelled for FY 2026-27 and simplified; verify Section 24(b), capital-gains and surcharge specifics with a qualified professional before acting.
               </p>
             </div>
           </>

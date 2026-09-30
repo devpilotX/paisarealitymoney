@@ -44,7 +44,7 @@ interface PopularScheme {
 }
 
 const POPULAR_SCHEMES: PopularScheme[] = [
-  { name: 'PM Awas Yojana', href: '/schemes/pm-awas-yojana', benefit: 'Up to 2.67 lakh subsidy on your home loan.' },
+  { name: 'PM Awas Yojana', href: '/schemes/pm-awas-yojana', benefit: 'Up to 1.80 lakh interest subsidy on your home loan.' },
   { name: 'Ayushman Bharat', href: '/schemes/ayushman-bharat', benefit: 'Cashless hospital cover up to 5 lakh a family.' },
   { name: 'PM Kisan Samman Nidhi', href: '/schemes/pm-kisan', benefit: 'Income support of 6,000 a year for farmers.' },
   { name: 'Sukanya Samriddhi', href: '/schemes/sukanya-samriddhi', benefit: 'High interest savings to build a fund for your daughter.' },

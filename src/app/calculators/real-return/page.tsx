@@ -23,12 +23,12 @@ const FAQS = [
   {
     question: 'What is the "real return" of an investment offer?',
     answer:
-      'It is the single annual growth rate (the internal rate of return, or XIRR) that connects everything you pay with everything you receive, respecting the timing of each payment. Agents quote totals like "pay 6 lakh, get 14 lakh" because totals sound impressive. The real return converts that into a comparable annual percentage — and a plan that returns 1.9x your money over 20 years is earning less than 5% a year, which is below inflation.',
+      'It is the single annual growth rate (the internal rate of return, or XIRR) that connects everything you pay with everything you receive, respecting the timing of each payment. Agents quote totals like "pay 6 lakh, get 14 lakh" because totals sound impressive. The real return converts that into a comparable annual percentage, and a plan that returns 1.9x your money over 20 years is earning less than 5% a year, which is below inflation.',
   },
   {
     question: 'Why do money-back and endowment policies look better than they are?',
     answer:
-      'Three reasons. First, the pitch quotes the total payout, not the annual rate. Second, the payouts arrive far in the future, when rupees are worth less — 14 lakh in 2046 does not buy what 14 lakh buys today. Third, part of your premium pays for insurance cover and commissions rather than earning returns. None of this is illegal, but you deserve to see the actual annual rate before signing.',
+      'Three reasons. First, the pitch quotes the total payout, not the annual rate. Second, the payouts arrive far in the future, when rupees are worth less: 14 lakh in 2046 does not buy what 14 lakh buys today. Third, part of your premium pays for insurance cover and commissions rather than earning returns. None of this is illegal, but you deserve to see the actual annual rate before signing.',
   },
   {
     question: 'Is this tool saying insurance is bad?',
@@ -53,7 +53,7 @@ const FAQS = [
   {
     question: 'What is XIRR and why should I trust it over the agent\'s numbers?',
     answer:
-      'XIRR is the standard method used by mutual funds, banks, and auditors worldwide to measure the return of irregular cash flows. It is pure arithmetic — the same formula Excel uses. We simply apply it to the offer as pitched to you. If the agent\'s numbers are right, the XIRR is right; the difference is that XIRR cannot be dressed up.',
+      'XIRR is the standard method used by mutual funds, banks, and auditors worldwide to measure the return of irregular cash flows. It is pure arithmetic, the same formula Excel uses. We simply apply it to the offer as pitched to you. If the agent\'s numbers are right, the XIRR is right; the difference is that XIRR cannot be dressed up.',
   },
 ];
 
@@ -66,14 +66,14 @@ const jsonLd = {
   operatingSystem: 'Any (web browser)',
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
   description:
-    'A free educational tool that computes the true annual return (XIRR) of any investment offer — endowment policies, money-back plans, or lump-sum "double your money" pitches — and compares it with savings, FD, PPF, inflation, and index funds.',
+    'A free educational tool that computes the true annual return (XIRR) of any investment offer (endowment policies, money-back plans, or lump-sum "double your money" pitches) and compares it with savings, FD, PPF, inflation, and index funds.',
   featureList: [
     'True annual return (XIRR) of any offer',
     'Endowment, money-back, and lump-sum pitch shapes',
     'Comparison with savings, FD, PPF, inflation, and Nifty benchmarks',
     'Inflation-adjusted buying power of the payout',
     'Mis-selling and fraud red-flag education',
-    'Runs fully in your browser — details never leave your device',
+    'Runs fully in your browser; details never leave your device',
   ],
 };
 
@@ -97,7 +97,7 @@ export default function RealReturnPage(): React.ReactElement {
       <h1 className="heading-1 mb-2">Real Return Checker</h1>
       <LastReviewed date="2026-07-02" className="mb-3" />
       <p className="text-body mb-6 max-w-3xl">
-        &quot;Pay ₹50,000 a year, get ₹14 lakh!&quot; sounds amazing — until you learn it is a 4.8% annual return,
+        &quot;Pay ₹50,000 a year, get ₹14 lakh!&quot; sounds amazing, until you learn it is a 4.8% annual return,
         less than inflation. Type in any offer exactly as it was pitched to you and see the one number the pitch
         never mentions.
       </p>
@@ -111,7 +111,7 @@ export default function RealReturnPage(): React.ReactElement {
       <article className="prose max-w-3xl my-10">
         <h2>The trick behind every mis-sold policy</h2>
         <p>
-          India&apos;s most widely sold savings products — traditional endowment and money-back insurance plans —
+          India&apos;s most widely sold savings products, traditional endowment and money-back insurance plans,
           are pitched with totals: <em>&quot;invest 6 lakh in total, receive 14 lakh!&quot;</em>. Totals feel large
           because the money comes back decades later. The honest measure is the <strong>annual rate</strong> that
           links your payments to your payouts, respecting when each one happens. That rate is called the internal
@@ -182,7 +182,7 @@ export default function RealReturnPage(): React.ReactElement {
         <p>
           Commissions on traditional insurance plans can exceed a quarter of your first-year premium, which funds
           an enormous sales force with a strong incentive to keep the conversation on totals, &quot;guaranteed
-          additions&quot;, and emotional security — anything but the annual rate. Regulators require a benefit
+          additions&quot;, and emotional security, anything but the annual rate. Regulators require a benefit
           illustration, but it arrives as a dense table at signing time. This tool exists so you can check the
           math <em>before</em> that moment, in ten seconds, from a WhatsApp forward if needed.
         </p>
@@ -194,7 +194,7 @@ export default function RealReturnPage(): React.ReactElement {
           seeing the guaranteed column of the benefit illustration, not the &quot;projected at 8%&quot; column.
           <strong> 3. Who regulates the entity making the promise?</strong> Banks (RBI), mutual funds and brokers
           (SEBI), insurers (IRDAI). A &quot;guaranteed 20% scheme&quot; from an unregulated outfit is not an
-          investment — it is a queue to be repaid with the next victim&apos;s money, until the queue stops.
+          investment; it is a queue to be repaid with the next victim&apos;s money, until the queue stops.
         </p>
 
         <h2>If you already own a low-return policy</h2>
@@ -203,7 +203,7 @@ export default function RealReturnPage(): React.ReactElement {
           policy is old, its remaining years may effectively earn a better rate than its lifetime average. Options
           people discuss with their advisers include making the policy paid-up (stop paying, keep reduced
           benefits), surrendering after the penalty window shrinks, or simply continuing while directing new money
-          elsewhere. The right move depends on your policy&apos;s exact numbers — take the guaranteed surrender and
+          elsewhere. The right move depends on your policy&apos;s exact numbers: take the guaranteed surrender and
           paid-up values from the insurer and run them through this tool to compare. For personal decisions,
           consult a fee-only, SEBI-registered adviser.
         </p>

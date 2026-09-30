@@ -89,10 +89,10 @@ export default function BudgetOptimizerClient(): React.ReactElement {
   return (
     <div>
       <div className="rounded-lg bg-primary-50 border border-primary-100 px-4 py-3 mb-6 text-sm text-primary-800">
-        <strong>Free &amp; private.</strong> No login, no ads in your data. every number stays in your browser.
+        <strong>Free &amp; private.</strong> No login, no ads in your data; every number stays in your browser.
       </div>
 
-      <Calculator title="Your income & profile" description="We adapt the 50/30/20 rule to your income, city and job stability. then find your surplus.">
+      <Calculator title="Your income & profile" description="We adapt the 50/30/20 rule to your income, city and job stability, then find your surplus.">
         <CalcSelect id="mode" label="Income input" value={useCTC ? 'ctc' : 'income'} onChange={(v) => setUseCTC(v === 'ctc')} options={[
           { value: 'income', label: 'Enter monthly take-home' },
           { value: 'ctc', label: 'Enter annual CTC (we estimate take-home)' },
@@ -112,7 +112,7 @@ export default function BudgetOptimizerClient(): React.ReactElement {
           { value: 'normal', label: 'Normal' },
           { value: 'unstable', label: 'Variable / startup / freelance' },
         ]} />
-        <CalcSelect id="irregular" label="Is your income irregular?" value={inputs.irregularIncome ? 'yes' : 'no'} onChange={(v) => set('irregularIncome', v === 'yes')} options={[{ value: 'no', label: 'No, steady' }, { value: 'yes', label: 'Yes. budget conservatively' }]} />
+        <CalcSelect id="irregular" label="Is your income irregular?" value={inputs.irregularIncome ? 'yes' : 'no'} onChange={(v) => set('irregularIncome', v === 'yes')} options={[{ value: 'no', label: 'No, steady' }, { value: 'yes', label: 'Yes, budget conservatively' }]} />
         <NumField label="Emergency fund saved so far" value={inputs.emergencyFundCurrent} onChange={(v) => set('emergencyFundCurrent', v)} step={10000} />
       </Calculator>
 
@@ -209,7 +209,7 @@ export default function BudgetOptimizerClient(): React.ReactElement {
         <CalcSlider id="trim" label="Cut all 'wants' spending by" value={trimWantsPct} onChange={setTrimWantsPct} min={0} max={50} step={5} suffix="%" />
         {whatIf && (
           <p className="text-sm text-ink mt-2">
-            Cutting wants by {trimWantsPct}% raises your monthly surplus from <strong>{formatCompactINR(analysis.monthlySurplus)}</strong> to <strong className="text-green-700">{formatCompactINR(whatIf.monthlySurplus)}</strong>. a savings rate of <strong>{Math.round(whatIf.currentSavingsRate * 100)}%</strong>{analysis.emergencyFund.gap > 0 && whatIf.emergencyFund.monthsToFill !== Infinity ? <>, filling your emergency fund in ~{whatIf.emergencyFund.monthsToFill} months (was {analysis.emergencyFund.monthsToFill === Infinity ? 'never' : `${analysis.emergencyFund.monthsToFill}`})</> : null}.
+            Cutting wants by {trimWantsPct}% raises your monthly surplus from <strong>{formatCompactINR(analysis.monthlySurplus)}</strong> to <strong className="text-green-700">{formatCompactINR(whatIf.monthlySurplus)}</strong>, a savings rate of <strong>{Math.round(whatIf.currentSavingsRate * 100)}%</strong>{analysis.emergencyFund.gap > 0 && whatIf.emergencyFund.monthsToFill !== Infinity ? <>, filling your emergency fund in ~{whatIf.emergencyFund.monthsToFill} months (was {analysis.emergencyFund.monthsToFill === Infinity ? 'never' : `${analysis.emergencyFund.monthsToFill}`})</> : null}.
           </p>
         )}
       </div>
@@ -243,7 +243,7 @@ export default function BudgetOptimizerClient(): React.ReactElement {
 
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-xs text-yellow-800">
-          <strong>Educational estimate, not financial advice.</strong> Benchmarks are general guidelines, not rules. your ideal split depends on your circumstances. The CTC→take-home estimate is approximate (assumes EPF on 40% basic and standard tax). Verify with a qualified advisor before major financial decisions.
+          <strong>Educational estimate, not financial advice.</strong> Benchmarks are general guidelines, not rules; your ideal split depends on your circumstances. The CTC→take-home estimate is approximate (assumes EPF on 40% basic and standard tax). Verify with a qualified advisor before major financial decisions.
         </p>
       </div>
     </div>

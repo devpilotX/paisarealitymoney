@@ -55,13 +55,13 @@ export default function RealReturnClient(): React.ReactElement {
   return (
     <div>
       <div className="rounded-lg bg-yellow-50 border border-yellow-300 px-4 py-3 mb-6 text-sm text-yellow-900">
-        <strong>Educational only — not advice.</strong> Type in any offer exactly as it was pitched to you. We compute
+        <strong>Educational only, not advice.</strong> Type in any offer exactly as it was pitched to you. We compute
         the one number the pitch never mentions: the real annual return. Your inputs stay in your browser.
       </div>
 
       <Calculator
         title="Type in the offer you were pitched"
-        description='Example: "Pay Rs 50,000 a year for 15 years, get Rs 14 lakh at year 20." That is the default below — change it to your offer.'
+        description='Example: "Pay Rs 50,000 a year for 15 years, get Rs 14 lakh at year 20." That is the default below; change it to your offer.'
       >
         <CalcSelect
           id="mode"

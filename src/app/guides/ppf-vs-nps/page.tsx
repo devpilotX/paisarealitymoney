@@ -29,6 +29,8 @@ export default function Page(): React.ReactElement {
     headline: 'PPF vs NPS: Which Is Better for Retirement',
     description: 'A simple comparison of PPF and NPS for long term and retirement savings in India.',
     path: '/guides/ppf-vs-nps',
+    datePublished: '2026-06-30',
+    dateModified: '2026-06-30',
   });
   return (
     <div className="container-main py-6">

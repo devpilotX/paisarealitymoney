@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { scrapeGoldPrices, scrapeSilverPrices, scrapeFuelPrices, scrapeLpgPrices } from '@/lib/scraper-prices';
 import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit';
+import { secretMatches } from '@/lib/secret-compare';
 
 const VALID_TYPES = ['gold', 'silver', 'fuel', 'lpg', 'all'] as const;
 type PriceType = typeof VALID_TYPES[number];
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const type = searchParams.get('type') as PriceType | null;
 
   const secretKey = process.env.SCRAPER_SECRET_KEY;
-  if (!secretKey || key !== secretKey) {
+  if (!secretMatches(key, secretKey)) {
     return NextResponse.json({ success: false, error: 'Invalid or missing API key.' }, { status: 401 });
   }
 

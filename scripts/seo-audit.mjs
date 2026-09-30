@@ -15,7 +15,12 @@
  */
 import fs from 'fs';
 
-const ORIGIN = 'https://paisareality.com';
+// Canonical origin written in the sitemap. --origin points the fetches at another
+// server (for example a local next start) while keeping the canonical checks honest.
+const CANONICAL = 'https://paisareality.com';
+const originArg = process.argv.indexOf('--origin');
+const ORIGIN = originArg > -1 ? process.argv[originArg + 1].replace(/\/$/, '') : CANONICAL;
+const toFetch = (u) => (ORIGIN === CANONICAL ? u : u.replace(CANONICAL, ORIGIN));
 const CONCURRENCY = 6;
 const TITLE_MAX = 60;
 const DESC_MIN = 70;
@@ -49,7 +54,7 @@ let urls = [...sm.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim())
 // Nested sitemap index support.
 if (urls.length && urls.every((u) => u.endsWith('.xml'))) {
   const nested = [];
-  for (const s of urls) { const r = await get(s); nested.push(...[...r.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim())); }
+  for (const s of urls) { const r = await get(toFetch(s)); nested.push(...[...r.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim())); }
   urls = nested;
 }
 console.log(`sitemap URLs: ${urls.length}`);
@@ -60,7 +65,7 @@ let done = 0;
 async function worker(queue) {
   while (queue.length) {
     const url = queue.shift();
-    const r = await get(url);
+    const r = await get(toFetch(url));
     const b = r.body;
     const title = decode(pick(/<title[^>]*>([\s\S]*?)<\/title>/i, b));
     const desc = decode(pick(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i, b)
@@ -91,11 +96,11 @@ await Promise.all(Array.from({ length: CONCURRENCY }, () => worker(queue)));
 fs.writeFileSync('tmp-audit-report.json', JSON.stringify(rows, null, 1));
 
 const bad = (f) => rows.filter(f);
-const pathOf = (u) => u.replace(ORIGIN, '') || '/';
+const pathOf = (u) => u.replace(CANONICAL, '').replace(ORIGIN, '') || '/';
 const summary = {
   total: rows.length,
   nonOk: bad((r) => r.status !== 200).map((r) => `${r.status} ${pathOf(r.url)}`),
-  redirected: bad((r) => r.finalUrl.replace(/\/$/, '') !== r.url.replace(/\/$/, '')).map((r) => `${pathOf(r.url)} -> ${r.finalUrl}`),
+  redirected: bad((r) => r.finalUrl.replace(/\/$/, '') !== toFetch(r.url).replace(/\/$/, '')).map((r) => `${pathOf(r.url)} -> ${r.finalUrl}`),
   noTitle: bad((r) => !r.title).map((r) => pathOf(r.url)),
   titleOver: bad((r) => r.titleLen > TITLE_MAX).length,
   titleOverWorst: bad((r) => r.titleLen > TITLE_MAX).sort((a, b) => b.titleLen - a.titleLen).slice(0, 15).map((r) => `${r.titleLen} ${pathOf(r.url)} :: ${r.title}`),

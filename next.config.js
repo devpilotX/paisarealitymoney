@@ -23,9 +23,14 @@ const nextConfig = {
     ]
   },
   async redirects() {
+    // Duplicate scheme slugs point at their canonical record. See src/lib/scheme-redirects.json.
+    const schemeAliases = Object.entries(require('./src/lib/scheme-redirects.json'))
+      .filter(([from]) => !from.startsWith('_'))
+      .map(([from, to]) => ({ source: `/schemes/${from}`, destination: `/schemes/${to}`, statusCode: 301 }))
     return [
       { source: '/blog', destination: '/newsletter', statusCode: 301 },
       { source: '/blog/:slug', destination: '/newsletter/:slug', statusCode: 301 },
+      ...schemeAliases,
     ]
   },
 }

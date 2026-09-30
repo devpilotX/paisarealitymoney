@@ -48,7 +48,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   verification: {
-    google: 'UKt2p3p1YlGr_1Tk84QZ8UGMaIGeiPMArUEJqGCD0lU',
+    // The env var lets the token change without a code edit; the fallback keeps
+    // the existing Search Console property verified if it is left unset.
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'UKt2p3p1YlGr_1Tk84QZ8UGMaIGeiPMArUEJqGCD0lU',
   },
   robots: {
     index: true,
@@ -116,6 +118,16 @@ export default function RootLayout({
       'Paisa Reality offers a free Money Health Score, smart financial calculators, live gold, silver, petrol and diesel rates, government scheme matching, and bank rate comparison for India.',
     areaServed: { '@type': 'Country', name: 'India' },
     knowsLanguage: ['en-IN', 'hi-IN'],
+    email: 'connect@paisareality.com',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: 'connect@paisareality.com',
+      url: SITE_URL + '/contact',
+      areaServed: 'IN',
+      availableLanguage: ['English', 'Hindi'],
+    },
+    publishingPrinciples: SITE_URL + '/editorial-policy',
   };
 
   const websiteSchema = {
@@ -131,7 +143,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} data-scroll-behavior="smooth">
       <head>
-        <meta name="google-site-verification" content="UKt2p3p1YlGr_1Tk84QZ8UGMaIGeiPMArUEJqGCD0lU" />
         <meta name="google-adsense-account" content="ca-pub-6484525483464374" />
         <meta name="geo.region" content="IN" />
         <meta name="geo.country" content="India" />

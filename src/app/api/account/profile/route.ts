@@ -24,6 +24,6 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Server error' }, { status: 500 });
+    return NextResponse.json({ success: false, error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

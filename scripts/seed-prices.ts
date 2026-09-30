@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import { buildScriptPool } from './lib/script-pool';
 import { CITIES } from '../src/lib/cities';
 
 const GOLD_BASE_24K = 7850;
@@ -78,7 +78,11 @@ function round2(value: number): number {
 }
 
 function getDateString(date: Date): string {
-  return date.toISOString().split('T')[0] ?? '';
+  // Local calendar date. toISOString() is UTC and lands on "yesterday" before 05:30 IST.
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }
 
 function getDailyVariation(seed: number): number {
@@ -91,13 +95,26 @@ function getDaySeed(date: Date): number {
 }
 
 async function seedPrices(): Promise<void> {
-  const connection = await mysql.createConnection({
-    host: process.env.MYSQL_HOST || 'localhost',
-    port: parseInt(process.env.MYSQL_PORT || '3306', 10),
-    user: process.env.MYSQL_USER || 'root',
-    password: process.env.MYSQL_PASSWORD || '',
-    database: process.env.MYSQL_DATABASE || 'paisareality',
-  });
+  // These are SYNTHETIC fixture prices for local development, far from real
+  // market levels, and the upserts overwrite the last 30 days. Refuse to touch a
+  // database that already holds prices unless explicitly told to.
+  const guard = buildScriptPool();
+  try {
+    const existing = await guard.query('SELECT COUNT(*)::int AS n FROM gold_prices');
+    const n = (existing.rows[0] as { n: number }).n;
+    if (n > 0 && process.env.ALLOW_SYNTHETIC_PRICES !== '1') {
+      console.error(
+        `gold_prices already has ${n} rows. seed-prices writes synthetic dev data and would overwrite ` +
+        'real prices. Set ALLOW_SYNTHETIC_PRICES=1 to run it anyway (local databases only).',
+      );
+      process.exitCode = 1;
+      return;
+    }
+  } finally {
+    await guard.end();
+  }
+
+  const connection = buildScriptPool();
 
   const previousGold = new Map<string, number>();
   const previousSilver = new Map<string, number>();
@@ -107,7 +124,7 @@ async function seedPrices(): Promise<void> {
   const cityStates = Array.from(new Set(CITIES.map((city) => city.state)));
   let recordsProcessed = 0;
 
-  console.log(`Connected to MySQL. Seeding ${DAYS_TO_SEED} days of prices for ${CITIES.length} cities...`);
+  console.log(`Connected to PostgreSQL. Seeding ${DAYS_TO_SEED} days of prices for ${CITIES.length} cities...`);
 
   try {
     for (let dayOffset = DAYS_TO_SEED - 1; dayOffset >= 0; dayOffset--) {
@@ -134,10 +151,10 @@ async function seedPrices(): Promise<void> {
         const goldChangePercent = oldGold === undefined ? 0 : round2((goldChange / oldGold) * 100);
         previousGold.set(city.slug, gold24k);
 
-        await connection.execute(
+        await connection.query(
           `INSERT INTO gold_prices (city_id, price_date, gold_24k_per_gram, gold_22k_per_gram, gold_18k_per_gram, gold_24k_per_10gram, gold_22k_per_10gram, change_amount, change_percent)
-           SELECT id, ?, ?, ?, ?, ?, ?, ?, ? FROM cities WHERE slug = ?
-           ON DUPLICATE KEY UPDATE gold_24k_per_gram=VALUES(gold_24k_per_gram), gold_22k_per_gram=VALUES(gold_22k_per_gram), gold_18k_per_gram=VALUES(gold_18k_per_gram), gold_24k_per_10gram=VALUES(gold_24k_per_10gram), gold_22k_per_10gram=VALUES(gold_22k_per_10gram), change_amount=VALUES(change_amount), change_percent=VALUES(change_percent)`,
+           SELECT id, $1::date, $2::numeric, $3::numeric, $4::numeric, $5::numeric, $6::numeric, $7::numeric, $8::numeric FROM cities WHERE slug = $9
+           ON CONFLICT (city_id, price_date) DO UPDATE SET gold_24k_per_gram=EXCLUDED.gold_24k_per_gram, gold_22k_per_gram=EXCLUDED.gold_22k_per_gram, gold_18k_per_gram=EXCLUDED.gold_18k_per_gram, gold_24k_per_10gram=EXCLUDED.gold_24k_per_10gram, gold_22k_per_10gram=EXCLUDED.gold_22k_per_10gram, change_amount=EXCLUDED.change_amount, change_percent=EXCLUDED.change_percent`,
           [dateStr, gold24k, gold22k, gold18k, round2(gold24k * 10), round2(gold22k * 10), goldChange, goldChangePercent, city.slug]
         );
 
@@ -147,10 +164,10 @@ async function seedPrices(): Promise<void> {
         const silverChangePercent = oldSilver === undefined ? 0 : round2((silverChange / oldSilver) * 100);
         previousSilver.set(city.slug, silverPerGram);
 
-        await connection.execute(
+        await connection.query(
           `INSERT INTO silver_prices (city_id, price_date, silver_per_gram, silver_per_kg, change_amount, change_percent)
-           SELECT id, ?, ?, ?, ?, ? FROM cities WHERE slug = ?
-           ON DUPLICATE KEY UPDATE silver_per_gram=VALUES(silver_per_gram), silver_per_kg=VALUES(silver_per_kg), change_amount=VALUES(change_amount), change_percent=VALUES(change_percent)`,
+           SELECT id, $1::date, $2::numeric, $3::numeric, $4::numeric, $5::numeric FROM cities WHERE slug = $6
+           ON CONFLICT (city_id, price_date) DO UPDATE SET silver_per_gram=EXCLUDED.silver_per_gram, silver_per_kg=EXCLUDED.silver_per_kg, change_amount=EXCLUDED.change_amount, change_percent=EXCLUDED.change_percent`,
           [dateStr, silverPerGram, round2(silverPerGram * 1000), silverChange, silverChangePercent, city.slug]
         );
 
@@ -163,10 +180,10 @@ async function seedPrices(): Promise<void> {
         previousPetrol.set(city.slug, petrolPrice);
         previousDiesel.set(city.slug, dieselPrice);
 
-        await connection.execute(
+        await connection.query(
           `INSERT INTO fuel_prices (city_id, price_date, petrol_price, diesel_price, petrol_change, diesel_change)
-           SELECT id, ?, ?, ?, ?, ? FROM cities WHERE slug = ?
-           ON DUPLICATE KEY UPDATE petrol_price=VALUES(petrol_price), diesel_price=VALUES(diesel_price), petrol_change=VALUES(petrol_change), diesel_change=VALUES(diesel_change)`,
+           SELECT id, $1::date, $2::numeric, $3::numeric, $4::numeric, $5::numeric FROM cities WHERE slug = $6
+           ON CONFLICT (city_id, price_date) DO UPDATE SET petrol_price=EXCLUDED.petrol_price, diesel_price=EXCLUDED.diesel_price, petrol_change=EXCLUDED.petrol_change, diesel_change=EXCLUDED.diesel_change`,
           [dateStr, petrolPrice, dieselPrice, petrolChange, dieselChange, city.slug]
         );
 
@@ -181,10 +198,10 @@ async function seedPrices(): Promise<void> {
         const changeAmount = oldDomestic === undefined ? 0 : round2(domestic - oldDomestic);
         previousLpg.set(state, domestic);
 
-        await connection.execute(
+        await connection.query(
           `INSERT INTO lpg_prices (state, price_date, domestic_14kg, commercial_19kg, subsidy_amount, change_amount)
-           VALUES (?, ?, ?, ?, ?, ?)
-           ON DUPLICATE KEY UPDATE domestic_14kg=VALUES(domestic_14kg), commercial_19kg=VALUES(commercial_19kg), subsidy_amount=VALUES(subsidy_amount), change_amount=VALUES(change_amount)`,
+           VALUES ($1, $2, $3, $4, $5, $6)
+           ON CONFLICT (state, price_date) DO UPDATE SET domestic_14kg=EXCLUDED.domestic_14kg, commercial_19kg=EXCLUDED.commercial_19kg, subsidy_amount=EXCLUDED.subsidy_amount, change_amount=EXCLUDED.change_amount`,
           [state, dateStr, domestic, commercial, 0, changeAmount]
         );
 

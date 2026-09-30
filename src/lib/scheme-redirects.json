@@ -1,0 +1,18 @@
+{
+  "_comment": "Duplicate scheme slug -> canonical slug. Read by next.config.js (301 redirects), scripts/migrate-dedupe-schemes.ts and scripts/seed-schemes.ts. The canonical side is the richer, newer record.",
+  "pm-kaushal-vikas": "pmkvy",
+  "nps-national-pension": "national-pension-system",
+  "pm-ujjwala": "pmuy",
+  "jan-dhan-yojana": "pm-jan-dhan-yojana",
+  "ddugky": "ddu-gky",
+  "nrega-mgnrega": "mgnrega",
+  "mid-day-meal": "pm-poshan",
+  "national-rural-livelihood": "deendayal-antyodaya-nrlm",
+  "senior-citizen-saving": "senior-citizens-savings-scheme",
+  "indira-gandhi-pension": "indira-gandhi-old-age-pension",
+  "disability-pension": "indira-gandhi-disability-pension",
+  "widow-pension": "indira-gandhi-widow-pension",
+  "national-family-benefit": "national-family-benefit-scheme",
+  "sugamya-bharat": "sugamya-bharat-abhiyan",
+  "udid-disability-card": "unique-disability-id"
+}
