@@ -16,6 +16,7 @@ import {
   type UpdateResult,
 } from '@/lib/price-providers';
 import { secretMatches } from '@/lib/secret-compare';
+import { runGrantsUpkeep, LINK_FAILURE_LIMIT, type UpkeepResult } from '@/lib/grants-upkeep';
 import type { QueryResultRow } from 'pg';
 
 export const dynamic = 'force-dynamic';
@@ -159,6 +160,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // fail-open: drift monitoring must never break the price cron
   }
 
+  // Grants: hide passed deadlines and programmes whose official links keep failing.
+  let grants: UpkeepResult | null = null;
+  try {
+    grants = await runGrantsUpkeep();
+    if (grants.hidden.length > 0) problems.push(`Grants hidden because their links failed ${LINK_FAILURE_LIMIT} days running: ${grants.hidden.join(' | ')}`);
+  } catch (err) {
+    console.error('grants upkeep failed:', err instanceof Error ? err.message : err);
+  }
+
   if (userAlerts.errors.length > 0) {
     problems.push(`Price alerts: ${userAlerts.errors.length} error(s), first: ${userAlerts.errors[0]}`);
   }
@@ -196,6 +206,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     alerted,
     scholarshipReminders,
     premiumExpired,
+    grants,
     userAlerts,
     results,
   });

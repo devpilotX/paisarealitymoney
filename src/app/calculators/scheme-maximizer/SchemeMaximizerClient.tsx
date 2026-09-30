@@ -91,12 +91,12 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {/* Headline */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-8">
         <div className="card bg-green-50 border-green-200 sm:col-span-2">
-          <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Your total benefit (conflict-resolved optimal set)</p>
+          <p className="text-sm text-muted mb-1">Your total benefit (conflict-resolved optimal set)</p>
           <p className="text-3xl font-bold text-green-700">{formatINR(a.totalAnnualBenefit)}<span className="text-base font-normal text-muted-2">/year</span></p>
           {a.totalOneTimeBenefit > 0 && <p className="text-sm text-muted mt-1">plus <strong>{formatINR(a.totalOneTimeBenefit)}</strong> in one-time benefits</p>}
         </div>
         <div className="card">
-          <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Schemes you qualify for</p>
+          <p className="text-sm text-muted mb-1">Schemes you qualify for</p>
           <p className="text-3xl font-bold text-primary">{a.eligible.length}</p>
           <p className="text-xs text-muted-2 mt-1">{a.optimalSet.length} in your optimal (non-conflicting) set</p>
         </div>

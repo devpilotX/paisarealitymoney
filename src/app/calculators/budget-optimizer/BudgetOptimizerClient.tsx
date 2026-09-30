@@ -121,19 +121,19 @@ export default function BudgetOptimizerClient(): React.ReactElement {
         <summary className="cursor-pointer font-semibold text-navy select-none">Your monthly spends</summary>
         <div className="mt-4 space-y-4">
           <div>
-            <p className="text-xs font-semibold text-brown uppercase tracking-wide mb-2">Needs</p>
+            <p className="text-sm font-semibold text-ink mb-2">Needs</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {needsCats.map((c) => <NumField key={c.key} label={c.label} value={c.amount} onChange={(v) => setCategoryAmount(c.key, v)} />)}
             </div>
           </div>
           <div>
-            <p className="text-xs font-semibold text-ink uppercase tracking-wide mb-2">Wants</p>
+            <p className="text-sm font-semibold text-ink mb-2">Wants</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {wantsCats.map((c) => <NumField key={c.key} label={c.label} value={c.amount} onChange={(v) => setCategoryAmount(c.key, v)} />)}
             </div>
           </div>
           <div>
-            <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-2">Savings / investments</p>
+            <p className="text-sm font-semibold text-navy mb-2">Savings / investments</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {savingsCats.map((c) => <NumField key={c.key} label={c.label} value={c.amount} onChange={(v) => setCategoryAmount(c.key, v)} />)}
             </div>
@@ -181,9 +181,9 @@ export default function BudgetOptimizerClient(): React.ReactElement {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Monthly surplus</p><p className="text-2xl font-bold text-primary">{formatCompactINR(analysis.monthlySurplus)}</p><p className="text-xs text-muted-2 mt-1">Capacity to save &amp; invest</p></div>
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Surplus found by trimming</p><p className="text-2xl font-bold text-green-700">{formatCompactINR(analysis.surplusFound)}</p><p className="text-xs text-muted-2 mt-1">If overspends are cut to benchmark</p></div>
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Emergency fund gap</p><p className="text-2xl font-bold text-primary">{formatCompactINR(analysis.emergencyFund.gap)}</p><p className="text-xs text-muted-2 mt-1">{analysis.emergencyFund.gap <= 0 ? `Fully funded (${analysis.emergencyFund.recommendedMonths} mo)` : analysis.emergencyFund.monthsToFill === Infinity ? 'No surplus to fill it yet' : `~${analysis.emergencyFund.monthsToFill} months to fill`}</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Monthly surplus</p><p className="text-2xl font-bold text-primary">{formatCompactINR(analysis.monthlySurplus)}</p><p className="text-xs text-muted-2 mt-1">Capacity to save &amp; invest</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Surplus found by trimming</p><p className="text-2xl font-bold text-green-700">{formatCompactINR(analysis.surplusFound)}</p><p className="text-xs text-muted-2 mt-1">If overspends are cut to benchmark</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Emergency fund gap</p><p className="text-2xl font-bold text-primary">{formatCompactINR(analysis.emergencyFund.gap)}</p><p className="text-xs text-muted-2 mt-1">{analysis.emergencyFund.gap <= 0 ? `Fully funded (${analysis.emergencyFund.recommendedMonths} mo)` : analysis.emergencyFund.monthsToFill === Infinity ? 'No surplus to fill it yet' : `~${analysis.emergencyFund.monthsToFill} months to fill`}</p></div>
       </div>
 
       <InArticleAd />

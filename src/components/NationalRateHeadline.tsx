@@ -41,7 +41,7 @@ export default function NationalRateHeadline({
         {isGold ? (
           <>
             <div>
-              <p className="eyebrow">24K Gold, India average</p>
+              <p className="text-sm font-medium text-muted">24K Gold, India average</p>
               <p className="text-3xl font-extrabold text-navy leading-tight">
                 {formatINR(snapshot.k24PerGram ?? 0)}
                 <span className="text-base font-medium text-muted"> /gram</span>
@@ -52,7 +52,7 @@ export default function NationalRateHeadline({
             </div>
             {snapshot.k22PerGram != null && (
               <div>
-                <p className="eyebrow">22K Gold</p>
+                <p className="text-sm font-medium text-muted">22K Gold</p>
                 <p className="text-2xl font-bold text-navy leading-tight">
                   {formatINR(snapshot.k22PerGram)}
                   <span className="text-sm font-medium text-muted"> /gram</span>
@@ -62,7 +62,7 @@ export default function NationalRateHeadline({
           </>
         ) : (
           <div>
-            <p className="eyebrow">Silver, India average</p>
+            <p className="text-sm font-medium text-muted">Silver, India average</p>
             <p className="text-3xl font-extrabold text-navy leading-tight">
               {formatINR(snapshot.perKg ?? 0)}
               <span className="text-base font-medium text-muted"> /kg</span>
@@ -75,7 +75,7 @@ export default function NationalRateHeadline({
 
         {change != null && (
           <div>
-            <p className="eyebrow">Today&apos;s change</p>
+            <p className="text-sm font-medium text-muted">Today&apos;s change</p>
             <p className={`text-lg font-semibold ${changeCls}`}>
               {arrow} {formatINR(Math.abs(change))}
               {snapshot.changePercent != null && (
@@ -91,7 +91,7 @@ export default function NationalRateHeadline({
 
         {snapshot.dayHigh != null && snapshot.dayLow != null && (
           <div>
-            <p className="eyebrow">Across cities</p>
+            <p className="text-sm font-medium text-muted">Across cities</p>
             <p className="text-sm text-muted">
               {formatINR(snapshot.dayLow)} to {formatINR(snapshot.dayHigh)}
             </p>

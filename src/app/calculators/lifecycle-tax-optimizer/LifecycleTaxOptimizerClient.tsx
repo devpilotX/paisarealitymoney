@@ -15,7 +15,7 @@ import {
 function StatCard({ label, value, sub, highlight }: { label: string; value: string; sub?: string; highlight?: boolean }): React.ReactElement {
   return (
     <div className={`card ${highlight ? 'border-primary border-2' : ''}`}>
-      <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">{label}</p>
+      <p className="text-sm text-muted mb-1">{label}</p>
       <p className={`text-2xl font-bold ${highlight ? 'text-green-700' : 'text-primary'}`}>{value}</p>
       {sub && <p className="text-xs text-muted-2 mt-1">{sub}</p>}
       {highlight && <span className="inline-block mt-2 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded">Lowest lifetime tax</span>}

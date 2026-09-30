@@ -161,7 +161,7 @@ export default function InterestRatesPage(): React.ReactElement {
         <div>
           <h2 className="heading-2 mb-4">EPF rate</h2>
           <div className="card">
-            <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Employees&apos; Provident Fund, {EPF_RATE_YEAR}</p>
+            <p className="text-sm text-muted mb-1">Employees&apos; Provident Fund, {EPF_RATE_YEAR}</p>
             <p className="font-serif text-3xl font-bold text-navy mb-2">{EPF_RATE_PCT}%</p>
             <p className="text-sm text-muted">
               Notified by the EPFO on {formatDate(EPF_NOTIFIED)}, unchanged for the third straight year. Interest

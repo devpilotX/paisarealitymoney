@@ -115,9 +115,9 @@ export default function TaxHarvestingClient(): React.ReactElement {
 
       {/* Headline */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="card bg-green-50 border-green-200"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Tax saved this year</p><p className="text-2xl font-bold text-green-700">{formatCompactINR(a.taxSaved)}</p><p className="text-xs text-muted-2 mt-1">By harvesting losses to offset gains</p></div>
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Tax-free gains to harvest</p><p className="text-2xl font-bold text-primary">{formatCompactINR(a.gainHarvestAmount)}</p><p className="text-xs text-muted-2 mt-1">Basis reset worth ~{formatCompactINR(a.basisStepUpBenefit)} in future tax</p></div>
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Exemption headroom left</p><p className="text-2xl font-bold text-primary">{formatCompactINR(a.exemptionHeadroomRemaining)}</p><p className="text-xs text-muted-2 mt-1">of the ₹1.25L LTCG exemption</p></div>
+        <div className="card bg-green-50 border-green-200"><p className="text-sm text-muted mb-1">Tax saved this year</p><p className="text-2xl font-bold text-green-700">{formatCompactINR(a.taxSaved)}</p><p className="text-xs text-muted-2 mt-1">By harvesting losses to offset gains</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Tax-free gains to harvest</p><p className="text-2xl font-bold text-primary">{formatCompactINR(a.gainHarvestAmount)}</p><p className="text-xs text-muted-2 mt-1">Basis reset worth ~{formatCompactINR(a.basisStepUpBenefit)} in future tax</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Exemption headroom left</p><p className="text-2xl font-bold text-primary">{formatCompactINR(a.exemptionHeadroomRemaining)}</p><p className="text-xs text-muted-2 mt-1">of the ₹1.25L LTCG exemption</p></div>
       </div>
 
       {/* Before / after */}
@@ -142,7 +142,7 @@ export default function TaxHarvestingClient(): React.ReactElement {
           {a.actions.map((act, i) => (
             <div key={i} className={`rounded-lg p-3 ${ACTION_STYLE[act.type].tone}`}>
               <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-xs font-semibold uppercase tracking-wide text-muted">{ACTION_STYLE[act.type].label}</span>
+                <span className="text-sm font-medium text-muted">{ACTION_STYLE[act.type].label}</span>
                 <span className="text-sm font-medium text-navy">{act.lotName}</span>
               </div>
               <p className="text-sm text-ink">{act.note}</p>

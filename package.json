@@ -24,8 +24,9 @@
     "db:migrate-prices-hub": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-prices-hub.ts",
     "db:migrate-ads": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-ads.ts",
     "db:migrate-dedupe-schemes": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/migrate-dedupe-schemes.ts",
+    "db:seed-grants": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-grants.ts",
     "db:schema": "ts-node -r dotenv/config --project tsconfig.scripts.json scripts/db-schema.ts",
-    "db:setup": "npm run db:schema && npm run db:seed-cities && npm run db:seed-schemes && npm run db:seed-schemes-expansion && npm run db:seed-schemes-expansion-2 && npm run db:seed-banks && npm run db:schema -- scripts/pg-scholarships.sql scripts/seo-ctr-meta.sql && npm run db:migrate-dedupe-schemes"
+    "db:setup": "npm run db:schema && npm run db:seed-cities && npm run db:seed-schemes && npm run db:seed-schemes-expansion && npm run db:seed-schemes-expansion-2 && npm run db:seed-banks && npm run db:seed-grants && npm run db:schema -- scripts/pg-scholarships.sql scripts/seo-ctr-meta.sql && npm run db:migrate-dedupe-schemes"
   },
   "dependencies": {
     "@react-pdf/renderer": "^3.4.4",

@@ -53,6 +53,7 @@ How the data is produced:
 - [Schemes by state](${u('/state')})
 - [Schemes by category](${u('/category')})
 - [Scholarships](${u('/scholarships')}): government and private scholarships with eligibility, amounts and deadlines
+- [Startup grants](${u('/grants')}): government seed funds, state grants and international accelerators open to Indian founders, with amounts, equity terms and eligibility
 
 ## Tools
 - [Money Health Score](${u('/score')}): a score out of 900 across eight areas of personal finance

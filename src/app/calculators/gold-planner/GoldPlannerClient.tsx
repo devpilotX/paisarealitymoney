@@ -18,7 +18,7 @@ import {
 function Stat({ label, value, sub }: { label: string; value: string; sub?: string }): React.ReactElement {
   return (
     <div className="card">
-      <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">{label}</p>
+      <p className="text-sm text-muted mb-1">{label}</p>
       <p className="text-2xl font-bold text-primary">{value}</p>
       {sub && <p className="text-xs text-muted-2 mt-1">{sub}</p>}
     </div>

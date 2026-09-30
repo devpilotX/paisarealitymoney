@@ -28,6 +28,7 @@ const SCHEMA_FILES = [
   'scripts/pg-scholarships.sql',
   'scripts/pg-prices-hub.sql',
   'scripts/pg-ads.sql',
+  'scripts/pg-grants.sql',
 ];
 
 async function main(): Promise<void> {

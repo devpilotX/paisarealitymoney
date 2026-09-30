@@ -132,17 +132,17 @@ export default function RealReturnClient(): React.ReactElement {
           {/* Agent's number vs reality */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">The pitch says</p>
+              <p className="text-sm text-muted mb-1">The pitch says</p>
               <p className="text-2xl font-bold text-navy">{a.multiple}x your money</p>
               <p className="text-xs text-muted-2 mt-1">Pay {formatCompactINR(a.totalPaid)}, receive {formatCompactINR(a.totalReceived)}</p>
             </div>
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">The math says</p>
+              <p className="text-sm text-muted mb-1">The math says</p>
               <p className="text-2xl font-bold text-primary">{a.irrPct !== null ? `${a.irrPct}% / year` : '—'}</p>
               <p className="text-xs text-muted-2 mt-1">{a.doublingYears !== null ? `Money doubles every ~${Math.round(a.doublingYears)} years at this rate` : 'This money never doubles'}</p>
             </div>
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Buying power today</p>
+              <p className="text-sm text-muted mb-1">Buying power today</p>
               <p className="text-2xl font-bold text-navy">{formatCompactINR(a.receivedTodayValue)}</p>
               <p className="text-xs text-muted-2 mt-1">What everything you receive is worth in today&apos;s rupees (6% inflation)</p>
             </div>
