@@ -122,6 +122,8 @@ export interface PolicyRate {
 // 3 to 5 August 2026 MPC held every rate and kept the neutral stance.
 export const RBI_RATES_AS_OF = '2026-08-05';
 export const RBI_NEXT_MPC = '5 to 7 October 2026';
+/** Last day of that meeting; the daily health report asks for a recheck after it. */
+export const RBI_NEXT_MPC_ENDS = '2026-10-07';
 
 export const RBI_RATES: PolicyRate[] = [
   { name: 'Repo rate', ratePct: 5.25, note: 'The rate banks borrow at from RBI; home loan EBLR rates track this' },

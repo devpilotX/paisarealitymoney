@@ -36,7 +36,8 @@ export default function MethodologyPage(): React.ReactElement {
               Apply import costs and 3% GST. India&apos;s customs duty on gold and silver is 15% since 13 May 2026
               (10% basic customs duty plus 5% AIDC), but Indian retail rates do not pass the full duty through.
               So instead of adding a flat 15%, we apply a smaller duty factor plus a market premium, both fitted
-              to published Indian dealer rates and reviewed regularly.
+              to published Indian dealer rates and reviewed regularly. Those dealer rates exclude GST, so the rate
+              we show is before the 3% GST added to the bill when you buy.
             </li>
             <li>
               The silver premium is much larger than the gold one: physical silver in India has traded well
