@@ -45,8 +45,14 @@ mv "$REL.partial" "$REL"
 # Next records the build directory; it was built as .partial, so point it at the final path.
 grep -rl "$REL.partial" "$REL/.next" 2>/dev/null | xargs -r sed -i "s#$REL.partial#$REL#g"
 
-PREV="$(readlink -f "$ROOT/current" 2>/dev/null || true)"
-log "switching current -> $SHA (previous: ${PREV##*/})"
+PREV=""
+if [ -L "$ROOT/current" ]; then
+  PREV="$(readlink -f "$ROOT/current")"
+  case "$PREV" in "$ROOT"/releases/*) [ -d "$PREV" ] || PREV="" ;; *) PREV="" ;; esac
+fi
+[ "$PREV" = "$REL" ] && PREV=""
+log "switching current -> $SHA (previous: ${PREV:+${PREV##*/}})"
+rm -rf "$ROOT/current.new"
 ln -sfn "$REL" "$ROOT/current.new" && mv -Tf "$ROOT/current.new" "$ROOT/current"
 
 if pm2 describe paisareality >/dev/null 2>&1; then

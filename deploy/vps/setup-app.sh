@@ -20,7 +20,7 @@ SQL
 fi
 sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname='paisareality'" | grep -q 1 \
   || sudo -u postgres createdb -O paisa paisareality
-chown root:paisa "$ENV_FILE"; chmod 640 "$ENV_FILE"
+chown root:paisa "$ENV_FILE"; chmod 640 "$ENV_FILE"; chgrp paisa /etc/paisareality; chmod 750 /etc/paisareality
 
 # nginx
 install -d /var/www/letsencrypt /etc/nginx/snippets /etc/ssl/paisareality
