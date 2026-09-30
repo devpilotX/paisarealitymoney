@@ -80,14 +80,15 @@ export default async function LpgPricePage(): Promise<React.ReactElement> {
             </tr></thead>
             <tbody>
               {prices.map((row) => {
-                const cc = row.change_amount > 0 ? 'price-up' : row.change_amount < 0 ? 'price-down' : 'price-neutral';
+                const chg = Number(row.change_amount) || 0;
+                const cc = chg > 0 ? 'price-up' : chg < 0 ? 'price-down' : 'price-neutral';
                 return (
                   <tr key={row.state} className="border-b border-line/60 hover:bg-paper-2 transition-colors">
                     <td className="py-3 px-4 font-medium text-ink">{row.state}</td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.domestic_14kg)}</td>
                     <td className="py-3 px-4 text-right font-medium">{row.commercial_19kg != null ? formatINR(row.commercial_19kg) : <span className="text-muted-2" title="No published rate for this state; check your distributor">-</span>}</td>
                     <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>
-                      {row.change_amount === 0 ? 'No change' : `${row.change_amount > 0 ? '+' : ''}${formatINR(row.change_amount)}`}
+                      {chg === 0 ? 'No change' : `${chg > 0 ? '+' : '-'}${formatINR(Math.abs(chg))}`}
                     </td>
                   </tr>
                 );
