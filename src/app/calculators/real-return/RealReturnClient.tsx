@@ -55,13 +55,13 @@ export default function RealReturnClient(): React.ReactElement {
   return (
     <div>
       <div className="rounded-lg bg-yellow-50 border border-yellow-300 px-4 py-3 mb-6 text-sm text-yellow-900">
-        <strong>Educational only — not advice.</strong> Type in any offer exactly as it was pitched to you. We compute
+        <strong>Educational only, not advice.</strong> Type in any offer exactly as it was pitched to you. We compute
         the one number the pitch never mentions: the real annual return. Your inputs stay in your browser.
       </div>
 
       <Calculator
         title="Type in the offer you were pitched"
-        description='Example: "Pay Rs 50,000 a year for 15 years, get Rs 14 lakh at year 20." That is the default below — change it to your offer.'
+        description='Example: "Pay Rs 50,000 a year for 15 years, get Rs 14 lakh at year 20." That is the default below; change it to your offer.'
       >
         <CalcSelect
           id="mode"
@@ -121,7 +121,7 @@ export default function RealReturnClient(): React.ReactElement {
       <div className={`rounded-xl border-2 px-5 py-5 mt-8 ${style.box}`}>
         <div className="flex flex-wrap items-center gap-3 mb-2">
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${style.badge}`}>REAL ANNUAL RETURN</span>
-          <span className="text-3xl font-extrabold text-navy">{a.irrPct !== null ? `${a.irrPct}%` : '—'}</span>
+          <span className="text-3xl font-extrabold text-navy">{a.irrPct !== null ? `${a.irrPct}%` : 'n/a'}</span>
         </div>
         <h2 className="text-lg font-bold text-navy mb-1">{a.verdict.title}</h2>
         <p className="text-sm text-ink">{a.verdict.message}</p>
@@ -132,17 +132,17 @@ export default function RealReturnClient(): React.ReactElement {
           {/* Agent's number vs reality */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">The pitch says</p>
+              <p className="text-sm text-muted mb-1">The pitch says</p>
               <p className="text-2xl font-bold text-navy">{a.multiple}x your money</p>
               <p className="text-xs text-muted-2 mt-1">Pay {formatCompactINR(a.totalPaid)}, receive {formatCompactINR(a.totalReceived)}</p>
             </div>
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">The math says</p>
-              <p className="text-2xl font-bold text-primary">{a.irrPct !== null ? `${a.irrPct}% / year` : '—'}</p>
+              <p className="text-sm text-muted mb-1">The math says</p>
+              <p className="text-2xl font-bold text-primary">{a.irrPct !== null ? `${a.irrPct}% / year` : 'n/a'}</p>
               <p className="text-xs text-muted-2 mt-1">{a.doublingYears !== null ? `Money doubles every ~${Math.round(a.doublingYears)} years at this rate` : 'This money never doubles'}</p>
             </div>
             <div className="card">
-              <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Buying power today</p>
+              <p className="text-sm text-muted mb-1">Buying power today</p>
               <p className="text-2xl font-bold text-navy">{formatCompactINR(a.receivedTodayValue)}</p>
               <p className="text-xs text-muted-2 mt-1">What everything you receive is worth in today&apos;s rupees (6% inflation)</p>
             </div>

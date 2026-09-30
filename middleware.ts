@@ -23,10 +23,34 @@ function isAdminPath(pathname: string): boolean {
   );
 }
 
+const MUTATING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+
+/**
+ * CSRF guard for cookie-authenticated API calls. Browsers always send Origin on
+ * a cross-site POST, so a request whose Origin names another host is refused.
+ * Requests with no Origin (server-to-server: Razorpay webhook, cron, one-click
+ * unsubscribe from a mail client) pass, because they carry no browser cookies
+ * worth forging.
+ */
+function isCrossSiteWrite(request: NextRequest, host: string): boolean {
+  if (!MUTATING.has(request.method)) return false;
+  const origin = request.headers.get('origin');
+  if (!origin || origin === 'null') return false;
+  try {
+    return new URL(origin).host.toLowerCase() !== host;
+  } catch {
+    return true;
+  }
+}
+
 export function middleware(request: NextRequest): NextResponse {
   const host = (request.headers.get('host') || '').toLowerCase();
   const { pathname } = request.nextUrl;
   const isAdminHost = host.startsWith(ADMIN_HOST_PREFIX);
+
+  if (pathname.startsWith('/api/') && isCrossSiteWrite(request, host)) {
+    return NextResponse.json({ error: 'Cross-site request refused.' }, { status: 403 });
+  }
 
   if (isAdminHost) {
     // Route the admin subdomain into the /admin section of the app.

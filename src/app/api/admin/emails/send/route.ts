@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, execute } from '@/lib/db';
 import { verifyAdmin } from '@/lib/admin-auth';
-import { sendEmail, wrapBroadcast } from '@/lib/email';
+import { sendEmail, wrapBroadcast, unsubscribeHeaders } from '@/lib/email';
 import type { QueryResultRow } from 'pg';
 
 interface Sub extends QueryResultRow { email: string; unsubscribe_token: string; }
@@ -20,7 +20,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     for (const sub of subs) {
       const html = wrapBroadcast(htmlBody, sub.unsubscribe_token);
-      const result = await sendEmail({ to: sub.email, subject, html, replyTo: 'contact@paisareality.com' });
+      const result = await sendEmail({
+        to: sub.email,
+        subject,
+        html,
+        replyTo: 'connect@paisareality.com',
+        headers: unsubscribeHeaders(sub.unsubscribe_token),
+      });
       const status = result.ok ? 'sent' : 'failed';
       if (result.ok) sent++; else failed++;
       execute(

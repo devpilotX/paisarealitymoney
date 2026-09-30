@@ -16,7 +16,7 @@ interface DateRow extends QueryResultRow {
 
 /**
  * Server component that shows when the displayed bank rates were last
- * verified. Bank rates are YMYL data — never show a rate without its date.
+ * verified. Bank rates are YMYL data, never show a rate without its date.
  */
 export default async function RatesAsOf({ rateType, bankSlug, className = '' }: RatesAsOfProps): Promise<React.ReactElement | null> {
   let asOf: string | null = null;

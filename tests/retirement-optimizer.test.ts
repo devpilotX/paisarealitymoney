@@ -1,5 +1,5 @@
 /**
- * Retirement Corpus & Withdrawal Optimizer — test suite (24 cases)
+ * Retirement Corpus & Withdrawal Optimizer, test suite (24 cases)
  * Run: npx ts-node --project tsconfig.scripts.json tests/retirement-optimizer.test.ts
  *
  * Coverage:

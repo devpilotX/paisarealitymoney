@@ -1,7 +1,3 @@
-'use client';
-
-import { useState, useCallback } from 'react';
-
 interface FAQItem {
   question: string;
   answer: string;
@@ -12,78 +8,41 @@ interface FAQProps {
   title?: string;
 }
 
-export default function FAQ({ items, title = 'Frequently Asked Questions' }: FAQProps): React.ReactElement {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const toggleItem = useCallback((index: number): void => {
-    setOpenIndex((prev) => (prev === index ? null : index));
-  }, []);
-
+/**
+ * Questions and answers as native <details> rows. The answers are in the HTML from
+ * the start, so search engines and screen readers get them, and the open/close
+ * works without JavaScript.
+ */
+export default function FAQ({ items, title = 'Common questions' }: FAQProps): React.ReactElement {
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: items.map((item) => ({
       '@type': 'Question',
       name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer,
-      },
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   };
 
   return (
     <section className="py-8">
       <h2 className="heading-2 mb-6">{title}</h2>
-      <div className="space-y-3">
-        {items.map((item, index) => {
-          const isOpen = openIndex === index;
-          return (
-            <div
-              key={item.question}
-              className="border border-line rounded-[5px] overflow-hidden"
-            >
-              <button
-                type="button"
-                onClick={() => toggleItem(index)}
-                className="w-full flex items-center justify-between px-5 py-4 text-left
-                           bg-paper hover:bg-paper-2 transition-colors duration-200 ease-in-out
-                           min-h-[44px]"
-                aria-expanded={isOpen}
-              >
-                <span className="font-serif text-base font-bold text-navy pr-4">
-                  {item.question}
-                </span>
-                <span
-                  className={`flex-shrink-0 w-5 h-5 text-brand-red transition-transform duration-200 ${
-                    isOpen ? 'rotate-180' : ''
-                  }`}
-                  aria-hidden="true"
-                >
-                  <svg viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </button>
-              {isOpen && (
-                <div className="px-5 pb-4">
-                  <p className="text-body">{item.answer}</p>
-                </div>
-              )}
-            </div>
-          );
-        })}
+      <div className="border-t border-line">
+        {items.map((item) => (
+          <details key={item.question} className="group border-b border-line">
+            <summary className="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden
+                                text-left text-[17px] font-medium text-ink hover:text-navy transition-colors">
+              <span>{item.question}</span>
+              <span className="relative shrink-0 w-5 h-5 text-muted-2 group-hover:text-navy" aria-hidden="true">
+                <span className="absolute left-1/2 top-1/2 w-3.5 h-[1.5px] -translate-x-1/2 -translate-y-1/2 bg-current rounded" />
+                <span className="absolute left-1/2 top-1/2 w-[1.5px] h-3.5 -translate-x-1/2 -translate-y-1/2 bg-current rounded transition-transform duration-200 group-open:scale-y-0" />
+              </span>
+            </summary>
+            <p className="pb-6 pr-10 text-muted leading-relaxed max-w-prose">{item.answer}</p>
+          </details>
+        ))}
       </div>
-
-      {/* FAQ Schema JSON-LD (server-rendered for reliable indexing) */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </section>
   );
 }

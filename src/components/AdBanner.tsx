@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { adClientId } from './AdSenseScript';
+import { usePlan } from '@/lib/use-plan';
 
 interface AdBannerProps {
   slot?: string;
@@ -30,6 +31,7 @@ export default function AdBanner({
   const containerRef = useRef<HTMLDivElement>(null);
   const pushed = useRef(false);
   const [inView, setInView] = useState(false);
+  const plan = usePlan();
   const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
   const adSlot = slot || process.env.NEXT_PUBLIC_ADSENSE_DEFAULT_SLOT || '';
 
@@ -65,7 +67,7 @@ export default function AdBanner({
     }
   }, [inView, pubId, adSlot]);
 
-  if (!pubId || !adSlot) {
+  if (!pubId || !adSlot || plan === 'premium') {
     return null;
   }
 

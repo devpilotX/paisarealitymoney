@@ -14,7 +14,12 @@
  */
 import fs from 'fs';
 
-const ORIGIN = 'https://paisareality.com';
+// Canonical origin written in the sitemap. --origin points the fetches at another
+// server (for example a local next start) while keeping the canonical checks honest.
+const CANONICAL = 'https://paisareality.com';
+const originArg = process.argv.indexOf('--origin');
+const ORIGIN = originArg > -1 ? process.argv[originArg + 1].replace(/\/$/, '') : CANONICAL;
+const toFetch = (u) => (ORIGIN === CANONICAL ? u : u.replace(CANONICAL, ORIGIN));
 const CONCURRENCY = 6;
 const limitArg = process.argv.indexOf('--limit');
 const LIMIT = limitArg > -1 ? Number(process.argv[limitArg + 1]) : Infinity;
@@ -56,17 +61,17 @@ let scanned = 0;
 async function scanWorker(queue) {
   while (queue.length) {
     const page = queue.shift();
-    const { body } = await fetchText(page);
+    const { body } = await fetchText(toFetch(page));
     for (const m of body.matchAll(/<a\b[^>]*href=["']([^"']+)["']/gi)) {
       const raw = m[1].trim();
       if (!raw || raw.startsWith('#') || raw.startsWith('mailto:') || raw.startsWith('tel:')) continue;
       let abs;
-      if (raw.startsWith('/')) abs = ORIGIN + raw;
-      else if (raw.startsWith(ORIGIN)) abs = raw;
+      if (raw.startsWith('/')) abs = CANONICAL + raw;
+      else if (raw.startsWith(CANONICAL)) abs = raw;
       else continue; // external, handled separately
       abs = abs.split('#')[0];
       if (!targets.has(abs)) targets.set(abs, new Set());
-      if (targets.get(abs).size < 4) targets.get(abs).add(page.replace(ORIGIN, '') || '/');
+      if (targets.get(abs).size < 4) targets.get(abs).add(page.replace(CANONICAL, '') || '/');
     }
     scanned++;
     if (scanned % 100 === 0) console.log(`  scanned ${scanned}/${pages.length}, ${targets.size} unique internal targets`);
@@ -84,7 +89,7 @@ let checked = 0;
 async function checkWorker(queue) {
   while (queue.length) {
     const url = queue.shift();
-    const r = await checkStatus(url);
+    const r = await checkStatus(toFetch(url));
     if (r.status !== 200) broken.push({ url, status: r.status, err: r.err, from: [...targets.get(url)] });
     checked++;
     if (checked % 100 === 0) console.log(`  checked ${checked}/${list.length}`);
@@ -99,6 +104,6 @@ console.log(`pages scanned            : ${pages.length}`);
 console.log(`unique internal targets  : ${list.length}`);
 console.log(`internal links not 200   : ${broken.length}`);
 for (const b of broken.sort((a, b2) => a.url.localeCompare(b2.url))) {
-  console.log(`  ${b.status || 'ERR'} ${b.url.replace(ORIGIN, '')}${b.err ? ` (${b.err})` : ''}`);
+  console.log(`  ${b.status || 'ERR'} ${b.url.replace(CANONICAL, '')}${b.err ? ` (${b.err})` : ''}`);
   console.log(`      linked from: ${b.from.join(', ')}`);
 }

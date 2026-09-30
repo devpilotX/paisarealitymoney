@@ -1,5 +1,5 @@
 /**
- * Home Loan Prepay vs Invest Optimizer — test suite (26 cases)
+ * Home Loan Prepay vs Invest Optimizer, test suite (26 cases)
  * Run: npx ts-node --project tsconfig.scripts.json tests/prepay-vs-invest.test.ts
  */
 

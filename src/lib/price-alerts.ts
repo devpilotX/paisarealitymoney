@@ -1,5 +1,5 @@
 /**
- * Price alerts — the retention loop.
+ * Price alerts, the retention loop.
  *
  * Users set a one-shot target ("email me when 24K gold in Jaipur drops below
  * Rs 11,000/gram"); the daily price cron calls checkPriceAlerts() after
@@ -76,7 +76,7 @@ export async function checkPriceAlerts(): Promise<AlertCheckResult> {
     );
     rows = [...goldRows, ...silverRows];
   } catch {
-    // price_alerts table not migrated yet — nothing to check.
+    // price_alerts table not migrated yet, nothing to check.
     return { checked: 0, fired: 0, errors: [] };
   }
 

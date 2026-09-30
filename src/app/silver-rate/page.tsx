@@ -19,7 +19,7 @@ import { getNationalSnapshot, getNationalSeries } from '@/lib/national-prices';
 
 export const metadata = pageMetadata({
   title: 'Silver Rate Today in India: Price per Gram & Kg',
-  description: 'Check the latest available silver rate in India. Silver prices per gram and per kg for 50+ cities.',
+  description: 'Check the latest available silver rate in India. Silver prices per gram and per kg for 50 cities, updated five times a day.',
   path: '/silver-rate',
   keywords: ['silver rate today', 'silver price today india', 'silver rate per gram', 'silver price per kg'],
 });
@@ -72,7 +72,7 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
           <>
             The silver rate today in India is <strong>{formatINR(national.perKg)} per kg</strong>
             {national.perGram != null ? <> ({formatINR(national.perGram)} per gram)</> : null}
-            , as of {priceDate} (average across 50+ cities). Below are today&apos;s rates for major Indian cities. Verify with your jeweller before buying.
+            , as of {priceDate}, averaged across the 50 cities we track. Below are today&apos;s rates for major Indian cities. Verify with your jeweller before buying.
           </>
         ) : (
           <>Latest available silver prices per gram and per kg for {priceDate}. Verify with your jeweller before buying.</>
@@ -94,14 +94,14 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
             </tr></thead>
             <tbody>
               {prices.map((row) => {
-                const cc = row.change_amount > 0 ? 'price-up' : row.change_amount < 0 ? 'price-down' : 'price-neutral';
-                const ar = row.change_amount > 0 ? '\u25B2' : row.change_amount < 0 ? '\u25BC' : '';
+                const cc = Number(row.change_amount) > 0 ? 'price-up' : Number(row.change_amount) < 0 ? 'price-down' : 'price-neutral';
+                const ar = Number(row.change_amount) > 0 ? '\u25B2' : Number(row.change_amount) < 0 ? '\u25BC' : '';
                 return (
                   <tr key={row.city_slug} className="border-b border-line/60 hover:bg-paper-2 transition-colors duration-200">
                     <td className="py-3 px-4"><Link href={`/silver-rate/${row.city_slug}`} className="text-navy font-medium no-underline hover:text-brand-red">{row.city_name}</Link><span className="text-xs text-muted-2 ml-1">{row.state}</span></td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.silver_per_gram)}</td>
                     <td className="py-3 px-4 text-right font-medium">{formatINR(row.silver_per_kg)}</td>
-                    <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>{ar} {row.change_amount === 0 ? '-' : formatINR(Math.abs(row.change_amount))}</td>
+                    <td className={`py-3 px-4 text-right text-sm font-medium ${cc}`}>{Number(row.change_amount) === 0 ? 'No change' : <>{ar} {formatINR(Math.abs(Number(row.change_amount)))}</>}</td>
                   </tr>
                 );
               })}

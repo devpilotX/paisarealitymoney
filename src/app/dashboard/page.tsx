@@ -34,9 +34,12 @@ export default function DashboardPage(): React.ReactElement {
   }, [router]);
 
   const logout = useCallback(() => {
-    document.cookie = 'auth-token=; path=/; max-age=0';
-    document.cookie = 'refresh-token=; path=/; max-age=0';
-    router.push('/login');
+    fetch('/api/auth/logout', { method: 'POST' })
+      .catch(() => {})
+      .finally(() => {
+        router.push('/login');
+        router.refresh();
+      });
   }, [router]);
 
   if (loading) return <div className="container-main py-12 text-center"><p className="text-muted-2">Loading...</p></div>;

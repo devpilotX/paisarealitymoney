@@ -1,0 +1,10 @@
+[Unit]
+Description=Run a backup requested from Telegram
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/rm -f /var/lib/paisareality-backup/requests/backup-now
+Environment=BACKUP_TRIGGER=telegram
+ExecStart=/usr/local/bin/paisareality-backup
+Nice=10
+TimeoutStartSec=30min

@@ -87,6 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Schemes hub + bank rates (hub + sub-pages)
     { url: `${BASE_URL}/schemes`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/scholarships`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE_URL}/grants`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     // Hub parents for the state and category families. These previously did not
     // exist (both returned 404), leaving 36 state + 14 category pages with no
     // hub parent and no link path from the top of the site.
@@ -105,7 +106,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/guides/fd-vs-rd`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/guides/22k-vs-24k-gold`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     // Content + legal
-    { url: `${BASE_URL}/newsletter`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${BASE_URL}/pricing`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
@@ -187,6 +187,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Grants: only live programmes, so a closed or hidden one drops out of the sitemap too.
+  const grantPages: MetadataRoute.Sitemap = await query<ScholarshipSitemapRow>(
+    "SELECT slug, updated_at FROM grants WHERE active AND (deadline IS NULL OR deadline >= (NOW() AT TIME ZONE 'Asia/Kolkata')::date)"
+  ).then((rows) => rows.map((g) => ({
+    url: `${BASE_URL}/grants/${g.slug}`,
+    lastModified: toIsoDate(g.updated_at, now),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))).catch(() => [] as MetadataRoute.Sitemap);
+
+  // The newsletter hub is noindex until it has a post, so it joins the sitemap only then.
   const blogPages = await getAllPostsAsync(true)
     .then((posts) => posts.map((post) => ({
       url: `${BASE_URL}/newsletter/${post.slug}`,
@@ -211,6 +222,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...statePages,
     ...schemePages,
     ...scholarshipPages,
+    ...grantPages,
+    ...(blogPages.length > 0 ? [{ url: `${BASE_URL}/newsletter`, lastModified: now, changeFrequency: 'weekly' as const, priority: 0.6 }] : []),
     ...blogPages,
     ...bankPages,
     ...goldCityPages,

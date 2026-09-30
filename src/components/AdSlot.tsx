@@ -58,7 +58,7 @@ export default async function AdSlot({
   } else if (ad.type === 'html' && ad.html) {
     return (
       <div className={className}>
-        <span className="block text-[10px] uppercase tracking-[0.12em] text-muted-2 mb-1">Advertisement</span>
+        <span className="block text-[11px] text-muted-2 mb-1">Advertisement</span>
         <div dangerouslySetInnerHTML={{ __html: cleanAdHtml(ad.html) }} />
         <AdImpression id={ad.id} />
       </div>
@@ -84,7 +84,7 @@ export default async function AdSlot({
 
   return (
     <div className={className}>
-      <span className="block text-[10px] uppercase tracking-[0.12em] text-muted-2 mb-1">Advertisement</span>
+      <span className="block text-[11px] text-muted-2 mb-1">Advertisement</span>
       {wrapped}
       <AdImpression id={ad.id} />
     </div>

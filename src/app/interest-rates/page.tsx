@@ -24,9 +24,9 @@ import {
 } from '@/lib/policy-rates';
 
 export const metadata = pageMetadata({
-  title: 'PPF, SSY, NSC, SCSS Interest Rates Jul-Sep 2026 + Repo Rate',
+  title: 'PPF, SSY, NSC, SCSS Interest Rates Oct-Dec 2026 + Repo Rate',
   description:
-    'Official small savings rates for July to September 2026: PPF 7.1%, SSY 8.2%, SCSS 8.2%, NSC 7.7%, KVP and post office deposits, plus the repo rate.',
+    'Official small savings rates for October to December 2026: PPF 7.1%, SSY 8.2%, SCSS 8.2%, NSC 7.7%, KVP and post office deposits, plus the repo rate.',
   path: '/interest-rates',
   keywords: [
     'ppf interest rate 2026', 'sukanya samriddhi interest rate', 'scss interest rate', 'nsc interest rate',
@@ -38,7 +38,7 @@ const FAQS = [
   {
     question: 'What is the PPF interest rate right now?',
     answer:
-      'PPF pays 7.1% per annum for the July to September 2026 quarter, compounded yearly. The government reviews small savings rates every quarter; PPF has been at 7.1% since April 2020. PPF is EEE: the deposit gets a Section 80C deduction, and both interest and maturity are completely tax-free.',
+      'PPF pays 7.1% per annum for the October to December 2026 quarter, compounded yearly. The government reviews small savings rates every quarter; PPF has been at 7.1% since April 2020. PPF is EEE: the deposit gets a Section 80C deduction, and both interest and maturity are completely tax-free.',
   },
   {
     question: 'Which small savings scheme pays the highest interest?',
@@ -53,7 +53,7 @@ const FAQS = [
   {
     question: 'What is the RBI repo rate and why does it matter to me?',
     answer:
-      'The repo rate, currently 5.25%, is the rate at which banks borrow from the RBI. Most floating-rate home loans are directly linked to it, so when the repo rate falls your EMI falls at the next reset, and when it rises your EMI rises. FD rates also loosely track it. The next MPC meeting is on 3 to 5 August 2026.',
+      `The repo rate, currently 5.25%, is the rate at which banks borrow from the RBI. Most floating-rate home loans are directly linked to it, so when the repo rate falls your EMI falls at the next reset, and when it rises your EMI rises. FD rates also loosely track it. The next MPC meeting is on ${RBI_NEXT_MPC}.`,
   },
   {
     question: 'Is the EPF rate better than PPF?',
@@ -88,7 +88,7 @@ export default function InterestRatesPage(): React.ReactElement {
       <script id="rates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
       <Breadcrumb items={[{ label: 'Interest Rates' }]} />
       <h1 className="heading-1 mb-2">Government Interest Rates: Small Savings, Repo Rate, EPF</h1>
-      <LastReviewed date="2026-07-03" className="mb-2" />
+      <LastReviewed date="2026-09-30" className="mb-2" />
       <p className="text-body mb-2 max-w-3xl">
         Every government-set rate that matters to your money, on one page: the quarterly small savings rates
         (PPF, SSY, SCSS, NSC, KVP, post office deposits), the RBI policy rates your home loan tracks, and the
@@ -161,7 +161,7 @@ export default function InterestRatesPage(): React.ReactElement {
         <div>
           <h2 className="heading-2 mb-4">EPF rate</h2>
           <div className="card">
-            <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Employees&apos; Provident Fund, {EPF_RATE_YEAR}</p>
+            <p className="text-sm text-muted mb-1">Employees&apos; Provident Fund, {EPF_RATE_YEAR}</p>
             <p className="font-serif text-3xl font-bold text-navy mb-2">{EPF_RATE_PCT}%</p>
             <p className="text-sm text-muted">
               Notified by the EPFO on {formatDate(EPF_NOTIFIED)}, unchanged for the third straight year. Interest

@@ -15,7 +15,7 @@ import {
 function StatCard({ label, value, sub, highlight }: { label: string; value: string; sub?: string; highlight?: boolean }): React.ReactElement {
   return (
     <div className={`card ${highlight ? 'border-primary border-2' : ''}`}>
-      <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">{label}</p>
+      <p className="text-sm text-muted mb-1">{label}</p>
       <p className={`text-2xl font-bold ${highlight ? 'text-green-700' : 'text-primary'}`}>{value}</p>
       {sub && <p className="text-xs text-muted-2 mt-1">{sub}</p>}
       {highlight && <span className="inline-block mt-2 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded">Lowest lifetime tax</span>}
@@ -43,7 +43,7 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
       return out;
     };
     return [
-      { label: 'Optimal', color: '#007A78', timeline: cum('chosenTax') },
+      { label: 'Optimal', color: '#1C3A5E', timeline: cum('chosenTax') },
       { label: 'Always Old', color: '#d97706', timeline: cum('oldTax') },
       { label: 'Always New', color: '#6366f1', timeline: cum('newTax') },
     ];
@@ -58,7 +58,7 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
   return (
     <div>
       <div className="rounded-lg bg-primary-50 border border-primary-100 px-4 py-3 mb-6 text-sm text-primary-800">
-        <strong>100% private.</strong> Your whole salary and tax projection is computed in your browser. nothing is sent to any server.
+        <strong>100% private.</strong> Your whole salary and tax projection is computed in your browser; nothing is sent to any server.
       </div>
 
       <Calculator title="Your profile" description="We project your tax under both regimes for every year to your horizon, then pick the cheaper path.">
@@ -119,7 +119,7 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
             <div className="text-sm"><span className="text-muted-2">Health 80D</span><div className="font-semibold">{formatINR(Math.round(analysis.recommendedFirstYearMix.ded80D))}</div></div>
           </div>
         ) : (
-          <p className="text-sm text-muted">You&apos;re in the <strong>new regime</strong> this year, so tax-saving lock-ins (80C, 80CCD(1B)) give no benefit. keep that money liquid or in unconstrained investments. Health cover (80D) and employer NPS (80CCD(2)) still make sense for non-tax reasons.</p>
+          <p className="text-sm text-muted">You&apos;re in the <strong>new regime</strong> this year, so tax-saving lock-ins (80C, 80CCD(1B)) give no benefit; keep that money liquid or in unconstrained investments. Health cover (80D) and employer NPS (80CCD(2)) still make sense for non-tax reasons.</p>
         )}
       </div>
 
@@ -165,7 +165,7 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
 
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-xs text-yellow-800">
-          <strong>Educational estimate, not tax advice.</strong> Projections assume current FY 2025-26 rules persist (you can override constants in the engine), simplified HRA (Basic = 40% of CTC) and a 20-year home-loan amortization. Regime-switching rules, surcharge, and the 80E/80C/80D specifics can change. verify with a qualified Chartered Accountant before filing or committing to lock-in products.
+          <strong>Educational estimate, not tax advice.</strong> Projections assume current FY 2026-27 rules persist (you can override constants in the engine), simplified HRA (Basic = 40% of CTC) and a 20-year home-loan amortization. Regime-switching rules, surcharge, and the 80E/80C/80D specifics can change; verify with a qualified Chartered Accountant before filing or committing to lock-in products.
         </p>
       </div>
     </div>

@@ -4,78 +4,123 @@
 
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    @apply bg-paper text-ink font-sans;
+    @apply bg-white text-ink font-sans;
     line-height: 1.6;
+    font-feature-settings: 'cv11', 'ss01';
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-bold text-navy;
+    @apply font-sans font-semibold text-ink;
     line-height: 1.15;
-    letter-spacing: 0.1px;
+    letter-spacing: -0.02em;
   }
 
   a {
     color: #1C3A5E;
-    transition: color 0.2s ease;
+    transition: color 0.15s ease;
   }
 
   a:hover {
-    color: #A62822;
+    color: #0F2237;
+  }
+
+  :focus-visible {
+    outline: 2px solid #1C3A5E;
+    outline-offset: 2px;
   }
 
   ::selection {
     background-color: #1C3A5E;
-    color: #F3EAD6;
+    color: #FFFFFF;
+  }
+
+  /* Figures line up in tables and price cards. */
+  table, .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 @layer components {
   .container-main {
-    @apply w-full max-w-content mx-auto px-5 sm:px-6 lg:px-8;
+    @apply w-full max-w-content mx-auto px-5 sm:px-8;
   }
 
+  /* Buttons */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-navy text-paper font-bold rounded-[3px]
-           border border-navy transition-all duration-200 ease-in-out
-           hover:bg-navy-deep hover:text-paper hover:-translate-y-px hover:shadow-md
-           focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2
-           disabled:opacity-50 disabled:cursor-not-allowed
-           min-h-[46px] text-[15px];
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-navy text-white font-semibold rounded-lg
+           border border-navy no-underline transition-all duration-200 ease-out
+           hover:bg-navy-deep hover:border-navy-deep hover:text-white hover:shadow-lift
+           active:translate-y-px
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none
+           min-h-[44px] text-[15px];
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-navy font-bold rounded-[3px]
-           border border-navy transition-all duration-200 ease-in-out
-           hover:bg-navy hover:text-paper hover:-translate-y-px
-           focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-ink font-semibold rounded-lg
+           border border-line no-underline transition-all duration-200 ease-out
+           hover:border-navy hover:text-navy hover:shadow-card
+           active:translate-y-px
            disabled:opacity-50 disabled:cursor-not-allowed
-           min-h-[46px] text-[15px];
+           min-h-[44px] text-[15px];
   }
 
+  /* Kept for older markup; now the same as the primary button. */
   .btn-yellow {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-yellow text-brown font-extrabold rounded-[3px]
-           border border-brand-yellow transition-all duration-200 ease-in-out
-           hover:-translate-y-px hover:brightness-95
-           focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:ring-offset-2
-           min-h-[46px] text-[15px];
+    @apply btn-primary;
   }
 
+  .btn-link {
+    @apply inline-flex items-center gap-1.5 font-semibold text-navy no-underline
+           transition-colors duration-150 hover:text-navy-deep;
+  }
+
+  .btn-link svg {
+    @apply transition-transform duration-200;
+  }
+
+  .btn-link:hover svg {
+    transform: translateX(3px);
+  }
+
+  /* Cards */
   .card {
-    @apply bg-paper rounded-[5px] border border-line p-6 transition-all duration-200 ease-in-out
-           hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(30,20,10,0.12)] hover:border-navy;
+    @apply bg-white rounded-xl border border-line p-6 shadow-card
+           transition-all duration-200 ease-out;
+  }
+
+  a.card, .card-link {
+    @apply no-underline text-ink hover:border-navy/60 hover:shadow-lift hover:-translate-y-0.5 hover:text-ink;
+  }
+
+  .card-flat {
+    @apply bg-white rounded-xl border border-line p-6;
   }
 
   .input-field {
-    @apply w-full px-4 py-3 bg-paper border border-line rounded-[4px] text-base text-ink
-           focus:outline-none focus:ring-2 focus:ring-navy focus:border-navy
+    @apply w-full px-3.5 py-2.5 bg-white border border-line rounded-lg text-base text-ink
+           transition-colors duration-150
+           hover:border-muted-2
+           focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy
            placeholder:text-muted-2 min-h-[44px];
+  }
+
+  .label {
+    @apply block text-sm font-medium text-ink mb-1.5;
   }
 
   .price-up {
@@ -87,167 +132,187 @@
   }
 
   .price-neutral {
-    @apply text-muted;
+    @apply text-muted-2;
   }
 
   .section-spacing {
-    @apply py-8 sm:py-12;
+    @apply py-12 sm:py-16;
   }
 
+  .section {
+    @apply py-16 sm:py-20;
+  }
+
+  .section-band {
+    @apply bg-paper-2 border-y border-line;
+  }
+
+  /* Headings */
   .heading-1 {
-    @apply font-serif text-4xl sm:text-5xl font-bold text-navy leading-[1.12];
+    @apply font-sans text-4xl sm:text-5xl font-semibold text-ink tracking-[-0.025em] leading-[1.1];
   }
 
   .heading-2 {
-    @apply font-serif text-3xl sm:text-4xl font-bold text-navy leading-[1.15];
+    @apply font-sans text-2xl sm:text-3xl font-semibold text-ink tracking-[-0.02em] leading-[1.2];
   }
 
   .heading-3 {
-    @apply font-serif text-xl sm:text-2xl font-bold text-navy;
+    @apply font-sans text-lg sm:text-xl font-semibold text-ink tracking-[-0.01em];
   }
 
-  .text-body {
-    @apply text-base text-ink/90 leading-relaxed;
-  }
-
-  .link-internal {
-    @apply text-navy underline underline-offset-2 font-medium
-           transition-colors duration-200 ease-in-out hover:text-brand-red;
-  }
-
-  /* Editorial helpers used by the homepage and section headers */
-  .eyebrow {
-    @apply inline-block font-sans text-xs font-bold tracking-[0.2em] uppercase text-brand-red;
-  }
-
-  .eyebrow-on-dark {
-    @apply text-brand-yellow;
+  .display {
+    @apply font-sans font-semibold text-ink tracking-[-0.035em] leading-[1.04];
+    font-size: clamp(38px, 5.4vw, 64px);
   }
 
   .section-title {
-    @apply font-serif font-bold text-navy leading-tight mt-2.5;
-    font-size: clamp(25px, 3vw, 35px);
+    @apply font-sans font-semibold text-ink tracking-[-0.025em] leading-[1.15];
+    font-size: clamp(26px, 3.2vw, 38px);
   }
 
   .section-lead {
-    @apply text-base text-muted mt-2.5 max-w-[600px];
+    @apply text-lg text-muted mt-3 max-w-[620px] leading-relaxed;
   }
 
-  .mark {
-    background-color: #E7B23B;
-    color: #3A2A15;
-    padding: 1px 10px;
-    border-radius: 5px;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
+  .text-body {
+    @apply text-base text-ink/85 leading-relaxed;
   }
 
-  .rule-double {
-    border: 0;
-    border-top: 3px double #DBCBA5;
-    height: 0;
+  .link-internal {
+    @apply text-navy underline decoration-navy/30 underline-offset-[3px] font-medium
+           transition-colors duration-150 hover:decoration-navy;
   }
 
-  /* Highlight badge: yellow is reserved for highlighting */
+  /* Small status labels next to data (not above headings). */
   .badge {
-    @apply inline-flex items-center gap-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.08em]
-           bg-brand-yellow text-brown px-2.5 py-1 rounded-[3px];
+    @apply inline-flex items-center gap-1.5 text-xs font-medium bg-navy-soft text-navy px-2 py-0.5 rounded-md;
   }
 
   .badge-soft {
-    @apply inline-flex items-center gap-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.08em]
-           bg-brand-yellow-soft/70 text-brown px-2.5 py-1 rounded-[3px];
+    @apply inline-flex items-center gap-1.5 text-xs font-medium bg-paper-2 text-muted px-2 py-0.5 rounded-md border border-line;
   }
 
   .badge-navy {
-    @apply inline-flex items-center gap-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.08em]
-           border border-navy text-navy bg-navy/5 px-2.5 py-1 rounded-[3px];
+    @apply inline-flex items-center gap-1.5 text-xs font-medium bg-navy-soft text-navy px-2 py-0.5 rounded-md;
   }
 
   .badge-red {
-    @apply inline-flex items-center gap-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.08em]
-           border border-brand-red text-brand-red bg-brand-red/5 px-2.5 py-1 rounded-[3px];
+    @apply inline-flex items-center gap-1.5 text-xs font-medium bg-red-50 text-brand-red px-2 py-0.5 rounded-md;
   }
 
-  /* Category chip */
+  .badge-green {
+    @apply inline-flex items-center gap-1.5 text-xs font-medium bg-green-50 text-green-800 px-2 py-0.5 rounded-md;
+  }
+
   .pill {
-    @apply inline-flex items-center font-sans text-[12.5px] font-semibold text-ink
-           border border-line bg-paper-2 px-2.5 py-1 rounded-[3px];
+    @apply inline-flex items-center text-[13px] font-medium text-muted
+           border border-line bg-white px-2.5 py-1 rounded-full;
   }
 
-  /* Callouts: yellow highlights an important note, navy is neutral info, red is a warning */
+  /* Callouts */
   .callout {
-    @apply border-l-4 border-brand-yellow bg-brand-yellow-soft/40 rounded-r-[5px] p-4 text-ink;
+    @apply border border-amber-200 bg-amber-50 rounded-xl p-4 text-ink;
   }
 
   .callout-navy {
-    @apply border-l-4 border-navy bg-navy/5 rounded-r-[5px] p-4 text-ink;
+    @apply border border-navy/15 bg-navy-soft rounded-xl p-4 text-ink;
   }
 
   .callout-red {
-    @apply border-l-4 border-brand-red bg-brand-red/5 rounded-r-[5px] p-4 text-ink;
+    @apply border border-red-200 bg-red-50 rounded-xl p-4 text-ink;
   }
 
   .divider {
     @apply border-0 border-t border-line;
   }
 
-  .prose h2 {
-    @apply font-serif text-2xl font-bold mt-8 mb-4 text-navy;
+  /* Plain in the new design; kept so older markup does not break. */
+  .mark {
+    color: inherit;
   }
 
-  .prose h3 {
-    @apply font-serif text-xl font-bold mt-6 mb-3 text-navy;
+  .rule-double {
+    @apply border-0 border-t border-line;
   }
 
-  .prose p {
-    @apply mb-4 text-ink/90 leading-relaxed;
+  /* Tables */
+  .table-clean {
+    @apply w-full text-sm border-collapse;
   }
 
-  .prose ul {
-    @apply list-disc pl-6 mb-4 space-y-1;
+  .table-clean thead th {
+    @apply bg-paper-2 text-left font-medium text-muted px-4 py-3 border-b border-line whitespace-nowrap;
   }
 
-  .prose ol {
-    @apply list-decimal pl-6 mb-4 space-y-1;
+  .table-clean tbody td {
+    @apply px-4 py-3 border-b border-line-soft;
   }
 
-  .prose li {
+  .table-clean tbody tr {
+    @apply transition-colors duration-100 hover:bg-paper-2/70;
+  }
+
+  /* Long-form reading */
+  .prose {
     @apply text-ink/90;
   }
 
+  .prose h2 {
+    @apply font-sans text-2xl font-semibold mt-10 mb-4 text-ink tracking-[-0.02em];
+  }
+
+  .prose h3 {
+    @apply font-sans text-xl font-semibold mt-8 mb-3 text-ink;
+  }
+
+  .prose p {
+    @apply mb-4 leading-[1.75];
+  }
+
+  .prose ul {
+    @apply list-disc pl-6 mb-4 space-y-1.5;
+  }
+
+  .prose ol {
+    @apply list-decimal pl-6 mb-4 space-y-1.5;
+  }
+
+  .prose li {
+    @apply leading-[1.7];
+  }
+
   .prose a {
-    @apply text-navy underline hover:text-brand-red;
+    @apply text-navy underline decoration-navy/30 underline-offset-[3px] hover:decoration-navy;
   }
 
   .prose blockquote {
-    @apply border-l-4 border-brand-yellow pl-4 italic text-muted my-4;
+    @apply border-l-2 border-navy pl-4 text-muted my-6;
   }
 
   .prose strong {
-    @apply font-semibold text-navy;
+    @apply font-semibold text-ink;
   }
 
   .prose img {
-    @apply rounded-[5px] my-6;
+    @apply rounded-xl my-6;
   }
 
   .prose table {
-    @apply w-full border-collapse my-4;
+    @apply w-full border-collapse my-6 text-sm;
   }
 
   .prose th {
-    @apply bg-paper-2 border border-line px-4 py-2 text-left font-semibold text-navy;
+    @apply bg-paper-2 border border-line px-4 py-2.5 text-left font-medium text-ink;
   }
 
   .prose td {
-    @apply border border-line px-4 py-2;
+    @apply border border-line px-4 py-2.5;
   }
 }
 
 @layer utilities {
   .min-h-screen-minus-header {
-    min-height: calc(100vh - 106px);
+    min-height: calc(100vh - 72px);
   }
 
   .line-clamp-2 {
@@ -257,8 +322,22 @@
     overflow: hidden;
   }
 
+  /* No longer patterned; the page is plain white. */
   .bg-paper-dots {
-    background-image: radial-gradient(rgba(120, 98, 68, 0.08) 1px, transparent 1px);
-    background-size: 22px 22px;
+    background-image: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
   }
 }
+
+/* Homepage hero: slides fade in, the line art drifts slowly. Both stop for reduced motion. */
+@keyframes hero-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes hero-drift { from { transform: translateX(0); } to { transform: translateX(-60px); } }
+.hero-fade { animation: hero-fade 0.6s ease-out both; }
+.hero-lines { animation: hero-drift 18s ease-in-out infinite alternate; }

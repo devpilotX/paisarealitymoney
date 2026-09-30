@@ -1,5 +1,5 @@
 /**
- * Government Scheme Benefit Maximizer — test suite (26 cases incl. optimizer-vs-greedy)
+ * Government Scheme Benefit Maximizer, test suite (26 cases incl. optimizer-vs-greedy)
  * Run: npx ts-node --project tsconfig.scripts.json tests/scheme-maximizer.test.ts
  */
 

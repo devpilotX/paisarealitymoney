@@ -1,0 +1,13 @@
+# Full encrypted backup (deploy/vps/backup.sh). Started by the timer, or by the
+# request path unit when Telegram /backup asks for one.
+[Unit]
+Description=Paisa Reality full backup
+After=postgresql.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/paisareality-backup
+Nice=10
+IOSchedulingClass=idle
+TimeoutStartSec=30min

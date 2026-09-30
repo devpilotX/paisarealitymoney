@@ -1,5 +1,5 @@
 /**
- * Multi-Year Tax Regime & Investment Optimizer — test suite (24 cases)
+ * Multi-Year Tax Regime & Investment Optimizer, test suite (24 cases)
  * Run: npx ts-node --project tsconfig.scripts.json tests/lifecycle-tax-optimizer.test.ts
  */
 

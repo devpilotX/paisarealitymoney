@@ -18,7 +18,7 @@ interface PriceChartProps {
 export default function PriceChart({
   data,
   title,
-  color = '#007A78',
+  color = '#1C3A5E',
   height = 250,
 }: PriceChartProps): React.ReactElement {
   const chartData = useMemo(() => {

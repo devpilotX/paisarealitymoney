@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { execute, query } from '@/lib/db';
-import { sendEmail, getAppUrl, escapeHtml } from '@/lib/email';
+import { sendEmail, getAppUrl, escapeHtml, emailLayout, unsubscribeHeaders } from '@/lib/email';
 import { sanitizeEmail } from '@/lib/sanitize';
 import crypto from 'crypto';
 import type { QueryResultRow } from 'pg';
@@ -31,12 +31,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Send confirmation (best-effort)
     const unsub = `${getAppUrl()}/unsubscribe?token=${token}`;
-    const html = `<div style="font-family:Inter,system-ui,sans-serif;max-width:500px;margin:0 auto;padding:20px;">
-      <h2 style="color:#007A78;">You are subscribed!</h2>
-      <p>Thank you for subscribing to the Paisa Reality newsletter. You will receive updates on prices, tools, and financial tips.</p>
-      <p style="font-size:12px;color:#6b7280;margin-top:24px;"><a href="${escapeHtml(unsub)}">Unsubscribe</a></p>
-    </div>`;
-    sendEmail({ to: email, subject: 'Subscribed to Paisa Reality', html, replyTo: 'contact@paisareality.com' }).catch(() => {});
+    const html = emailLayout(`
+      <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">You are subscribed</h2>
+      <p style="margin:0 0 12px;color:#374151;">Thanks for signing up. Once a week we send a short note: what moved in gold and fuel prices, new schemes and scholarships worth knowing about, and one money question answered plainly.</p>
+      <p style="margin:0;color:#6B7280;font-size:13px;">Did not sign up? <a href="${escapeHtml(unsub)}" style="color:#4B5563;">Unsubscribe with one click</a>.</p>
+    `, 'Your weekly Paisa Reality note starts soon');
+    sendEmail({ to: email, subject: 'You are subscribed to Paisa Reality', html, replyTo: 'connect@paisareality.com', headers: unsubscribeHeaders(token) }).catch(() => {});
 
     return NextResponse.json({ success: true });
   } catch {

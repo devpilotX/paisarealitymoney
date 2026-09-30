@@ -66,7 +66,7 @@ export default function TaxHarvestingClient(): React.ReactElement {
   return (
     <div>
       <div className="rounded-lg bg-primary-50 border border-primary-100 px-4 py-3 mb-6 text-sm text-primary-800">
-        <strong>100% private.</strong> Your portfolio is analysed entirely in your browser. nothing is uploaded anywhere.
+        <strong>100% private.</strong> Your portfolio is analysed entirely in your browser; nothing is uploaded anywhere.
       </div>
 
       {/* Lots */}
@@ -115,9 +115,9 @@ export default function TaxHarvestingClient(): React.ReactElement {
 
       {/* Headline */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="card bg-green-50 border-green-200"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Tax saved this year</p><p className="text-2xl font-bold text-green-700">{formatCompactINR(a.taxSaved)}</p><p className="text-xs text-muted-2 mt-1">By harvesting losses to offset gains</p></div>
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Tax-free gains to harvest</p><p className="text-2xl font-bold text-primary">{formatCompactINR(a.gainHarvestAmount)}</p><p className="text-xs text-muted-2 mt-1">Basis reset worth ~{formatCompactINR(a.basisStepUpBenefit)} in future tax</p></div>
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Exemption headroom left</p><p className="text-2xl font-bold text-primary">{formatCompactINR(a.exemptionHeadroomRemaining)}</p><p className="text-xs text-muted-2 mt-1">of the ₹1.25L LTCG exemption</p></div>
+        <div className="card bg-green-50 border-green-200"><p className="text-sm text-muted mb-1">Tax saved this year</p><p className="text-2xl font-bold text-green-700">{formatCompactINR(a.taxSaved)}</p><p className="text-xs text-muted-2 mt-1">By harvesting losses to offset gains</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Tax-free gains to harvest</p><p className="text-2xl font-bold text-primary">{formatCompactINR(a.gainHarvestAmount)}</p><p className="text-xs text-muted-2 mt-1">Basis reset worth ~{formatCompactINR(a.basisStepUpBenefit)} in future tax</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Exemption headroom left</p><p className="text-2xl font-bold text-primary">{formatCompactINR(a.exemptionHeadroomRemaining)}</p><p className="text-xs text-muted-2 mt-1">of the ₹1.25L LTCG exemption</p></div>
       </div>
 
       {/* Before / after */}
@@ -128,7 +128,7 @@ export default function TaxHarvestingClient(): React.ReactElement {
           <div className="text-center p-3 rounded-lg bg-green-50"><p className="text-xs text-muted-2 mb-1">With harvesting</p><p className="text-xl font-bold text-green-700">{formatINR(a.afterHarvest.tax)}</p></div>
         </div>
         <div className="mt-3 text-xs text-muted-2 flex flex-wrap gap-x-4 gap-y-1">
-          <span>Losses to carry forward. STCL: <strong>{formatCompactINR(a.afterHarvest.carrySTCL)}</strong>, LTCL: <strong>{formatCompactINR(a.afterHarvest.carryLTCL)}</strong> (8 years)</span>
+          <span>Losses to carry forward, STCL: <strong>{formatCompactINR(a.afterHarvest.carrySTCL)}</strong>, LTCL: <strong>{formatCompactINR(a.afterHarvest.carryLTCL)}</strong> (8 years)</span>
         </div>
       </div>
 
@@ -138,11 +138,11 @@ export default function TaxHarvestingClient(): React.ReactElement {
       <div className="card my-6">
         <h3 className="text-base font-semibold mb-3">Your action list</h3>
         <div className="space-y-2">
-          {a.actions.length === 0 && <p className="text-sm text-muted-2">No harvesting actions. your lots are all short-term gains or there is nothing to optimise right now.</p>}
+          {a.actions.length === 0 && <p className="text-sm text-muted-2">No harvesting actions: your lots are all short-term gains or there is nothing to optimise right now.</p>}
           {a.actions.map((act, i) => (
             <div key={i} className={`rounded-lg p-3 ${ACTION_STYLE[act.type].tone}`}>
               <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-xs font-semibold uppercase tracking-wide text-muted">{ACTION_STYLE[act.type].label}</span>
+                <span className="text-sm font-medium text-muted">{ACTION_STYLE[act.type].label}</span>
                 <span className="text-sm font-medium text-navy">{act.lotName}</span>
               </div>
               <p className="text-sm text-ink">{act.note}</p>
@@ -174,7 +174,7 @@ export default function TaxHarvestingClient(): React.ReactElement {
 
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-xs text-yellow-800">
-          <strong>Educational estimate, not tax or investment advice.</strong> This is not a recommendation to buy or sell any security (SEBI Investment Adviser Regulations). Tax is computed at FY 2025-26 rates (LTCG 12.5% over ₹1.25L, STCG 20%, debt at slab) plus 4% cess; surcharge and lot-level FIFO matching at your broker may change the exact figures. India has no formal wash-sale rule, but re-buying purely to harvest is a judgement call. verify with a qualified CA before transacting.
+          <strong>Educational estimate, not tax or investment advice.</strong> This is not a recommendation to buy or sell any security (SEBI Investment Adviser Regulations). Tax is computed at FY 2026-27 rates (LTCG 12.5% over ₹1.25L, STCG 20%, debt at slab) plus 4% cess; surcharge and lot-level FIFO matching at your broker may change the exact figures. India has no formal wash-sale rule, but re-buying purely to harvest is a judgement call; verify with a qualified CA before transacting.
         </p>
       </div>
     </div>

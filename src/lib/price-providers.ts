@@ -3,6 +3,8 @@ import type { QueryResultRow } from 'pg';
 import {
   FUEL_BASELINE_AS_OF,
   FUEL_BASELINE_SOURCE,
+  LPG_BASELINE_AS_OF,
+  STATE_FUEL_VERIFIED_ON,
   STATE_FUEL,
   STATE_LPG,
   resolveCityFuel,
@@ -63,8 +65,11 @@ function getGoldApiHeaders(): HeadersInit | undefined {
   return apiKey ? { 'x-api-key': apiKey } : undefined;
 }
 
+/** Calendar date in India (YYYY-MM-DD), independent of the host timezone. */
 function getDateString(date: Date): string {
-  return date.toISOString().split('T')[0] ?? '';
+  // en-CA formats as YYYY-MM-DD. toISOString() would give the UTC date, which is
+  // the previous day for any run between 00:00 and 05:30 IST.
+  return date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
 }
 
 function getNumber(value: unknown, label: string): number {
@@ -110,9 +115,9 @@ export async function fetchExchangeRate(): Promise<ExchangeRate> {
  * below the statutory rate because Indian retail gold does not pass the full
  * duty through to the counter; the market-premium factor then captures the
  * observed spread between duty-adjusted parity and published dealer rates.
- * Gold: GOLD_MARKET_PREMIUM=0.04, calibrated 21 Jul 2026 (Mumbai 24k about
- * Rs 14,290 vs published dealer Rs 14,280 to 14,350). Silver premium 0.175,
- * calibrated 3 Jul 2026. Duty and premium are entangled by this calibration:
+ * Gold: GOLD_MARKET_PREMIUM=0.058, re-fitted 30 Sep 2026 (Mumbai 24k was Rs 14,693
+ * at 0.04 against a published dealer Rs 14,957). Silver premium 0.161, re-fitted the
+ * same day (Rs 242.85/g at 0.175 against Rs 240/g). Duty and premium are entangled by this calibration:
  * do not raise the duty knob without re-fitting the premium to current dealer
  * rates, or prices drift high. All knobs are env-tunable so a re-fit never
  * needs a code deploy.
@@ -120,7 +125,7 @@ export async function fetchExchangeRate(): Promise<ExchangeRate> {
 export function internationalToIndianGold24k(usdPerOz: number, usdToInr: number): number {
   const importDuty = Number.parseFloat(process.env.GOLD_IMPORT_DUTY || '0.06');
   const gst = Number.parseFloat(process.env.GOLD_GST || '0.03');
-  const marketPremium = Number.parseFloat(process.env.GOLD_MARKET_PREMIUM || '0');
+  const marketPremium = Number.parseFloat(process.env.GOLD_MARKET_PREMIUM || '0.058');
   const gramsPerOz = 31.1035;
   const inrPerGram = (usdPerOz / gramsPerOz) * usdToInr;
   return round2(inrPerGram * (1 + importDuty) * (1 + gst) * (1 + marketPremium));
@@ -130,9 +135,9 @@ export function internationalToIndianSilver(usdPerOz: number, usdToInr: number):
   const importDuty = Number.parseFloat(process.env.SILVER_IMPORT_DUTY || '0.06');
   const gst = Number.parseFloat(process.env.SILVER_GST || '0.03');
   // Indian silver has carried a large physical premium over international
-  // parity since the 2025 silver squeeze. Calibrated 3 Jul 2026 vs published
-  // dealer rates (~Rs 245/g vs Rs 208/g parity). Review monthly.
-  const marketPremium = Number.parseFloat(process.env.SILVER_MARKET_PREMIUM || '0.175');
+  // parity since the 2025 silver squeeze. Re-fitted 30 Sep 2026 against published
+  // dealer rates (Rs 240/g in Mumbai). The daily drift check flags when it needs another re-fit.
+  const marketPremium = Number.parseFloat(process.env.SILVER_MARKET_PREMIUM || '0.161');
   const gramsPerOz = 31.1035;
   const inrPerGram = (usdPerOz / gramsPerOz) * usdToInr;
   return round2(inrPerGram * (1 + importDuty) * (1 + gst) * (1 + marketPremium));
@@ -316,7 +321,7 @@ export async function updateFuelPricesLive(): Promise<UpdateResult> {
 
         const petrol = (override && pickNumber(override.payload, 'petrol')) ?? livePetrol ?? baseline.petrol;
         const diesel = (override && pickNumber(override.payload, 'diesel')) ?? liveDiesel ?? baseline.diesel;
-        const asOf = override ? override.asOf : liveBoth ? today : FUEL_BASELINE_AS_OF;
+        const asOf = override ? override.asOf : liveBoth ? today : (STATE_FUEL_VERIFIED_ON[city.state] ?? FUEL_BASELINE_AS_OF);
         const source = override ? override.source : liveBoth ? FUEL_LIVE_SOURCE : FUEL_BASELINE_SOURCE;
         if (!override && liveBoth) liveCount++;
         if (asOf < oldestAsOf) oldestAsOf = asOf;
@@ -375,7 +380,7 @@ export async function updateLpgPricesLive(): Promise<UpdateResult> {
         const domestic = (override && pickNumber(override.payload, 'domestic')) ?? baseline.domestic;
         const commercialOverride = override ? pickNumber(override.payload, 'commercial') : undefined;
         const commercial = commercialOverride ?? baseline.commercial;
-        const asOf = override ? override.asOf : FUEL_BASELINE_AS_OF;
+        const asOf = override ? override.asOf : LPG_BASELINE_AS_OF;
         const source = override ? override.source : FUEL_BASELINE_SOURCE;
         if (asOf < oldestAsOf) oldestAsOf = asOf;
 

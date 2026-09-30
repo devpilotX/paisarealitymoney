@@ -53,7 +53,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     response.cookies.set('refresh-token', refreshToken, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 30 * 24 * 60 * 60, path: '/' });
     return response;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    console.error('auth/signup error:', error instanceof Error ? error.message : 'Unknown');
+    return NextResponse.json({ success: false, error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

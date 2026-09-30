@@ -5,15 +5,28 @@ import AdBanner from '@/components/AdBanner';
 import ScholarshipReminderForm from '@/components/ScholarshipReminderForm';
 import { pageMetadata, buildRecordTitle, buildRecordDescription } from '@/lib/seo';
 import FAQ from '@/components/FAQ';
-import { faqSchema } from '@/lib/schema';
 import { deadlineAnswer, deadlineQuestion, hasDeadline } from '@/lib/deadlines';
 import { formatNumber } from '@/lib/constants';
 import { getScholarshipBySlug, type Scholarship } from '@/lib/scholarships';
-import { breadcrumbSchema, scholarshipSchema } from '@/lib/schema';
+import { scholarshipSchema } from '@/lib/schema';
+import { query } from '@/lib/db';
+import type { QueryResultRow } from 'pg';
+import ScholarshipDetails from '@/components/ScholarshipDetails';
 
-export const dynamic = 'force-dynamic';
+// Cached and regenerated hourly like the scheme pages, so crawlers get a fast static response.
+export const revalidate = 3600;
 
 interface RouteParams { params: Promise<{ slug: string }>; }
+
+/** Pre-render every active scholarship at build time, like the scheme pages. */
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+  try {
+    const rows = await query<QueryResultRow & { slug: string }>('SELECT slug FROM scholarships WHERE active = TRUE ORDER BY slug');
+    return rows.map((row) => ({ slug: row.slug }));
+  } catch {
+    return [];
+  }
+}
 
 function formatDeadline(iso: string): string {
   const d = new Date(`${iso}T00:00:00`);
@@ -61,7 +74,7 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
    * of what a scholarship searcher actually asks. Every answer below comes from
    * a recorded field or says plainly that the value is not recorded.
    */
-  const level = s.level === 'state' ? 'state government' : 'central government';
+  const level = s.level === 'state' ? 'state government' : s.level === 'private' ? 'private' : 'central government';
   const faqs = [
     {
       question: `What is ${s.name}?`,
@@ -103,8 +116,10 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
     },
   ];
 
+  // BreadcrumbList and FAQPage are emitted by the <Breadcrumb> and <FAQ>
+  // components themselves; adding them here too produced two of each per page,
+  // which Search Console reports as a duplicate FAQPage error.
   const jsonLd = [
-    breadcrumbSchema([{ label: 'Scholarships', href: '/scholarships' }, { label: s.name }]),
     scholarshipSchema({
       name: s.name,
       description: ldDescription,
@@ -113,7 +128,6 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
       amount: s.amountMax,
       officialUrl: s.officialUrl,
     }),
-    faqSchema(faqs),
   ];
 
   return (
@@ -124,7 +138,7 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
       <div className="max-w-3xl">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary-50 text-primary">
-            {s.level === 'state' ? 'State Govt' : 'Central Govt'}
+            {s.level === 'state' ? 'State government' : s.level === 'private' ? 'Private' : 'Central government'}
           </span>
           {s.deadline ? (
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-red/10 text-brand-red">
@@ -152,6 +166,8 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <article className="lg:col-span-2">
+          <ScholarshipDetails s={s} part="glance" />
+
           {s.benefitSummary && (
             <section className="mb-6">
               <h2 className="heading-2 mb-2">What you get</h2>
@@ -207,6 +223,7 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
         </aside>
       </div>
 
+      <ScholarshipDetails s={s} part="similar" />
       <FAQ items={faqs} />
 
       <AdBanner format="horizontal" className="mt-10 mb-8" />

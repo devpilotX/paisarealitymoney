@@ -1,5 +1,5 @@
 /**
- * Real Return Checker — engine unit tests.
+ * Real Return Checker, engine unit tests.
  * Run: npx ts-node --project tsconfig.scripts.json tests/real-return.test.ts
  *
  * Every expected value below is derived from closed-form math, not from the
@@ -96,7 +96,7 @@ test('analyzeOffer: the classic endowment pitch (pay 7.5L, get 14L!)', () => {
   assert(a.totalPaid === 750000, 'total paid 7.5L');
   assert(a.totalReceived === 1400000, 'total received 14L');
   assert(close(a.multiple, 1.87, 0.01), 'multiple ~1.87x (the agent number)');
-  // Hand-solved: IRR ~4.77% — an offer sold as "almost doubles your money"
+  // Hand-solved: IRR ~4.77%, an offer sold as "almost doubles your money"
   assert(a.irrPct !== null && a.irrPct > 4.5 && a.irrPct < 5.0, `real return ~4.77% (got ${a.irrPct}%)`);
   assert(a.verdict.band === 'below-inflation', 'verdict: below inflation');
   assert(a.redFlags.length > 0, 'endowment pattern produces red flags');

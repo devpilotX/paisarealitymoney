@@ -56,7 +56,7 @@ export default function TermsPage(): React.ReactElement {
 
           <section>
             <h2 className="heading-2 mb-2">Third-party services</h2>
-            <p>We use third-party services including Google AdSense (advertising), Google Analytics (usage tracking), and Resend (email delivery). These services have their own terms and privacy policies.</p>
+            <p>We use third-party services including Google AdSense (advertising), Google Analytics (usage tracking), and Hostinger (email delivery). These services have their own terms and privacy policies.</p>
           </section>
 
           <section>

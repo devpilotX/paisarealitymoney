@@ -11,72 +11,13 @@ import ShareButton from '@/components/ShareButton';
 import { formatINR } from '@/lib/constants';
 import { trackCalculatorUse } from '@/lib/analytics';
 
-function calcNewRegimeTax(income: number): number {
-  const slabs = [
-    { limit: 400000, rate: 0 },
-    { limit: 800000, rate: 0.05 },
-    { limit: 1200000, rate: 0.10 },
-    { limit: 1600000, rate: 0.15 },
-    { limit: 2000000, rate: 0.20 },
-    { limit: 2400000, rate: 0.25 },
-    { limit: Infinity, rate: 0.30 },
-  ];
-  // Standard deduction Rs 75,000 under new regime
-  const taxableIncome = Math.max(0, income - 75000);
-  let tax = 0;
-  let prevLimit = 0;
-  for (const slab of slabs) {
-    if (taxableIncome <= prevLimit) break;
-    const taxableInSlab = Math.min(taxableIncome, slab.limit) - prevLimit;
-    tax += taxableInSlab * slab.rate;
-    prevLimit = slab.limit;
-  }
-  // Section 87A rebate: tax = 0 if taxable income <= 12 lakh under new regime (FY 2025-26)
-  if (taxableIncome <= 1200000) tax = 0;
-  // Health and education cess 4%
-  tax = tax * 1.04;
-  return Math.round(tax);
-}
-
-function calcOldRegimeTax(income: number, deductions80C: number, deductions80D: number, hra: number, otherDeductions: number, ageGroup: string): number {
-  // Standard deduction Rs 50,000
-  let taxableIncome = Math.max(0, income - 50000 - Math.min(deductions80C, 150000) - Math.min(deductions80D, 75000) - hra - otherDeductions);
-
-  const slabs = ageGroup === 'senior' ? [
-    { limit: 300000, rate: 0 },
-    { limit: 500000, rate: 0.05 },
-    { limit: 1000000, rate: 0.20 },
-    { limit: Infinity, rate: 0.30 },
-  ] : ageGroup === 'super_senior' ? [
-    { limit: 500000, rate: 0 },
-    { limit: 1000000, rate: 0.20 },
-    { limit: Infinity, rate: 0.30 },
-  ] : [
-    { limit: 250000, rate: 0 },
-    { limit: 500000, rate: 0.05 },
-    { limit: 1000000, rate: 0.20 },
-    { limit: Infinity, rate: 0.30 },
-  ];
-
-  let tax = 0;
-  let prevLimit = 0;
-  for (const slab of slabs) {
-    if (taxableIncome <= prevLimit) break;
-    const taxableInSlab = Math.min(taxableIncome, slab.limit) - prevLimit;
-    tax += taxableInSlab * slab.rate;
-    prevLimit = slab.limit;
-  }
-  // Section 87A rebate: tax = 0 if taxable income <= 5 lakh under old regime
-  if (taxableIncome <= 500000) tax = 0;
-  tax = tax * 1.04;
-  return Math.round(tax);
-}
+import { calcNewRegimeTax, calcOldRegimeTax } from '@/lib/income-tax';
 
 const TAX_FAQS = [
-  { question: 'Which tax regime is better - old or new?', answer: 'It depends on your deductions. If you claim significant deductions under 80C (Rs 1.5 lakh), 80D (health insurance), HRA, and home loan interest, the old regime may save you more tax. If you have few deductions, the new regime with lower rates and higher rebate (up to Rs 12 lakh) is usually better. Use this calculator to compare both.' },
-  { question: 'What is Section 87A rebate?', answer: 'Section 87A provides a tax rebate for lower-income taxpayers. Under the new regime (FY 2025-26), if your taxable income is up to Rs 12 lakh, your entire tax liability is waived. Under the old regime, the rebate applies for taxable income up to Rs 5 lakh.' },
+  { question: 'Which tax regime is better - old or new?', answer: 'It depends on your deductions. If you claim significant deductions under 80C (Rs 1.5 lakh), 80D (health insurance), HRA, and home loan interest, the old regime may save you more tax. If you have few deductions, the new regime with lower rates and higher rebate (no tax up to Rs 12 lakh of taxable income) is usually better. Use this calculator to compare both.' },
+  { question: 'What is Section 87A rebate?', answer: 'Section 87A provides a tax rebate for lower-income taxpayers. Under the new regime (FY 2026-27, unchanged from FY 2025-26), if your taxable income is up to Rs 12 lakh, your entire tax liability is waived. Just above Rs 12 lakh, marginal relief caps your tax at the amount by which your income exceeds Rs 12 lakh. Under the old regime, the rebate applies for taxable income up to Rs 5 lakh.' },
   { question: 'What deductions are available under the old regime?', answer: 'Key deductions: Section 80C (up to Rs 1.5 lakh for PPF, ELSS, EPF, life insurance, etc.), Section 80D (Rs 25,000-75,000 for health insurance), HRA exemption (for salaried paying rent), home loan interest (up to Rs 2 lakh under Section 24), NPS (additional Rs 50,000 under 80CCD(1B)), and standard deduction of Rs 50,000.' },
-  { question: 'What is the standard deduction for FY 2025-26?', answer: 'Salaried taxpayers get a standard deduction from salary income with no proof needed: Rs 75,000 under the new regime and Rs 50,000 under the old regime for FY 2025-26. It is applied automatically before tax is calculated.' },
+  { question: 'What is the standard deduction for FY 2026-27?', answer: 'Salaried taxpayers get a standard deduction from salary income with no proof needed: Rs 75,000 under the new regime and Rs 50,000 under the old regime for FY 2026-27, the same as the year before. It is applied automatically before tax is calculated.' },
   { question: 'What is the difference between gross income and taxable income?', answer: 'Gross income is your total income before any deductions. Taxable income is what remains after subtracting eligible deductions and exemptions. Tax is calculated on your taxable income, not your gross income.' },
   { question: 'Do I need to file an income tax return if my income is below the limit?', answer: 'Filing becomes mandatory once your income crosses the basic exemption limit. Even below it, filing can help you claim a refund of any TDS deducted, carry forward losses, and serve as income proof for loans and visas.' },
 ];
@@ -108,7 +49,7 @@ export default function IncomeTaxCalculatorPage(): React.ReactElement {
   return (
     <div className="container-main py-6">
       <Breadcrumb items={[{ label: 'Calculators', href: '/calculators' }, { label: 'Income Tax Calculator' }]} />
-      <h1 className="heading-1 mb-6">Income Tax Calculator (FY 2025-26)</h1>
+      <h1 className="heading-1 mb-6">Income Tax Calculator (FY 2026-27)</h1>
       <AdBanner format="horizontal" />
 
       <div className="my-8">
@@ -154,7 +95,7 @@ export default function IncomeTaxCalculatorPage(): React.ReactElement {
 
       <article className="max-w-3xl my-8">
         <h2 className="heading-2 mb-4">How Income Tax Calculator Works</h2>
-        <p className="text-body mb-4">This calculator computes tax under both old and new regimes based on the latest FY 2025-26 slab rates. The new regime offers lower tax rates with fewer deductions (only standard deduction of Rs 75,000). The old regime has higher rates but allows deductions under 80C, 80D, HRA, home loan interest, and more.</p>
+        <p className="text-body mb-4">This calculator computes tax under both old and new regimes based on the FY 2026-27 slab rates (the same as FY 2025-26, since Budget 2026 left them unchanged). The new regime offers lower tax rates with fewer deductions (only standard deduction of Rs 75,000). The old regime has higher rates but allows deductions under 80C, 80D, HRA, home loan interest, and more.</p>
         <p className="text-body mb-4">The new regime provides a rebate under Section 87A for taxable income up to Rs 12 lakh, making it effectively tax-free. The old regime rebate applies up to Rs 5 lakh taxable income. Both regimes include 4% health and education cess on the tax amount.</p>
         <p className="text-body mb-4">Note: This calculator provides an estimate. Actual tax may vary based on surcharge (for income above Rs 50 lakh), specific exemptions, and other factors. Consult a tax professional for accurate filing.</p>
       </article>

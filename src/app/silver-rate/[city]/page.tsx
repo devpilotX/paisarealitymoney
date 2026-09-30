@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
+import { getCityMetalContext } from '@/lib/city-metal';
 
 import { getCityBySlug, getRelatedCities, CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
@@ -59,14 +60,18 @@ export default async function SilverRateCityPage({ params }: PageProps): Promise
 
   const today = historyRows[0];
   const weekHistory = historyRows.slice(0, 7);
+  const ctx = await getCityMetalContext('silver', city.slug);
+  const r2 = (v: number): string => formatINR(Math.round(v * 100) / 100);
+  const r0 = (v: number): string => formatINR(Math.round(v));
   const chartData = historyRows.map((r) => ({ date: r.price_date, price: r.silver_per_gram })).reverse();
   const relatedCities = getRelatedCities(city.slug, 10);
   const cityLinks = relatedCities.map((c) => ({ href: `/silver-rate/${c.slug}`, label: `Silver Rate in ${c.name}`, description: c.state }));
 
   const faqs = [
-    { question: `What is the silver rate in ${city.name} today?`, answer: today ? `Today's silver rate in ${city.name} is ${formatINR(today.silver_per_gram)} per gram and ${formatINR(today.silver_per_kg)} per kg.` : `Silver prices for ${city.name} are being updated.` },
-    { question: `Where can I buy silver in ${city.name}?`, answer: `You can buy silver from authorized jewellers, bullion dealers, and some banks in ${city.name}. Always check for BIS hallmark (925 for Sterling Silver). You can also buy digital silver through apps and invest in Silver ETFs through your demat account.` },
-    { question: 'What affects silver prices?', answer: 'Silver prices are affected by international market rates, rupee-dollar exchange rate, import duty, industrial demand (especially from electronics and solar panel manufacturing), and seasonal demand during festivals and weddings.' },
+    { question: `What is the silver rate in ${city.name} today?`, answer: today ? `Silver in ${city.name} is ${formatINR(today.silver_per_gram)} a gram, or ${formatINR(today.silver_per_kg)} a kilo, as of ${formatDate(today.price_date)}. That is before 3% GST and any making charge.` : `Today's rate for ${city.name} appears after the first update of the day, around 6:15 am.` },
+    { question: `Is silver cheaper in ${city.name} than elsewhere?`, answer: ctx ? `Today silver in ${city.name} is ${r2(Math.abs(ctx.diffFromAvg))} a gram ${ctx.diffFromAvg >= 0 ? 'above' : 'below'} the average of the ${ctx.cityCount} cities we track, and ranks ${ctx.rank} from cheapest. On a kilo that is ${r0(Math.abs(ctx.diffFromAvg) * 1000)}.` : 'Differences between cities are small and come from local dealer rates and transport.' },
+    { question: 'Is silver jewellery hallmarked?', answer: 'Hallmarking is voluntary for silver, unlike gold. Since 1 September 2025 every piece that is hallmarked carries the BIS mark with the word SILVER, a purity grade (800, 835, 925, 958, 970, 990 or 999) and a six-character HUID code you can check in the BIS CARE app. Ask for a hallmarked piece when you can.' },
+    { question: 'Why is silver in India priced above the international rate?', answer: 'The international price is converted to rupees and then import duty and GST are added. Since the silver squeeze of 2025, physical silver in India has also traded at a noticeable premium to that landed cost, which our rate includes. The methodology page explains the steps.' },
   ];
 
   return (
@@ -96,11 +101,41 @@ export default async function SilverRateCityPage({ params }: PageProps): Promise
         <div className="my-8"><PriceChart data={chartData} title={`30-Day Silver Price Trend in ${city.name}`} color="#6B7280" /></div>
       )}
 
-      <article className="max-w-3xl my-8">
-        <h2 className="heading-2 mb-4">About Silver Rate in {city.name}</h2>
-        <p className="text-body mb-4">{city.name} has an active silver market with numerous jewellers and bullion dealers. The silver rate in {city.name} follows international prices closely, with small adjustments for local taxes and transportation.</p>
-        <p className="text-body mb-4">Silver is popular in {city.state} for jewellery, utensils, and religious offerings. During festivals like Dhanteras, demand for silver items rises significantly, which can cause a temporary increase in local silver prices.</p>
-        <p className="text-body mb-4">Also check the <Link href={`/gold-rate/${city.slug}`} className="link-internal">gold rate in {city.name}</Link> and <Link href={`/petrol-price/${city.slug}`} className="link-internal">petrol price in {city.name}</Link>.</p>
+      {ctx && today && (
+        <section className="my-12 grid gap-6 lg:grid-cols-2">
+          <div className="card-flat">
+            <h2 className="heading-3">How {city.name} compares today</h2>
+            <dl className="mt-5 space-y-3 text-[15px]">
+              <div className="flex justify-between gap-4"><dt className="text-muted">Silver in {city.name}</dt><dd className="font-semibold tabular">{r2(ctx.cityPrice)} / g</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-muted">Average of {ctx.cityCount} cities</dt><dd className="tabular">{r2(ctx.indiaAvg)} / g</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-muted">Rank, cheapest first</dt><dd className="tabular">{ctx.rank} of {ctx.cityCount}</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-muted">Cheapest today</dt><dd className="tabular"><Link href={`/silver-rate/${ctx.cheapest.slug}`} className="link-internal">{ctx.cheapest.name}</Link> {r2(ctx.cheapest.price)}</dd></div>
+              {ctx.high30 && ctx.low30 && (
+                <div className="flex justify-between gap-4"><dt className="text-muted">Range over the last {ctx.days} days</dt><dd className="tabular">{r2(ctx.low30)} to {r2(ctx.high30)}</dd></div>
+              )}
+            </dl>
+          </div>
+          <div className="card-flat">
+            <h2 className="heading-3">What silver costs in {city.name}, with GST</h2>
+            <p className="mt-2 text-sm text-muted">At today&apos;s rate plus 3% GST. Coins and bars carry little or no making charge; jewellery and utensils add one.</p>
+            <dl className="mt-5 space-y-3 text-[15px]">
+              {[['10 g coin', 10], ['100 g bar', 100], ['1 kg bar', 1000]].map(([k, g]) => (
+                <div key={k as string} className="flex justify-between gap-4"><dt className="text-muted">{k}</dt><dd className="font-medium tabular">{r0(Number(today.silver_per_gram) * (g as number) * 1.03)}</dd></div>
+              ))}
+            </dl>
+          </div>
+        </section>
+      )}
+
+      <article className="max-w-3xl my-10 prose">
+        <h2>Buying silver in {city.name}</h2>
+        <p>
+          {`The rate here is for fine silver (999), before GST and making charges. Jewellers in ${city.name} quote from their association's morning rate, so the counter price can differ a little from ours; we update five times a day.`}
+        </p>
+        <p>
+          Anklets, utensils and gift items are often 925 or lower, so check the grade before comparing prices. For silver as an investment,
+          silver ETFs follow the same price with no making charge and no storage.
+        </p>
       </article>
 
       <ShareButton url={`/silver-rate/${city.slug}`} title={`Silver Rate in ${city.name} Today`} />

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
+import FuelCityInsight from '@/components/FuelCityInsight';
 
 import { getCityBySlug, getRelatedCities, CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
@@ -66,7 +67,7 @@ export default async function PetrolPriceCityPage({ params }: PageProps): Promis
 
   const faqs = [
     { question: `What is the petrol price in ${city.name} today?`, answer: today ? `Today's petrol price in ${city.name} is ${formatINR(today.petrol_price)} per litre. Diesel price is ${formatINR(today.diesel_price)} per litre.` : `Fuel prices for ${city.name} are being updated.` },
-    { question: `Why is petrol expensive in ${city.name}?`, answer: `Petrol price in ${city.name} depends on VAT rate set by ${city.state} state government, local cess, and transportation costs. Different states charge different tax rates, which causes price variation across cities.` },
+    { question: `Why is petrol costlier in some cities than in ${city.name}?`, answer: `Excise duty and the oil company's base price are the same across India. The difference comes from state VAT, which ${city.state} sets, and from freight to the depot that supplies the city. That is why cities in the same state are usually within a rupee of each other.` },
     { question: 'When does petrol price change?', answer: 'Oil companies can revise fuel prices daily at 6 AM. In practice, prices stay stable for extended periods unless there are significant changes in international crude oil prices or government tax policy changes.' },
   ];
 
@@ -98,11 +99,19 @@ export default async function PetrolPriceCityPage({ params }: PageProps): Promis
         <div className="my-8"><PriceChart data={chartData} title={`30-Day Petrol Price Trend in ${city.name}`} color="#DC2626" /></div>
       )}
 
-      <article className="max-w-3xl my-8">
-        <h2 className="heading-2 mb-4">About Petrol Price in {city.name}</h2>
-        <p className="text-body mb-4">Petrol and diesel prices in {city.name} are set daily by oil marketing companies. The rate includes base price, excise duty, dealer commission, and {city.state} state VAT. Prices at individual petrol pumps may vary slightly due to transportation costs.</p>
-        <p className="text-body mb-4">You can verify the current fuel price at any petrol pump in {city.name} by sending an SMS: IOCL RSP (space) dealer code to 9224992249, or checking the Indian Oil, BPCL, or HPCL mobile apps.</p>
-        <p className="text-body mb-4">Also check the <Link href={`/diesel-price/${city.slug}`} className="link-internal">diesel price in {city.name}</Link>, <Link href={`/gold-rate/${city.slug}`} className="link-internal">gold rate in {city.name}</Link>, and <Link href="/lpg-price" className="link-internal">LPG price in {city.state}</Link>.</p>
+      <FuelCityInsight fuel="petrol" citySlug={city.slug} />
+
+      <article className="max-w-3xl my-10 prose">
+        <h2>How the price in {city.name} is made up</h2>
+        <p>
+          {`The pump price has four parts: the oil company's base price, central excise duty, the dealer's commission, and ${city.state}'s VAT. Excise and the base price are the same everywhere, which is why prices move together across India and differ mainly by state. Indian Oil, BPCL and HPCL can revise rates at 6 am every day, and this page picks up the change on its first update of the day.`}
+        </p>
+        <p>
+          {`To check the rate at a particular Indian Oil pump, SMS RSP followed by the dealer code painted at the station to 9224992249. The Indian Oil ONE, HP Pay and BPCL HelloBPCL apps show the rate at any of their pumps.`}
+        </p>
+        <p>
+          Also on this site: the <Link href={`/diesel-price/${city.slug}`}>diesel price in {city.name}</Link>, the <Link href={`/gold-rate/${city.slug}`}>gold rate in {city.name}</Link> and <Link href="/lpg-price">LPG cylinder prices by state</Link>.
+        </p>
       </article>
 
       <ShareButton url={`/petrol-price/${city.slug}`} title={`Petrol Price in ${city.name} Today`} />

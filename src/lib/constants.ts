@@ -5,7 +5,7 @@ export const SITE_DESCRIPTION = 'Check today\'s gold rate, silver rate, petrol p
 
 export const ADSENSE_PUB_ID = 'pub-6484525483464374';
 
-export const ACCENT_COLOR = '#007A78';
+export const ACCENT_COLOR = '#1C3A5E';
 
 export const NAV_LINKS = [
   { href: '/score', label: 'Money Health Score', labelHi: 'वित्तीय सेहत स्कोर' },
@@ -92,12 +92,17 @@ export function formatCompactINR(amount: number): string {
   return `${sign}\u20B9${Math.round(abs)}`;
 }
 
+// Dates are shown in IST regardless of the host timezone, so a build machine or
+// VPS on UTC renders the same calendar day an Indian reader expects.
+const DISPLAY_TZ = 'Asia/Kolkata';
+
 export function formatDate(date: Date | string): string {
   const d = typeof date === 'string' ? new Date(date) : date;
   return d.toLocaleDateString('en-IN', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
+    timeZone: DISPLAY_TZ,
   });
 }
 
@@ -107,5 +112,6 @@ export function formatDateShort(date: Date | string): string {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
+    timeZone: DISPLAY_TZ,
   });
 }

@@ -22,8 +22,8 @@ export default function ScoreLineChart({ points }: { points: readonly HistoryPoi
           <text x={PAD_L - 6} y={y(s) + 3} textAnchor="end" fontSize="10" fill="#9ca3af">{s}</text>
         </g>
       ))}
-      <path d={line} fill="none" stroke="#007A78" strokeWidth={2.5} strokeLinejoin="round" />
-      {points.map((p, i) => <circle key={i} cx={x(i)} cy={y(p.totalScore)} r={3.5} fill="#007A78" />)}
+      <path d={line} fill="none" stroke="#1C3A5E" strokeWidth={2.5} strokeLinejoin="round" />
+      {points.map((p, i) => <circle key={i} cx={x(i)} cy={y(p.totalScore)} r={3.5} fill="#1C3A5E" />)}
       <text x={PAD_L} y={H - 10} textAnchor="start" fontSize="10" fill="#6b7280">{fmt(points[0]!.date)}</text>
       <text x={W - PAD_R} y={H - 10} textAnchor="end" fontSize="10" fill="#6b7280">{fmt(points[n - 1]!.date)}</text>
     </svg>

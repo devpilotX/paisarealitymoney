@@ -4,16 +4,18 @@
  * Small savings rates are notified quarterly by the Ministry of Finance
  * (Department of Economic Affairs); RBI policy rates change at MPC meetings;
  * the EPF rate is declared yearly by the EPFO. Update this file when they
- * change and bump the as-of fields — the page displays them verbatim.
+ * change and bump the as-of fields, the page displays them verbatim.
  *
- * Verified 3 July 2026 against the 30 June 2026 DEA notification (unchanged
+ * Small savings re-verified 30 September 2026 against the DEA notification of that date (all rates
+ * unchanged for Oct-Dec 2026, the tenth quarter in a row). Earlier: verified 3 July 2026 against the 30 June 2026 DEA notification (unchanged
  * for the 9th straight quarter), the June 2026 MPC outcome, and the EPFO
- * circular of 1 July 2026.
+ * circular of 1 July 2026. RBI block re-checked 30 September 2026 against the
+ * 5 August 2026 MPC outcome (all rates unchanged).
  */
 
-export const SMALL_SAVINGS_QUARTER = 'July to September 2026 (Q2 FY 2026-27)';
-export const SMALL_SAVINGS_ANNOUNCED = '2026-06-30';
-export const SMALL_SAVINGS_NEXT_REVISION = '2026-10-01';
+export const SMALL_SAVINGS_QUARTER = 'October to December 2026 (Q3 FY 2026-27)';
+export const SMALL_SAVINGS_ANNOUNCED = '2026-09-30';
+export const SMALL_SAVINGS_NEXT_REVISION = '2027-01-01';
 export const POLICY_RATES_SOURCE = 'Ministry of Finance (DEA) quarterly notification; RBI MPC; EPFO circular';
 
 export interface SmallSavingsScheme {
@@ -36,7 +38,7 @@ export const SMALL_SAVINGS: SmallSavingsScheme[] = [
     name: 'Senior Citizens Savings Scheme (SCSS)',
     ratePct: 8.2,
     compounding: 'Quarterly payout',
-    taxNote: '80C deduction; interest taxable, TDS above Rs 50,000',
+    taxNote: '80C deduction; interest taxable, TDS once interest crosses Rs 1 lakh a year',
     note: 'Age 60+ (55+ for retirees); 5-year term, max Rs 30 lakh',
   },
   {
@@ -117,8 +119,9 @@ export interface PolicyRate {
   note: string;
 }
 
-export const RBI_RATES_AS_OF = '2026-06-06';
-export const RBI_NEXT_MPC = '3 to 5 August 2026';
+// 3 to 5 August 2026 MPC held every rate and kept the neutral stance.
+export const RBI_RATES_AS_OF = '2026-08-05';
+export const RBI_NEXT_MPC = '5 to 7 October 2026';
 
 export const RBI_RATES: PolicyRate[] = [
   { name: 'Repo rate', ratePct: 5.25, note: 'The rate banks borrow at from RBI; home loan EBLR rates track this' },

@@ -14,7 +14,7 @@ export default function PrivacyPage(): React.ReactElement {
 
       <article className="max-w-3xl">
         <h1 className="heading-1 mb-4">Privacy Policy</h1>
-        <p className="text-body text-sm text-muted-2 mb-6">Last updated: June 2026</p>
+        <p className="text-body text-sm text-muted-2 mb-6">Last updated: 30 September 2026</p>
 
         <div className="space-y-6 text-body">
           <section>
@@ -62,13 +62,30 @@ export default function PrivacyPage(): React.ReactElement {
           </section>
 
           <section>
+            <h2 className="heading-2 mb-2">Services that process data for us</h2>
+            <p>We rely on a small number of providers to run the site. Each one receives only what it needs for its job:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li><strong>Amazon Web Services (Mumbai region):</strong> hosts the website and its database.</li>
+              <li><strong>Cloudflare:</strong> delivers pages and protects the site from attacks. It sees your IP address and the pages you request.</li>
+              <li><strong>Hostinger:</strong> sends our emails, so it handles your email address and the message content.</li>
+              <li><strong>Razorpay:</strong> processes premium plan payments. Card and UPI details go to Razorpay directly; we never see or store them.</li>
+              <li><strong>Google:</strong> Analytics for aggregated usage, AdSense for ads, and Gemini for the Yojana Mitra assistant when you type a question into it. Do not type personal identifiers such as Aadhaar or bank numbers into the assistant.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="heading-2 mb-2">Consent and your rights under Indian law</h2>
+            <p>We process personal data under the Digital Personal Data Protection Act, 2023, on the basis of the consent you give when you sign up, subscribe, or submit a form. You can withdraw that consent at any time, and withdrawing is as easy as giving it: unsubscribe from any email, or delete your account from Dashboard, My Account.</p>
+          </section>
+
+          <section>
             <h2 className="heading-2 mb-2">Data storage and security</h2>
             <p>Your data is stored in a PostgreSQL database. Passwords are hashed with bcrypt and never stored in plain text. We use HTTPS for all connections. While we take reasonable steps to protect your data, no system is perfectly secure.</p>
           </section>
 
           <section>
             <h2 className="heading-2 mb-2">Data retention</h2>
-            <p>We keep your account data for as long as your account exists. If you delete your account, we remove your personal data within 30 days. Contact form messages are kept for up to 12 months. Newsletter subscription records are kept until you unsubscribe.</p>
+            <p>We keep your account data for as long as your account exists. You can delete your account yourself from Dashboard, My Account; that removes your profile, saved schemes, alerts and score history immediately, and any copies in backups expire within 30 days. Contact form messages are kept for up to 12 months. Newsletter subscription records are kept until you unsubscribe.</p>
           </section>
 
           <section>
@@ -87,8 +104,8 @@ export default function PrivacyPage(): React.ReactElement {
           </section>
 
           <section>
-            <h2 className="heading-2 mb-2">Contact</h2>
-            <p>Questions about your privacy? Email us at <a href="mailto:connect@paisareality.com" className="link-internal">connect@paisareality.com</a>.</p>
+            <h2 className="heading-2 mb-2">Contact and grievances</h2>
+            <p>Questions about your privacy, a request to see or delete your data, or a complaint? Email our grievance contact at <a href="mailto:connect@paisareality.com" className="link-internal">connect@paisareality.com</a>. We acknowledge every request within 72 hours and resolve it within 30 days. If you are not satisfied with our answer, you can complain to the Data Protection Board of India.</p>
           </section>
         </div>
       </article>

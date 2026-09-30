@@ -17,13 +17,15 @@ interface BankRateTableProps {
   rates: BankRate[];
   showTenure?: boolean;
   rateLabel?: string;
+  /** On a single bank's own page the bank and type columns repeat on every row. */
+  showBank?: boolean;
 }
 
 type SortField = 'bankName' | 'generalRate' | 'seniorCitizenRate';
 type SortOrder = 'asc' | 'desc';
 
 export default function BankRateTable({
-  title, rates, showTenure = true, rateLabel = 'Rate',
+  title, rates, showTenure = true, rateLabel = 'Rate', showBank = true,
 }: BankRateTableProps): React.ReactElement {
   const [sortField, setSortField] = useState<SortField>('generalRate');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
@@ -72,10 +74,10 @@ export default function BankRateTable({
         <table className="w-full border-collapse bg-paper rounded-[5px] border border-line overflow-hidden">
           <thead>
             <tr className="bg-paper-2 text-left text-sm font-semibold text-navy">
-              <th className="px-4 py-3 cursor-pointer hover:bg-paper-3" onClick={() => handleSort('bankName')}>
+              {showBank && <th className="px-4 py-3 cursor-pointer hover:bg-paper-3" onClick={() => handleSort('bankName')}>
                 Bank <SortArrow field="bankName" />
-              </th>
-              <th className="px-4 py-3">Type</th>
+              </th>}
+              {showBank && <th className="px-4 py-3">Type</th>}
               {showTenure && <th className="px-4 py-3">Tenure</th>}
               <th className="px-4 py-3 cursor-pointer hover:bg-paper-3" onClick={() => handleSort('generalRate')}>
                 {rateLabel} <SortArrow field="generalRate" />
@@ -88,12 +90,12 @@ export default function BankRateTable({
           <tbody>
             {sortedRates.map((rate, index) => (
               <tr key={`${rate.bankSlug}-${rate.tenure}-${index}`} className="border-t border-line/60 hover:bg-paper-2 text-sm">
-                <td className="px-4 py-3">
+                {showBank && <td className="px-4 py-3">
                   <Link href={`/bank-rates/${rate.bankSlug}`} className="text-navy hover:text-brand-red font-medium">
                     {rate.bankName}
                   </Link>
-                </td>
-                <td className="px-4 py-3 text-muted">{bankTypeLabel(rate.bankType)}</td>
+                </td>}
+                {showBank && <td className="px-4 py-3 text-muted">{bankTypeLabel(rate.bankType)}</td>}
                 {showTenure && <td className="px-4 py-3 text-muted">{rate.tenure ?? '-'}</td>}
                 <td className="px-4 py-3 font-bold text-navy">{Number(rate.generalRate).toFixed(2)}%</td>
                 <td className="px-4 py-3 text-ink">

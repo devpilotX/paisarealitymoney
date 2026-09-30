@@ -23,6 +23,9 @@ function AccountContent(): React.ReactElement {
   const [curPw, setCurPw] = useState('');
   const [newPw, setNewPw] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
+  const [deletePw, setDeletePw] = useState('');
+  const [deleteMsg, setDeleteMsg] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.json()).then((d: { success: boolean; user?: UserData }) => {
@@ -70,6 +73,26 @@ function AccountContent(): React.ReactElement {
     const d = await res.json() as { success: boolean; error?: string };
     setVerifyMsg(d.success ? 'Verification email sent. Check your inbox.' : (d.error || 'Failed.'));
   }, []);
+
+  const deleteAccount = useCallback(async () => {
+    setDeleteMsg('');
+    if (!deletePw) { setDeleteMsg('Enter your password to confirm.'); return; }
+    if (!window.confirm('Delete your account and all saved data? This cannot be undone.')) return;
+    setDeleting(true);
+    try {
+      const res = await fetch('/api/account/delete', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: deletePw }),
+      });
+      const d = await res.json() as { success: boolean; error?: string };
+      if (d.success) { router.push('/?account=deleted'); router.refresh(); return; }
+      setDeleteMsg(d.error || 'Could not delete the account.');
+    } catch {
+      setDeleteMsg('Could not reach the server. Please try again.');
+    } finally {
+      setDeleting(false);
+    }
+  }, [deletePw, router]);
 
   if (loading) return <p className="text-center text-muted-2">Loading...</p>;
   if (!user) return <div />;
@@ -127,6 +150,22 @@ function AccountContent(): React.ReactElement {
           <div><span className="text-muted-2">Plan:</span> <span className="font-medium">{user.plan === 'premium' ? 'Premium' : 'Free'}</span></div>
           <div><span className="text-muted-2">Member since:</span> <span className="font-medium">{user.created_at ? new Date(user.created_at).toLocaleDateString('en-IN') : 'N/A'}</span></div>
           <div><span className="text-muted-2">Last login:</span> <span className="font-medium">{user.last_login_at ? new Date(user.last_login_at).toLocaleString('en-IN') : 'N/A'}</span></div>
+        </div>
+      </div>
+
+      <div className="card mt-6 border border-red-200">
+        <h2 className="text-lg font-semibold mb-2">Delete account</h2>
+        <p className="text-sm text-muted-2 mb-4 max-w-xl">
+          This permanently removes your profile, saved schemes, application tracker, price alerts, score history and
+          newsletter subscription. It cannot be undone.
+        </p>
+        <div className="space-y-3 max-w-md">
+          <label htmlFor="delete-password" className="block text-sm font-medium text-ink">Password</label>
+          <input id="delete-password" type="password" autoComplete="current-password" value={deletePw} onChange={e => setDeletePw(e.target.value)} className="input-field" />
+          {deleteMsg && <p className="text-sm text-brand-red" role="alert">{deleteMsg}</p>}
+          <button onClick={() => void deleteAccount()} disabled={deleting} className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 disabled:opacity-60">
+            {deleting ? 'Deleting...' : 'Delete my account'}
+          </button>
         </div>
       </div>
     </>

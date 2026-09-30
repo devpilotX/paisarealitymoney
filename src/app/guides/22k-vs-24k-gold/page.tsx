@@ -29,6 +29,8 @@ export default function Page(): React.ReactElement {
     headline: '22K vs 24K Gold: What Is the Difference',
     description: 'A simple guide to gold purity and which type to buy in India.',
     path: '/guides/22k-vs-24k-gold',
+    datePublished: '2026-06-30',
+    dateModified: '2026-06-30',
   });
   return (
     <div className="container-main py-6">

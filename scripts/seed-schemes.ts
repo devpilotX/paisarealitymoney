@@ -1,4 +1,5 @@
-import mysql from 'mysql2/promise';
+import { buildScriptPool } from './lib/script-pool';
+import schemeRedirects from '../src/lib/scheme-redirects.json';
 
 interface SchemeData {
   slug: string; name: string; name_hi: string; category: string;
@@ -131,25 +132,22 @@ const BATCH_SCHEMES: Array<[string,string,string,string,string,string,string,str
 ];
 
 async function seedSchemes(): Promise<void> {
-  const conn = await mysql.createConnection({
-    host: process.env.MYSQL_HOST || 'localhost',
-    port: parseInt(process.env.MYSQL_PORT || '3306', 10),
-    user: process.env.MYSQL_USER || 'root',
-    password: process.env.MYSQL_PASSWORD || '',
-    database: process.env.MYSQL_DATABASE || 'paisareality',
-  });
+  const conn = buildScriptPool();
 
-  console.log('Connected to MySQL. Seeding schemes...');
+  console.log('Connected to PostgreSQL. Seeding schemes...');
 
-  const allSchemes = [...SCHEMES, ...MORE_SCHEMES];
+  // Slugs that duplicate a richer record from the expansion seeds are skipped;
+  // next.config.js 301-redirects them to the canonical slug.
+  const aliases = new Set(Object.keys(schemeRedirects).filter((k) => !k.startsWith('_')));
+  const allSchemes = [...SCHEMES, ...MORE_SCHEMES].filter((s) => !aliases.has(s.slug));
   let count = 0;
 
   for (const s of allSchemes) {
     try {
-      await conn.execute(
+      await conn.query(
         `INSERT INTO schemes (slug, name, name_hi, category, level, ministry, description, benefit_summary, benefit_amount_max, apply_url, official_url, min_age, max_age, gender, states, categories, max_income, occupations, education_min, area, bpl_required, minority_only, disability_only, how_to_apply, documents_required, meta_title, meta_description, source_url, last_verified, is_active)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), TRUE)
-         ON DUPLICATE KEY UPDATE name=VALUES(name), description=VALUES(description), benefit_summary=VALUES(benefit_summary), benefit_amount_max=VALUES(benefit_amount_max), last_verified=CURDATE()`,
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, '2026-07-12'::date, TRUE)
+         ON CONFLICT (slug) DO NOTHING`,
         [s.slug, s.name, s.name_hi, s.category, s.level, s.ministry, s.description, s.benefit_summary, s.benefit_amount_max, s.apply_url, s.official_url, s.min_age, s.max_age, s.gender, s.states, s.categories, s.max_income, s.occupations, s.education_min, s.area, s.bpl_required, s.minority_only, s.disability_only, s.how_to_apply, s.documents_required, s.meta_title, s.meta_description, s.source_url]
       );
       count++;
@@ -161,13 +159,13 @@ async function seedSchemes(): Promise<void> {
   }
 
   // Insert batch schemes
-  for (const b of BATCH_SCHEMES) {
+  for (const b of BATCH_SCHEMES.filter((row) => !aliases.has(row[0]))) {
     try {
-      await conn.execute(
+      await conn.query(
         `INSERT INTO schemes (slug, name, name_hi, category, level, ministry, description, benefit_summary, benefit_amount_max, apply_url, official_url, min_age, max_age, gender, states, categories, max_income, occupations, education_min, area, bpl_required, minority_only, disability_only, how_to_apply, documents_required, meta_title, meta_description, source_url, last_verified, is_active)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CONCAT(?, ' | Paisa Reality'), CONCAT('Check eligibility for ', ?, '. Benefits, documents, how to apply.'), 'https://myscheme.gov.in', CURDATE(), TRUE)
-         ON DUPLICATE KEY UPDATE name=VALUES(name), description=VALUES(description), benefit_summary=VALUES(benefit_summary), last_verified=CURDATE()`,
-        [...b, b[1], b[1]]
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, NULL, NULL, 'https://myscheme.gov.in', '2026-07-12'::date, TRUE)
+         ON CONFLICT (slug) DO NOTHING`,
+        [...b]
       );
       count++;
       console.log(`  [${count}] ${b[1]}`);

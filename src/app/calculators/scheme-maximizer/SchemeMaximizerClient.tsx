@@ -62,10 +62,10 @@ export default function SchemeMaximizerClient(): React.ReactElement {
   return (
     <div>
       <div className="rounded-lg bg-primary-50 border border-primary-100 px-4 py-3 mb-6 text-sm text-primary-800">
-        <strong>100% private.</strong> Your profile is matched against the scheme dataset entirely in your browser. nothing is sent to any server. Dataset version {DATASET_VERSION}.
+        <strong>100% private.</strong> Your profile is matched against the scheme dataset entirely in your browser; nothing is sent to any server. Dataset version {DATASET_VERSION}.
       </div>
 
-      <Calculator title="Your profile" description="Tell us about yourself to find the central government schemes you can claim. and what they're worth per year.">
+      <Calculator title="Your profile" description="Tell us about yourself to find the central government schemes you can claim, and what they're worth per year.">
         <CalcSlider id="age" label="Age" value={profile.age ?? 0} onChange={(v) => set('age', v)} min={0} max={100} step={1} suffix=" yrs" />
         <CalcSelect id="gender" label="Gender" value={profile.gender ?? 'male'} onChange={(v) => set('gender', v as SchemeProfile['gender'])} options={[{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }, { value: 'transgender', label: 'Transgender' }]} />
         <CalcSlider id="income" label="Annual family income" value={profile.income ?? 0} onChange={(v) => set('income', v)} min={0} max={3000000} step={25000} prefix="₹ " displayValue={formatCompactINR(profile.income ?? 0)} />
@@ -91,12 +91,12 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {/* Headline */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-8">
         <div className="card bg-green-50 border-green-200 sm:col-span-2">
-          <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Your total benefit (conflict-resolved optimal set)</p>
+          <p className="text-sm text-muted mb-1">Your total benefit, with overlapping schemes counted once</p>
           <p className="text-3xl font-bold text-green-700">{formatINR(a.totalAnnualBenefit)}<span className="text-base font-normal text-muted-2">/year</span></p>
           {a.totalOneTimeBenefit > 0 && <p className="text-sm text-muted mt-1">plus <strong>{formatINR(a.totalOneTimeBenefit)}</strong> in one-time benefits</p>}
         </div>
         <div className="card">
-          <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Schemes you qualify for</p>
+          <p className="text-sm text-muted mb-1">Schemes you qualify for</p>
           <p className="text-3xl font-bold text-primary">{a.eligible.length}</p>
           <p className="text-xs text-muted-2 mt-1">{a.optimalSet.length} in your optimal (non-conflicting) set</p>
         </div>
@@ -136,7 +136,7 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {a.facilitationSchemes.length > 0 && (
         <div className="card my-6">
           <h3 className="text-base font-semibold mb-1">Also available: credit &amp; access schemes (not a cash benefit)</h3>
-          <p className="text-xs text-muted-2 mb-3">These give you access to loans or services. valuable, but the loan itself is not &ldquo;free money&rdquo;, so we count it as ₹0 in your total.</p>
+          <p className="text-xs text-muted-2 mb-3">These give you access to loans or services, valuable, but the loan itself is not &ldquo;free money&rdquo;, so we count it as ₹0 in your total.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {a.facilitationSchemes.map((e) => <SchemeCard key={e.scheme.id} e={e} />)}
           </div>
@@ -146,7 +146,7 @@ export default function SchemeMaximizerClient(): React.ReactElement {
       {/* Near misses */}
       {a.nearMisses.length > 0 && (
         <div className="card my-6">
-          <h3 className="text-base font-semibold mb-1">So close. change one thing to unlock these</h3>
+          <h3 className="text-base font-semibold mb-1">So close, change one thing to unlock these</h3>
           <p className="text-xs text-muted-2 mb-3">You miss each of these by a single criterion.</p>
           <ul className="space-y-2">
             {a.nearMisses.map((m) => (
@@ -161,13 +161,13 @@ export default function SchemeMaximizerClient(): React.ReactElement {
 
       {a.eligible.length === 0 && (
         <div className="card my-6 text-center text-muted">
-          <p>No central schemes matched this exact profile. Check the near-misses above, and note that many <strong>state-specific</strong> schemes (not yet in this dataset) may apply. see your state portal.</p>
+          <p>No central schemes matched this exact profile. Check the near-misses above, and note that many <strong>state-specific</strong> schemes (not yet in this dataset) may apply; see your state portal.</p>
         </div>
       )}
 
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-xs text-yellow-800">
-          <strong>Educational estimate, not legal or financial advice.</strong> Eligibility and amounts are simplified for the highest-impact <em>central</em> schemes and valued on a consistent basis (loans counted as ₹0 since the principal is repaid; insurance valued at an equivalent private premium). Actual eligibility, amounts and documents are decided by the implementing authority. always verify on the official portal before applying. Dataset version {DATASET_VERSION}; state schemes are being added.
+          <strong>Educational estimate, not legal or financial advice.</strong> Eligibility and amounts are simplified for the highest-impact <em>central</em> schemes and valued on a consistent basis (loans counted as ₹0 since the principal is repaid; insurance valued at an equivalent private premium). Actual eligibility, amounts and documents are decided by the implementing authority; always verify on the official portal before applying. Dataset version {DATASET_VERSION}; state schemes are being added.
         </p>
       </div>
     </div>

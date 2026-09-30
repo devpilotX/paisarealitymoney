@@ -269,7 +269,7 @@ export function analyzeHarvest(inputs: HarvestInputs): HarvestAnalysis {
       const realized = Math.round(qtyToSell * c.unitGainLoss);
       actions.push({
         type: 'gain-harvest', lotId: c.id, lotName: c.name, qty: qtyToSell, amount: realized,
-        note: `Sell ${qtyToSell} units to realize ₹${realized.toLocaleString('en-IN')} of long-term gain. tax-free under the ₹1.25L exemption. Re-buy to reset your cost basis higher and lower future tax.`,
+        note: `Sell ${qtyToSell} units to realize ₹${realized.toLocaleString('en-IN')} of long-term gain, tax-free under the ₹1.25L exemption. Re-buy to reset your cost basis higher and lower future tax.`,
       });
       remainingHarvest -= realized;
     }
@@ -280,12 +280,12 @@ export function analyzeHarvest(inputs: HarvestInputs): HarvestAnalysis {
     if (c.nearBoundary) {
       actions.push({
         type: 'wait', lotId: c.id, lotName: c.name, qty: c.qty, amount: c.totalGainLoss,
-        note: `Hold ${c.name} for ~${c.daysToLongTerm} more days. once it crosses 12 months the gain is taxed at 12.5% (with the ₹1.25L exemption) instead of 20%.`,
+        note: `Hold ${c.name} for ~${c.daysToLongTerm} more days; once it crosses 12 months the gain is taxed at 12.5% (with the ₹1.25L exemption) instead of 20%.`,
       });
     } else if (c.term === 'short' && c.isGain && !c.nearBoundary) {
       actions.push({
         type: 'avoid', lotId: c.id, lotName: c.name, qty: c.qty, amount: c.totalGainLoss,
-        note: `Avoid selling ${c.name} now. short-term gains are taxed at 20% with no exemption. Defer until it turns long-term if you can.`,
+        note: `Avoid selling ${c.name} now: short-term gains are taxed at 20% with no exemption. Defer until it turns long-term if you can.`,
       });
     }
   }

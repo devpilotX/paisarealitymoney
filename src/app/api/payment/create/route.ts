@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateRequest, unauthorizedResponse } from '@/lib/auth';
-import { createOrder } from '@/lib/razorpay';
+import { createOrder, isPremiumPlan, PLAN_PRICES_INR } from '@/lib/razorpay';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const auth = authenticateRequest(request);
@@ -9,11 +9,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json() as { plan?: string };
     const plan = body.plan ?? 'monthly';
-    if (plan !== 'monthly' && plan !== 'yearly') {
+    if (!isPremiumPlan(plan)) {
       return NextResponse.json({ success: false, error: 'Invalid plan selected.' }, { status: 400 });
     }
 
-    const amount = plan === 'yearly' ? 999 : 99;
+    const amount = PLAN_PRICES_INR[plan];
 
     const order = await createOrder({
       amount,
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       key: process.env.RAZORPAY_KEY_ID,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    console.error('Payment order error:', error instanceof Error ? error.message : 'Unknown');
+    return NextResponse.json({ success: false, error: 'Could not start the payment. Please try again.' }, { status: 500 });
   }
 }

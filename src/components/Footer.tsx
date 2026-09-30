@@ -6,99 +6,113 @@ interface FooterLink {
   label: string;
 }
 
-const ABOUT_LINKS: FooterLink[] = [
-  { href: '/about', label: 'About Us' },
-  { href: '/contact', label: 'Contact Us' },
-  { href: '/newsletter', label: 'Newsletter' },
-  { href: '/methodology', label: 'Data Methodology' },
-  { href: '/editorial-policy', label: 'Editorial Policy' },
+const COLUMNS: Array<{ title: string; links: FooterLink[] }> = [
+  {
+    title: 'Prices',
+    links: [
+      { href: '/gold-rate', label: 'Gold rate today' },
+      { href: '/silver-rate', label: 'Silver rate today' },
+      { href: '/petrol-price', label: 'Petrol price' },
+      { href: '/diesel-price', label: 'Diesel price' },
+      { href: '/lpg-price', label: 'LPG cylinder price' },
+      { href: '/interest-rates', label: 'PPF and small savings rates' },
+      { href: '/bank-rates', label: 'Bank FD and loan rates' },
+    ],
+  },
+  {
+    title: 'Money for you',
+    links: [
+      { href: '/schemes', label: 'Government schemes' },
+      { href: '/scholarships', label: 'Scholarships' },
+      { href: '/grants', label: 'Startup grants' },
+      { href: '/state', label: 'Schemes by state' },
+      { href: '/score', label: 'Money Health Score' },
+    ],
+  },
+  {
+    title: 'Tools',
+    links: [
+      { href: '/smart-tools', label: 'Smart tools' },
+      { href: '/calculators/real-return', label: 'Real Return Checker' },
+      { href: '/calculators/emi', label: 'EMI calculator' },
+      { href: '/calculators/sip', label: 'SIP calculator' },
+      { href: '/calculators/income-tax', label: 'Income tax calculator' },
+      { href: '/calculators', label: 'All calculators' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { href: '/about', label: 'About us' },
+      { href: '/methodology', label: 'How we check our data' },
+      { href: '/editorial-policy', label: 'Editorial policy' },
+      { href: '/guides', label: 'Guides' },
+      { href: '/contact', label: 'Contact' },
+    ],
+  },
 ];
 
-const QUICK_LINKS: FooterLink[] = [
-  { href: '/score', label: 'Money Health Score' },
-  { href: '/smart-tools', label: 'Smart Tools' },
-  { href: '/gold-rate', label: 'Gold Rate Today' },
-  { href: '/silver-rate', label: 'Silver Rate Today' },
-  { href: '/petrol-price', label: 'Petrol Price Today' },
-  { href: '/diesel-price', label: 'Diesel Price Today' },
-  { href: '/lpg-price', label: 'LPG Price Today' },
-  { href: '/schemes', label: 'Government Schemes' },
-  { href: '/scholarships', label: 'Scholarships' },
-  { href: '/bank-rates', label: 'Bank Rates' },
-  { href: '/interest-rates', label: 'Interest Rates' },
-];
-
-const CALCULATOR_LINKS: FooterLink[] = [
-  { href: '/calculators/emi', label: 'EMI Calculator' },
-  { href: '/calculators/sip', label: 'SIP Calculator' },
-  { href: '/calculators/fd', label: 'FD Calculator' },
-  { href: '/calculators/ppf', label: 'PPF Calculator' },
-  { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
-  { href: '/calculators/home-loan', label: 'Home Loan Calculator' },
-];
-
-const LEGAL_LINKS: FooterLink[] = [
-  { href: '/terms', label: 'Terms of Service' },
-  { href: '/privacy', label: 'Privacy Policy' },
+const LEGAL: FooterLink[] = [
+  { href: '/privacy', label: 'Privacy' },
+  { href: '/terms', label: 'Terms' },
   { href: '/disclaimer', label: 'Disclaimer' },
+  { href: '/contact', label: 'Report an error' },
 ];
-
-function FooterColumn({ title, links }: { title: string; links: FooterLink[] }): React.ReactElement {
-  return (
-    <div>
-      <h3 className="font-sans text-xs font-semibold text-paper uppercase tracking-[0.13em] mb-4">
-        {title}
-      </h3>
-      <ul className="space-y-2.5">
-        {links.map((link) => (
-          <li key={link.href}>
-            <Link
-              href={link.href}
-              className="text-sm text-paper/60 no-underline transition-colors duration-200 hover:text-brand-yellow"
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 export default function Footer(): React.ReactElement {
-  const currentYear = new Date().getFullYear();
-
+  const year = new Date().getFullYear();
   return (
-    <footer className="bg-navy-deep text-paper/70">
-      <div className="container-main py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <FooterColumn title="About" links={ABOUT_LINKS} />
-          <FooterColumn title="Quick Links" links={QUICK_LINKS} />
-          <FooterColumn title="Calculators" links={CALCULATOR_LINKS} />
-          <FooterColumn title="Legal" links={LEGAL_LINKS} />
-        </div>
-
-        <div className="mt-10 pt-6 border-t border-paper/15 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          <div>
-            <h3 className="font-sans text-sm font-semibold text-paper mb-2">Subscribe to our newsletter</h3>
-            <p className="text-xs text-paper/50 mb-3">Get weekly updates on prices, tools, and financial tips.</p>
-            <SubscribeForm />
-          </div>
-          <p className="text-xs text-paper/45 leading-relaxed">
-            Disclaimer: Paisa Reality is an informational website. We are not financial advisors.
-            Prices shown are indicative and sourced from public data. Government scheme details are
-            sourced from official websites. Always verify information with official sources before
-            making any financial decisions.
-          </p>
-        </div>
-
-        <div className="mt-6 pt-6 border-t border-paper/15 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="font-serif text-lg font-bold text-paper">
-            Paisa<span className="text-brand-yellow">Reality</span>
+    <footer className="bg-[#0B1220] text-white/70 mt-auto">
+      <div className="container-main pt-16 pb-10">
+        <div className="text-center max-w-xl mx-auto">
+          <span className="font-display font-bold text-[26px] text-white">
+            Paisa<span className="text-[#E8615A]">Reality</span>
           </span>
-          <p className="text-xs text-paper/45">
-            &copy; {currentYear} Paisa Reality. Built in India, for Indian families.
+          <p className="mt-3 text-[15px] text-white/60">
+            Free, checked information on prices, schemes and money decisions for Indian families.
+            No products to sell you.
           </p>
+          <div className="mt-6 max-w-md mx-auto">
+            <SubscribeForm />
+            <p className="mt-2 text-xs text-white/65">One email a week. Unsubscribe with one click.</p>
+          </div>
+        </div>
+
+        <div className="mt-14 grid grid-cols-2 md:grid-cols-4 border-t border-white/10">
+          {COLUMNS.map((col, i) => (
+            <div key={col.title} className={`pt-8 pb-4 md:px-6 ${i > 0 ? 'md:border-l md:border-white/10' : ''}`}>
+              <h2 className="text-sm font-semibold text-white tracking-normal mb-4">{col.title}</h2>
+              <ul className="space-y-2.5">
+                {col.links.map((l) => (
+                  <li key={l.href + l.label}>
+                    <Link href={l.href} className="text-sm text-white/60 no-underline hover:text-white transition-colors">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 pt-8 border-t border-white/10 text-[13px] leading-relaxed text-white/65 max-w-4xl">
+          <p>
+            Paisa Reality is an information service, not a bank, broker or SEBI-registered investment adviser.
+            Prices are computed or collected from public sources and dated on every page. Scheme, scholarship and
+            grant details come from official portals, which remain the final word. Check with the source before
+            you act.
+          </p>
+        </div>
+
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] text-white/65">
+          <p>&copy; {year} Paisa Reality. Made in India.</p>
+          <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            {LEGAL.map((l) => (
+              <li key={l.label}>
+                <Link href={l.href} className="text-white/55 no-underline hover:text-white transition-colors">{l.label}</Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>

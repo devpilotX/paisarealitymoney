@@ -31,7 +31,7 @@ export default function SchemeCard({
             {category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
           <span className="text-xs text-muted-2">
-            {level === 'central' ? 'Central Govt' : 'State Govt'}
+            {level === 'central' ? 'Central government' : 'State government'}
           </span>
         </div>
         {matchScore !== undefined && matchScore > 0 && (

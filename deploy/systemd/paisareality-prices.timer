@@ -1,11 +1,13 @@
-# Runs the daily price update at 07:00 in the server timezone (IST).
-# Persistent=true catches up the run if the server was off at the scheduled time.
+# Five price updates a day in the server timezone (IST): 06:15, 09:15, 12:15, 15:15, 18:15.
+# Fuel revises at 6 AM; gold and silver move through the trading day.
+# Persistent=true catches up a run missed while the server was off.
 [Unit]
-Description=Run Paisa Reality price update daily
+Description=Run the Paisa Reality price update
 
 [Timer]
-OnCalendar=*-*-* 07:00:00
+OnCalendar=*-*-* 06,09,12,15,18:15:00
 Persistent=true
+RandomizedDelaySec=60
 
 [Install]
 WantedBy=timers.target

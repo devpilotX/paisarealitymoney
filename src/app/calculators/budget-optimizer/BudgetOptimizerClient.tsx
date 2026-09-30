@@ -89,10 +89,10 @@ export default function BudgetOptimizerClient(): React.ReactElement {
   return (
     <div>
       <div className="rounded-lg bg-primary-50 border border-primary-100 px-4 py-3 mb-6 text-sm text-primary-800">
-        <strong>Free &amp; private.</strong> No login, no ads in your data. every number stays in your browser.
+        <strong>Free &amp; private.</strong> No login, no ads in your data; every number stays in your browser.
       </div>
 
-      <Calculator title="Your income & profile" description="We adapt the 50/30/20 rule to your income, city and job stability. then find your surplus.">
+      <Calculator title="Your income & profile" description="We adapt the 50/30/20 rule to your income, city and job stability, then find your surplus.">
         <CalcSelect id="mode" label="Income input" value={useCTC ? 'ctc' : 'income'} onChange={(v) => setUseCTC(v === 'ctc')} options={[
           { value: 'income', label: 'Enter monthly take-home' },
           { value: 'ctc', label: 'Enter annual CTC (we estimate take-home)' },
@@ -112,7 +112,7 @@ export default function BudgetOptimizerClient(): React.ReactElement {
           { value: 'normal', label: 'Normal' },
           { value: 'unstable', label: 'Variable / startup / freelance' },
         ]} />
-        <CalcSelect id="irregular" label="Is your income irregular?" value={inputs.irregularIncome ? 'yes' : 'no'} onChange={(v) => set('irregularIncome', v === 'yes')} options={[{ value: 'no', label: 'No, steady' }, { value: 'yes', label: 'Yes. budget conservatively' }]} />
+        <CalcSelect id="irregular" label="Is your income irregular?" value={inputs.irregularIncome ? 'yes' : 'no'} onChange={(v) => set('irregularIncome', v === 'yes')} options={[{ value: 'no', label: 'No, steady' }, { value: 'yes', label: 'Yes, budget conservatively' }]} />
         <NumField label="Emergency fund saved so far" value={inputs.emergencyFundCurrent} onChange={(v) => set('emergencyFundCurrent', v)} step={10000} />
       </Calculator>
 
@@ -121,19 +121,19 @@ export default function BudgetOptimizerClient(): React.ReactElement {
         <summary className="cursor-pointer font-semibold text-navy select-none">Your monthly spends</summary>
         <div className="mt-4 space-y-4">
           <div>
-            <p className="text-xs font-semibold text-brown uppercase tracking-wide mb-2">Needs</p>
+            <p className="text-sm font-semibold text-ink mb-2">Needs</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {needsCats.map((c) => <NumField key={c.key} label={c.label} value={c.amount} onChange={(v) => setCategoryAmount(c.key, v)} />)}
             </div>
           </div>
           <div>
-            <p className="text-xs font-semibold text-ink uppercase tracking-wide mb-2">Wants</p>
+            <p className="text-sm font-semibold text-ink mb-2">Wants</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {wantsCats.map((c) => <NumField key={c.key} label={c.label} value={c.amount} onChange={(v) => setCategoryAmount(c.key, v)} />)}
             </div>
           </div>
           <div>
-            <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-2">Savings / investments</p>
+            <p className="text-sm font-semibold text-navy mb-2">Savings / investments</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {savingsCats.map((c) => <NumField key={c.key} label={c.label} value={c.amount} onChange={(v) => setCategoryAmount(c.key, v)} />)}
             </div>
@@ -181,9 +181,9 @@ export default function BudgetOptimizerClient(): React.ReactElement {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Monthly surplus</p><p className="text-2xl font-bold text-primary">{formatCompactINR(analysis.monthlySurplus)}</p><p className="text-xs text-muted-2 mt-1">Capacity to save &amp; invest</p></div>
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Surplus found by trimming</p><p className="text-2xl font-bold text-green-700">{formatCompactINR(analysis.surplusFound)}</p><p className="text-xs text-muted-2 mt-1">If overspends are cut to benchmark</p></div>
-        <div className="card"><p className="text-xs uppercase tracking-wide text-muted-2 mb-1">Emergency fund gap</p><p className="text-2xl font-bold text-primary">{formatCompactINR(analysis.emergencyFund.gap)}</p><p className="text-xs text-muted-2 mt-1">{analysis.emergencyFund.gap <= 0 ? `Fully funded (${analysis.emergencyFund.recommendedMonths} mo)` : analysis.emergencyFund.monthsToFill === Infinity ? 'No surplus to fill it yet' : `~${analysis.emergencyFund.monthsToFill} months to fill`}</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Monthly surplus</p><p className="text-2xl font-bold text-primary">{formatCompactINR(analysis.monthlySurplus)}</p><p className="text-xs text-muted-2 mt-1">Capacity to save &amp; invest</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Surplus found by trimming</p><p className="text-2xl font-bold text-green-700">{formatCompactINR(analysis.surplusFound)}</p><p className="text-xs text-muted-2 mt-1">If overspends are cut to benchmark</p></div>
+        <div className="card"><p className="text-sm text-muted mb-1">Emergency fund gap</p><p className="text-2xl font-bold text-primary">{formatCompactINR(analysis.emergencyFund.gap)}</p><p className="text-xs text-muted-2 mt-1">{analysis.emergencyFund.gap <= 0 ? `Fully funded (${analysis.emergencyFund.recommendedMonths} mo)` : analysis.emergencyFund.monthsToFill === Infinity ? 'No surplus to fill it yet' : `~${analysis.emergencyFund.monthsToFill} months to fill`}</p></div>
       </div>
 
       <InArticleAd />
@@ -209,7 +209,7 @@ export default function BudgetOptimizerClient(): React.ReactElement {
         <CalcSlider id="trim" label="Cut all 'wants' spending by" value={trimWantsPct} onChange={setTrimWantsPct} min={0} max={50} step={5} suffix="%" />
         {whatIf && (
           <p className="text-sm text-ink mt-2">
-            Cutting wants by {trimWantsPct}% raises your monthly surplus from <strong>{formatCompactINR(analysis.monthlySurplus)}</strong> to <strong className="text-green-700">{formatCompactINR(whatIf.monthlySurplus)}</strong>. a savings rate of <strong>{Math.round(whatIf.currentSavingsRate * 100)}%</strong>{analysis.emergencyFund.gap > 0 && whatIf.emergencyFund.monthsToFill !== Infinity ? <>, filling your emergency fund in ~{whatIf.emergencyFund.monthsToFill} months (was {analysis.emergencyFund.monthsToFill === Infinity ? 'never' : `${analysis.emergencyFund.monthsToFill}`})</> : null}.
+            Cutting wants by {trimWantsPct}% raises your monthly surplus from <strong>{formatCompactINR(analysis.monthlySurplus)}</strong> to <strong className="text-green-700">{formatCompactINR(whatIf.monthlySurplus)}</strong>, a savings rate of <strong>{Math.round(whatIf.currentSavingsRate * 100)}%</strong>{analysis.emergencyFund.gap > 0 && whatIf.emergencyFund.monthsToFill !== Infinity ? <>, filling your emergency fund in ~{whatIf.emergencyFund.monthsToFill} months (was {analysis.emergencyFund.monthsToFill === Infinity ? 'never' : `${analysis.emergencyFund.monthsToFill}`})</> : null}.
           </p>
         )}
       </div>
@@ -243,7 +243,7 @@ export default function BudgetOptimizerClient(): React.ReactElement {
 
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-xs text-yellow-800">
-          <strong>Educational estimate, not financial advice.</strong> Benchmarks are general guidelines, not rules. your ideal split depends on your circumstances. The CTC→take-home estimate is approximate (assumes EPF on 40% basic and standard tax). Verify with a qualified advisor before major financial decisions.
+          <strong>Educational estimate, not financial advice.</strong> Benchmarks are general guidelines, not rules; your ideal split depends on your circumstances. The CTC→take-home estimate is approximate (assumes EPF on 40% basic and standard tax). Verify with a qualified advisor before major financial decisions.
         </p>
       </div>
     </div>

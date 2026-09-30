@@ -17,7 +17,7 @@ import {
 } from '@/lib/debt-optimizer';
 
 const STRATEGY_COLORS: Record<StrategyKey, string> = {
-  'tax-aware': '#007A78',
+  'tax-aware': '#1C3A5E',
   avalanche: '#d97706',
   snowball: '#6366f1',
   minimums: '#9ca3af',
@@ -167,7 +167,7 @@ export default function DebtOptimizerClient(): React.ReactElement {
           <p className="text-sm text-ink">
             The <strong>tax-aware plan</strong> clears all your debt in <strong>{months(rec.months)}</strong> and saves
             <strong> {formatINR(Math.round(analysis.interestSavedVsMinimums))}</strong> in interest versus paying only the minimums
-            {analysis.monthsSavedVsMinimums > 0 ? <>. and gets you debt-free <strong>{months(analysis.monthsSavedVsMinimums)}</strong> sooner</> : null}.
+            {analysis.monthsSavedVsMinimums > 0 ? <>, and gets you debt-free <strong>{months(analysis.monthsSavedVsMinimums)}</strong> sooner</> : null}.
             {useTarget && analysis.targetBudget !== null ? <> To be debt-free in {targetMonths} months, budget about <strong>{formatINR(analysis.targetBudget)}/month</strong>.</> : null}
           </p>
         </div>
@@ -204,7 +204,7 @@ export default function DebtOptimizerClient(): React.ReactElement {
 
       {/* Tax-adjusted ranking */}
       <div className="card my-6 overflow-x-auto">
-        <h3 className="text-base font-semibold mb-1">Tax-adjusted ranking. what to attack first</h3>
+        <h3 className="text-base font-semibold mb-1">Tax-adjusted ranking: what to attack first</h3>
         <p className="text-xs text-muted-2 mb-3">The effective rate is the true cost after Indian tax deductions. Highest effective rate gets your surplus first.</p>
         <table className="w-full text-sm">
           <thead>
@@ -250,7 +250,7 @@ export default function DebtOptimizerClient(): React.ReactElement {
 
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-xs text-yellow-800">
-          <strong>Educational estimate, not financial or tax advice.</strong> Results assume your budget and minimums stay constant and that interest accrues as modelled (credit cards daily, others monthly). Section 24(b)/80E shields are modelled for the old regime and simplified. verify caps, the 80E 8-year limit, and prepayment penalty terms with your lender and a qualified professional before acting.
+          <strong>Educational estimate, not financial or tax advice.</strong> Results assume your budget and minimums stay constant and that interest accrues as modelled (credit cards daily, others monthly). Section 24(b)/80E shields are modelled for the old regime and simplified; verify caps, the 80E 8-year limit, and prepayment penalty terms with your lender and a qualified professional before acting.
         </p>
       </div>
     </div>

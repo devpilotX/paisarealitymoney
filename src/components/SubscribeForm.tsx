@@ -1,9 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
-export default function SubscribeForm(): React.ReactElement {
+/** Newsletter sign-up. `tone="dark"` for the footer, `"light"` elsewhere. */
+export default function SubscribeForm({ tone = 'dark' }: { tone?: 'dark' | 'light' }): React.ReactElement {
+  const id = useId();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'err'>('idle');
+  const dark = tone === 'dark';
 
   async function handleSubmit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
@@ -18,19 +21,35 @@ export default function SubscribeForm(): React.ReactElement {
     } catch { setStatus('err'); }
   }
 
-  if (status === 'ok') return <p className="text-sm text-green-700">Subscribed! Check your inbox.</p>;
+  if (status === 'ok') {
+    return (
+      <p role="status" className={`text-sm ${dark ? 'text-emerald-300' : 'text-green-700'}`}>
+        You are subscribed. A confirmation is on its way to your inbox.
+      </p>
+    );
+  }
 
   return (
+    <div>
     <form onSubmit={handleSubmit} className="flex gap-2">
+      <label htmlFor={id} className="sr-only">Email address</label>
       <input
-        type="email" required value={email} onChange={e => setEmail(e.target.value)}
-        placeholder="Your email"
-        className="flex-1 px-3 py-2 text-sm rounded-[3px] bg-paper border border-line text-ink focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy"
+        id={id} type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)}
+        placeholder="you@example.com"
+        className={dark
+          ? 'flex-1 min-w-0 h-11 px-3.5 text-sm rounded-lg bg-white/10 border border-white/15 text-white placeholder:text-white/65 focus:outline-none focus:border-white/60 focus:ring-2 focus:ring-white/20'
+          : 'input-field flex-1 min-w-0'}
       />
       <button type="submit" disabled={status === 'loading'}
-        className="px-4 py-2 text-sm font-bold text-paper bg-navy rounded-[3px] hover:bg-navy-deep disabled:opacity-60">
-        {status === 'loading' ? '...' : 'Subscribe'}
+        className={dark
+          ? 'h-11 px-5 text-sm font-semibold rounded-lg bg-white text-[#0B1220] hover:bg-white/90 transition-colors disabled:opacity-60'
+          : 'btn-primary'}>
+        {status === 'loading' ? 'Subscribing' : 'Subscribe'}
       </button>
     </form>
+    {status === 'err' && (
+      <p role="alert" className={`mt-2 text-sm ${dark ? 'text-red-300' : 'text-brand-red'}`}>That did not work. Check the address and try again.</p>
+    )}
+    </div>
   );
 }

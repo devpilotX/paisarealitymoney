@@ -1,5 +1,5 @@
 /**
- * Apply scripts/pg-price-integrity.sql — provenance columns on fuel/LPG price
+ * Apply scripts/pg-price-integrity.sql, provenance columns on fuel/LPG price
  * tables, the price_overrides table, and the system_meta table.
  *
  * Usage:  npm run db:migrate-price-integrity

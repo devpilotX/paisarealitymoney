@@ -1,5 +1,5 @@
 /**
- * Unified database access layer — PostgreSQL only.
+ * Unified database access layer, PostgreSQL only.
  * Drop-in replacement for the old MySQL db.ts.
  * All query/execute calls route through the single PG pool in ./db/pg.ts.
  */
@@ -21,7 +21,7 @@ export async function query<T extends QueryResultRow>(
 
 /**
  * Run a parameterized INSERT/UPDATE/DELETE.
- * Returns { rowCount, rows } — use RETURNING id for insert ids.
+ * Returns { rowCount, rows }, use RETURNING id for insert ids.
  */
 export async function execute<T extends QueryResultRow = QueryResultRow>(
   sql: string,

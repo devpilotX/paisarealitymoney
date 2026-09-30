@@ -29,6 +29,8 @@ export default function Page(): React.ReactElement {
     headline: 'SIP vs FD: Which Is Better for You',
     description: 'A simple comparison of mutual fund SIP and bank fixed deposit for Indian savers.',
     path: '/guides/sip-vs-fd',
+    datePublished: '2026-06-30',
+    dateModified: '2026-06-30',
   });
   return (
     <div className="container-main py-6">

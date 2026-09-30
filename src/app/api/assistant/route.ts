@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { LRUCache } from 'lru-cache';
 import { SYSTEM_PROMPT, guidedReply } from '@/lib/assistant-knowledge';
+import { getClientIp } from '@/lib/rate-limit';
 import { MAX_OUTPUT_TOKENS, geminiModelChain, readGeminiReply } from '@/lib/assistant-reply';
 
 export const runtime = 'nodejs';
@@ -10,11 +11,7 @@ interface ChatTurn { role: 'user' | 'assistant'; content: string; }
 const rateLimiter = new LRUCache<string, number>({ max: 5000, ttl: 60_000 });
 const LIMIT_PER_MINUTE = 20;
 
-function clientIp(req: NextRequest): string {
-  const fwd = req.headers.get('x-forwarded-for');
-  if (fwd) return fwd.split(',')[0]!.trim();
-  return req.headers.get('x-real-ip') ?? 'unknown';
-}
+const clientIp = getClientIp;
 
 /**
  * Model fallback chain. Pinned ids rot, and the previous pair

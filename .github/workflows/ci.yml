@@ -1,6 +1,8 @@
-# Gate every push and PR: strict typecheck + the full unit test suite.
-# All test suites are DB-free by design, so no services or secrets are needed.
-# The production build runs at deploy time on the server (it needs env + DB).
+# Every push to main and every pull request:
+#   check  strict typecheck and the full unit test suite (DB-free)
+#   build  a real PostgreSQL database built from scratch with db:setup, then a
+#          full production build against it, so a broken migration, seed or
+#          page fails here instead of on the server.
 name: CI
 
 on:
@@ -9,22 +11,69 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
+      - run: npm ci
       - name: Typecheck (strict)
         run: npm run typecheck
-
       - name: Unit tests
         run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: check
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: paisa
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: paisareality
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U paisa"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgres://paisa:ci-only-password@127.0.0.1:5432/paisareality
+      JWT_SECRET: ci-only-jwt-secret-not-used-anywhere-else
+      AUTH_SECRET: ci-only-auth-secret
+      CRON_SECRET: ci-only-cron-secret
+      NEXT_PUBLIC_SITE_URL: https://paisareality.com
+      APP_URL: https://paisareality.com
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Build the database from empty (every table and seed)
+        run: npm run db:setup
+      - name: Seeds are idempotent (second run changes nothing it should not)
+        run: npm run db:setup
+      - name: Production build
+        run: npm run build
+      - name: Start and answer
+        run: |
+          npx next start -p 3100 &
+          for i in $(seq 1 30); do curl -fsS -o /dev/null http://127.0.0.1:3100/api/prices/national && break; sleep 2; done
+          for p in / /schemes /schemes/pm-kisan /grants /scholarships /bank-rates/sbi /state/kerala /sitemap.xml /robots.txt /llms.txt; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:3100$p")
+            echo "$code $p"; [ "$code" = 200 ] || exit 1
+          done

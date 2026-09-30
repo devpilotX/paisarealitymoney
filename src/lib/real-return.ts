@@ -1,10 +1,10 @@
 /**
- * Real Return Checker — the engine behind India's first purpose-built
+ * Real Return Checker, the engine behind India's first purpose-built
  * mis-selling exposer.
  *
  * Agents pitch money-back policies, endowment plans, and "double your money"
  * schemes using totals ("pay 6 lakh, get 14 lakh!"). The only honest measure
- * of such an offer is its internal rate of return (XIRR) — the single annual
+ * of such an offer is its internal rate of return (XIRR), the single annual
  * rate that makes all the cash flows balance. This module computes it exactly
  * and puts it next to boring benchmarks everyone understands (savings, FD,
  * PPF, inflation, index funds).
@@ -72,7 +72,7 @@ export interface RealReturnResult {
   irrPct: number | null;
   totalPaid: number;
   totalReceived: number;
-  /** totalReceived / totalPaid — the number agents quote. */
+  /** totalReceived / totalPaid, the number agents quote. */
   multiple: number;
   horizonYears: number;
   /** Years to double at this return (null when return <= 0). */
@@ -219,28 +219,28 @@ function verdictFor(irrPct: number | null): Verdict {
   if (irrPct < INFLATION_PCT) {
     return {
       band: 'below-inflation',
-      title: 'Below inflation — your money loses buying power',
+      title: 'Below inflation: your money loses buying power',
       message: `At ~${INFLATION_PCT}% inflation, this return means the money you get back buys less than the money you put in. The rupee amount grows; its value does not.`,
     };
   }
   if (irrPct < PPF_PCT) {
     return {
       band: 'below-ppf',
-      title: 'PPF beats this — government-guaranteed and tax-free',
+      title: 'PPF beats this: government-guaranteed and tax-free',
       message: `PPF currently pays ${PPF_PCT}% tax-free with a sovereign guarantee. An offer below that needs a strong justification, like genuine insurance cover you actually need.`,
     };
   }
   if (irrPct < 9) {
     return {
       band: 'moderate',
-      title: 'Moderate return — read the lock-in and guarantee terms',
+      title: 'Moderate return: read the lock-in and guarantee terms',
       message: 'This is in fixed-income territory. Check what is guaranteed versus "projected", what the surrender penalty is, and how long your money is locked.',
     };
   }
   if (irrPct < 15) {
     return {
       band: 'competitive',
-      title: 'Competitive — IF these numbers are guaranteed',
+      title: 'Competitive, IF these numbers are guaranteed',
       message: 'This beats most fixed-income options. Insist on seeing which figures are contractually guaranteed and which are marketing "projections at 8%". Projections are not promises.',
     };
   }
@@ -271,11 +271,11 @@ function buildRedFlags(input: OfferInput, irrPct: number | null, horizonYears: n
   }
   if (input.mode === 'moneyback') {
     flags.push(
-      'Money-back payouts feel like gifts but they are your own premium coming back to you slowly. The IRR above already accounts for their timing — that IS the real return including every payout.'
+      'Money-back payouts feel like gifts but they are your own premium coming back to you slowly. The IRR above already accounts for their timing; that IS the real return including every payout.'
     );
   }
   if (irrPct >= 0 && irrPct < INFLATION_PCT) {
-    flags.push('"Your money is safe" is not the same as "your money grows". Below inflation, safety is an illusion — the loss is just invisible.');
+    flags.push('"Your money is safe" is not the same as "your money grows". Below inflation, safety is an illusion; the loss is just invisible.');
   }
   return flags;
 }

@@ -15,7 +15,8 @@ import {
   type EligibilityProfile,
 } from '@/lib/scholarships';
 
-export const dynamic = 'force-dynamic';
+// Cached and regenerated hourly like the scheme pages, so crawlers get a fast static response.
+export const revalidate = 3600;
 
 export const metadata = pageMetadata({
   title: 'Scholarship Finder: Find Scholarships You Qualify For',
@@ -68,7 +69,7 @@ function ScholarshipCard({ s }: { s: Scholarship }): React.ReactElement {
     <div className="card flex h-full flex-col">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary-50 text-primary">
-          {s.level === 'state' ? 'State Govt' : 'Central Govt'}
+          {s.level === 'state' ? 'State government' : s.level === 'private' ? 'Private' : 'Central government'}
         </span>
         {s.deadline ? (
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-red/10 text-brand-red">

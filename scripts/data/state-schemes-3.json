@@ -1,0 +1,783 @@
+{
+  "dataset_verified_on": "2026-09-30",
+  "schemes": [
+    {
+      "slug": "sikkim-aama-sashaktikaran",
+      "name": "Sikkim Aama Sashaktikaran Yojana",
+      "name_hi": null,
+      "category": "women",
+      "ministry": "Government of Sikkim",
+      "description": "A women-centred scheme of the Government of Sikkim that gives financial support to mothers to strengthen their financial independence. Benefit cheques are being distributed to eligible mothers across constituencies, including a distribution round on 3 and 4 October 2026.",
+      "benefit_summary": "Annual financial assistance of Rs 40,000 to eligible mothers, paid in instalments.",
+      "benefit_amount_max": 40000,
+      "apply_url": null,
+      "official_url": "https://www.sikkim.gov.in/media/press-release/press-info?id=165841&name=Press%20Release%20From%20Hon%E2%80%99ble%20Deputy%20Speaker%20SLA",
+      "min_age": null,
+      "max_age": null,
+      "gender": "female",
+      "states": [
+        "Sikkim"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "The state government identifies eligible mothers and distributes benefit cheques through constituency-level distribution programmes. Check with your local Panchayat or the state government for the current enrolment process.",
+      "documents_required": [],
+      "source_url": "https://www.sikkim.gov.in/media/press-release/press-info?id=165841&name=Press%20Release%20From%20Hon%E2%80%99ble%20Deputy%20Speaker%20SLA"
+    },
+    {
+      "slug": "ladakh-rewa-student-support",
+      "name": "REWA Lt. Governor's Students Support Initiative (Ladakh)",
+      "name_hi": null,
+      "category": "education",
+      "ministry": "Department of Social and Tribal Welfare, UT of Ladakh",
+      "description": "REWA is a student support initiative of the Administration of the Union Territory of Ladakh. It provides financial assistance to meritorious students of Ladakh, including support for coaching facilities.",
+      "benefit_summary": "Financial assistance to meritorious students of Ladakh for their studies and coaching.",
+      "benefit_amount_max": null,
+      "apply_url": "http://socialwelfare.ladakh.gov.in/rewa/",
+      "official_url": "https://socialwelfare.ladakh.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Ladakh"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply online through the REWA portal on the Ladakh Social and Tribal Welfare Department website during the application window.",
+      "documents_required": [],
+      "source_url": "https://socialwelfare.ladakh.gov.in/"
+    },
+    {
+      "slug": "manipur-ima-nongthangleima-tengbang",
+      "name": "Ima Nongthangleima Yaipha Tengbang Scheme (Manipur)",
+      "name_hi": null,
+      "category": "women",
+      "ministry": "Department of Social Welfare, Government of Manipur",
+      "description": "A women-focused scheme of the Manipur Department of Social Welfare that provides financial assistance to women to support economic independence. The department has invited applications and issued a notification requiring applicants to submit a valid age-proof document as of 2026.",
+      "benefit_summary": "Financial assistance to eligible women under the Manipur Social Welfare Department.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "https://socialwelfare.mn.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "female",
+      "states": [
+        "Manipur"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Applications are invited in the prescribed format by the Department of Social Welfare, Manipur. Submit the application with a valid age-proof document as notified.",
+      "documents_required": [
+        "Age proof document"
+      ],
+      "source_url": "https://socialwelfare.mn.gov.in/"
+    },
+    {
+      "slug": "manipur-cmat-bal-seva",
+      "name": "Chief Ministergi Anganggi Tengbang (Chief Minister Bal Seva) (Manipur)",
+      "name_hi": null,
+      "category": "social",
+      "ministry": "Department of Social Welfare, Government of Manipur",
+      "description": "Chief Ministergi Anganggi Tengbang, also called the Chief Minister Bal Seva scheme, is run by the Manipur Department of Social Welfare to support children who need care and protection. Scheme guidelines and application forms are published by the department.",
+      "benefit_summary": "Support for children who have lost parental care under the Manipur Social Welfare Department.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "https://socialwelfare.mn.gov.in/",
+      "min_age": null,
+      "max_age": 18,
+      "gender": "all",
+      "states": [
+        "Manipur"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Download the scheme guidelines and application form from the Manipur Department of Social Welfare website and submit as directed.",
+      "documents_required": [],
+      "source_url": "https://socialwelfare.mn.gov.in/",
+      "meta_title": "Chief Minister Bal Seva Scheme, Manipur: Eligibility"
+    },
+    {
+      "slug": "tripura-mukhyamantri-kanya-bibaha",
+      "name": "Mukhyamantri Kanya Bibaha Yojana (Tripura)",
+      "name_hi": null,
+      "category": "women",
+      "ministry": "Directorate of Social Welfare and Social Education, Government of Tripura",
+      "description": "Mukhyamantri Kanya Bibaha Yojana (MKBY) is a scheme of the Tripura Directorate of Social Welfare and Social Education that gives marriage assistance. The department publishes the scheme gazette notification and application form on its official website.",
+      "benefit_summary": "Marriage assistance for eligible families under the Tripura Social Welfare Directorate.",
+      "benefit_amount_max": null,
+      "apply_url": "https://socialwelfare.tripura.gov.in/sites/default/files/Application_Form_for_Mukhyamantri_Kanya_Bibaha_Yojana.pdf",
+      "official_url": "https://socialwelfare.tripura.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "female",
+      "states": [
+        "Tripura"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Download the application form from the Tripura Directorate of Social Welfare and Social Education website, fill it as per the gazette notification, and submit to the department.",
+      "documents_required": [],
+      "source_url": "https://socialwelfare.tripura.gov.in/"
+    },
+    {
+      "slug": "tripura-antyodaya-shradhanjali",
+      "name": "Mukhyamantri Antyodaya Shradhanjali Yojana (Tripura)",
+      "name_hi": null,
+      "category": "social",
+      "ministry": "Directorate of Social Welfare and Social Education, Government of Tripura",
+      "description": "Mukhyamantri Antyodaya Shradhanjali Yojana provides financial assistance towards the last rites of a deceased member of an Antyodaya family. It is administered by the Tripura Directorate of Social Welfare and Social Education.",
+      "benefit_summary": "Financial assistance for the last rites of a deceased member of an Antyodaya family.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "https://socialwelfare.tripura.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Tripura"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "The assistance is provided to the next of kin or nearest family member of the deceased of an Antyodaya family. Apply through the Tripura Directorate of Social Welfare and Social Education.",
+      "documents_required": [],
+      "source_url": "https://socialwelfare.tripura.gov.in/"
+    },
+    {
+      "slug": "uttarakhand-mukhyamantri-swarojgar-2",
+      "name": "Mukhyamantri Swarojgar Yojana 2.0 (Uttarakhand)",
+      "name_hi": null,
+      "category": "employment",
+      "ministry": "Directorate of Industries, Government of Uttarakhand",
+      "description": "Mukhyamantri Swarojgar Yojana 2.0 helps people in Uttarakhand set up an enterprise, service or business. It provides loan facilities through nationalised, scheduled commercial, state cooperative and regional rural banks. It is listed as an active scheme on the state self-employment portal.",
+      "benefit_summary": "Bank loan support to set up a manufacturing, service or business enterprise in Uttarakhand.",
+      "benefit_amount_max": null,
+      "apply_url": "https://msy.uk.gov.in/",
+      "official_url": "https://msy.uk.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Uttarakhand"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply online through the Uttarakhand self-employment portal, where the scheme provides loan facilities through partner banks for setting up an enterprise.",
+      "documents_required": [],
+      "source_url": "https://msy.uk.gov.in/"
+    },
+    {
+      "slug": "uttarakhand-veer-chandra-garhwali-tourism",
+      "name": "Veer Chandra Singh Garhwali Paryatan Swarojgar Yojna (Uttarakhand)",
+      "name_hi": null,
+      "category": "employment",
+      "ministry": "Government of Uttarakhand",
+      "description": "Veer Chandra Singh Garhwali Paryatan Swarojgar Yojna is a tourism self-employment scheme of the Government of Uttarakhand. It is listed as an active scheme on the state self-employment portal for people setting up tourism-related ventures.",
+      "benefit_summary": "Support for setting up tourism-related self-employment ventures in Uttarakhand.",
+      "benefit_amount_max": null,
+      "apply_url": "https://msy.uk.gov.in/",
+      "official_url": "https://msy.uk.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Uttarakhand"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply online through the Uttarakhand self-employment portal for tourism-sector self-employment support.",
+      "documents_required": [],
+      "source_url": "https://msy.uk.gov.in/",
+      "meta_title": "Veer Chandra Singh Garhwali Tourism Yojana, Uttarakhand"
+    },
+    {
+      "slug": "assam-atmanirbhar-asom-abhijan",
+      "name": "Chief Minister's Atmanirbhar Asom Abhijan (Assam)",
+      "name_hi": null,
+      "category": "employment",
+      "ministry": "Industries, Commerce and Public Enterprises Department, Government of Assam",
+      "description": "Chief Minister's Atmanirbhar Asom Abhijan provides financial assistance to educated youth in Assam to set up new or existing income-generating ventures. Aid is disbursed to eligible applicants through direct benefit transfer after an application and interview process, with a second tranche of Rs 25,000 disbursed to earlier beneficiaries.",
+      "benefit_summary": "Financial assistance to educated youth in Assam to start or expand a business or self-employment venture.",
+      "benefit_amount_max": null,
+      "apply_url": "https://cmaaa.assam.gov.in/",
+      "official_url": "https://cmaaa.assam.gov.in/",
+      "min_age": 28,
+      "max_age": 45,
+      "gender": "all",
+      "states": [
+        "Assam"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": "class-10",
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Register online on the CMAAA portal with mobile or email, apply for the scheme, upload the required documents and a project report, and track the application. Eligible applicants are notified by SMS and email and funds are disbursed through DBT.",
+      "documents_required": [
+        "Aadhaar or Voter ID or Passport or Driving Licence",
+        "Proof of educational qualification",
+        "First page of active bank account passbook",
+        "PAN card",
+        "Employment Exchange registration card"
+      ],
+      "source_url": "https://cmaaa.assam.gov.in/"
+    },
+    {
+      "slug": "punjab-mukh-mantri-sehat-yojana",
+      "name": "Mukh Mantri Sehat Yojana (Punjab)",
+      "name_hi": null,
+      "category": "healthcare",
+      "ministry": "State Health Agency, Department of Health and Family Welfare, Government of Punjab",
+      "description": "Mukh Mantri Sehat Yojana provides cashless treatment up to Rs 10 lakh per family per year to all residents of Punjab, with no income cap. It covers secondary and tertiary care in empanelled government and private hospitals in Punjab and includes government employees and pensioners.",
+      "benefit_summary": "Cashless hospital treatment of up to Rs 10 lakh per family per year for all Punjab residents.",
+      "benefit_amount_max": 1000000,
+      "apply_url": "https://sha.punjab.gov.in/",
+      "official_url": "https://sha.punjab.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Punjab"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Visit your nearest Common Service Centre with Aadhaar and Voter ID and documents of all family members. Registration is confirmed by SMS and the Sehat card is distributed within two to three weeks. Present the Sehat card at an empanelled hospital for cashless treatment.",
+      "documents_required": [
+        "Aadhaar card",
+        "Voter ID",
+        "Proof of Punjab residence"
+      ],
+      "source_url": "https://sha.punjab.gov.in/"
+    },
+    {
+      "slug": "haryana-chirayu-ayushman-extension",
+      "name": "Chirayu Ayushman Extension Scheme (Haryana)",
+      "name_hi": null,
+      "category": "healthcare",
+      "ministry": "Ayushman Bharat Haryana, Government of Haryana",
+      "description": "Chirayu Haryana (Comprehensive Health Insurance of Antyodaya Units) is a state extension of Ayushman Bharat PM-JAY. Families with annual income up to Rs 1.80 lakh get free cover, and families with income above Rs 1.80 lakh and up to Rs 3.00 lakh can join through a contribution of Rs 1,500 per family per year.",
+      "benefit_summary": "Health cover of Rs 5 lakh per family per year on a family floater basis for eligible Haryana families.",
+      "benefit_amount_max": 500000,
+      "apply_url": "https://ayushmanbharat.haryana.gov.in/",
+      "official_url": "https://ayushmanbharat.haryana.gov.in/haryana-ayushman-bharat-implementation-overview/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Haryana"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": 300000,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Families use their Parivar Pehchan Patra (PPP) to check eligibility and enrol. Families with income above Rs 1.80 lakh and up to Rs 3.00 lakh pay a contribution of Rs 1,500 per year. Treatment is cashless at empanelled hospitals.",
+      "documents_required": [
+        "Parivar Pehchan Patra (PPP)"
+      ],
+      "source_url": "https://ayushmanbharat.haryana.gov.in/haryana-ayushman-bharat-implementation-overview/"
+    },
+    {
+      "slug": "goa-mamta-girl-child",
+      "name": "Mamta Scheme (Goa)",
+      "name_hi": null,
+      "category": "women",
+      "ministry": "Directorate of Women and Child Development, Government of Goa",
+      "description": "The Mamta Scheme of the Government of Goa gives financial assistance to mothers who deliver a girl child in a registered medical institution. It aims to encourage institutional deliveries and support the girl child.",
+      "benefit_summary": "Financial assistance of Rs 10,000 to mothers who deliver a girl child in a registered medical institution.",
+      "benefit_amount_max": 10000,
+      "apply_url": null,
+      "official_url": "https://www.goa.gov.in/wp-content/uploads/2021/01/WCD-State-Schemes.pdf",
+      "min_age": null,
+      "max_age": null,
+      "gender": "female",
+      "states": [
+        "Goa"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply to the Directorate of Women and Child Development, Goa, after delivery of a girl child in a registered medical institution, with the supporting documents.",
+      "documents_required": [],
+      "source_url": "https://www.goa.gov.in/wp-content/uploads/2021/01/WCD-State-Schemes.pdf"
+    },
+    {
+      "slug": "goa-children-of-widow",
+      "name": "Children of Widow Scheme (Goa)",
+      "name_hi": null,
+      "category": "social",
+      "ministry": "Department of Tribal Welfare, Government of Goa",
+      "description": "The Children of Widow Scheme, run by the Goa Department of Tribal Welfare, supports minor children of Scheduled Tribe widows. The benefit is limited to two children up to the age of 18 years, and the widow's family income should not exceed Rs 3,00,000 per year.",
+      "benefit_summary": "Financial support for up to two minor children of a Scheduled Tribe widow.",
+      "benefit_amount_max": null,
+      "apply_url": "https://cmwelfare.goa.gov.in/",
+      "official_url": "https://cmwelfare.goa.gov.in/",
+      "min_age": null,
+      "max_age": 18,
+      "gender": "all",
+      "states": [
+        "Goa"
+      ],
+      "categories": [
+        "st"
+      ],
+      "max_income": 300000,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Register on the Goa Chief Minister Welfare Portal, log in, fill the online application, upload the required documents and submit to the Department of Tribal Welfare for verification.",
+      "documents_required": [],
+      "source_url": "https://cmwelfare.goa.gov.in/"
+    },
+    {
+      "slug": "goa-orphan-child",
+      "name": "Orphan Child Scheme (Goa)",
+      "name_hi": null,
+      "category": "social",
+      "ministry": "Department of Tribal Welfare, Government of Goa",
+      "description": "The Orphan Child Scheme of the Goa Department of Tribal Welfare supports an orphan belonging to the Scheduled Tribe community who is under the care of a guardian, such as grandparents or near relatives, or in a protective home, up to the age of 18 years.",
+      "benefit_summary": "Support for orphan children of the Scheduled Tribe community up to age 18.",
+      "benefit_amount_max": null,
+      "apply_url": "https://cmwelfare.goa.gov.in/",
+      "official_url": "https://cmwelfare.goa.gov.in/",
+      "min_age": null,
+      "max_age": 18,
+      "gender": "all",
+      "states": [
+        "Goa"
+      ],
+      "categories": [
+        "st"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Register on the Goa Chief Minister Welfare Portal, log in, fill the online application, upload the required documents and submit to the Department of Tribal Welfare for verification.",
+      "documents_required": [],
+      "source_url": "https://cmwelfare.goa.gov.in/"
+    },
+    {
+      "slug": "goa-antya-sanskar",
+      "name": "Antya Sanskar Yojana (Goa)",
+      "name_hi": null,
+      "category": "social",
+      "ministry": "Department of Tribal Welfare, Government of Goa",
+      "description": "Antya Sanskar Yojana of the Goa Department of Tribal Welfare gives assistance towards last rites where the deceased or the applicant belongs to the Scheduled Tribe community and the family income does not exceed Rs 3.00 lakh per year. The claim may be made within 12 months of the death.",
+      "benefit_summary": "Assistance towards last rites for Scheduled Tribe families in Goa.",
+      "benefit_amount_max": null,
+      "apply_url": "https://cmwelfare.goa.gov.in/",
+      "official_url": "https://cmwelfare.goa.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Goa"
+      ],
+      "categories": [
+        "st"
+      ],
+      "max_income": 300000,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Register on the Goa Chief Minister Welfare Portal and submit the online application within 12 months of the death, with the required documents, to the Department of Tribal Welfare.",
+      "documents_required": [],
+      "source_url": "https://cmwelfare.goa.gov.in/"
+    },
+    {
+      "slug": "chandigarh-ambedkar-awas-yojana",
+      "name": "Dr. Ambedkar Awas Yojana (Chandigarh)",
+      "name_hi": null,
+      "category": "housing",
+      "ministry": "Department of Social Welfare, Chandigarh Administration",
+      "description": "Dr. Ambedkar Awas Yojana is a housing scheme for Scheduled Caste families implemented by the Social Welfare Department of the Chandigarh Administration. It is one of the welfare schemes listed by the district administration.",
+      "benefit_summary": "Housing assistance for Scheduled Caste families in Chandigarh.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "https://chandigarhdistrict.nic.in/social-welfare/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Chandigarh"
+      ],
+      "categories": [
+        "sc"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply through the Department of Social Welfare, Chandigarh Administration, Town Hall Extension Building, Sector 17, Chandigarh.",
+      "documents_required": [],
+      "source_url": "https://chandigarhdistrict.nic.in/social-welfare/"
+    },
+    {
+      "slug": "chandigarh-widow-destitute-assistance",
+      "name": "Financial Assistance to Widows and Destitute Women (Chandigarh)",
+      "name_hi": null,
+      "category": "women",
+      "ministry": "Department of Social Welfare, Chandigarh Administration",
+      "description": "The Social Welfare Department of the Chandigarh Administration provides financial assistance to widows and destitute women as part of its social security and welfare programmes for women and children.",
+      "benefit_summary": "Financial assistance to widows and destitute women in Chandigarh.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "https://chandigarhdistrict.nic.in/social-welfare/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "female",
+      "states": [
+        "Chandigarh"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply through the Department of Social Welfare, Chandigarh Administration, Town Hall Extension Building, Sector 17, Chandigarh.",
+      "documents_required": [],
+      "source_url": "https://chandigarhdistrict.nic.in/social-welfare/",
+      "meta_title": "Chandigarh Widow and Destitute Women Assistance"
+    },
+    {
+      "slug": "jharkhand-mukhyamantri-shramik",
+      "name": "Mukhyamantri SHRAMIK Yojana (Jharkhand)",
+      "name_hi": "मुख्यमंत्री श्रमिक योजना",
+      "category": "employment",
+      "ministry": "Directorate of Municipal Administration, Urban Development and Housing Department, Government of Jharkhand",
+      "description": "Mukhyamantri SHRAMIK Yojana gives a guarantee of 100 days of wage employment in a financial year to unskilled labourers in urban areas of Jharkhand. If a registered labourer is not given work, the state government pays an unemployment allowance, and a job card is issued to workers.",
+      "benefit_summary": "Guaranteed 100 days of wage employment a year for urban unskilled labourers, with an unemployment allowance if work is not provided.",
+      "benefit_amount_max": null,
+      "apply_url": "https://msy.jharkhand.gov.in/index.php/applicationform",
+      "official_url": "https://msy.jharkhand.gov.in/index.php/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Jharkhand"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "urban",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply for a job card online on the Mukhyamantri SHRAMIK Yojana portal, then raise a work demand through the portal or your urban local body.",
+      "documents_required": [],
+      "source_url": "https://msy.jharkhand.gov.in/index.php/"
+    },
+    {
+      "slug": "puducherry-one-girl-child-education-assistance",
+      "name": "Financial Assistance to Poor Parents Having Only One Girl Child (Puducherry)",
+      "name_hi": null,
+      "category": "education",
+      "ministry": "Department of Women and Child Development, Government of Puducherry",
+      "description": "The Department of Women and Child Development, Puducherry, gives financial assistance to poor parents who have only one girl child studying in the 8th to 10th standard. The Lieutenant-Governor enhanced the quantum of assistance by a notification dated 23 December 2025.",
+      "benefit_summary": "Financial assistance to poor parents with only one girl child studying in class 8 to 10.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "https://wcd.py.gov.in/grant-financial-assistance-poor-parents-having-only-one-girl-child-who-studying-8th-10th-std",
+      "min_age": null,
+      "max_age": null,
+      "gender": "female",
+      "states": [
+        "Puducherry"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply to the Department of Women and Child Development, Puducherry, for a poor family with only one girl child studying in class 8 to 10, with the required documents.",
+      "documents_required": [],
+      "source_url": "https://wcd.py.gov.in/",
+      "meta_title": "Puducherry One Girl Child Assistance: Eligibility"
+    },
+    {
+      "slug": "puducherry-girl-child-family-planning-incentive",
+      "name": "Incentive to Family Having Girl Children and Parents Who Underwent Family Planning (Puducherry)",
+      "name_hi": null,
+      "category": "women",
+      "ministry": "Department of Women and Child Development, Government of Puducherry",
+      "description": "The Department of Women and Child Development, Puducherry, grants an incentive to families that have one girl child or two girl children and where the parents have undergone family planning. The scheme is administered region-wise by the department.",
+      "benefit_summary": "Incentive to families with one or two girl children whose parents have undergone family planning.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "https://wcd.py.gov.in/grant-incentive-family-having-one-girl-child-two-girl-children-and-parents-who-have-undergone-family",
+      "min_age": null,
+      "max_age": null,
+      "gender": "female",
+      "states": [
+        "Puducherry"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply to the Department of Women and Child Development, Puducherry, if your family has one or two girl children and the parents have undergone family planning, with the required documents.",
+      "documents_required": [],
+      "source_url": "https://wcd.py.gov.in/",
+      "meta_title": "Puducherry Girl Child Incentive Scheme: Eligibility"
+    },
+    {
+      "slug": "chhattisgarh-krishak-unnati",
+      "name": "Krishak Unnati Yojana (Chhattisgarh)",
+      "name_hi": "कृषक उन्नति योजना",
+      "category": "agriculture",
+      "ministry": "Department of Agriculture, Government of Chhattisgarh",
+      "description": "Krishak Unnati Yojana gives input assistance to farmers in Chhattisgarh through direct benefit transfer. It covers paddy and other crops such as pulses, oilseeds, maize and millets, and encourages farmers who shift from paddy to alternative kharif crops.",
+      "benefit_summary": "Per-acre input assistance to farmers in Chhattisgarh, paid through direct benefit transfer.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "http://agriportal.cg.nic.in/PortHi/Default.aspx",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Chhattisgarh"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "farmer"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Register as a farmer with the Chhattisgarh agriculture department and sell your produce at the support price or register for the eligible crop. The input assistance is paid by direct benefit transfer.",
+      "documents_required": [],
+      "source_url": "http://agriportal.cg.nic.in/PortHi/Default.aspx"
+    },
+    {
+      "slug": "uttarakhand-deen-dayal-grah-aawas",
+      "name": "Deen Dayal Upadhyay Grah Aawas Vikas Yojna (Uttarakhand)",
+      "name_hi": null,
+      "category": "housing",
+      "ministry": "Directorate of Industries, Government of Uttarakhand",
+      "description": "Deen Dayal Upadhyay Grah Aawas Vikas Yojna is a scheme of the Government of Uttarakhand listed as active on the state self-employment and industries portal. It supports housing and related development for eligible residents.",
+      "benefit_summary": "Support for home and housing development for eligible residents of Uttarakhand.",
+      "benefit_amount_max": null,
+      "apply_url": "https://msy.uk.gov.in/",
+      "official_url": "https://msy.uk.gov.in/",
+      "min_age": null,
+      "max_age": null,
+      "gender": "all",
+      "states": [
+        "Uttarakhand"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply through the Uttarakhand self-employment and industries portal where the scheme is listed as active.",
+      "documents_required": [],
+      "source_url": "https://msy.uk.gov.in/"
+    },
+    {
+      "slug": "goa-chief-minister-rojgar-yojana",
+      "name": "Chief Minister's Rojgar Yojana (Goa)",
+      "name_hi": null,
+      "category": "employment",
+      "ministry": "Government of Goa",
+      "description": "Chief Minister's Rojgar Yojana (CMRY 2023) provides self-employment opportunities to Goan youth through financial assistance for setting up new units or expanding existing ones. Under the revised scheme the income ceiling was removed and the age limit extended to 50 years, with loans available at a low interest rate.",
+      "benefit_summary": "Financial assistance and low-interest loans for Goan youth to set up or expand a business.",
+      "benefit_amount_max": null,
+      "apply_url": null,
+      "official_url": "https://www.goa.gov.in/wp-content/uploads/2024/08/CMRY-2023-SCHEME.pdf",
+      "min_age": null,
+      "max_age": 50,
+      "gender": "all",
+      "states": [
+        "Goa"
+      ],
+      "categories": [
+        "all"
+      ],
+      "max_income": null,
+      "occupations": [
+        "all"
+      ],
+      "education_min": null,
+      "area": "all",
+      "bpl_required": false,
+      "minority_only": false,
+      "disability_only": false,
+      "how_to_apply": "Apply under the Chief Minister's Rojgar Yojana through the promoting agency in Goa for a loan to set up a new business or expand an existing one.",
+      "documents_required": [],
+      "source_url": "https://www.goa.gov.in/wp-content/uploads/2024/08/CMRY-2023-SCHEME.pdf"
+    }
+  ]
+}

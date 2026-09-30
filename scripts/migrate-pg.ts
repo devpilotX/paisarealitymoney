@@ -1,5 +1,5 @@
 /**
- * Apply scripts/pg-health-score.sql to PostgreSQL — cross-platform (no psql needed).
+ * Apply scripts/pg-health-score.sql to PostgreSQL, cross-platform (no psql needed).
  *
  * Usage:  npm run db:migrate-pg
  * Env:    DATABASE_URL, or PGHOST/PGPORT/PGUSER/PGPASSWORD/PGDATABASE (loaded from .env

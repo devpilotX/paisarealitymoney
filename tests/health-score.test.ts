@@ -1,5 +1,5 @@
 /**
- * Financial Health Score — engine unit tests.
+ * Financial Health Score, engine unit tests.
  * Run: npx ts-node --project tsconfig.scripts.json tests/health-score.test.ts
  */
 

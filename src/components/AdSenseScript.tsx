@@ -1,6 +1,7 @@
 'use client';
 
 import Script from 'next/script';
+import { usePlan } from '@/lib/use-plan';
 
 const PUB_ID = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
 
@@ -24,7 +25,9 @@ export function adClientId(pubId: string): string {
  * strategy="lazyOnload" already keeps it off the critical path.
  */
 export default function AdSenseScript(): React.ReactElement | null {
-  if (!PUB_ID) {
+  // Premium members get the site without ads, so the library is never loaded for them.
+  const plan = usePlan();
+  if (!PUB_ID || plan === 'unknown' || plan === 'premium') {
     return null;
   }
   const src =

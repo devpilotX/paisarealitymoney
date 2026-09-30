@@ -5,13 +5,19 @@ import { getAllPostsAsync } from '@/lib/blog';
 import { formatDate } from '@/lib/constants';
 import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = pageMetadata({
+const BASE_META: Metadata = pageMetadata({
   title: 'Newsletter: Money Tips, Rate Updates, Tax Saving',
   description:
     'Read the Paisa Reality newsletter for gold and fuel price updates, government schemes, tax saving tips, and simple personal finance guides for India.',
   path: '/newsletter',
   keywords: ['paisa reality newsletter', 'personal finance newsletter india', 'money tips', 'tax saving tips'],
 });
+
+/** Kept out of search while there is nothing to read; it indexes itself once a post is published. */
+export async function generateMetadata(): Promise<Metadata> {
+  const posts = await getAllPostsAsync(true).catch(() => []);
+  return posts.length > 0 ? BASE_META : { ...BASE_META, robots: { index: false, follow: true } };
+}
 
 export const revalidate = 300;
 

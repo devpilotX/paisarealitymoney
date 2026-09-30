@@ -3,319 +3,300 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import RateTicker from './RateTicker';
 
-interface DropdownItem {
+interface MenuLink {
   href: string;
   label: string;
+  note?: string;
 }
 
-const PRICE_LINKS: DropdownItem[] = [
-  { href: '/gold-rate', label: 'Gold Rate' },
-  { href: '/silver-rate', label: 'Silver Rate' },
-  { href: '/petrol-price', label: 'Petrol Price' },
-  { href: '/diesel-price', label: 'Diesel Price' },
-  { href: '/lpg-price', label: 'LPG Price' },
-];
+interface MenuGroup {
+  title: string;
+  links: MenuLink[];
+}
 
-const CALCULATOR_LINKS: DropdownItem[] = [
-  { href: '/calculators', label: 'All Calculators' },
-  { href: '/calculators/emi', label: 'EMI Calculator' },
-  { href: '/calculators/sip', label: 'SIP Calculator' },
-  { href: '/calculators/fd', label: 'FD Calculator' },
-  { href: '/calculators/ppf', label: 'PPF Calculator' },
-  { href: '/calculators/income-tax', label: 'Income Tax' },
-  { href: '/calculators/home-loan', label: 'Home Loan' },
-];
-
-const SMART_TOOLS_LINKS: DropdownItem[] = [
-  { href: '/smart-tools', label: 'All Smart Tools' },
-  { href: '/calculators/real-return', label: 'Real Return Checker' },
-  { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
-  { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest' },
-  { href: '/calculators/debt-optimizer', label: 'Debt Optimizer' },
-  { href: '/calculators/budget-optimizer', label: 'Budget Optimizer' },
-  { href: '/calculators/lifecycle-tax-optimizer', label: 'Tax Regime Optimizer' },
-  { href: '/calculators/tax-harvesting', label: 'Tax Harvesting' },
-  { href: '/calculators/gold-planner', label: 'Gold Planner' },
-  { href: '/calculators/scheme-maximizer', label: 'Scheme Maximizer' },
-  { href: '/calculators/salary-optimizer', label: 'Salary Optimizer' },
-];
-
-interface NavItemConfig {
+interface NavItem {
   label: string;
-  href?: string;
-  dropdown?: DropdownItem[];
+  href: string;
+  groups?: MenuGroup[];
+  match?: string[];
 }
 
-const NAV_ITEMS: NavItemConfig[] = [
-  { label: 'Schemes', href: '/schemes' },
+const NAV: NavItem[] = [
+  {
+    label: 'Prices',
+    href: '/gold-rate',
+    match: ['/gold-rate', '/silver-rate', '/petrol-price', '/diesel-price', '/lpg-price', '/prices'],
+    groups: [
+      {
+        title: 'Daily prices',
+        links: [
+          { href: '/gold-rate', label: 'Gold rate', note: '24K, 22K and 18K in 50 cities' },
+          { href: '/silver-rate', label: 'Silver rate', note: 'Per gram and per kilo' },
+          { href: '/petrol-price', label: 'Petrol price', note: 'City rates, revised at 6 AM' },
+          { href: '/diesel-price', label: 'Diesel price', note: 'City rates, revised at 6 AM' },
+          { href: '/lpg-price', label: 'LPG cylinder', note: 'Domestic and commercial by state' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Schemes',
+    href: '/schemes',
+    match: ['/schemes', '/state', '/category'],
+    groups: [
+      {
+        title: 'Government schemes',
+        links: [
+          { href: '/schemes', label: 'Find schemes for you', note: 'Answer a few questions, see what you qualify for' },
+          { href: '/state', label: 'Schemes by state', note: 'All 36 states and union territories' },
+          { href: '/category', label: 'Schemes by category', note: 'Farmers, women, housing, health and more' },
+        ],
+      },
+    ],
+  },
   { label: 'Scholarships', href: '/scholarships' },
-  { label: 'Prices', dropdown: PRICE_LINKS },
-  { label: 'Smart Tools', href: '/smart-tools', dropdown: SMART_TOOLS_LINKS },
-  { label: 'Calculators', href: '/calculators', dropdown: CALCULATOR_LINKS },
-  { label: 'Bank Rates', href: '/bank-rates' },
+  { label: 'Grants', href: '/grants' },
+  {
+    label: 'Tools',
+    href: '/smart-tools',
+    match: ['/smart-tools', '/calculators', '/score'],
+    groups: [
+      {
+        title: 'Smart tools',
+        links: [
+          { href: '/calculators/real-return', label: 'Real Return Checker' },
+          { href: '/calculators/retirement-optimizer', label: 'Retirement Optimizer' },
+          { href: '/calculators/lifecycle-tax-optimizer', label: 'Tax Regime Optimizer' },
+          { href: '/calculators/prepay-vs-invest', label: 'Prepay vs Invest' },
+          { href: '/calculators/debt-optimizer', label: 'Debt Optimizer' },
+          { href: '/smart-tools', label: 'All smart tools' },
+        ],
+      },
+      {
+        title: 'Calculators',
+        links: [
+          { href: '/calculators/emi', label: 'EMI' },
+          { href: '/calculators/sip', label: 'SIP' },
+          { href: '/calculators/income-tax', label: 'Income tax' },
+          { href: '/calculators/fd', label: 'Fixed deposit' },
+          { href: '/calculators/ppf', label: 'PPF' },
+          { href: '/calculators', label: 'All calculators' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Rates',
+    href: '/bank-rates',
+    match: ['/bank-rates', '/interest-rates'],
+    groups: [
+      {
+        title: 'Rates',
+        links: [
+          { href: '/bank-rates/fd-rates', label: 'FD rates', note: 'Across 51 banks' },
+          { href: '/bank-rates/savings-rates', label: 'Savings account rates' },
+          { href: '/bank-rates/home-loan-rates', label: 'Home loan rates' },
+          { href: '/bank-rates/personal-loan-rates', label: 'Personal loan rates' },
+          { href: '/interest-rates', label: 'PPF, SSY and post office', note: 'Rates set by the government each quarter' },
+        ],
+      },
+    ],
+  },
+  { label: 'Guides', href: '/guides' },
 ];
 
-const NAV_LINK_BASE =
-  'relative px-0 py-1 text-[14.5px] font-semibold no-underline transition-colors duration-200 ' +
-  'after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:transition-all after:duration-300';
-
-function navLinkClass(active: boolean): string {
-  // Yellow underline marks the active section (yellow = highlight); red on hover elsewhere.
-  return active
-    ? `${NAV_LINK_BASE} text-navy after:w-full after:bg-brand-yellow`
-    : `${NAV_LINK_BASE} text-ink hover:text-navy after:w-0 after:bg-brand-red hover:after:w-full`;
+function isActive(item: NavItem, pathname: string): boolean {
+  const prefixes = item.match ?? [item.href];
+  return prefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 
-function isItemActive(item: NavItemConfig, pathname: string): boolean {
-  if (item.href) {
-    if (item.href === '/') return pathname === '/';
-    return pathname === item.href || pathname.startsWith(`${item.href}/`);
-  }
-  if (item.dropdown) {
-    return item.dropdown.some((d) => pathname === d.href || pathname.startsWith(`${d.href}/`));
-  }
-  return false;
-}
-
-function DesktopDropdown({ items, isOpen }: { items: DropdownItem[]; isOpen: boolean }): React.ReactElement | null {
-  if (!isOpen) return null;
+function Chevron({ open }: { open?: boolean }): React.ReactElement {
   return (
-    <div className="absolute top-full left-0 mt-2 w-52 bg-paper border border-line rounded-[5px] shadow-lg py-1 z-50">
-      {items.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
-          className="block px-4 py-2.5 text-sm text-ink no-underline hover:bg-paper-2 hover:text-navy transition-colors duration-150"
-        >
-          {item.label}
-        </Link>
-      ))}
+    <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+function Menu({ item, onNavigate }: { item: NavItem; onNavigate: () => void }): React.ReactElement {
+  const wide = (item.groups?.length ?? 0) > 1;
+  return (
+    <div className={`absolute top-full pt-3 z-50 ${wide ? 'left-1/2 -translate-x-1/2' : '-left-4'}`}>
+      <div className={`bg-white border border-line rounded-xl shadow-lift p-2 ${wide ? 'grid grid-cols-2 gap-2 w-[520px]' : 'w-[320px]'}`}>
+        {item.groups!.map((g) => (
+          <div key={g.title} className="p-2">
+            <p className="px-2 pb-2 text-[13px] font-medium text-muted-2">{g.title}</p>
+            <ul>
+              {g.links.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} onClick={onNavigate} className="block rounded-lg px-2 py-2 no-underline text-ink hover:bg-paper-2 hover:text-navy transition-colors">
+                    <span className="block text-[14.5px] font-medium">{l.label}</span>
+                    {l.note && <span className="block text-[13px] text-muted-2 mt-0.5">{l.note}</span>}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 export default function Header(): React.ReactElement {
   const pathname = usePathname() ?? '/';
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
-  const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [open, setOpen] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen((prev) => !prev);
-    setMobileExpanded(null);
-  }, []);
+  useEffect(() => {
+    // Rechecked on every navigation, so the header flips straight after log in or log out.
+    fetch('/api/auth/session', { cache: 'no-store' }).then((r) => r.json()).then((d: { signedIn?: boolean }) => setSignedIn(Boolean(d.signedIn))).catch(() => setSignedIn(false));
+  }, [pathname]);
 
-  const closeMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen(false);
-    setMobileExpanded(null);
-  }, []);
-
-  const handleMouseEnter = useCallback((label: string) => {
-    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
-    setOpenDropdown(label);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    dropdownTimeout.current = setTimeout(() => setOpenDropdown(null), 150);
+  useEffect(() => {
+    const onScroll = (): void => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
-    return () => {
-      if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+    setMobileOpen(false);
+    setOpen(null);
+  }, [pathname]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent): void => {
+      if (e.key === 'Escape') { setOpen(null); setMobileOpen(false); }
     };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const toggleMobileExpanded = useCallback((label: string) => {
-    setMobileExpanded((prev) => (prev === label ? null : label));
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+
+  const enter = useCallback((label: string) => {
+    if (timer.current) clearTimeout(timer.current);
+    setOpen(label);
   }, []);
+  const leave = useCallback(() => {
+    timer.current = setTimeout(() => setOpen(null), 120);
+  }, []);
+  const close = useCallback(() => { setOpen(null); setMobileOpen(false); }, []);
+
+  const account = signedIn
+    ? { href: '/dashboard', label: 'Dashboard' }
+    : { href: '/login', label: 'Log in' };
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Utility bar */}
-      <div className="bg-brown text-paper text-[12.5px]">
-        <div className="container-main flex items-center justify-between h-[38px]">
-          <div className="flex items-center gap-6">
-            <span className="inline-flex items-center gap-1.5 text-paper/80">
-              <svg className="w-3.5 h-3.5 text-brand-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3 4 6v6c0 5 3.5 7.5 8 9 4.5-1.5 8-4 8-9V6z" />
-              </svg>
-              Straight from official sources
+      {/* The homepage shows these rates in full just below, so the strip would only repeat them. */}
+      {pathname !== '/' && <RateTicker />}
+      <div className={`bg-white/95 backdrop-blur border-b transition-shadow duration-200 ${scrolled ? 'border-line shadow-card' : 'border-line'}`}>
+        <div className="container-main flex items-center justify-between h-16 gap-6">
+          <Link href="/" className="flex items-center no-underline shrink-0" aria-label="Paisa Reality, home">
+            <span className="font-display font-bold text-[23px] leading-none tracking-[0.2px] text-navy">
+              Paisa<span className="text-brand-red">Reality</span>
             </span>
-            <span className="hidden sm:inline-flex items-center gap-1.5 text-paper/80">
-              <svg className="w-3.5 h-3.5 text-brand-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
-                <path d="M20 6 9 17l-5-5" />
-              </svg>
-              Free to use, no sign up
-            </span>
-            <span className="hidden md:inline-flex items-center gap-1.5 text-paper/80">
-              <svg className="w-3.5 h-3.5 text-brand-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
-                <circle cx="12" cy="12" r="9" />
-                <path d="M12 7v5l3 2" />
-              </svg>
-              Checked every day
-            </span>
-          </div>
-          <span className="hidden sm:inline text-paper/70">Made in India</span>
-        </div>
-      </div>
+          </Link>
 
-      {/* Main nav */}
-      <div className="bg-paper border-b border-line">
-        <div className="container-main">
-          <div className="flex items-center justify-between h-[68px]">
-            {/* Wordmark with custom seal */}
-            <Link href="/" className="flex items-center no-underline" onClick={closeMobileMenu} aria-label="Paisa Reality home">
-              <span className="font-serif font-bold text-[22px] leading-none tracking-[0.3px] text-navy">
-                Paisa<span className="text-brand-red">Reality</span>
-              </span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-6">
-              {NAV_ITEMS.map((item) => {
-                const active = isItemActive(item, pathname);
-                return (
-                  <div
-                    key={item.label}
-                    className="relative flex items-center"
-                    onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
-                    onMouseLeave={() => item.dropdown && handleMouseLeave()}
+          <nav className="hidden xl:flex items-center gap-1" aria-label="Main">
+            {NAV.map((item) => {
+              const active = isActive(item, pathname);
+              const hasMenu = Boolean(item.groups);
+              return (
+                <div
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => hasMenu && enter(item.label)}
+                  onMouseLeave={() => hasMenu && leave()}
+                >
+                  <Link
+                    href={item.href}
+                    className={`inline-flex items-center gap-1 px-3 py-2 rounded-lg text-[15px] font-medium no-underline transition-colors duration-150
+                      ${active ? 'text-navy bg-navy-soft' : 'text-ink/80 hover:text-ink hover:bg-paper-2'}`}
+                    aria-current={active ? 'page' : undefined}
+                    onFocus={() => hasMenu && enter(item.label)}
                   >
-                    {item.href && !item.dropdown ? (
-                      <Link href={item.href} className={navLinkClass(active)}>
-                        {item.label}
-                      </Link>
-                    ) : item.href && item.dropdown ? (
-                      <Link href={item.href} className={`${navLinkClass(active)} inline-flex items-center gap-1`}>
-                        {item.label}
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </Link>
-                    ) : (
-                      <button type="button" className={`${navLinkClass(active)} inline-flex items-center gap-1`}>
-                        {item.label}
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-                    )}
-                    {item.dropdown && <DesktopDropdown items={item.dropdown} isOpen={openDropdown === item.label} />}
-                  </div>
-                );
-              })}
-            </nav>
+                    {item.label}
+                    {hasMenu && <Chevron open={open === item.label} />}
+                  </Link>
+                  {hasMenu && open === item.label && <Menu item={item} onNavigate={close} />}
+                </div>
+              );
+            })}
+          </nav>
 
-            {/* Right: Score CTA + hamburger */}
-            <div className="flex items-center gap-3">
-              <Link
-                href="/score"
-                className="hidden sm:inline-flex items-center px-4 py-2 text-[14px] font-bold rounded-[3px] no-underline
-                           border border-navy bg-transparent text-navy transition-all duration-200
-                           hover:bg-navy hover:text-paper
-                           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
-              >
-                Health Score
-              </Link>
-
-              <button
-                type="button"
-                className="lg:hidden inline-flex items-center justify-center rounded-[3px] border border-line
-                           text-navy hover:bg-paper-2 transition-colors duration-200 w-[46px] h-[46px]"
-                onClick={toggleMobileMenu}
-                aria-expanded={isMobileMenuOpen}
-                aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              >
-                {isMobileMenuOpen ? (
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" />
-                  </svg>
-                )}
-              </button>
-            </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link href={account.href} className="hidden sm:inline-flex items-center px-3 py-2 text-[15px] font-medium text-ink/80 no-underline rounded-lg hover:text-ink hover:bg-paper-2 transition-colors">
+              {account.label}
+            </Link>
+            <Link href="/score" className="btn-primary !min-h-[40px] !py-2 !px-4 !text-[14.5px] hidden sm:inline-flex">
+              Check your score
+            </Link>
+            <button
+              type="button"
+              className="xl:hidden inline-flex items-center justify-center w-11 h-11 rounded-lg border border-line text-ink hover:bg-paper-2 transition-colors"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                {mobileOpen
+                  ? <path strokeLinecap="round" d="M6 6l12 12M18 6 6 18" />
+                  : <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />}
+              </svg>
+            </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-line bg-paper">
-            <nav className="container-main py-3">
-              {NAV_ITEMS.map((item) => {
-                const active = isItemActive(item, pathname);
+        {mobileOpen && (
+          <nav id="mobile-nav" className="xl:hidden border-t border-line bg-white max-h-[calc(100vh-100px)] overflow-y-auto" aria-label="Main">
+            <div className="container-main py-3">
+              {NAV.map((item) => {
+                const active = isActive(item, pathname);
+                if (!item.groups) {
+                  return (
+                    <Link key={item.label} href={item.href} onClick={close}
+                      className={`flex items-center min-h-[48px] px-3 rounded-lg text-base font-medium no-underline ${active ? 'text-navy bg-navy-soft' : 'text-ink hover:bg-paper-2'}`}>
+                      {item.label}
+                    </Link>
+                  );
+                }
+                const isExp = expanded === item.label;
                 return (
                   <div key={item.label}>
-                    {item.dropdown ? (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => toggleMobileExpanded(item.label)}
-                          className={`flex items-center justify-between w-full px-3 py-3 text-base font-semibold
-                                     rounded-[3px] transition-colors duration-200 hover:bg-paper-2 min-h-[44px]
-                                     ${active ? 'text-navy' : 'text-ink hover:text-navy'}`}
-                          aria-expanded={mobileExpanded === item.label}
-                        >
-                          <span className="inline-flex items-center gap-2">
-                            {active && <span className="w-1.5 h-4 rounded-full bg-brand-yellow" aria-hidden="true" />}
-                            {item.label}
-                          </span>
-                          <svg
-                            className={`w-4 h-4 transition-transform duration-200 ${mobileExpanded === item.label ? 'rotate-180' : ''}`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                        {mobileExpanded === item.label && (
-                          <div className="pl-4 pb-2">
-                            {item.dropdown.map((sub) => (
-                              <Link
-                                key={sub.href}
-                                href={sub.href}
-                                className="block px-3 py-2.5 text-sm text-muted rounded-[3px] no-underline
-                                           hover:text-navy hover:bg-paper-2 transition-colors duration-150"
-                                onClick={closeMobileMenu}
-                              >
-                                {sub.label}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <Link
-                        href={item.href!}
-                        className={`flex items-center gap-2 px-3 py-3 text-base font-semibold rounded-[3px] no-underline
-                                   transition-colors duration-200 hover:bg-paper-2 min-h-[44px]
-                                   ${active ? 'text-navy' : 'text-ink hover:text-navy'}`}
-                        onClick={closeMobileMenu}
-                      >
-                        {active && <span className="w-1.5 h-4 rounded-full bg-brand-yellow" aria-hidden="true" />}
-                        {item.label}
-                      </Link>
+                    <button type="button" onClick={() => setExpanded(isExp ? null : item.label)} aria-expanded={isExp}
+                      className={`flex items-center justify-between w-full min-h-[48px] px-3 rounded-lg text-base font-medium ${active ? 'text-navy' : 'text-ink'} hover:bg-paper-2`}>
+                      {item.label}
+                      <Chevron open={isExp} />
+                    </button>
+                    {isExp && (
+                      <div className="pb-2 pl-3">
+                        {item.groups.flatMap((g) => g.links).map((l) => (
+                          <Link key={l.href} href={l.href} onClick={close}
+                            className="flex items-center min-h-[44px] px-3 rounded-lg text-[15px] text-muted no-underline hover:text-navy hover:bg-paper-2">
+                            {l.label}
+                          </Link>
+                        ))}
+                      </div>
                     )}
                   </div>
                 );
               })}
-              <Link
-                href="/score"
-                className="block mx-3 mt-3 px-4 py-3 text-center text-base font-bold text-paper
-                           bg-navy rounded-[3px] no-underline transition-colors duration-200
-                           hover:bg-navy-deep sm:hidden"
-                onClick={closeMobileMenu}
-              >
-                Health Score
-              </Link>
-            </nav>
-          </div>
+              <div className="grid grid-cols-2 gap-2 pt-3 mt-2 border-t border-line">
+                <Link href={account.href} onClick={close} className="btn-secondary">{account.label}</Link>
+                <Link href="/score" onClick={close} className="btn-primary">Check your score</Link>
+              </div>
+            </div>
+          </nav>
         )}
       </div>
     </header>

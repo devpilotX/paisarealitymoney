@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 /**
- * Admin-authenticated price refresh — same work as the cron endpoint but
+ * Admin-authenticated price refresh, same work as the cron endpoint but
  * guarded by the admin session instead of CRON_SECRET, so the dashboard
  * button works without pasting a secret.
  */

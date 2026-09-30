@@ -3,7 +3,14 @@
  * Self-hosted Postgres; connection comes from env (never hardcode the password).
  * Parameterized queries only. This is the ONLY place that opens a Postgres connection.
  */
-import { Pool, type PoolClient, type QueryResultRow } from 'pg';
+import { Pool, types, type PoolClient, type QueryResultRow } from 'pg';
+
+// Return DATE columns as the plain 'YYYY-MM-DD' string the row types already
+// declare. The driver default builds a JS Date at *server-local* midnight, so a
+// DATE rendered through a UTC formatter on an IST host showed the previous day
+// (a 30 Sep last_verified printed as "29 September" in the FAQ, "30 September"
+// in the body). Timestamps (timestamptz) are unaffected.
+types.setTypeParser(types.builtins.DATE, (value: string) => value);
 
 /** Build the pool config from env (DATABASE_URL wins; else discrete PG* vars). */
 function poolConfig(): { connectionString?: string; host?: string; port?: number; user?: string; password?: string; database?: string } {

@@ -26,17 +26,21 @@ export default function MethodologyPage(): React.ReactElement {
         <section>
           <h2 className="heading-2 mb-3">Gold and silver rates</h2>
           <p className="text-body mb-3">
-            Gold and silver prices update every day from the live international spot price (via gold-api.com)
+            Gold and silver prices refresh five times a day, between 6 AM and 6:30 PM IST, using the live international spot price (via gold-api.com)
             and the live USD to INR exchange rate (via frankfurter.dev). We convert to Indian landed cost like
             this:
           </p>
           <ul className="list-disc pl-6 text-body space-y-2 mb-3">
             <li>Convert the USD per troy ounce spot price to INR per gram.</li>
-            <li>Add import duty and 3% GST. India&apos;s gold and silver customs duty is 15% since 13 May 2026 (10% basic customs duty plus 5% AIDC).</li>
             <li>
-              For silver, add the Indian market premium: physical silver in India has traded well above
-              international parity since the 2025 silver squeeze, so we apply a premium calibrated against
-              published Indian dealer rates and review it regularly.
+              Apply import costs and 3% GST. India&apos;s customs duty on gold and silver is 15% since 13 May 2026
+              (10% basic customs duty plus 5% AIDC), but Indian retail rates do not pass the full duty through.
+              So instead of adding a flat 15%, we apply a smaller duty factor plus a market premium, both fitted
+              to published Indian dealer rates and reviewed regularly.
+            </li>
+            <li>
+              The silver premium is much larger than the gold one: physical silver in India has traded well
+              above international parity since the 2025 silver squeeze.
             </li>
             <li>
               Add a city premium: a small per-city adjustment reflecting typical local jeweller spreads. These
@@ -46,7 +50,7 @@ export default function MethodologyPage(): React.ReactElement {
             <li>22K = 24K price × 0.9167. 18K = 24K price × 0.75.</li>
           </ul>
           <p className="text-body">
-            What this means for you: our rate tracks the market closely and is refreshed daily, but your local
+            What this means for you: our rate tracks the market closely and is refreshed through the day, but your local
             jeweller may quote slightly differently because of making charges, local association rates, and
             stock. Always confirm the day&apos;s rate at the shop before buying.
           </p>
@@ -64,7 +68,7 @@ export default function MethodologyPage(): React.ReactElement {
           </p>
           <p className="text-body">
             Every fuel page shows a <strong>&quot;data verified as of&quot;</strong> date. That is the date we
-            last checked the figures against published rates, and it is the honest freshness signal — not just
+            last checked the figures against published rates, and it is the honest freshness signal, not just
             the date the page was generated. If our data ages beyond two weeks, our own system emails us to fix
             it.
           </p>
@@ -75,7 +79,7 @@ export default function MethodologyPage(): React.ReactElement {
           <p className="text-body mb-3">
             Domestic 14.2 kg cylinder rates are state-wise figures from OMC published prices, which revise on
             the 1st of each month. Commercial 19 kg rates are shown only for states where a published figure
-            exists; where you see a dash, we chose not to guess — check your distributor.
+            exists; where you see a dash, we chose not to guess; check your distributor.
           </p>
         </section>
 
@@ -83,7 +87,7 @@ export default function MethodologyPage(): React.ReactElement {
           <h2 className="heading-2 mb-3">Bank interest rates</h2>
           <p className="text-body mb-3">
             FD, savings, home loan, and personal loan rates are curated manually from each bank&apos;s official
-            website. Every rate table shows a <strong>&quot;rates as of&quot;</strong> date — the date that data
+            website. Every rate table shows a <strong>&quot;rates as of&quot;</strong> date, the date that data
             was last refreshed. Banks revise rates without notice, so treat our tables as a comparison starting
             point and verify the exact rate with the bank before booking a deposit or applying for a loan.
           </p>
@@ -103,7 +107,7 @@ export default function MethodologyPage(): React.ReactElement {
           <h2 className="heading-2 mb-3">Calculators and Smart Tools</h2>
           <p className="text-body mb-3">
             All calculators run standard, published formulas (EMI amortisation, compound interest, current
-            income tax slabs) directly in your browser — your inputs never leave your device. Smart Tools use
+            income tax slabs) directly in your browser; your inputs never leave your device. Smart Tools use
             simulation and optimisation on top of the same public rules. Results are educational models, not
             guarantees, and tax figures follow the law as of the assessment year stated on each tool.
           </p>

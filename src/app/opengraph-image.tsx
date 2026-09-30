@@ -17,7 +17,7 @@ export default function OpengraphImage(): ImageResponse {
           alignItems: 'flex-start',
           justifyContent: 'center',
           backgroundColor: '#0c4a47',
-          backgroundImage: 'linear-gradient(135deg, #0c4a47 0%, #007A78 100%)',
+          backgroundImage: 'linear-gradient(135deg, #0c4a47 0%, #1C3A5E 100%)',
           padding: '80px',
         }}
       >

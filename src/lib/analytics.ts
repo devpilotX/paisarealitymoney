@@ -11,12 +11,29 @@ declare global {
 
 export const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-MT7980F7JH';
 
+/**
+ * The gtag script loads lazily, after the page is interactive, so tool pages can
+ * fire events before it exists. This installs the standard queue stub: calls made
+ * early go into dataLayer and are sent once the script arrives.
+ */
+function gtag(...args: unknown[]): void {
+  if (typeof window === 'undefined') return;
+  window.dataLayer = window.dataLayer || [];
+  if (typeof window.gtag !== 'function') {
+    window.gtag = function queued() {
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer.push(arguments as unknown as Record<string, unknown>);
+    } as Window['gtag'];
+  }
+  (window.gtag as (...a: unknown[]) => void)(...args);
+}
+
 export function trackPageView(url: string): void {
   if (typeof window === 'undefined' || !GA_ID) {
     return;
   }
   try {
-    window.gtag('config', GA_ID, {
+    gtag('config', GA_ID, {
       page_path: url,
     });
   } catch (error) {
@@ -32,7 +49,7 @@ export function trackEvent(
     return;
   }
   try {
-    window.gtag('event', eventName, params ?? {});
+    gtag('event', eventName, params ?? {});
   } catch (error) {
     console.error('Failed to track event:', error);
   }

@@ -1,5 +1,5 @@
 /**
- * Equity Tax-Loss & Gain Harvesting Optimizer — test suite (26 cases incl. brute force)
+ * Equity Tax-Loss & Gain Harvesting Optimizer, test suite (26 cases incl. brute force)
  * Run: npx ts-node --project tsconfig.scripts.json tests/tax-harvesting.test.ts
  */
 

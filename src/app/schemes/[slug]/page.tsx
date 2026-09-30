@@ -6,6 +6,7 @@ import { buildRecordTitle, buildRecordDescription, SOCIAL_IMAGE } from '@/lib/se
 import { deadlineAnswer, deadlineLine, deadlineQuestion } from '@/lib/deadlines';
 import { parseJsonArray as parseJsonArrayShared } from '@/lib/json-array';
 import type { QueryResultRow } from 'pg';
+import SaveSchemeButton from '@/components/SaveSchemeButton';
 
 import { formatNumber, formatDate } from '@/lib/constants';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -367,6 +368,7 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
                 Official Website
               </a>
             )}
+            <SaveSchemeButton slug={scheme.slug} />
           </div>
         {scheme.last_verified && (
           <p className="text-xs text-muted-2 mt-3">Last verified: {formatDate(scheme.last_verified)}</p>

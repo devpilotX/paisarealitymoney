@@ -1,35 +1,33 @@
 import { CITIES } from '../src/lib/cities';
-import mysql from 'mysql2/promise';
+import { buildScriptPool } from './lib/script-pool';
 
 async function seedCities(): Promise<void> {
-  const connection = await mysql.createConnection({
-    host: process.env.MYSQL_HOST || 'localhost',
-    port: parseInt(process.env.MYSQL_PORT || '3306', 10),
-    user: process.env.MYSQL_USER || 'root',
-    password: process.env.MYSQL_PASSWORD || '',
-    database: process.env.MYSQL_DATABASE || 'paisareality',
-  });
+  const pool = buildScriptPool();
+  console.log('Connected to PostgreSQL. Seeding cities...');
+  let failed = 0;
 
-  console.log('Connected to MySQL. Seeding cities...');
-
-  for (const city of CITIES) {
-    try {
-      await connection.execute(
-        `INSERT INTO cities (slug, name, name_hi, state, is_metro, latitude, longitude)
-         VALUES (?, ?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE name=VALUES(name), name_hi=VALUES(name_hi), state=VALUES(state),
-         is_metro=VALUES(is_metro), latitude=VALUES(latitude), longitude=VALUES(longitude)`,
-        [city.slug, city.name, city.nameHi, city.state, city.isMetro, city.latitude, city.longitude]
-      );
-      console.log(`  Inserted/updated: ${city.name} (${city.state})`);
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`  Error for ${city.name}: ${msg}`);
+  try {
+    for (const city of CITIES) {
+      try {
+        await pool.query(
+          `INSERT INTO cities (slug, name, name_hi, state, is_metro, latitude, longitude)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)
+           ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name, name_hi = EXCLUDED.name_hi,
+             state = EXCLUDED.state, is_metro = EXCLUDED.is_metro,
+             latitude = EXCLUDED.latitude, longitude = EXCLUDED.longitude`,
+          [city.slug, city.name, city.nameHi, city.state, city.isMetro, city.latitude, city.longitude],
+        );
+      } catch (error) {
+        failed++;
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        console.error(`  Error for ${city.name}: ${msg}`);
+      }
     }
+    console.log(`Done. ${CITIES.length - failed} of ${CITIES.length} cities seeded.`);
+    if (failed > 0) process.exitCode = 1;
+  } finally {
+    await pool.end();
   }
-
-  console.log(`\nDone. ${CITIES.length} cities seeded.`);
-  await connection.end();
 }
 
 seedCities().catch((error) => {

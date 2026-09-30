@@ -18,7 +18,7 @@ import {
 function Stat({ label, value, sub }: { label: string; value: string; sub?: string }): React.ReactElement {
   return (
     <div className="card">
-      <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">{label}</p>
+      <p className="text-sm text-muted mb-1">{label}</p>
       <p className="text-2xl font-bold text-primary">{value}</p>
       {sub && <p className="text-xs text-muted-2 mt-1">{sub}</p>}
     </div>
@@ -37,7 +37,7 @@ export default function GoldPlannerClient(): React.ReactElement {
   const a = useMemo(() => analyzeGoldPlan(inputs), [inputs]);
 
   const series: TimelineSeries[] = useMemo(() => [
-    { label: 'SIP value', color: '#007A78', timeline: a.backtest.sipValuePath },
+    { label: 'SIP value', color: '#1C3A5E', timeline: a.backtest.sipValuePath },
     { label: 'Lump-sum value', color: '#d97706', timeline: a.backtest.lumpsumValuePath },
     { label: 'Amount invested', color: '#9ca3af', timeline: a.backtest.investedPath },
   ].filter((s) => s.timeline.some((v) => v > 0)), [a.backtest]);
@@ -46,7 +46,7 @@ export default function GoldPlannerClient(): React.ReactElement {
     <div>
       {/* Prominent compliance banner */}
       <div className="rounded-lg bg-yellow-50 border border-yellow-300 px-4 py-3 mb-6 text-sm text-yellow-900">
-        <strong>Educational &amp; historical only. not advice, not a prediction.</strong> This tool explains gold&apos;s
+        <strong>Educational &amp; historical only, not advice, not a prediction.</strong> This tool explains gold&apos;s
         historical behaviour and helps you plan a disciplined allocation. It does not tell you whether to buy or sell, and
         it cannot predict prices. Dataset as of {GOLD_DATASET_AS_OF}.
       </div>
@@ -88,7 +88,7 @@ export default function GoldPlannerClient(): React.ReactElement {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
           <Stat label="Best year" value={`${a.stats.bestYear.pct}%`} sub={`in ${a.stats.bestYear.year}`} />
           <Stat label="Worst year" value={`${a.stats.worstYear.pct}%`} sub={`in ${a.stats.worstYear.year}`} />
-          <Stat label={`${a.entryTimingSpread.windowYears}-yr return range by entry`} value={`${a.entryTimingSpread.minCagrPct}% to ${a.entryTimingSpread.maxCagrPct}%`} sub={`${a.entryTimingSpread.spreadPct}-pt spread. timing is hard`} />
+          <Stat label={`${a.entryTimingSpread.windowYears}-yr return range by entry`} value={`${a.entryTimingSpread.minCagrPct}% to ${a.entryTimingSpread.maxCagrPct}%`} sub={`${a.entryTimingSpread.spreadPct}-pt spread, timing is hard`} />
         </div>
       </div>
 
@@ -135,8 +135,8 @@ export default function GoldPlannerClient(): React.ReactElement {
 
       {/* Instrument comparison */}
       <div className="card my-6 overflow-x-auto">
-        <h3 className="text-base font-semibold mb-1">Ways to hold gold. tax &amp; key notes</h3>
-        <p className="text-xs text-muted-2 mb-3">Tax as of FY 2025-26. Long-term gains taxed at 12.5% + 4% cess; short-term at your slab. Verify current rules before acting.</p>
+        <h3 className="text-base font-semibold mb-1">Ways to hold gold: tax &amp; key notes</h3>
+        <p className="text-xs text-muted-2 mb-3">Tax as of FY 2026-27 (unchanged from FY 2025-26). Long-term gains taxed at 12.5% + 4% cess; short-term at your slab. Verify current rules before acting.</p>
         <table className="w-full text-sm">
           <thead><tr className="text-left text-muted-2 border-b border-line"><th className="py-2 font-medium">Instrument</th><th className="py-2 font-medium">Long-term after</th><th className="py-2 font-medium">Notes</th></tr></thead>
           <tbody>

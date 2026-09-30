@@ -74,7 +74,7 @@ export default function PricingActions(): React.ReactElement {
           setMessage('Payment received. Your premium access will activate shortly.');
           router.refresh();
         },
-        theme: { color: '#007A78' },
+        theme: { color: '#1C3A5E' },
       });
 
       checkout.open();

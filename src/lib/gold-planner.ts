@@ -302,10 +302,10 @@ export function goldTax(gain: number, holdingMonths: number, instrument: Instrum
 
 export function instrumentTable(): InstrumentInfo[] {
   return [
-    { instrument: 'sgb', label: 'Sovereign Gold Bond (SGB)', longTermMonths: 12, longTermRatePct: 12.5, shortTermNote: 'Slab if sold within 12 months on exchange', extra: 'Pays 2.5% annual interest (taxable at slab). Capital gain on redemption at maturity (8 years) is tax-free. Govt-backed.', sebiCaveat: 'Issued by RBI. among the most regulated options.' },
+    { instrument: 'sgb', label: 'Sovereign Gold Bond (SGB)', longTermMonths: 12, longTermRatePct: 12.5, shortTermNote: 'Slab if sold within 12 months on exchange', extra: 'No new SGBs have been issued since February 2024; existing ones trade on NSE and BSE. They pay 2.5% a year (taxable at slab). From 1 April 2026 the maturity gain is tax-free only for bonds bought at original issue and held for 8 years; bonds bought on the exchange pay capital gains tax.', sebiCaveat: 'Issued by RBI on behalf of the Government of India.' },
     { instrument: 'etf', label: 'Gold ETF / Gold Fund', longTermMonths: 12, longTermRatePct: 12.5, shortTermNote: 'Slab if held 12 months or less', extra: 'Exchange-traded, low cost, no making charges, demat held. Tracks gold price.', sebiCaveat: 'SEBI-regulated mutual fund / ETF.' },
     { instrument: 'physical', label: 'Physical gold (jewellery/coins)', longTermMonths: 24, longTermRatePct: 12.5, shortTermNote: 'Slab if held 24 months or less', extra: 'Making charges and purity/storage risk reduce returns vs paper gold.', sebiCaveat: 'Not a financial product; quality and storage are your responsibility.' },
-    { instrument: 'digital', label: 'Digital gold', longTermMonths: 24, longTermRatePct: 12.5, shortTermNote: 'Slab if held 24 months or less', extra: 'Convenient small-ticket buying, but spreads and platform risk apply.', sebiCaveat: 'Digital gold is NOT regulated by SEBI or the RBI. counterparty/platform risk is a known concern flagged by regulators.' },
+    { instrument: 'digital', label: 'Digital gold', longTermMonths: 24, longTermRatePct: 12.5, shortTermNote: 'Slab if held 24 months or less', extra: 'Convenient small-ticket buying, but spreads and platform risk apply.', sebiCaveat: 'Digital gold is NOT regulated by SEBI or the RBI; counterparty/platform risk is a known concern flagged by regulators.' },
   ];
 }
 
@@ -330,8 +330,8 @@ export function analyzeGoldPlan(inputs: GoldPlanInputs): GoldPlanAnalysis {
 
   const educationalNotes: string[] = [
     `Over the ${stats.years} years in this dataset, INR gold returned about ${stats.avgAnnualReturnPct}% a year on average, with annual swings (volatility) of about ${stats.volatilityPct}% and a worst peak-to-trough fall of about ${stats.maxDrawdownPct}%. Past patterns do not predict the future.`,
-    `Gold's year-to-year correlation with the Nifty was about ${stats.niftyCorrelation} in this dataset. historically low, which is why gold is often discussed as a diversifier rather than a growth engine.`,
-    `Across historical ${entryTimingSpread.windowYears}-year windows, the annualised return ranged from ${entryTimingSpread.minCagrPct}% to ${entryTimingSpread.maxCagrPct}% depending purely on WHEN you started. a ${entryTimingSpread.spreadPct}-point spread. This illustrates how hard timing is, which is why disciplined cost-averaging is a common approach.`,
+    `Gold's year-to-year correlation with the Nifty was about ${stats.niftyCorrelation} in this dataset, historically low, which is why gold is often discussed as a diversifier rather than a growth engine.`,
+    `Across historical ${entryTimingSpread.windowYears}-year windows, the annualised return ranged from ${entryTimingSpread.minCagrPct}% to ${entryTimingSpread.maxCagrPct}% depending purely on WHEN you started, a ${entryTimingSpread.spreadPct}-point spread. This illustrates how hard timing is, which is why disciplined cost-averaging is a common approach.`,
     'These are historical observations and scenarios for learning only. They are not advice, not a recommendation to buy or sell, and not a prediction of future prices.',
   ];
 
@@ -344,7 +344,7 @@ export function analyzeGoldPlan(inputs: GoldPlanInputs): GoldPlanAnalysis {
     allInstruments,
     selectedInstrument,
     educationalNotes,
-    disclaimer: 'Educational and historical information only. not investment advice and not a price prediction. Gold prices can fall as well as rise; historical patterns do not guarantee future results. Consult a SEBI-registered investment adviser before making any decision.',
+    disclaimer: 'Educational and historical information only, not investment advice and not a price prediction. Gold prices can fall as well as rise; historical patterns do not guarantee future results. Consult a SEBI-registered investment adviser before making any decision.',
   };
 }
 

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
+import FuelCityInsight from '@/components/FuelCityInsight';
 
 import { getCityBySlug, getRelatedCities, CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
@@ -97,10 +98,19 @@ export default async function DieselPriceCityPage({ params }: PageProps): Promis
         <div className="my-8"><PriceChart data={chartData} title={`30-Day Diesel Price Trend in ${city.name}`} color="#2563EB" /></div>
       )}
 
-      <article className="max-w-3xl my-8">
-        <h2 className="heading-2 mb-4">About Diesel Price in {city.name}</h2>
-        <p className="text-body mb-4">Diesel prices in {city.name} are revised daily by oil marketing companies. The rate depends on the base price, central excise duty, dealer commission, and {city.state} VAT. Diesel is typically Rs 5 to Rs 10 cheaper than petrol in most cities.</p>
-        <p className="text-body mb-4">Check also: <Link href={`/petrol-price/${city.slug}`} className="link-internal">Petrol price in {city.name}</Link> and <Link href={`/gold-rate/${city.slug}`} className="link-internal">Gold rate in {city.name}</Link>.</p>
+      <FuelCityInsight fuel="diesel" citySlug={city.slug} />
+
+      <article className="max-w-3xl my-10 prose">
+        <h2>How the price in {city.name} is made up</h2>
+        <p>
+          {`The pump price has four parts: the oil company's base price, central excise duty, the dealer's commission, and ${city.state}'s VAT. Excise and the base price are the same everywhere, which is why prices move together across India and differ mainly by state. Indian Oil, BPCL and HPCL can revise rates at 6 am every day, and this page picks up the change on its first update of the day.`}
+        </p>
+        <p>
+          {`To check the rate at a particular Indian Oil pump, SMS RSP followed by the dealer code painted at the station to 9224992249. The Indian Oil ONE, HP Pay and BPCL HelloBPCL apps show the rate at any of their pumps.`}
+        </p>
+        <p>
+          Also on this site: the <Link href={`/petrol-price/${city.slug}`}>petrol price in {city.name}</Link>, the <Link href={`/gold-rate/${city.slug}`}>gold rate in {city.name}</Link> and <Link href="/lpg-price">LPG cylinder prices by state</Link>.
+        </p>
       </article>
 
       <ShareButton url={`/diesel-price/${city.slug}`} title={`Diesel Price in ${city.name} Today`} />

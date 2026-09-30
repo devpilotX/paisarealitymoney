@@ -83,8 +83,13 @@ export function fitTitle(base: string, suffixes: string[]): string {
  * URL. Most schemes only link out to an official portal, so claiming "Apply
  * Online" on those pages would misrepresent them.
  */
+/** Calendar year in India, so titles roll over on 1 January without a code change. */
+export function currentYearIST(now: Date = new Date()): string {
+  return now.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }).slice(0, 4);
+}
+
 export function buildRecordTitle(name: string, opts: { canApplyOnline?: boolean; year?: string } = {}): string {
-  const year = opts.year ?? '2026';
+  const year = opts.year ?? currentYearIST();
   return fitTitle(name, opts.canApplyOnline
     ? [
         ` ${year}: Eligibility & Apply Online`,
@@ -103,13 +108,22 @@ export function buildRecordTitle(name: string, opts: { canApplyOnline?: boolean;
 /**
  * Build a description that fits within DESCRIPTION_LIMIT. Appends a short
  * call to action only when it fits, so the CTA is either fully present or
- * fully absent — never cut in half.
+ * fully absent, never cut in half.
  */
 export function buildRecordDescription(summary: string | null | undefined, fallbackName: string): string {
   const cta = ' Check who qualifies and how to apply.';
   const base = (summary?.trim() || `${fallbackName}: eligibility, benefits and how to apply.`).replace(/\s+/g, ' ');
   if (base.length + cta.length <= DESCRIPTION_LIMIT) return `${base}${cta}`;
   if (base.length <= DESCRIPTION_LIMIT) return base;
+  // Prefer ending on a whole sentence; only clip mid-sentence when no sentence fits.
+  const sentences = base.match(/[^.!?]+[.!?]+/g) ?? [];
+  let fit = '';
+  for (const s of sentences) {
+    if ((fit + s).trim().length > DESCRIPTION_LIMIT) break;
+    fit += s;
+  }
+  fit = fit.trim();
+  if (fit.length >= 70) return fit.length + cta.length <= DESCRIPTION_LIMIT ? `${fit}${cta}` : fit;
   return `${base.slice(0, DESCRIPTION_LIMIT - 3).trimEnd()}...`;
 }
 

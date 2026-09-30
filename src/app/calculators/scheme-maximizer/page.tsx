@@ -21,7 +21,7 @@ const FAQS = [
   {
     question: 'How is this different from a normal government scheme finder?',
     answer:
-      'Most finders (including the official myScheme portal) only LIST the schemes you might be eligible for. This tool goes further: it QUANTIFIES the rupee benefit of each scheme, sums them into a single total you can claim per year, and resolves overlaps. because some schemes are mutually exclusive (you can draw only one social-security pension, for example). It also separates one-time benefits from recurring ones and treats loans honestly (a ₹10 lakh MUDRA loan is access to credit, not free money, so it counts as ₹0).',
+      'Most finders (including the official myScheme portal) only LIST the schemes you might be eligible for. This tool goes further: it QUANTIFIES the rupee benefit of each scheme, sums them into a single total you can claim per year, and resolves overlaps, because some schemes are mutually exclusive (you can draw only one social-security pension, for example). It also separates one-time benefits from recurring ones and treats loans honestly (a ₹10 lakh MUDRA loan is access to credit, not free money, so it counts as ₹0).',
   },
   {
     question: 'How do you put a rupee value on each scheme?',
@@ -31,27 +31,27 @@ const FAQS = [
   {
     question: 'What does "conflict-resolved optimal set" mean?',
     answer:
-      'Some benefits cannot be combined. For instance, the three NSAP social-security pensions (old-age, widow, disability) are mutually exclusive. you can draw only one. A naive tool would add them all up and overstate your benefit. This tool builds a conflict graph and computes the maximum-weight combination of non-conflicting schemes, so the total it shows is one you can actually receive together.',
+      'Some benefits cannot be combined. For instance, the three NSAP social-security pensions (old-age, widow, disability) are mutually exclusive; you can draw only one. A naive tool would add them all up and overstate your benefit. This tool builds a conflict graph and computes the maximum-weight combination of non-conflicting schemes, so the total it shows is one you can actually receive together.',
   },
   {
     question: 'Which schemes are covered?',
     answer:
-      'The dataset focuses on the highest-impact CENTRAL government schemes. PM-KISAN, Ayushman Bharat, the Jan Suraksha insurance schemes, MGNREGA, Kisan Credit Card, PM Fasal Bima, National Scholarships, the NSAP pensions, PMAY (urban and rural), PM Vishwakarma, PMKVY, Ujjwala, PM Matru Vandana, and more. State-specific schemes are being added; until your state is covered, the tool shows central schemes and flags that state portals may have more.',
+      'The dataset focuses on the highest-impact CENTRAL government schemes: PM-KISAN, Ayushman Bharat, the Jan Suraksha insurance schemes, VB-G RAM G (formerly MGNREGA), Kisan Credit Card, PM Fasal Bima, National Scholarships, the NSAP pensions, PMAY (urban and rural), PM Vishwakarma, PMKVY, Ujjwala, PM Matru Vandana, and more. State-specific schemes are being added; until your state is covered, the tool shows central schemes and flags that state portals may have more.',
   },
   {
     question: 'What are "near-misses"?',
     answer:
-      'These are schemes you just barely miss. by a single criterion. For example, if your income is a little over the Ayushman Bharat ceiling, or you are a couple of years below a pension\'s minimum age, the tool flags it and tells you exactly what would need to change. It turns a flat "not eligible" into actionable information.',
+      'These are schemes you just barely miss, by a single criterion. For example, if your income is a little over the Ayushman Bharat ceiling, or you are a couple of years below a pension\'s minimum age, the tool flags it and tells you exactly what would need to change. It turns a flat "not eligible" into actionable information.',
   },
   {
     question: 'Is my personal information safe?',
     answer:
-      'Completely. The entire eligibility check runs inside your browser using a bundled dataset. your age, income, caste category and other details are never sent to any server, and the tool works offline once loaded. There is no login and nothing is stored.',
+      'Completely. The entire eligibility check runs inside your browser using a bundled dataset; your age, income, caste category and other details are never sent to any server, and the tool works offline once loaded. There is no login and nothing is stored.',
   },
   {
     question: 'Can I rely on these amounts when applying?',
     answer:
-      'Treat them as a well-reasoned estimate, not a guarantee. Eligibility rules and benefit amounts are set by the implementing ministries and can change, and final approval is always at the authority\'s discretion. Every scheme card carries the official link and a "last verified" date. confirm there before you apply.',
+      'Treat them as a well-reasoned estimate, not a guarantee. Eligibility rules and benefit amounts are set by the implementing ministries and can change, and final approval is always at the authority\'s discretion. Every scheme card carries the official link and a "last verified" date; confirm there before you apply.',
   },
 ];
 
@@ -68,7 +68,7 @@ const jsonLd = {
   featureList: [
     'Eligibility across age, income, occupation, category, area, BPL, disability',
     'Quantified annual rupee benefit per scheme',
-    'Conflict-resolved optimal benefit total',
+    'Total benefit, with overlapping schemes counted once',
     'One-time vs recurring benefit separation',
     'Near-miss diagnostics',
     'Official link + last-verified date per scheme',
@@ -90,7 +90,7 @@ export default function SchemeMaximizerPage(): React.ReactElement {
 
       <div className="inline-flex items-center gap-2 mb-2">
         <span className="badge"><svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z" /></svg> Smart Tool</span>
-        <span className="text-xs text-muted-2">Quantified · Conflict-resolved · 100% in-browser</span>
+        <span className="text-xs text-muted-2">Runs in your browser</span>
       </div>
       <h1 className="heading-1 mb-3">Government Scheme Benefit Maximizer</h1>
       <p className="text-body mb-6 max-w-3xl">
@@ -107,7 +107,7 @@ export default function SchemeMaximizerPage(): React.ReactElement {
         <h2>Stop leaving government money on the table</h2>
         <p>
           India runs hundreds of welfare and support schemes worth lakhs of crores, yet most eligible citizens claim only
-          a fraction of what they are entitled to. partly because no one tells them the <strong>total</strong> they could
+          a fraction of what they are entitled to, partly because no one tells them the <strong>total</strong> they could
           receive. The official portals and finder sites are good at listing schemes, but they stop there. They never add
           up the money, never tell you which benefits cancel each other out, and never put an honest rupee value on a
           health-insurance cover or an interest-subvented loan. This tool exists to fill exactly that gap.
@@ -115,8 +115,8 @@ export default function SchemeMaximizerPage(): React.ReactElement {
 
         <h2>From a list to a number</h2>
         <p>
-          Enter your profile. age, gender, income, occupation, category, area and a few flags like BPL status, land
-          ownership or disability. and the tool evaluates each scheme's eligibility rules against it. For every scheme you
+          Enter your profile: age, gender, income, occupation, category, area and a few flags like BPL status, land
+          ownership or disability, and the tool evaluates each scheme's eligibility rules against it. For every scheme you
           qualify for, it computes a <strong>quantified annual benefit</strong> and adds them into one headline number: the
           total you can claim per year, plus any one-time benefits like a housing subsidy or a free toolkit. Suddenly the
           decision to spend an afternoon on paperwork has a concrete payoff attached to it.
@@ -125,7 +125,7 @@ export default function SchemeMaximizerPage(): React.ReactElement {
         <h2>Honest valuation is the hard part</h2>
         <p>
           The reason no one sums benefits is that schemes are not comparable at face value, and adding them naively is
-          misleading. A ₹10 lakh MUDRA loan is not ₹10 lakh of benefit. it is access to credit you repay, so we count it
+          misleading. A ₹10 lakh MUDRA loan is not ₹10 lakh of benefit; it is access to credit you repay, so we count it
           as ₹0 and label it clearly. A ₹2 lakh accident-insurance cover that costs ₹20 is worth roughly what you would pay
           privately for the same cover, not ₹2 lakh. Interest-subvention schemes are worth the interest you save. Cash
           transfers and pensions are counted at face value. Every card explains how its number was derived, so the total is
@@ -134,17 +134,17 @@ export default function SchemeMaximizerPage(): React.ReactElement {
 
         <h2>Resolving conflicts: the optimal set</h2>
         <p>
-          Some benefits are mutually exclusive. The three National Social Assistance pensions. old-age, widow and
-          disability. cannot be drawn together; you receive one. A naive calculator would stack them and overstate your
-          entitlement. This tool builds a conflict graph and computes the <strong>maximum-weight independent set</strong> , 
+          Some benefits are mutually exclusive. The three National Social Assistance pensions, old-age, widow and
+          disability, cannot be drawn together; you receive one. A naive calculator would stack them and overstate your
+          entitlement. This tool builds a conflict graph and computes the <strong>maximum-weight independent set</strong>,
           the combination of non-conflicting schemes with the highest total value. That is a genuinely better answer than a
           greedy "take the biggest first" rule, which can block two smaller benefits that together are worth more.
         </p>
 
         <h2>Near-misses turn "no" into "how"</h2>
         <p>
-          A flat "not eligible" is unhelpful. So when you miss a scheme by a single criterion. income just over a ceiling,
-          age just under a threshold, missing a BPL card. the tool flags it as a near-miss and tells you precisely what
+          A flat "not eligible" is unhelpful. So when you miss a scheme by a single criterion, income just over a ceiling,
+          age just under a threshold, missing a BPL card, the tool flags it as a near-miss and tells you precisely what
           would change the outcome. Combined with the official link and a "last verified" date on every scheme, you get not
           just a number but a clear, actionable plan. As always, eligibility and amounts are decided by the implementing
           authority, so confirm on the official portal before you apply.

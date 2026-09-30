@@ -20,6 +20,15 @@ interface RazorpayConfig {
   keySecret: string;
 }
 
+export type PremiumPlan = 'monthly' | 'yearly';
+
+/** Premium prices in rupees. The webhook checks the captured amount against these. */
+export const PLAN_PRICES_INR: Record<PremiumPlan, number> = { monthly: 99, yearly: 999 };
+
+export function isPremiumPlan(value: unknown): value is PremiumPlan {
+  return value === 'monthly' || value === 'yearly';
+}
+
 function getConfig(): RazorpayConfig | null {
   const keyId = process.env.RAZORPAY_KEY_ID;
   const keySecret = process.env.RAZORPAY_KEY_SECRET;

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cacheClearAll } from '@/lib/cache';
 import { execute, query } from '@/lib/db';
-import { escapeHtml, getAppUrl, sendAdminAlert, sendEmail } from '@/lib/email';
+import { escapeHtml, getAppUrl, sendAdminAlert, sendEmail, emailLayout, btn } from '@/lib/email';
 import { checkPriceAlerts } from '@/lib/price-alerts';
 import { revalidatePriceRoutes } from '@/lib/revalidate-prices';
 import { checkMetalDrift } from '@/lib/price-drift';
@@ -15,6 +15,8 @@ import {
   updateSilverPricesLive,
   type UpdateResult,
 } from '@/lib/price-providers';
+import { secretMatches } from '@/lib/secret-compare';
+import { runGrantsUpkeep, LINK_FAILURE_LIMIT, type UpkeepResult } from '@/lib/grants-upkeep';
 import type { QueryResultRow } from 'pg';
 
 export const dynamic = 'force-dynamic';
@@ -83,24 +85,32 @@ async function markAlertSent(): Promise<void> {
 
 function scholarshipReminderHtml(r: DueReminder): string {
   const url = `${getAppUrl()}/scholarships/${r.slug}`;
-  const official = r.official_url
-    ? `<p style="margin:12px 0">Apply on the official portal: <a href="${r.official_url}" style="color:#007A78">${escapeHtml(r.official_url)}</a></p>`
-    : '';
-  return `<div style="font-family:Arial,sans-serif;color:#1f2937;max-width:560px">
-    <h2 style="color:#007A78;font-size:22px;margin:0 0 8px">${escapeHtml(r.name)}</h2>
-    <p style="margin:0 0 8px">This is your reminder: the application closes on <strong>${escapeHtml(r.deadline)}</strong>.</p>
-    ${official}
-    <p style="margin:12px 0"><a href="${url}" style="color:#007A78">View eligibility, documents and steps</a></p>
-    <p style="color:#6b7280;font-size:13px;margin-top:16px">You asked Paisa Reality to remind you. Always verify the exact dates on the official portal.</p>
-  </div>`;
+  return emailLayout(`
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">${escapeHtml(r.name)} closes on ${escapeHtml(r.deadline)}</h2>
+    <p style="margin:0 0 12px;color:#374151;">You asked us to remind you before this scholarship closes. Keep your documents ready and apply on the official portal.</p>
+    ${r.official_url ? btn(r.official_url, 'Apply on the official portal') : ''}
+    <p style="margin:0 0 8px;"><a href="${url}" style="color:#1C3A5E;">Eligibility, documents and steps</a></p>
+    <p style="margin:0;color:#6B7280;font-size:13px;">Dates can change, so confirm the last date on the portal. This was a one-time reminder.</p>
+  `, `${r.name} closes on ${r.deadline}`);
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  const secret = request.nextUrl.searchParams.get('secret');
-  const cronSecret = process.env.CRON_SECRET;
-
-  if (!cronSecret || secret !== cronSecret) {
+  // Header preferred (keeps the secret out of access logs); query string still accepted.
+  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
+  const secret = bearer || request.nextUrl.searchParams.get('secret') || '';
+  if (!secretMatches(secret, process.env.CRON_SECRET)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Lapsed premium plans go back to free (the webhook sets plan_expires_at).
+  let premiumExpired = 0;
+  try {
+    const res = await execute(
+      "UPDATE users SET plan = 'free' WHERE plan = 'premium' AND plan_expires_at IS NOT NULL AND plan_expires_at < NOW()"
+    );
+    premiumExpired = res.rowCount ?? 0;
+  } catch (err) {
+    console.error('premium expiry sweep failed:', err instanceof Error ? err.message : err);
   }
 
   const startTime = Date.now();
@@ -124,7 +134,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   // prices show up on the very next request instead of after a lazy regen.
   const revalidatedRoutes = revalidatePriceRoutes();
 
-  // Fresh prices are in — evaluate user price alerts against them.
+  // Fresh prices are in, evaluate user price alerts against them.
   const userAlerts = await checkPriceAlerts();
 
   const problems = collectAlerts(results);
@@ -145,6 +155,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     problems.push(...(await checkMetalDrift(ourGold, ourSilver)));
   } catch {
     // fail-open: drift monitoring must never break the price cron
+  }
+
+  // Grants: hide passed deadlines and programmes whose official links keep failing.
+  let grants: UpkeepResult | null = null;
+  try {
+    grants = await runGrantsUpkeep();
+    if (grants.hidden.length > 0) problems.push(`Grants hidden because their links failed ${LINK_FAILURE_LIMIT} days running: ${grants.hidden.join(' | ')}`);
+  } catch (err) {
+    console.error('grants upkeep failed:', err instanceof Error ? err.message : err);
   }
 
   if (userAlerts.errors.length > 0) {
@@ -183,6 +202,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     problems,
     alerted,
     scholarshipReminders,
+    premiumExpired,
+    grants,
     userAlerts,
     results,
   });

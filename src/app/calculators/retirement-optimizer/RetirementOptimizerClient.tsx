@@ -28,7 +28,7 @@ function StatCard({ label, value, sub, tone = 'default' }: { label: string; valu
     tone === 'good' ? 'text-green-700' : tone === 'warn' ? 'text-brown' : tone === 'bad' ? 'text-brand-red' : 'text-navy';
   return (
     <div className="card">
-      <p className="text-xs uppercase tracking-wide text-muted-2 mb-1">{label}</p>
+      <p className="text-sm text-muted mb-1">{label}</p>
       <p className={`text-2xl font-bold ${toneClass}`}>{value}</p>
       {sub && <p className="text-xs text-muted-2 mt-1">{sub}</p>}
     </div>
@@ -134,14 +134,14 @@ export default function RetirementOptimizerClient(): React.ReactElement {
     <div>
       {/* Privacy assurance */}
       <div className="rounded-lg bg-primary-50 border border-primary-100 px-4 py-3 mb-6 text-sm text-primary-800">
-        <strong>100% private.</strong> Every calculation. all {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} simulations , 
+        <strong>100% private.</strong> Every calculation, all {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} simulations,
         runs inside your browser. Your age, savings and income are never sent to any server.
       </div>
 
       {/* ---------------- Inputs ---------------- */}
       <Calculator
         title="Your retirement plan"
-        description="Enter your details. Results recompute automatically. Open ‘Advanced assumptions’ to fine-tune returns, inflation, glide path, EPF and NPS."
+        description="Enter your details. Results recompute automatically. Open 'Advanced assumptions' to fine-tune returns, inflation, glide path, EPF and NPS."
       >
         <CalcSlider id="currentAge" label="Current age" value={inputs.currentAge} onChange={(v) => set('currentAge', v)} min={18} max={70} step={1} suffix=" yrs" />
         <CalcSlider id="retirementAge" label="Retirement age" value={inputs.retirementAge} onChange={(v) => set('retirementAge', v)} min={Math.max(inputs.currentAge + 1, 35)} max={75} step={1} suffix=" yrs" />
@@ -246,13 +246,13 @@ export default function RetirementOptimizerClient(): React.ReactElement {
                 <h3 className="text-base font-semibold mb-2">{onTrack ? 'You are on track' : 'Likely shortfall'}</h3>
                 <p className="text-sm text-ink">
                   {onTrack ? (
-                    <>At ₹{formatCompactINR(inputs.monthlySIP)}/month, your plan succeeds in <strong>{Math.round(success * 100)}%</strong> of simulated futures. at or above your {inputs.desiredSuccessProbabilityPct}% target. You could consider retiring earlier or spending a little more.</>
+                    <>At ₹{formatCompactINR(inputs.monthlySIP)}/month, your plan succeeds in <strong>{Math.round(success * 100)}%</strong> of simulated futures, at or above your {inputs.desiredSuccessProbabilityPct}% target. You could consider retiring earlier or spending a little more.</>
                   ) : (
                     <>At ₹{formatCompactINR(inputs.monthlySIP)}/month, your plan succeeds in only <strong>{Math.round(success * 100)}%</strong> of futures, below your {inputs.desiredSuccessProbabilityPct}% target. Raise your SIP to <strong>{formatCompactINR(analysis.requiredMonthlySIP.value)}/month</strong>, trim retirement spending toward <strong>{formatCompactINR(analysis.safeMonthlyWithdrawalToday)}/month</strong>, or delay retirement.</>
                   )}
                 </p>
                 <p className="text-xs text-muted-2 mt-2">
-                  Why: success depends on whether early-retirement market crashes (sequence-of-returns risk) drain the corpus before it can recover. which a single “average return” hides.
+                  Why: success depends on whether early-retirement market crashes (sequence-of-returns risk) drain the corpus before it can recover, which a single "average return" hides.
                 </p>
               </div>
             </div>
@@ -269,7 +269,7 @@ export default function RetirementOptimizerClient(): React.ReactElement {
             <div className="card mb-6">
               <h3 className="text-base font-semibold mb-1">Projected corpus over time</h3>
               <p className="text-xs text-muted-2 mb-3">
-                Median (dark line) with 25th to 75th (inner) and 10th to 90th (outer) percentile bands across {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} simulations. The fan widens because returns are uncertain. the spread is the real risk.
+                Median (dark line) with 25th to 75th (inner) and 10th to 90th (outer) percentile bands across {(inputs.numSimulations ?? 10000).toLocaleString('en-IN')} simulations. The fan widens because returns are uncertain; the spread is the real risk.
               </p>
               <FanChart bands={analysis.base.fanChart} retirementAge={inputs.retirementAge} />
             </div>
@@ -278,7 +278,7 @@ export default function RetirementOptimizerClient(): React.ReactElement {
 
             {/* Sensitivity */}
             <div className="card my-6 overflow-x-auto">
-              <h3 className="text-base font-semibold mb-1">Sensitivity. what moves the needle</h3>
+              <h3 className="text-base font-semibold mb-1">Sensitivity: what moves the needle</h3>
               <p className="text-xs text-muted-2 mb-3">How your {Math.round(success * 100)}% success probability changes if one assumption is wrong.</p>
               <table className="w-full text-sm">
                 <thead>
@@ -380,7 +380,7 @@ export default function RetirementOptimizerClient(): React.ReactElement {
             {/* Disclaimer */}
             <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-xs text-yellow-800">
-                <strong>Educational estimate, not financial, tax or investment advice.</strong> Projections are scenarios based on your assumptions and random simulation. not predictions or a recommendation to buy or sell any security. Market returns are uncertain and past performance does not guarantee future results. The bundled historical dataset is approximate and for illustration only. Verify with a SEBI-registered investment adviser before acting.
+                <strong>Educational estimate, not financial, tax or investment advice.</strong> Projections are scenarios based on your assumptions and random simulation, not predictions or a recommendation to buy or sell any security. Market returns are uncertain and past performance does not guarantee future results. The bundled historical dataset is approximate and for illustration only. Verify with a SEBI-registered investment adviser before acting.
               </p>
             </div>
           </>

@@ -1,5 +1,5 @@
 /**
- * Gold Allocation & Cost-Averaging Explainer — test suite (24 cases incl. compliance scan)
+ * Gold Allocation & Cost-Averaging Explainer, test suite (24 cases incl. compliance scan)
  * Run: npx ts-node --project tsconfig.scripts.json tests/gold-planner.test.ts
  */
 
