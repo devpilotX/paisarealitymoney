@@ -6,7 +6,7 @@
     "executionOrder": "v1",
     "timezone": "Asia/Kolkata",
     "errorWorkflow": "paisaErrorAlert1",
-    "saveDataSuccessExecution": "none",
+    "saveDataSuccessExecution": "all",
     "saveDataErrorExecution": "all"
   },
   "nodes": [
