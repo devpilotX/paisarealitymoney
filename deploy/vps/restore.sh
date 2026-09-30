@@ -52,7 +52,7 @@ chmod 600 /etc/paisareality/backup.env
 log "restoring databases"
 systemctl enable --now postgresql
 # Roles first, with their original passwords (errors for roles that already exist are expected).
-sudo -u postgres psql -q -f "$B/db/globals.sql" >/dev/null 2>&1 || true
+sudo -u postgres psql -q < "$B/db/globals.sql" >/dev/null 2>&1 || true
 for db in paisareality n8n; do
   [ -f "$B/db/$db.dump" ] || continue
   owner=paisa; [ "$db" = n8n ] && owner=n8n
@@ -60,7 +60,7 @@ for db in paisareality n8n; do
     echo "database $db already exists on this server, refusing to overwrite it"; exit 1
   fi
   sudo -u postgres createdb -O "$owner" "$db"
-  sudo -u postgres pg_restore -d "$db" --exit-on-error "$B/db/$db.dump"
+  sudo -u postgres pg_restore -d "$db" --exit-on-error < "$B/db/$db.dump"   # piped: /root is not readable by postgres
   echo "restored $db"
 done
 

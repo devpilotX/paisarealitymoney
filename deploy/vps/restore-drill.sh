@@ -39,7 +39,8 @@ for db in paisareality n8n; do
   [ -f "$B/db/$db.dump" ] || continue
   sudo -u postgres dropdb --if-exists "drill_$db"
   sudo -u postgres createdb "drill_$db"
-  sudo -u postgres pg_restore --no-owner --no-privileges --exit-on-error -d "drill_$db" "$B/db/$db.dump"
+  # Read by root and piped in: the postgres user cannot open files in the root-only work dir.
+  sudo -u postgres pg_restore --no-owner --no-privileges --exit-on-error -d "drill_$db" < "$B/db/$db.dump"
   echo "restored $db into drill_$db"
 done
 
