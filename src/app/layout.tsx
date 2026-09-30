@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieConsent from '@/components/CookieConsent';
+import { CONSENT_BOOTSTRAP } from '@/lib/consent';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import AdSenseScript from '@/components/AdSenseScript';
 import YojanaMitra from '@/components/YojanaMitra';
@@ -100,7 +101,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#1C3A5E',
+  themeColor: '#0F2237',
 };
 
 export default function RootLayout({
@@ -154,10 +155,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
-      <body className="font-sans bg-paper text-ink antialiased flex flex-col min-h-screen">
+      <body className="font-sans bg-white text-ink antialiased flex flex-col min-h-screen">
         <Script id="sw-killswitch" strategy="afterInteractive">
   {`if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));if(window.caches){caches.keys().then(k=>k.forEach(n=>caches.delete(n)))}}`}
 </Script>
+        <Script id="consent-default" strategy="beforeInteractive">{CONSENT_BOOTSTRAP}</Script>
         <GoogleAnalytics />
         <AdSenseScript />
         <Header />

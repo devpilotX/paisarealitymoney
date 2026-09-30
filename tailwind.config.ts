@@ -1,5 +1,8 @@
 import type { Config } from 'tailwindcss';
 
+// Design tokens. See docs/design-direction.md. The old palette names (paper, ink,
+// muted, line, brown) are kept so existing class names across the site pick up the
+// new white, navy and neutral-grey system without a rewrite of every file.
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,79 +12,80 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Primary is remapped to the new navy so every existing text-primary /
-        // bg-primary / border-primary across the site picks up the new design.
         primary: {
           DEFAULT: '#1C3A5E',
-          50: '#E9EEF3',
-          100: '#C8D4E0',
-          200: '#9DB0C6',
-          300: '#6E88A8',
-          400: '#47648B',
+          50: '#EEF2F7',
+          100: '#D6E0EB',
+          200: '#AFC1D6',
+          300: '#7F99B8',
+          400: '#4F6E94',
           500: '#1C3A5E',
           600: '#183350',
           700: '#132A45',
           800: '#0F2237',
           900: '#0A1826',
         },
-        // Newspaper / vintage palette (mirrors index.html :root)
         paper: {
-          DEFAULT: '#F3EAD6',
-          2: '#EDE2C9',
-          3: '#E6D9BC',
+          DEFAULT: '#FFFFFF',
+          2: '#F7F8FA',
+          3: '#EEF1F5',
         },
         navy: {
           DEFAULT: '#1C3A5E',
-          deep: '#132A45',
+          deep: '#0F2237',
+          soft: '#EEF2F7',
         },
         brand: {
           red: '#A62822',
           'red-deep': '#8A2019',
-          yellow: '#E7B23B',
-          'yellow-soft': '#F0D089',
+          // Kept for the few places that need a warm highlight (warnings, the score gauge).
+          yellow: '#D9A21B',
+          'yellow-soft': '#FDF3D7',
         },
+        // "brown" used to be the dark utility colour; it now maps to neutral slate.
         brown: {
-          DEFAULT: '#43301F',
-          2: '#5A4530',
-          line: '#7A6244',
+          DEFAULT: '#1F2937',
+          2: '#374151',
+          line: '#9CA3AF',
         },
-        ink: '#2B2216',
+        ink: '#111827',
         muted: {
-          DEFAULT: '#6D5E48',
-          // Darkened from #8A7A61 to meet WCAG AA (4.5:1) on the paper
-          // background. #756547 gives ~4.7:1 for small secondary text.
-          2: '#756547',
+          DEFAULT: '#4B5563',
+          2: '#6B7280',
         },
         line: {
-          DEFAULT: '#CDB98E',
-          soft: '#DBCBA5',
+          DEFAULT: '#E5E7EB',
+          soft: '#F0F2F5',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Georgia', 'Times New Roman', 'Noto Serif', 'serif'],
+        sans: ['var(--font-inter)', 'Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        // Headings used font-serif everywhere; they now render in the sans face.
+        serif: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+        // The wordmark keeps its serif.
+        display: ['Georgia', 'Times New Roman', 'serif'],
       },
       fontSize: {
-        base: ['16px', '24px'],
+        base: ['16px', '26px'],
         lg: ['18px', '28px'],
         xl: ['20px', '30px'],
         '2xl': ['24px', '32px'],
-        '3xl': ['28px', '36px'],
-        '4xl': ['32px', '40px'],
-        '5xl': ['44px', '1.1'],
+        '3xl': ['30px', '38px'],
+        '4xl': ['36px', '44px'],
+        '5xl': ['48px', '1.08'],
+        '6xl': ['60px', '1.04'],
       },
       spacing: {
         '18': '4.5rem',
         '22': '5.5rem',
       },
       maxWidth: {
-        'content': '1140px',
+        content: '1200px',
+        prose: '70ch',
       },
-      backgroundImage: {
-        'paper-dots': 'radial-gradient(rgba(120,98,68,.08) 1px, transparent 1px)',
-      },
-      backgroundSize: {
-        'dots-22': '22px 22px',
+      boxShadow: {
+        card: '0 1px 2px rgba(16, 24, 40, 0.04)',
+        lift: '0 12px 32px -8px rgba(16, 24, 40, 0.14)',
       },
     },
   },
