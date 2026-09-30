@@ -135,7 +135,7 @@
         480
       ],
       "parameters": {
-        "jsCode": "const known = ['/backup', '/status', '/report'];\nreturn $input.all().filter((i) => !known.includes(i.json.cmd)).map(() => ({ json: { text: [\n  'Paisa Reality bot. Commands:',\n  '/status  site health, last backup, price freshness and today\\'s numbers',\n  '/backup  make a full backup now and send it here and to Google Drive',\n  '/help    this list',\n  '',\n  'You also get: site-down and recovery alerts, a report every morning at 9, new contact messages and sign-ups, and an alert if any automation fails.',\n].join('\\n') } }));"
+        "jsCode": "const known = ['/backup', '/status', '/report', '/health', '/sendwrap'];\nreturn $input.all().filter((i) => !known.includes(i.json.cmd)).map(() => ({ json: { text: [\n  'Paisa Reality bot. Commands:',\n  '/status    site health, last backup, price freshness and today\\'s numbers',\n  '/health    what on the site needs updating: prices, rates, deadlines, official links',\n  '/sendwrap  email this week\\'s price post to subscribers (once)',\n  '/backup    make a full backup now and send it here and to Google Drive',\n  '/help      this list',\n  '',\n  'You also get: site-down and recovery alerts, a report every morning at 9, the data health report at 8:40, official links that break or change, the weekly price post on Sunday evening, new contact messages and sign-ups, and an alert if any automation fails.',\n].join('\\n') } }));"
       }
     },
     {
@@ -272,6 +272,114 @@
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 5000
+    },
+    {
+      "id": "b4a0c004-0000-4000-8000-000000000101",
+      "name": "Is /health",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        520
+      ],
+      "parameters": {
+        "jsCode": "return $input.all().filter((i) => i.json.cmd === '/health');"
+      }
+    },
+    {
+      "id": "b4a0c004-0000-4000-8000-000000000102",
+      "name": "Health report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        520
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://paisareality.com/api/cron/health",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 95000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaCronSecret",
+          "name": "Site cron secret"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 30000
+    },
+    {
+      "id": "b4a0c004-0000-4000-8000-000000000103",
+      "name": "Compose health message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        520
+      ],
+      "parameters": {
+        "jsCode": "const r = $json;\nconst fix = (r.issues || []).filter((i) => i.level === 'fix');\nconst review = (r.issues || []).filter((i) => i.level === 'review');\nif (false && fix.length === 0 && review.length === 0) return [];\nconst lines = ['Data health, ' + new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' })];\nif (!fix.length && !review.length) lines.push('', 'Everything is current: prices, rates, deadlines and official links.');\nif (fix.length) lines.push('', 'Fix now:', ...fix.map((i) => '- ' + i.text));\nif (review.length) lines.push('', 'Review:', ...review.map((i) => '- ' + i.text));\nconst p = r.facts?.latestPrice || {};\nlines.push('', 'Latest prices: gold ' + p.gold + ', fuel ' + p.fuel + ', LPG ' + p.lpg);\nreturn [{ json: { text: lines.join('\\n').slice(0, 3900) } }];"
+      }
+    },
+    {
+      "id": "b4a0c004-0000-4000-8000-000000000104",
+      "name": "Is /sendwrap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        700
+      ],
+      "parameters": {
+        "jsCode": "return $input.all().filter((i) => i.json.cmd === '/sendwrap');"
+      }
+    },
+    {
+      "id": "b4a0c004-0000-4000-8000-000000000105",
+      "name": "Email the weekly post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        700
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://paisareality.com/api/cron/weekly-wrap/email",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaCronSecret",
+          "name": "Site cron secret"
+        }
+      },
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 30000
+    },
+    {
+      "id": "b4a0c004-0000-4000-8000-000000000106",
+      "name": "Email result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        700
+      ],
+      "parameters": {
+        "jsCode": "const r = $json;\nconst text = r.skipped ? 'Not sent: ' + r.skipped + '.' : 'Weekly post emailed: ' + r.sent + ' sent, ' + r.failed + ' failed, of ' + r.total + ' subscribers.';\nreturn [{ json: { text } }];"
+      }
     }
   ],
   "connections": {
@@ -312,6 +420,16 @@
           },
           {
             "node": "Is /help or unknown",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is /health",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is /sendwrap",
             "type": "main",
             "index": 0
           }
@@ -429,6 +547,72 @@
       ]
     },
     "Compose report": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is /health": {
+      "main": [
+        [
+          {
+            "node": "Health report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Health report": {
+      "main": [
+        [
+          {
+            "node": "Compose health message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose health message": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is /sendwrap": {
+      "main": [
+        [
+          {
+            "node": "Email the weekly post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email the weekly post": {
+      "main": [
+        [
+          {
+            "node": "Email result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email result": {
       "main": [
         [
           {

@@ -1,0 +1,230 @@
+{
+  "id": "paisaDataHealth1",
+  "name": "Data: official links and daily health report",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "errorWorkflow": "paisaErrorAlert1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all"
+  },
+  "nodes": [
+    {
+      "id": "b7a0c007-0000-4000-8000-000000000001",
+      "name": "Every hour at :20",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "20 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b7a0c007-0000-4000-8000-000000000002",
+      "name": "Check a batch of official links",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://paisareality.com/api/cron/links?limit=30",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 95000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaCronSecret",
+          "name": "Site cron secret"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 30000
+    },
+    {
+      "id": "b7a0c007-0000-4000-8000-000000000003",
+      "name": "New problems only",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const r = $json;\nconst lines = [];\nfor (const f of r.failing || []) lines.push('Official link failing ' + f.failures + ' checks in a row (' + f.status + '): https://paisareality.com/' + f.table + '/' + f.slug);\nfor (const c of r.changed || []) lines.push('Official page changed, recheck the details: https://paisareality.com/' + c.table + '/' + c.slug + '\\nSource: ' + c.url);\nif (!lines.length) return [];\nreturn [{ json: { text: lines.join('\\n\\n').slice(0, 3900) } }];"
+      }
+    },
+    {
+      "id": "b7a0c007-0000-4000-8000-000000000004",
+      "name": "Every morning at 8:40",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        240
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "40 8 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b7a0c007-0000-4000-8000-000000000005",
+      "name": "Health report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        240
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://paisareality.com/api/cron/health",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 95000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaCronSecret",
+          "name": "Site cron secret"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 30000
+    },
+    {
+      "id": "b7a0c007-0000-4000-8000-000000000006",
+      "name": "Compose health message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        240
+      ],
+      "parameters": {
+        "jsCode": "const r = $json;\nconst fix = (r.issues || []).filter((i) => i.level === 'fix');\nconst review = (r.issues || []).filter((i) => i.level === 'review');\nif (false && fix.length === 0 && review.length === 0) return [];\nconst lines = ['Data health, ' + new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' })];\nif (!fix.length && !review.length) lines.push('', 'Everything is current: prices, rates, deadlines and official links.');\nif (fix.length) lines.push('', 'Fix now:', ...fix.map((i) => '- ' + i.text));\nif (review.length) lines.push('', 'Review:', ...review.map((i) => '- ' + i.text));\nconst p = r.facts?.latestPrice || {};\nlines.push('', 'Latest prices: gold ' + p.gold + ', fuel ' + p.fuel + ', LPG ' + p.lpg);\nreturn [{ json: { text: lines.join('\\n').slice(0, 3900) } }];"
+      }
+    },
+    {
+      "id": "b7a0c007-0000-4000-8000-000000000007",
+      "name": "Send to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        680,
+        120
+      ],
+      "parameters": {
+        "chatId": "__CHAT_ID__",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "paisaTelegramBot",
+          "name": "Telegram: Paisareality_bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every hour at :20": {
+      "main": [
+        [
+          {
+            "node": "Check a batch of official links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check a batch of official links": {
+      "main": [
+        [
+          {
+            "node": "New problems only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New problems only": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every morning at 8:40": {
+      "main": [
+        [
+          {
+            "node": "Health report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Health report": {
+      "main": [
+        [
+          {
+            "node": "Compose health message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose health message": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}

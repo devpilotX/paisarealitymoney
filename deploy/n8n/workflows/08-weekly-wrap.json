@@ -1,0 +1,198 @@
+{
+  "id": "paisaWeeklyWrap1",
+  "name": "Content: weekly price post, IndexNow and email on approval",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "errorWorkflow": "paisaErrorAlert1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all"
+  },
+  "nodes": [
+    {
+      "id": "b8a0c008-0000-4000-8000-000000000001",
+      "name": "Sundays at 19:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 19 * * 0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b8a0c008-0000-4000-8000-000000000002",
+      "name": "Publish this week's post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://paisareality.com/api/cron/weekly-wrap",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 95000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaCronSecret",
+          "name": "Site cron secret"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 30000
+    },
+    {
+      "id": "b8a0c008-0000-4000-8000-000000000003",
+      "name": "Stop if skipped",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "jsCode": "if (!$json.success || !$json.url) return [];\nreturn [{ json: { ...$json, body: { host: 'paisareality.com', key: '8810a952e5b341dfd230c20bb6dc9f03', keyLocation: 'https://paisareality.com/8810a952e5b341dfd230c20bb6dc9f03.txt', urlList: [$json.url, 'https://paisareality.com/newsletter'] } } }];"
+      }
+    },
+    {
+      "id": "b8a0c008-0000-4000-8000-000000000004",
+      "name": "Submit to IndexNow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.indexnow.org/indexnow",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "b8a0c008-0000-4000-8000-000000000005",
+      "name": "Compose message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const post = $('Stop if skipped').first().json;\nconst idx = Number($json.statusCode) || 0;\nreturn [{ json: { text: [\n  \"This week's price post is live:\",\n  post.title,\n  post.url,\n  '',\n  'Sent to Bing through IndexNow: ' + (idx >= 200 && idx < 300 ? 'accepted' : 'failed (HTTP ' + idx + ')'),\n  '',\n  'Read it, then send /sendwrap to email it to subscribers. It is sent once.',\n].join('\\n') } }];"
+      }
+    },
+    {
+      "id": "b8a0c008-0000-4000-8000-000000000006",
+      "name": "Send to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "chatId": "__CHAT_ID__",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "paisaTelegramBot",
+          "name": "Telegram: Paisareality_bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Sundays at 19:30": {
+      "main": [
+        [
+          {
+            "node": "Publish this week's post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish this week's post": {
+      "main": [
+        [
+          {
+            "node": "Stop if skipped",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stop if skipped": {
+      "main": [
+        [
+          {
+            "node": "Submit to IndexNow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit to IndexNow": {
+      "main": [
+        [
+          {
+            "node": "Compose message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose message": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}

@@ -9,7 +9,8 @@
 #   - nginx site and a certificate that covers n8n.paisareality.com
 #   - the owner account, the credentials and the workflows in deploy/n8n/workflows,
 #     published. Workflows that already exist in n8n are left alone, so edits made
-#     in the editor survive a re-run. Delete one in n8n to get the repo version back.
+#     in the editor survive a re-run. To take the repo version of existing ones, run with
+#     N8N_REPLACE="<workflow id> ..." (or delete the workflow in n8n first).
 set -euo pipefail
 SRC="$(cd "$(dirname "$0")/../.." && pwd)"
 ENV=/etc/n8n/n8n.env
@@ -152,6 +153,10 @@ exists credentials_entity paisaBackupToken || add_cred "$(jq -n --arg v "$N8N_BA
   '{id:"paisaBackupToken", name:"Backup webhook token", type:"httpHeaderAuth", data:{name:"X-Backup-Token", value:$v}}')"
 exists credentials_entity paisaGoogleDrive || add_cred "$(jq -n --arg i "${GOOGLE_CLIENT_ID:-}" --arg s "${GOOGLE_CLIENT_SECRET:-}" \
   '{id:"paisaGoogleDrive", name:"Google Drive: backups", type:"googleDriveOAuth2Api", data:{clientId:$i, clientSecret:$s}}')"
+# The site's CRON_SECRET, for the data-health, link-check and weekly-post workflows.
+CRON_SECRET_VALUE="$(sed -n 's/^CRON_SECRET=//p' /etc/paisareality/paisareality.env | tr -d '"')"
+exists credentials_entity paisaCronSecret || add_cred "$(jq -n --arg v "Bearer $CRON_SECRET_VALUE" \
+  '{id:"paisaCronSecret", name:"Site cron secret", type:"httpHeaderAuth", data:{name:"Authorization", value:$v}}')"
 if [ "$(jq length <<<"$creds")" -gt 0 ]; then
   printf '%s' "$creds" > "$IMP/credentials.json"; chown 1000:1000 "$IMP/credentials.json"
   docker exec -u node n8n n8n import:credentials --input=/home/node/.n8n/import/credentials.json
@@ -160,7 +165,8 @@ fi
 new_ids=()
 for f in "$SRC"/deploy/n8n/workflows/*.json; do
   id="$(jq -r .id "$f")"
-  exists workflow_entity "$id" && continue
+  # N8N_REPLACE="id1 id2" re-imports those workflows from the repo, replacing editor edits.
+  if exists workflow_entity "$id" && [[ " ${N8N_REPLACE:-} " != *" $id "* ]]; then continue; fi
   sed "s/__CHAT_ID__/${TELEGRAM_CHAT_ID}/g" "$f" > "$IMP/workflows/$(basename "$f")"
   new_ids+=("$id")
 done
