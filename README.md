@@ -83,6 +83,8 @@ are running.
 | `npm run start` | Start the production server |
 | `npm run typecheck` | TypeScript strict check |
 | `npm test` | Run every unit test suite (DB-free, also runs in CI) |
+| `node scripts/smoke.mjs <url>` | End-to-end check of a running server: pages, accounts, CSRF, payments webhook, admin |
+| `node scripts/indexnow.mjs` | Submit sitemap URLs to Bing and Yandex through IndexNow |
 | `node scripts/seo-audit.mjs` | Crawl the live sitemap and report metadata problems (add `--limit N` for a sample, `--origin http://localhost:3100` to audit a local build) |
 | `node scripts/link-audit.mjs` | Check every internal link on every sitemap page (same `--limit` and `--origin` flags) |
 | `npm run db:migrate-pg` | Create PostgreSQL tables for the Money Health Score |
@@ -96,7 +98,8 @@ are running.
 | `npm run db:seed-banks` | Seed banks and rates (same as `db:seed-banks-expansion`) |
 | `npm run db:seed-banks-expansion` | Add more banks and rates (additive) |
 | `npm run db:migrate-dedupe-schemes` | Deactivate duplicate scheme slugs listed in `src/lib/scheme-redirects.json` (never deletes; the old URLs 301 to the canonical slug) |
-| `npm run db:seed-all` | Bootstrap an empty database: cities, prices, all scheme seeds, banks |
+| `npm run db:setup` | Build an empty database: every table, then cities, schemes, scholarships and banks (no synthetic prices) |
+| `npm run db:seed-all` | Local development only: the same seeds plus synthetic price history |
 
 The scheme seeds use `INSERT ... ON CONFLICT (slug)`, so they only add new schemes and refresh existing ones. They never delete data. `last_verified` comes from the dataset (`DATASET_VERIFIED_ON`, or a per-record `verified_on`), not from the day the seed runs.
 
@@ -176,46 +179,53 @@ Configuration is audited by `src/lib/monetization.ts`, reported by
 
 ## Deployment
 
-Production runs the app with PM2 behind Nginx, with Cloudflare in front.
+Production is an AWS EC2 instance in Mumbai (t4g.medium, Ubuntu 24.04, arm64), with
+Cloudflare in front in Full (strict) SSL mode, nginx, PM2 and PostgreSQL 16 on the
+same box. The server is set up once with `deploy/vps/bootstrap.sh` and
+`deploy/vps/setup-app.sh`.
 
-Build in the standing worktree at `/opt/paisareality-build` rather than in the live
-directory, so the running site never serves a half-written `.next`. The live
-directory holds the `main` branch, so the build worktree checks the commit out
-detached.
+| What | Where |
+|------|-------|
+| Releases, one directory per commit | `/opt/paisareality/releases/<sha>/` |
+| Live release (PM2 runs from here) | `/opt/paisareality/current` symlink |
+| Settings and secrets (linked in as `.env`) | `/etc/paisareality/paisareality.env`, root:paisa 0640 |
+| nginx | `deploy/nginx/`, installed to `/etc/nginx/` |
+| TLS | Let's Encrypt for all three hostnames, renewed by `certbot.timer` |
+| Price updates | `paisareality-prices.timer`, 06:15, 09:15, 12:15, 15:15, 18:15 IST; log in `/var/log/paisareality/cron.log` |
+| Database backups | nightly 02:30 to `/var/backups/paisareality/`, 14 days kept |
 
-```bash
-# 1. build the release, off the critical path (shared 4-core box)
-cd /opt/paisareality-build
-git fetch origin && git checkout --detach <sha>
-nohup sh -c 'NODE_OPTIONS=--max-old-space-size=4096 nice -n 19 ionice -c3 \
-  npm run build > build.log 2>&1; echo EXIT=$? >> build.log' &
-# poll build.log for EXIT=0. Roughly 100 s, and it emits every page from the live DB.
+To ship a commit from your PC:
 
-# 2. the build records its own absolute path in two files, so rewrite them
-sed -i 's#/opt/paisareality-build#/opt/paisareality#g' \
-  .next/required-server-files.js .next/required-server-files.json
-grep -rl /opt/paisareality-build .next   # must return nothing
-
-# 3. record a rollback point, update the source, swap the build in
-cd /opt/paisareality
-git rev-parse HEAD > /tmp/paisa_rollback_$(date +%s).txt
-git pull --ff-only origin main
-mv .next .next.prev-$(date +%s)
-mv /opt/paisareality-build/.next .next
-
-# 4. restart, then verify
-pm2 restart paisareality --update-env && pm2 save
-pm2 logs paisareality --lines 50 | grep monetization
+```powershell
+$sha = git rev-parse --short HEAD
+git -c core.autocrlf=false archive --format=tar.gz -o "paisareality-$sha.tgz" HEAD
+scp -i C:\infra\vps\keys\paisareality.pem "paisareality-$sha.tgz" ubuntu@<server>:/tmp/
+ssh -i C:\infra\vps\keys\paisareality.pem ubuntu@<server>
+# on the server:
+tar -xzf /tmp/paisareality-<sha>.tgz -C /tmp/src deploy/vps/release.sh
+sudo install -o paisa /tmp/paisareality-<sha>.tgz /opt/paisareality/
+sudo -u paisa bash /tmp/src/deploy/vps/release.sh /opt/paisareality/paisareality-<sha>.tgz <sha>
 ```
 
-Downtime is the restart only, a few seconds. To roll back, move a `.next.prev-*`
-directory back into place and restart; no rebuild needed.
+`release.sh` installs dependencies and builds inside the new release directory while
+the old one keeps serving. It then flips the symlink, restarts PM2 and checks health.
+If the new release does not answer within 60 seconds, it switches back by itself.
+Downtime is the restart, about two seconds. To roll back by hand, point `current` at
+an older directory in `releases/` and run `pm2 restart paisareality`.
 
-Run database migrations or the additive seeds only when a release needs them.
-Scheme and scholarship pages are statically generated, so changing a `meta_title`
-in the database requires a reseed **and** a rebuild before it shows up. Nginx config
-for the main domain and the admin subdomain lives in `deploy/nginx/`.
+After a deploy, run `node scripts/smoke.mjs https://paisareality.com --admin-host admin.paisareality.com`
+(with `ADMIN_EMAIL` and `ADMIN_PASSWORD` set) and `node scripts/indexnow.mjs` to tell
+Bing about changed pages.
 
+An empty database is built with `npm run db:setup`, run from the release directory
+as the `paisa` user. It creates every table and loads cities, schemes, scholarships
+and banks. Real prices arrive with the first run of the price timer. Scheme and
+scholarship pages are statically generated, so a `meta_title` change in the database
+shows up after the next deploy.
+
+The backups sit on the same disk as the database, which protects against mistakes
+but not against losing the server. Copy `/var/backups/paisareality` somewhere else
+on a schedule.
 ## Disclaimer
 
 Paisa Reality is an informational website, not a financial advisor. Verify details with official sources before making any financial decision.
