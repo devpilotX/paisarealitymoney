@@ -9,6 +9,10 @@
  * Rates are indicative and rounded. They move often, so the site shows an
  * "as of" date and asks users to verify with the bank before deciding.
  *
+ * The rates were compiled from each bank's website on RATES_VERIFIED_ON. A bank can
+ * carry its own verifiedOn when it is rechecked. effective_date stores that date, so
+ * the site never shows a newer as-of date than the data really has.
+ *
  * Run:
  *   npx ts-node -r dotenv/config --project tsconfig.scripts.json scripts/seed-banks-expansion.ts
  * or:
@@ -20,7 +24,10 @@ type BankType = 'public' | 'private' | 'small_finance' | 'cooperative';
 type RateType = 'fd' | 'savings' | 'home_loan' | 'personal_loan' | 'car_loan' | 'education_loan';
 
 interface Rate { type: RateType; tenure: string; general: number; senior: number | null; }
-interface Bank { slug: string; name: string; type: BankType; website: string; rates: Rate[]; }
+interface Bank { slug: string; name: string; type: BankType; website: string; rates: Rate[]; verifiedOn?: string; }
+
+/** When the rates below were taken from the banks' own sites. */
+const RATES_VERIFIED_ON = '2026-06-25';
 
 function fd(tenure: string, general: number, senior: number): Rate { return { type: 'fd', tenure, general, senior }; }
 function sav(general: number): Rate { return { type: 'savings', tenure: 'Regular', general, senior: null }; }
@@ -30,8 +37,8 @@ function pers(general: number): Rate { return { type: 'personal_loan', tenure: '
 const BANKS: Bank[] = [
 
   // Public sector banks
-  { slug: 'sbi', name: 'State Bank of India (SBI)', type: 'public', website: 'https://www.sbi.co.in', rates: [fd('1 year', 6.80, 7.30), fd('2-3 years', 6.75, 7.25), fd('5 years', 6.50, 7.50), sav(2.70), home(8.50), pers(11.15)] },
-  { slug: 'pnb', name: 'Punjab National Bank', type: 'public', website: 'https://www.pnbindia.in', rates: [fd('1 year', 6.80, 7.30), fd('2-3 years', 7.00, 7.50), sav(2.70), home(8.45), pers(11.40)] },
+  { slug: 'sbi', name: 'State Bank of India (SBI)', type: 'public', website: 'https://www.sbi.co.in', rates: [fd('1 year', 6.25, 6.75), fd('2-3 years', 6.40, 6.90), fd('5 years', 6.05, 7.05), sav(2.50), home(7.25), pers(10.00)], verifiedOn: '2026-09-30' },
+  { slug: 'pnb', name: 'Punjab National Bank', type: 'public', website: 'https://www.pnbindia.in', rates: [fd('1 year', 6.25, 6.75), fd('2-3 years', 6.30, 6.80), sav(2.50), home(8.45), pers(11.40)] },
   { slug: 'bank-of-baroda', name: 'Bank of Baroda', type: 'public', website: 'https://www.bankofbaroda.in', rates: [fd('1 year', 6.85, 7.35), fd('2-3 years', 7.15, 7.65), sav(2.75), home(8.40), pers(11.05)] },
   { slug: 'canara-bank', name: 'Canara Bank', type: 'public', website: 'https://www.canarabank.com', rates: [fd('1 year', 6.85, 7.35), fd('2-3 years', 6.80, 7.30), sav(2.90), home(8.45), pers(10.95)] },
   { slug: 'union-bank', name: 'Union Bank of India', type: 'public', website: 'https://www.unionbankofindia.co.in', rates: [fd('1 year', 6.90, 7.40), fd('2-3 years', 6.70, 7.20), sav(2.75), home(8.35), pers(11.40)] },
@@ -43,9 +50,9 @@ const BANKS: Bank[] = [
   { slug: 'bank-of-maharashtra', name: 'Bank of Maharashtra', type: 'public', website: 'https://bankofmaharashtra.in', rates: [fd('1 year', 6.75, 7.25), fd('2-3 years', 6.50, 7.00), sav(2.75), home(8.35), pers(10.50)] },
   { slug: 'punjab-sind-bank', name: 'Punjab and Sind Bank', type: 'public', website: 'https://punjabandsindbank.co.in', rates: [fd('1 year', 6.30, 6.80), fd('2-3 years', 6.00, 6.50), sav(2.80), home(8.50), pers(11.50)] },
   // Private sector banks
-  { slug: 'hdfc-bank', name: 'HDFC Bank', type: 'private', website: 'https://www.hdfcbank.com', rates: [fd('1 year', 6.60, 7.10), fd('2-3 years', 7.00, 7.50), fd('5 years', 7.00, 7.50), sav(3.00), home(8.70), pers(10.75)] },
-  { slug: 'icici-bank', name: 'ICICI Bank', type: 'private', website: 'https://www.icicibank.com', rates: [fd('1 year', 6.70, 7.20), fd('2-3 years', 7.00, 7.50), fd('5 years', 7.00, 7.50), sav(3.00), home(8.75), pers(10.85)] },
-  { slug: 'axis-bank', name: 'Axis Bank', type: 'private', website: 'https://www.axisbank.com', rates: [fd('1 year', 6.70, 7.20), fd('2-3 years', 7.10, 7.60), sav(3.00), home(8.75), pers(10.99)] },
+  { slug: 'hdfc-bank', name: 'HDFC Bank', type: 'private', website: 'https://www.hdfcbank.com', rates: [fd('1 year', 6.25, 6.75), fd('2-3 years', 6.45, 6.95), fd('5 years', 6.40, 6.90), sav(3.00), home(8.70), pers(10.75)] },
+  { slug: 'icici-bank', name: 'ICICI Bank', type: 'private', website: 'https://www.icicibank.com', rates: [fd('1 year', 6.25, 6.75), fd('2-3 years', 6.45, 6.95), fd('5 years', 6.50, 7.10), sav(3.00), home(8.75), pers(10.85)] },
+  { slug: 'axis-bank', name: 'Axis Bank', type: 'private', website: 'https://www.axisbank.com', rates: [fd('1 year', 6.25, 6.75), fd('2-3 years', 7.10, 7.60), sav(3.00), home(8.75), pers(10.99)] },
   { slug: 'kotak-mahindra', name: 'Kotak Mahindra Bank', type: 'private', website: 'https://www.kotak.com', rates: [fd('1 year', 6.80, 7.30), fd('2-3 years', 6.90, 7.40), sav(3.00), home(8.75), pers(10.99)] },
   { slug: 'indusind-bank', name: 'IndusInd Bank', type: 'private', website: 'https://www.indusind.com', rates: [fd('1 year', 7.25, 7.85), fd('2-3 years', 7.25, 7.85), sav(3.50), home(8.85), pers(10.49)] },
   { slug: 'yes-bank', name: 'YES Bank', type: 'private', website: 'https://www.yesbank.in', rates: [fd('1 year', 7.25, 7.75), fd('2-3 years', 7.25, 7.75), sav(3.25), home(9.00), pers(10.99)] },
@@ -124,8 +131,8 @@ async function main(): Promise<void> {
       for (const r of b.rates) {
         await client.query(
           `INSERT INTO bank_rates (bank_id, rate_type, tenure, general_rate, senior_citizen_rate, effective_date)
-           VALUES ($1, $2, $3, $4, $5, CURRENT_DATE)`,
-          [bankId, r.type, r.tenure, r.general, r.senior],
+           VALUES ($1, $2, $3, $4, $5, $6::date)`,
+          [bankId, r.type, r.tenure, r.general, r.senior, b.verifiedOn ?? RATES_VERIFIED_ON],
         );
         ratesInserted += 1;
       }
