@@ -106,7 +106,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/guides/fd-vs-rd`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/guides/22k-vs-24k-gold`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     // Content + legal
-    { url: `${BASE_URL}/newsletter`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${BASE_URL}/pricing`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
@@ -198,6 +197,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))).catch(() => [] as MetadataRoute.Sitemap);
 
+  // The newsletter hub is noindex until it has a post, so it joins the sitemap only then.
   const blogPages = await getAllPostsAsync(true)
     .then((posts) => posts.map((post) => ({
       url: `${BASE_URL}/newsletter/${post.slug}`,
@@ -223,6 +223,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...schemePages,
     ...scholarshipPages,
     ...grantPages,
+    ...(blogPages.length > 0 ? [{ url: `${BASE_URL}/newsletter`, lastModified: now, changeFrequency: 'weekly' as const, priority: 0.6 }] : []),
     ...blogPages,
     ...bankPages,
     ...goldCityPages,

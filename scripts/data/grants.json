@@ -15,8 +15,14 @@
       "amount_max_inr": 5000000,
       "amount_note": "Up to INR 20 lakh as a grant for proof of concept, prototype development or product trials, and up to INR 50 lakh through convertible debentures, debt or debt-linked instruments for market entry, commercialisation or scaling.",
       "equity_taken": "No equity for the grant portion. The market-entry portion may be through convertible debentures or debt.",
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "A central scheme that routes seed money to early-stage startups through DPIIT-recognised incubators. Startups do not apply to the government directly, they apply to a listed incubator.",
       "eligibility": [
         "Recognised as a startup by DPIIT",
@@ -49,8 +55,15 @@
       "amount_max_inr": 5000000,
       "amount_note": "Up to INR 50 lakh as grant-in-aid for up to 18 months.",
       "equity_taken": null,
-      "stage": ["idea", "prototype"],
-      "sectors": ["biotech", "healthtech", "agritech"],
+      "stage": [
+        "idea",
+        "prototype"
+      ],
+      "sectors": [
+        "biotech",
+        "healthtech",
+        "agritech"
+      ],
       "summary": "BIRAC's flagship early-stage grant for taking a biotech idea to proof of concept. It is run through eight BIG Partners who mentor and monitor the grantees.",
       "eligibility": [
         "Individual entrepreneurs or startups with a biotechnology idea that has commercialisation potential",
@@ -83,8 +96,14 @@
       "amount_max_inr": 4000000,
       "amount_note": "Up to INR 20 lakh per innovator or startup at a PRAYAS Centre, and up to INR 40 lakh at an Advance PRAYAS Centre for deep-tech and advanced prototypes.",
       "equity_taken": null,
-      "stage": ["idea", "prototype"],
-      "sectors": ["all", "deeptech"],
+      "stage": [
+        "idea",
+        "prototype"
+      ],
+      "sectors": [
+        "all",
+        "deeptech"
+      ],
       "summary": "A DST prototype grant that helps innovators turn an idea into a working prototype, along with access to fabrication labs and mentoring. It is delivered through PRAYAS Centres, not by DST directly.",
       "eligibility": [
         "Innovators and startups with a technology-based idea to build a prototype",
@@ -114,8 +133,12 @@
       "amount_max_inr": 30000,
       "amount_note": "Monthly fellowship of INR 10,000 to INR 30,000 for up to 12 months.",
       "equity_taken": null,
-      "stage": ["idea"],
-      "sectors": ["all"],
+      "stage": [
+        "idea"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "A DST fellowship that lets graduating students and budding entrepreneurs work on a technology business idea while getting a monthly stipend, workspace and mentoring at a Technology Business Incubator.",
       "eligibility": [
         "Graduate students, researchers, innovators or entrepreneurs",
@@ -146,8 +169,13 @@
       "amount_max_inr": 10000000,
       "amount_note": "Up to INR 100 lakh per startup, routed through incubators.",
       "equity_taken": "Support terms are set by the incubator; the scheme is a seed support instrument delivered by TBIs.",
-      "stage": ["prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "A DST scheme that gives incubators seed money to support their incubatee startups between product development and commercialisation. Startups apply to the incubator, not to DST.",
       "eligibility": [
         "Incubatee startups at a DST-supported incubator or TBI",
@@ -177,8 +205,16 @@
       "amount_max_inr": null,
       "amount_note": "Amount decided case by case. Grant support is provided through TIDE Centres for EiR support, prototype and proof-of-concept stages; the scheme has a total outlay of INR 264.62 crore over five years across 51 TIDE Centres.",
       "equity_taken": null,
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["ict", "electronics", "deeptech"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "ict",
+        "electronics",
+        "deeptech"
+      ],
       "summary": "A MeitY scheme run through incubators (TIDE Centres) that supports tech entrepreneurs using emerging technologies such as IoT, AI, blockchain and robotics, from idea to market. Support is delivered by the incubators.",
       "eligibility": [
         "Tech startups and individual innovators working on ICT and emerging technologies",
@@ -193,7 +229,8 @@
       "deadline": null,
       "cycle_note": "TIDE Centres announce their own calls; there is no single national deadline.",
       "verified_on": "2026-09-30",
-      "source_note": "meity.gov.in innovation promotion page and MeitY administrative approval document confirmed TIDE 2.0, the INR 264.62 crore outlay over five years and 51 TIDE Centres. Per-startup grant sizes vary by centre so the amount is left case by case."
+      "source_note": "meity.gov.in innovation promotion page and MeitY administrative approval document confirmed TIDE 2.0, the INR 264.62 crore outlay over five years and 51 TIDE Centres. Per-startup grant sizes vary by centre so the amount is left case by case.",
+      "meta_title": "MeitY TIDE 2.0 Startup Support: Eligibility"
     },
     {
       "slug": "atal-new-india-challenge",
@@ -208,8 +245,13 @@
       "amount_max_inr": 10000000,
       "amount_note": "Tranche-based grant-in-aid of up to INR 1 crore.",
       "equity_taken": null,
-      "stage": ["prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "A grant challenge from Atal Innovation Mission that funds startups and innovators to take a prototype to the commercialisation stage against sectoral problem statements set with partner ministries.",
       "eligibility": [
         "Startups and individual innovators with a technology-based solution",
@@ -240,8 +282,14 @@
       "amount_max_inr": 100000000,
       "amount_note": "Grant-in-aid of up to INR 10 crore over up to five years, paid to the incubator (not to individual startups) to set up and run an Atal Incubation Centre.",
       "equity_taken": null,
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "AIM funds organisations to set up and run incubation centres. Founders benefit indirectly by getting incubated at an AIC rather than by applying to AIM for money themselves.",
       "eligibility": [
         "Applicant is an eligible institution such as a university, R&D institution or company that will set up an incubation centre",
@@ -271,8 +319,14 @@
       "amount_max_inr": 15000000,
       "amount_note": "SPARK grant of up to INR 1.5 crore per winner, on a milestone basis, in the form of grant, equity, debt or other structures.",
       "equity_taken": "Support may be structured as grant, equity, debt or other instruments depending on the case.",
-      "stage": ["prototype", "early-revenue"],
-      "sectors": ["defence", "deeptech"],
+      "stage": [
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "defence",
+        "deeptech"
+      ],
       "summary": "Defence Ministry challenges that invite startups and MSMEs to build solutions to defence problem statements. Winners receive the SPARK grant to develop a prototype for the armed forces.",
       "eligibility": [
         "Startups, MSMEs, individual innovators, R&D institutes and academia",
@@ -302,8 +356,15 @@
       "amount_max_inr": 250000000,
       "amount_note": "Grant of up to 50 percent of the product development budget, capped at INR 25 crore per challenge.",
       "equity_taken": null,
-      "stage": ["prototype", "early-revenue", "growth"],
-      "sectors": ["defence", "deeptech"],
+      "stage": [
+        "prototype",
+        "early-revenue",
+        "growth"
+      ],
+      "sectors": [
+        "defence",
+        "deeptech"
+      ],
       "summary": "The iDEX scheme for critical and strategic defence technologies, with a much larger grant than DISC for startups working on advanced problem statements.",
       "eligibility": [
         "Startups and MSMEs working on critical and strategic defence technologies",
@@ -318,7 +379,8 @@
       "deadline": null,
       "cycle_note": "Runs in editions (ADITI 4.0 launched March 2026); each edition opens its own window.",
       "verified_on": "2026-09-30",
-      "source_note": "ddpmod.gov.in ADITI details page confirmed grants of up to 50 percent of the product development budget, capped at INR 25 crore; idex.gov.in home page confirmed ADITI 4.0 launch in March 2026."
+      "source_note": "ddpmod.gov.in ADITI details page confirmed grants of up to 50 percent of the product development budget, capped at INR 25 crore; idex.gov.in home page confirmed ADITI 4.0 launch in March 2026.",
+      "meta_title": "iDEX ADITI Defence Grant: Eligibility and Amount"
     },
     {
       "slug": "msme-idea-hackathon",
@@ -333,8 +395,13 @@
       "amount_max_inr": 1500000,
       "amount_note": "Financial assistance of up to INR 15 lakh per approved idea, paid to the Host Institute that develops and nurtures the idea.",
       "equity_taken": null,
-      "stage": ["idea", "prototype"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "Part of the MSME Innovative Scheme. It funds untested and validated innovative ideas for prototype and product development through empanelled Host Institutes.",
       "eligibility": [
         "Innovators and MSMEs with an innovative idea for a new product or process",
@@ -364,8 +431,14 @@
       "amount_max_inr": 5000000,
       "amount_note": "One-time grant-in-aid of up to INR 50 lakh per startup, non-repayable and non-equity.",
       "equity_taken": null,
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "Karnataka's flagship grant that gives selected startups a one-time grant to build prototypes, develop proof of concept and scale early innovations, along with subsidised incubation support.",
       "eligibility": [
         "Startup based in Karnataka",
@@ -396,8 +469,13 @@
       "amount_max_inr": 300000,
       "amount_note": "Idea Grant of up to INR 3 lakh to turn an idea into a prototype and validate technical and market feasibility. KSUM also runs a Productisation grant up to INR 7 lakh and a Scale Up grant up to INR 12 lakh under its grant ladder.",
       "equity_taken": null,
-      "stage": ["idea", "prototype"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "Kerala Startup Mission's first rung of grant support, for aspiring entrepreneurs to build a prototype and test feasibility. It is part of a wider KSUM grant ladder.",
       "eligibility": [
         "Startup or innovator registered with Kerala Startup Mission",
@@ -427,8 +505,13 @@
       "amount_max_inr": 1000000,
       "amount_note": "Startup Srujan seed support of up to INR 10 lakh per startup. Smaller Srujan grants and school-level grants also exist under the policy.",
       "equity_taken": null,
-      "stage": ["idea", "prototype"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "Gujarat's student and youth innovation policy that gives seed support to develop or improve a product, process or service, delivered through universities and institutions.",
       "eligibility": [
         "Individual or group of individuals with an innovative idea",
@@ -443,7 +526,8 @@
       "deadline": null,
       "cycle_note": "SSIP 2.0 has a five-year allocation with annual grants; applications are handled through institutions.",
       "verified_on": "2026-09-30",
-      "source_note": "ssipgujarat.in confirmed eligibility of individuals and institutions; official SSIP material confirmed the Startup Srujan Seed Support of up to INR 10 lakh."
+      "source_note": "ssipgujarat.in confirmed eligibility of individuals and institutions; official SSIP material confirmed the Startup Srujan Seed Support of up to INR 10 lakh.",
+      "meta_title": "Gujarat SSIP 2.0 Startup Grant: Eligibility and Amount"
     },
     {
       "slug": "tamil-nadu-tanseed",
@@ -458,8 +542,14 @@
       "amount_max_inr": 1500000,
       "amount_note": "Support-equity-linked grant of up to INR 15 lakh for green technology, rural impact and women-led startups, and up to INR 10 lakh for startups in other sectors.",
       "equity_taken": "Grant is support-equity-linked as set by StartupTN.",
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "Tamil Nadu's seed grant for early-stage startups to bridge the gap in early funding, run as periodic funding rounds by StartupTN.",
       "eligibility": [
         "Early-stage startup based in Tamil Nadu",
@@ -489,8 +579,14 @@
       "amount_max_inr": 47990000,
       "amount_note": "USD 500,000 total: USD 125,000 for 7 percent on a post-money SAFE, plus USD 375,000 on an uncapped MFN SAFE. Converted at 1 USD = 95.98 INR, USD 500,000 is about INR 4,79,90,000.",
       "equity_taken": "7 percent for the USD 125,000, plus a variable amount from the USD 375,000 MFN SAFE and a pro rata right in future rounds.",
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "A US accelerator that invests in startups from all over the world, including India, and runs a batch programme. Indian founders can apply, but the company must be incorporated in the US, Canada, Cayman or Singapore, or flip to one of those.",
       "eligibility": [
         "Founders from anywhere, including India",
@@ -521,8 +617,13 @@
       "amount_max_inr": null,
       "amount_note": "Amount decided case by case. The programme is equity-free and gives mentorship, technical support and Google Cloud credits rather than a cash grant.",
       "equity_taken": "None. The programme is equity-free.",
-      "stage": ["early-revenue", "growth"],
-      "sectors": ["ai"],
+      "stage": [
+        "early-revenue",
+        "growth"
+      ],
+      "sectors": [
+        "ai"
+      ],
       "summary": "A three-month equity-free accelerator for AI-first startups in India between seed and Series A, building core AI or agentic AI solutions, with mentorship and Google Cloud credits.",
       "eligibility": [
         "Startup based in India",
@@ -553,8 +654,14 @@
       "amount_max_inr": 19196000,
       "amount_note": "Up to USD 100,000 in AWS credits for eligible startups through the self-service tier, and up to USD 200,000 for startups affiliated with an Activate Provider. Converted at 1 USD = 95.98 INR, USD 200,000 is about INR 1,91,96,000.",
       "equity_taken": null,
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "Cloud credits that offset the cost of AWS services for early-stage startups. These are service credits, not cash, and can be used to build an MVP or extend runway.",
       "eligibility": [
         "Self-funded or pre-Series B (most recent funding round within the last 12 months, if any)",
@@ -587,8 +694,14 @@
       "amount_max_inr": 14397000,
       "amount_note": "Up to USD 150,000 in Azure credits released in stages as the startup shows verified progress and sustained Azure usage, plus access to tools such as GitHub and OpenAI services. Converted at 1 USD = 95.98 INR, USD 150,000 is about INR 1,43,97,000.",
       "equity_taken": null,
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "Microsoft's programme that gives startups Azure cloud credits along with development and AI tools. Credits are released in stages rather than all at once.",
       "eligibility": [
         "Early-stage startup building a software-based product or service",
@@ -619,8 +732,16 @@
       "amount_max_inr": null,
       "amount_note": "Amount decided case by case. Inception is free to join with no equity taken; benefits are preferred hardware and software pricing, technical training, cloud credits through partners and investor exposure, not a cash grant.",
       "equity_taken": "None. Inception is free and takes no equity.",
-      "stage": ["idea", "prototype", "early-revenue", "growth"],
-      "sectors": ["ai", "deeptech"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue",
+        "growth"
+      ],
+      "sectors": [
+        "ai",
+        "deeptech"
+      ],
       "summary": "A free programme for AI startups that gives access to NVIDIA technology, training, preferred pricing and a global ecosystem of partners and investors. Indian AI startups can join.",
       "eligibility": [
         "AI or data-science startup, at any stage",
@@ -652,8 +773,13 @@
       "amount_max_inr": 40000000,
       "amount_note": "About INR 4 crore (around USD 425,000) for 11 percent equity in total investment, with potential follow-on capital. Founders in the residency also get a one-time INR 2 lakh grant to cover expenses and over USD 1 million in AI-relevant perks.",
       "equity_taken": "11 percent for the roughly INR 4 crore investment.",
-      "stage": ["idea", "prototype"],
-      "sectors": ["ai"],
+      "stage": [
+        "idea",
+        "prototype"
+      ],
+      "sectors": [
+        "ai"
+      ],
       "summary": "An early-stage programme for Indian founders building AI-first startups. It runs an in-person residency in Bengaluru and makes a fast investment decision, backing founders from the pre-launch, pre-product or pre-revenue stage. Antler also invests directly outside the residency.",
       "eligibility": [
         "Founding team building an AI-first startup",
@@ -684,8 +810,14 @@
       "amount_max_inr": 479900000,
       "amount_note": "Seed capital of USD 500,000 to USD 5 million per company, with an open architecture that welcomes co-investors. Converted at 1 USD = 95.98 INR, USD 500,000 is about INR 4,79,90,000 and USD 5 million is about INR 47,99,00,000.",
       "equity_taken": "Seed equity investment; the exact stake depends on the round.",
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "A seed-stage programme from Peak XV Partners for founders in India and Southeast Asia. It combines seed capital with hands-on operating support across hiring, product, go-to-market and global expansion, and a founder community.",
       "eligibility": [
         "Early-stage founders, including from India",
@@ -715,8 +847,14 @@
       "amount_max_inr": 1000000,
       "amount_note": "Each selected venture in the incubation phase can receive a grant of INR 10 lakh. Grants are awarded based on the eligibility criteria and a pitch.",
       "equity_taken": "None. NSRCEL does not take equity from ventures in the Women Startup Program.",
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "A programme for women entrepreneurs run by NSRCEL at IIM Bangalore. It supports founders from ideation to scale through three pathways, with mentoring, co-incubation and a grant in the incubation phase.",
       "eligibility": [
         "Woman entrepreneur aged 18 and above with a business idea, for the base program",
@@ -747,8 +885,16 @@
       "amount_max_inr": null,
       "amount_note": "Amount decided case by case. Villgro provides seed funding along with incubation; it has deployed about INR 671 million in seed funding across more than 300 startups over its history. The per-startup amount and instrument are set case by case.",
       "equity_taken": "Set case by case as part of the incubation and funding terms.",
-      "stage": ["prototype", "early-revenue"],
-      "sectors": ["agritech", "healthtech", "climate", "livelihoods"],
+      "stage": [
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "agritech",
+        "healthtech",
+        "climate",
+        "livelihoods"
+      ],
       "summary": "One of India's older social enterprise incubators. It backs early-stage impact startups in agriculture, healthcare, climate action and inclusive livelihoods with seed funding, incubation, market partnerships and mentoring.",
       "eligibility": [
         "Early-stage social enterprise with an innovation that can create impact at scale",
@@ -778,8 +924,14 @@
       "amount_max_inr": 1500000,
       "amount_note": "Monthly allowance of INR 20,000 for one year (INR 22,000 if the founder is a woman, transgender or from SC, ST, SEBC or PH categories with at least 50 percent equity), plus product development and marketing assistance up to INR 15 lakh (up to INR 16 lakh for the same categories).",
       "equity_taken": null,
-      "stage": ["idea", "prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "Financial benefits for state-recognised startups in Odisha. A recognised startup can draw a monthly sustenance allowance for a year and, separately, a grant for product development and marketing, subject to funding, patent or revenue conditions.",
       "eligibility": [
         "Recognised as a startup by Startup Odisha (incorporation not prior to 7 years, or 10 years for biotech, and turnover under INR 25 crore)",
@@ -810,8 +962,17 @@
       "amount_max_inr": 38392000,
       "amount_note": "Early-stage investments of USD 50,000 to USD 100,000 and growth-stage investments of USD 200,000 to USD 400,000, made as equity-free funding. Converted at 1 USD = 95.98 INR, USD 50,000 is about INR 47,99,000 and USD 400,000 is about INR 3,83,92,000.",
       "equity_taken": "None. The Venture Fund provides equity-free funding.",
-      "stage": ["prototype", "early-revenue", "growth"],
-      "sectors": ["ai", "deeptech", "healthtech", "climate"],
+      "stage": [
+        "prototype",
+        "early-revenue",
+        "growth"
+      ],
+      "sectors": [
+        "ai",
+        "deeptech",
+        "healthtech",
+        "climate"
+      ],
       "summary": "A UNICEF fund that makes equity-free investments in early-stage frontier-technology startups registered in UNICEF programme countries, including India, that build open-source solutions with potential to help children. It invests through periodic calls for applications on specific themes.",
       "eligibility": [
         "Company registered in a UNICEF programme country, which includes India",
@@ -842,8 +1003,13 @@
       "amount_max_inr": 9598000,
       "amount_note": "For each regional award, three fellows receive a grant: USD 100,000 for first place, USD 60,000 for second and USD 30,000 for third. Converted at 1 USD = 95.98 INR, USD 30,000 is about INR 28,79,400 and USD 100,000 is about INR 95,98,000.",
       "equity_taken": "None. The award is a grant.",
-      "stage": ["early-revenue", "growth"],
-      "sectors": ["all"],
+      "stage": [
+        "early-revenue",
+        "growth"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "An annual award for women-owned and women-led impact businesses. Indian founders apply under the South Asia and Central Asia regional award. Fellows receive a grant plus a fellowship of training, coaching and community.",
       "eligibility": [
         "Woman-owned and woman-led for-profit impact business contributing to at least one UN Sustainable Development Goal",
@@ -881,8 +1047,13 @@
       "amount_max_inr": 95980000,
       "amount_note": "USD 1 million in seed funding to the winning team. Converted at 1 USD = 95.98 INR, USD 1 million is about INR 9,59,80,000.",
       "equity_taken": "None. The prize is seed funding awarded to the winning team.",
-      "stage": ["idea", "prototype"],
-      "sectors": ["all"],
+      "stage": [
+        "idea",
+        "prototype"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "A global student startup competition. Student teams, including from India, build and pitch a startup around an annual challenge, and the winning team receives USD 1 million in seed funding.",
       "eligibility": [
         "Team of currently enrolled students, including from Indian colleges and universities",
@@ -912,8 +1083,13 @@
       "amount_max_inr": null,
       "amount_note": "Amount decided case by case. Selected Solver teams share funding from prize pools that vary by challenge and sponsor, along with a nine-month support programme. The exact prize depends on the challenge.",
       "equity_taken": "None. Funding is awarded as prizes and grants.",
-      "stage": ["prototype", "early-revenue"],
-      "sectors": ["all"],
+      "stage": [
+        "prototype",
+        "early-revenue"
+      ],
+      "sectors": [
+        "all"
+      ],
       "summary": "MIT's open innovation challenges seek technology-based solutions to global problems from anyone, anywhere, including India. Selected teams become Solvers and get funding from challenge prize pools plus mentorship and partnerships over a nine-month programme.",
       "eligibility": [
         "Any individual or team with a technology-based solution, including from India",

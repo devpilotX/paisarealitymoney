@@ -33,6 +33,7 @@ export interface Grant {
   cycleNote: string | null;
   verifiedOn: string;
   linkCheckedAt: string | null;
+  metaTitle: string | null;
 }
 
 interface Row extends QueryResultRow {
@@ -41,12 +42,12 @@ interface Row extends QueryResultRow {
   amount_note: string | null; equity_taken: string | null; stage: string[]; sectors: string[]; summary: string;
   eligibility: string[]; documents: string[]; how_to_apply: string | null; apply_url: string; official_url: string;
   application_status: Grant['status']; opens_on: string | null; deadline: string | null; cycle_note: string | null;
-  verified_on: string; link_checked_at: string | null;
+  verified_on: string; link_checked_at: string | null; meta_title: string | null;
 }
 
 const COLUMNS = `slug, name, provider, region, level, state, kind, funding_type, amount_min_inr, amount_max_inr, amount_note,
   equity_taken, stage, sectors, summary, eligibility, documents, how_to_apply, apply_url, official_url, application_status,
-  opens_on::text, deadline::text, cycle_note, verified_on::text, link_checked_at::text`;
+  opens_on::text, deadline::text, cycle_note, verified_on::text, link_checked_at::text, meta_title`;
 
 const LIVE = `active AND (deadline IS NULL OR deadline >= (NOW() AT TIME ZONE 'Asia/Kolkata')::date)`;
 
@@ -59,7 +60,7 @@ function map(r: Row): Grant {
     amountNote: r.amount_note, equityTaken: r.equity_taken, stage: r.stage ?? [], sectors: r.sectors ?? [],
     summary: r.summary, eligibility: r.eligibility ?? [], documents: r.documents ?? [], howToApply: r.how_to_apply,
     applyUrl: r.apply_url, officialUrl: r.official_url, status: r.application_status, opensOn: r.opens_on,
-    deadline: r.deadline, cycleNote: r.cycle_note, verifiedOn: r.verified_on, linkCheckedAt: r.link_checked_at,
+    deadline: r.deadline, cycleNote: r.cycle_note, verifiedOn: r.verified_on, linkCheckedAt: r.link_checked_at, metaTitle: r.meta_title,
   };
 }
 

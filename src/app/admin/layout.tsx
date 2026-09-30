@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 // Admin is private. Block from search as a backup to the robots.txt disallow.
 export const metadata: Metadata = {
+  title: 'Admin | Paisa Reality',
   robots: { index: false, follow: false },
 };
 

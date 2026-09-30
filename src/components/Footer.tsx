@@ -47,7 +47,6 @@ const COLUMNS: Array<{ title: string; links: FooterLink[] }> = [
       { href: '/methodology', label: 'How we check our data' },
       { href: '/editorial-policy', label: 'Editorial policy' },
       { href: '/guides', label: 'Guides' },
-      { href: '/newsletter', label: 'Newsletter' },
       { href: '/contact', label: 'Contact' },
     ],
   },

@@ -92,7 +92,6 @@ How the data is produced:
 
 ## Optional
 - [Full reference with current prices, rates and every scheme](${u('/llms-full.txt')})
-- [Newsletter](${u('/newsletter')})
 - [Sitemap](${u('/sitemap.xml')})
 `;
 

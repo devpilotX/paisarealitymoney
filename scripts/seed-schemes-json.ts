@@ -14,7 +14,7 @@ const COLUMNS = [
   'slug', 'name', 'name_hi', 'category', 'level', 'ministry', 'description', 'benefit_summary',
   'benefit_amount_max', 'apply_url', 'official_url', 'min_age', 'max_age', 'gender',
   'states', 'categories', 'max_income', 'occupations', 'education_min', 'area', 'bpl_required',
-  'minority_only', 'disability_only', 'how_to_apply', 'documents_required', 'source_url',
+  'minority_only', 'disability_only', 'how_to_apply', 'documents_required', 'source_url', 'meta_title',
 ] as const;
 const JSONB = new Set(['states', 'categories', 'occupations', 'documents_required']);
 const CATEGORIES = new Set(['agriculture', 'business', 'disability', 'education', 'employment', 'finance', 'healthcare', 'housing', 'insurance', 'pension', 'senior-citizen', 'skill-training', 'social', 'women']);
@@ -35,7 +35,7 @@ async function main(): Promise<void> {
         if (!Array.isArray(s.states) || s.states.length === 0) throw new Error(`${f}: ${s.slug} has no states`);
         const values = COLUMNS.map((c) => (JSONB.has(c) ? JSON.stringify(s[c] ?? (c === 'documents_required' ? [] : ['all'])) : s[c] ?? null));
         const ph = COLUMNS.map((c, i) => (JSONB.has(c) ? `$${i + 1}::jsonb` : `$${i + 1}`)).join(', ');
-        const set = COLUMNS.filter((c) => c !== 'slug').map((c) => `${c} = EXCLUDED.${c}`).join(', ');
+        const set = COLUMNS.filter((c) => c !== 'slug').map((c) => (c === 'meta_title' ? 'meta_title = COALESCE(EXCLUDED.meta_title, schemes.meta_title)' : `${c} = EXCLUDED.${c}`)).join(', ');
         const r = await pool.query<{ inserted: boolean }>(
           `INSERT INTO schemes (${COLUMNS.join(', ')}, last_verified, is_active)
            VALUES (${ph}, $${COLUMNS.length + 1}::date, true)

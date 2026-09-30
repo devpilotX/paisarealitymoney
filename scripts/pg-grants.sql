@@ -46,3 +46,5 @@ CREATE TABLE IF NOT EXISTS grants (
 );
 
 CREATE INDEX IF NOT EXISTS idx_grants_active ON grants (active, region);
+
+ALTER TABLE grants ADD COLUMN IF NOT EXISTS meta_title TEXT;

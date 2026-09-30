@@ -1,40 +1,40 @@
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Page not found',
+  robots: { index: false, follow: true },
+};
+
+const POPULAR = [
+  { href: '/gold-rate', label: 'Gold rate today' },
+  { href: '/petrol-price', label: 'Petrol price' },
+  { href: '/schemes', label: 'Find government schemes' },
+  { href: '/scholarships', label: 'Scholarships' },
+  { href: '/grants', label: 'Startup grants' },
+  { href: '/calculators/emi', label: 'EMI calculator' },
+  { href: '/bank-rates/fd-rates', label: 'FD rates' },
+  { href: '/interest-rates', label: 'PPF and small savings rates' },
+];
+
 export default function NotFound(): React.ReactElement {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-paper">
-      <div className="text-center px-6">
-        <p className="text-8xl font-bold text-primary/20 mb-4">404</p>
-        <h1 className="font-serif text-3xl font-bold text-navy mb-3">Page Not Found</h1>
-        <p className="text-muted mb-8 max-w-md mx-auto">
-          The page you are looking for does not exist or has been moved. Try checking the URL
-          or go back to the homepage.
-        </p>
-        <div className="flex flex-wrap gap-4 justify-center">
-          <Link href="/" className="btn-primary">
-            Go to Homepage
-          </Link>
-          <Link href="/schemes" className="btn-secondary">
-            Find Schemes
-          </Link>
-        </div>
-        <div className="mt-12 flex flex-wrap gap-3 justify-center text-sm">
-          <Link href="/gold-rate" className="text-navy hover:text-brand-red">
-            Gold Rate
-          </Link>
-          <Link href="/silver-rate" className="text-navy hover:text-brand-red">
-            Silver Rate
-          </Link>
-          <Link href="/petrol-price" className="text-navy hover:text-brand-red">
-            Petrol Price
-          </Link>
-          <Link href="/calculators" className="text-navy hover:text-brand-red">
-            Calculators
-          </Link>
-          <Link href="/bank-rates" className="text-navy hover:text-brand-red">
-            Bank Rates
-          </Link>
-        </div>
+    <div className="container-main py-20 sm:py-28 text-center">
+      <p className="text-sm font-medium text-muted-2 tabular">Error 404</p>
+      <h1 className="heading-1 mt-3">We could not find that page</h1>
+      <p className="mt-4 text-lg text-muted max-w-xl mx-auto">
+        The link may be old, or the page may have moved. A scheme or grant that has closed is also removed from the site.
+      </p>
+      <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+        <Link href="/" className="btn-primary">Go to the homepage</Link>
+        <Link href="/contact" className="btn-secondary">Tell us about a broken link</Link>
+      </div>
+      <div className="mt-14 max-w-2xl mx-auto">
+        <h2 className="text-sm font-medium text-muted mb-4">Pages people often look for</h2>
+        <ul className="flex flex-wrap justify-center gap-2">
+          {POPULAR.map((p) => (
+            <li key={p.href}><Link href={p.href} className="pill no-underline hover:border-navy hover:text-navy">{p.label}</Link></li>
+          ))}
+        </ul>
       </div>
     </div>
   );

@@ -115,6 +115,15 @@ export function buildRecordDescription(summary: string | null | undefined, fallb
   const base = (summary?.trim() || `${fallbackName}: eligibility, benefits and how to apply.`).replace(/\s+/g, ' ');
   if (base.length + cta.length <= DESCRIPTION_LIMIT) return `${base}${cta}`;
   if (base.length <= DESCRIPTION_LIMIT) return base;
+  // Prefer ending on a whole sentence; only clip mid-sentence when no sentence fits.
+  const sentences = base.match(/[^.!?]+[.!?]+/g) ?? [];
+  let fit = '';
+  for (const s of sentences) {
+    if ((fit + s).trim().length > DESCRIPTION_LIMIT) break;
+    fit += s;
+  }
+  fit = fit.trim();
+  if (fit.length >= 70) return fit.length + cta.length <= DESCRIPTION_LIMIT ? `${fit}${cta}` : fit;
   return `${base.slice(0, DESCRIPTION_LIMIT - 3).trimEnd()}...`;
 }
 

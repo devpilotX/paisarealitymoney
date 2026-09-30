@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!g) return { title: 'Programme not found', robots: { index: false } };
   const year = currentYearIST();
   return pageMetadata({
-    title: fitTitle(g.name, [` ${year}: Eligibility, Amount, How to Apply`, ` ${year}: Eligibility and Amount`, ` ${year}: Eligibility`, ` ${year}`]),
+    title: g.metaTitle ?? fitTitle(g.name, [` ${year}: Eligibility, Amount, How to Apply`, ` ${year}: Eligibility and Amount`, ` ${year}: Eligibility`, ` ${year}`]),
     description: buildRecordDescription(g.summary, g.name),
     path: `/grants/${g.slug}`,
     ogType: 'article',

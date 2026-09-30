@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieConsent from '@/components/CookieConsent';
+import PublicOnly from '@/components/PublicOnly';
 import { CONSENT_BOOTSTRAP } from '@/lib/consent';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import AdSenseScript from '@/components/AdSenseScript';
@@ -162,11 +163,11 @@ export default function RootLayout({
         <Script id="consent-default" strategy="beforeInteractive">{CONSENT_BOOTSTRAP}</Script>
         <GoogleAnalytics />
         <AdSenseScript />
-        <Header />
+        <PublicOnly><Header /></PublicOnly>
             <main className="flex-1">{children}</main>
-        <Footer />
-        <CookieConsent />
-        <YojanaMitra />
+        <PublicOnly><Footer /></PublicOnly>
+        <PublicOnly><CookieConsent /></PublicOnly>
+        <PublicOnly><YojanaMitra /></PublicOnly>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </body>
