@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
+import { getCityMetalContext, jewelleryBill } from '@/lib/city-metal';
 
 import { getCityBySlug, getRelatedCities, CITIES } from '@/lib/cities';
 import { formatINR, formatDate } from '@/lib/constants';
@@ -82,6 +83,7 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
   }
 
   const today = historyRows[0];
+  const ctx = await getCityMetalContext('gold', city.slug);
   const weekHistory = historyRows.slice(0, 7);
   const chartData = historyRows.map((r) => ({ date: r.price_date, price: r.gold_24k_per_gram })).reverse();
 
@@ -92,20 +94,27 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
     description: c.state,
   }));
 
+  const r = (v: number): string => formatINR(Math.round(v));
   const faqs = [
     {
       question: `What is the gold rate in ${city.name} today?`,
       answer: today
-        ? `Today's 24K gold rate in ${city.name} is ${formatINR(today.gold_24k_per_gram)} per gram and 22K gold rate is ${formatINR(today.gold_22k_per_gram)} per gram. The price of 10 grams of 24K gold is ${formatINR(today.gold_24k_per_10gram)}.`
-        : `Gold prices for ${city.name} are being updated. Please check back shortly.`,
+        ? `24K gold in ${city.name} is ${formatINR(today.gold_24k_per_gram)} a gram and 22K is ${formatINR(today.gold_22k_per_gram)} a gram, as of ${formatDate(today.price_date)}. Ten grams of 22K costs ${formatINR(today.gold_22k_per_10gram)} before GST and making charges.`
+        : `Today's rate for ${city.name} has not been published yet. It appears after the first update of the day, around 6:15 am.`,
     },
     {
-      question: `Why is gold price in ${city.name} different from other cities?`,
-      answer: `Gold prices in ${city.name} may differ from other cities due to local taxes, transportation costs, and demand. ${city.state} state taxes and local market conditions affect the final price. The difference is usually small, between Rs 10 to Rs 50 per gram.`,
+      question: `Is gold cheaper in ${city.name} than in other cities?`,
+      answer: ctx
+        ? `Today 22K gold in ${city.name} is ${r(Math.abs(ctx.diffFromAvg))} a gram ${ctx.diffFromAvg >= 0 ? 'above' : 'below'} the average of the ${ctx.cityCount} cities we track, and ranks ${ctx.rank} from cheapest. The spread across India is small, ${r(ctx.dearest.price - ctx.cheapest.price)} a gram between ${ctx.cheapest.name} and ${ctx.dearest.name}, and comes from local jewellers' association rates and transport costs.`
+        : 'City differences are small and come from local jewellers association rates and transport costs.',
     },
     {
-      question: 'How often do gold prices change?',
-      answer: 'Gold prices in India change daily based on international market movements and the rupee-dollar exchange rate. Major price updates happen when the London Bullion Market Association (LBMA) sets the daily fix price. Indian markets open at 9 AM and prices can fluctuate during trading hours.',
+      question: 'How much GST do I pay on gold jewellery?',
+      answer: 'When you buy jewellery from a shop, 3% GST applies to the whole bill, the gold and the making charge together. A 5% rate applies only when you give your own gold to a jeweller to be made into something, because that is billed as job work.',
+    },
+    {
+      question: `How do I know gold I buy in ${city.name} is pure?`,
+      answer: 'Hallmarking is compulsory for gold jewellery in India. Every hallmarked piece carries the BIS mark, the purity grade (for example 22K916) and a six-character HUID code. Enter the HUID in the free BIS CARE app to see the purity, the jeweller and the testing centre.',
     },
   ];
 
@@ -170,20 +179,56 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
         </div>
       )}
 
-      {/* Content */}
-      <article className="max-w-3xl my-8">
-        <h2 className="heading-2 mb-4">About Gold Rate in {city.name}</h2>
-        <p className="text-body mb-4">
-          {city.name} is one of India's major cities in {city.state} with an active gold market. The gold rate in {city.name} is influenced by international gold prices, the value of the Indian rupee, import duties, and local demand from jewellers and consumers.
+      {/* City analysis */}
+      {ctx && today && (
+        <section className="my-12 grid gap-6 lg:grid-cols-2">
+          <div className="card-flat">
+            <h2 className="heading-3">How {city.name} compares today</h2>
+            <dl className="mt-5 space-y-3 text-[15px]">
+              <div className="flex justify-between gap-4"><dt className="text-muted">22K in {city.name}</dt><dd className="font-semibold tabular">{formatINR(ctx.cityPrice)} / g</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-muted">Average of {ctx.cityCount} cities</dt><dd className="tabular">{r(ctx.indiaAvg)} / g</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-muted">Difference</dt><dd className={`tabular font-medium ${ctx.diffFromAvg > 0 ? 'text-brand-red' : 'text-green-700'}`}>{ctx.diffFromAvg >= 0 ? '+' : '-'}{r(Math.abs(ctx.diffFromAvg))} / g</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-muted">Rank, cheapest first</dt><dd className="tabular">{ctx.rank} of {ctx.cityCount}</dd></div>
+              {ctx.high30 && ctx.low30 && (
+                <div className="flex justify-between gap-4"><dt className="text-muted">Range over the last {ctx.days} days</dt><dd className="tabular">{r(ctx.low30)} to {r(ctx.high30)}</dd></div>
+              )}
+            </dl>
+            {ctx.statePeers.length > 0 && (
+              <p className="mt-5 pt-4 border-t border-line text-sm text-muted leading-relaxed">
+                Elsewhere in {city.state}:{' '}
+                {ctx.statePeers.map((s, i) => (
+                  <span key={s.slug}>{i > 0 ? ', ' : ''}<Link href={`/gold-rate/${s.slug}`} className="link-internal">{s.name}</Link> {r(s.price)}</span>
+                ))}.
+              </p>
+            )}
+          </div>
+
+          <div className="card-flat">
+            <h2 className="heading-3">What 10 grams of 22K jewellery costs in {city.name}</h2>
+            <p className="mt-2 text-sm text-muted">An example at today&apos;s rate with a 12% making charge. The making charge varies a lot with the design, so ask the shop for its figure and put it in place of ours.</p>
+            {(() => {
+              const b = jewelleryBill(today.gold_22k_per_gram, 10, 12);
+              return (
+                <dl className="mt-5 space-y-3 text-[15px]">
+                  <div className="flex justify-between gap-4"><dt className="text-muted">Gold, 10 g at {formatINR(today.gold_22k_per_gram)}</dt><dd className="tabular">{r(b.gold)}</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="text-muted">Making charge, 12%</dt><dd className="tabular">{r(b.making)}</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="text-muted">GST, 3% on both</dt><dd className="tabular">{r(b.gst)}</dd></div>
+                  <div className="flex justify-between gap-4 pt-3 border-t border-line"><dt className="font-medium">You pay</dt><dd className="font-semibold tabular">{r(b.total)}</dd></div>
+                </dl>
+              );
+            })()}
+            <p className="mt-4 text-sm text-muted">Ask for a bill that lists weight, rate, making charge and GST on separate lines, and check the HUID on the piece.</p>
+          </div>
+        </section>
+      )}
+
+      <article className="max-w-3xl my-10 prose">
+        <h2>Buying gold in {city.name}</h2>
+        <p>
+          {`The rate on this page is for pure metal, before GST and making charges. It is what a jeweller in ${city.name} starts from, and what most shops write at the top of the bill. Local jewellers' associations in ${city.state} publish their own morning rate, so the number at the counter can be a little different from ours; we update five times a day to stay close to it.`}
         </p>
-        <p className="text-body mb-4">
-          When buying gold jewellery in {city.name}, remember that the final price includes making charges (which range from 5% to 25% of the gold value depending on the complexity of the design), 3% GST, and possibly hallmarking charges. Always ask for a detailed bill that shows the gold rate, weight, making charge, and tax separately.
-        </p>
-        <p className="text-body mb-4">
-          For gold investment, you can buy gold coins or bars from banks and authorized dealers in {city.name}. You can also invest in Sovereign Gold Bonds (SGBs) issued by the Reserve Bank of India, which give you the benefit of gold price appreciation plus 2.5% annual interest.
-        </p>
-        <p className="text-body mb-4">
-          Gold prices in {city.name} are shown from the latest available database update. You can also check the <Link href={`/silver-rate/${city.slug}`} className="link-internal">silver rate in {city.name}</Link> and <Link href={`/petrol-price/${city.slug}`} className="link-internal">petrol price in {city.name}</Link>.
+        <p>
+          For jewellery, 22K (91.6% pure) is the usual choice because pure gold is too soft to hold stones. For coins and bars, 24K is better value because there is almost no making charge. If you want gold only as an investment, gold ETFs and gold mutual funds follow the same price with no making charge and nothing to store.
         </p>
       </article>
 

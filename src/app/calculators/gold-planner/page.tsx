@@ -36,7 +36,7 @@ const FAQS = [
   {
     question: 'SGB vs Gold ETF vs physical vs digital gold: what is the difference?',
     answer:
-      'Sovereign Gold Bonds (SGBs) are issued by the RBI, pay 2.5% annual interest, and their capital gain is tax-free if held to maturity (8 years), but they have a long lock-in. Gold ETFs and gold funds are SEBI-regulated, low-cost and easy to trade. Physical gold carries making charges and storage/purity risk. Digital gold is convenient for small amounts but is NOT regulated by SEBI or the RBI, so platform/counterparty risk is a known concern. The tool compares their tax treatment side by side.',
+      'Sovereign Gold Bonds (SGBs) pay 2.5% a year, but no new bonds have been issued since February 2024, so today you can only buy existing ones on NSE or BSE. From 1 April 2026 the gain at maturity is tax-free only for bonds bought at original issue and held for 8 years; exchange buyers pay capital gains tax. Gold ETFs and gold funds are SEBI-regulated, low-cost and easy to trade. Physical gold carries making charges and storage/purity risk. Digital gold is convenient for small amounts but is NOT regulated by SEBI or the RBI, so platform/counterparty risk is a known concern. The tool compares their tax treatment side by side.',
   },
   {
     question: 'How is gold taxed in India?',
