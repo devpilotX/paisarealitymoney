@@ -25,10 +25,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const year = currentYearIST();
   return pageMetadata({
     title: g.metaTitle ?? fitTitle(g.name, [` ${year}: Eligibility, Amount, How to Apply`, ` ${year}: Eligibility and Amount`, ` ${year}: Eligibility`, ` ${year}`]),
-    description: buildRecordDescription(g.summary, g.name),
+    description: grantDescription(g),
     path: `/grants/${g.slug}`,
     ogType: 'article',
   });
+}
+
+/** A search description from the record's own facts, always a whole sentence under 155 characters. */
+function grantDescription(g: Grant): string {
+  const amount = formatAmount(g.amountMinInr, g.amountMaxInr);
+  const kind = (KIND_LABEL[g.kind] ?? 'Programme').toLowerCase();
+  const who = g.region === 'international' ? 'open to Indian startups' : g.state ? `for startups in ${g.state}` : 'for Indian startups';
+  const money = amount ? `, ${amount.charAt(0).toLowerCase()}${amount.slice(1)}` : '';
+  const tries = [
+    `${g.name}: ${kind} ${who}${money}. Eligibility, equity terms and how to apply.`,
+    `${g.name}: ${kind} ${who}${money}. Check eligibility and how to apply.`,
+    `${g.name}: eligibility, amount and how to apply.`,
+  ];
+  return tries.find((t) => t.length <= 155 && t.length >= 70) ?? buildRecordDescription(g.summary, g.name);
 }
 
 function istLong(iso: string): string {
