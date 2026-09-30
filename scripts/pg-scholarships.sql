@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS scholarships (
   slug                TEXT UNIQUE NOT NULL,
   name                TEXT NOT NULL,
   provider            TEXT,
-  level               TEXT NOT NULL DEFAULT 'central',   -- 'central' | 'state'
+  level               TEXT NOT NULL DEFAULT 'central',   -- 'central' | 'state' | 'private'
   state               TEXT,                              -- NULL = all-India
   categories          TEXT[] NOT NULL DEFAULT '{all}',   -- {'all'} or e.g. {'sc','st','obc'}
   gender              TEXT NOT NULL DEFAULT 'all',        -- 'all' | 'female' | 'male'
@@ -815,3 +815,7 @@ UPDATE scholarships SET
   meta_title = 'Colgate Keep India Smiling Scholarship 2026',
   meta_description = 'Colgate Keep India Smiling supports meritorious students from low-income families in STEM, engineering and dental courses. Check how to apply.'
   WHERE slug = 'colgate-keep-india-smiling';
+
+-- Scholarships run by companies and foundations, not by any government. They were
+-- stored as 'central', which labelled them 'Central Govt' on the site.
+UPDATE scholarships SET level = 'private' WHERE slug IN ('aditya-birla-scholarship','colgate-keep-india-smiling','glow-lovely-careers','hdfc-parivartan-ecss','jn-tata-endowment','mahindra-all-india-talent','kc-mahindra-pg-abroad','kotak-kanya','narotam-sekhsaria','opjems','vidyasaarathi','reliance-foundation-ug','reliance-foundation-pg','vidyadhan','sitaram-jindal','tata-capital-pankh','santoor-womens');

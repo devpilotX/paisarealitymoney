@@ -11,6 +11,7 @@ import { getScholarshipBySlug, type Scholarship } from '@/lib/scholarships';
 import { scholarshipSchema } from '@/lib/schema';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
+import ScholarshipDetails from '@/components/ScholarshipDetails';
 
 // Cached and regenerated hourly like the scheme pages, so crawlers get a fast static response.
 export const revalidate = 3600;
@@ -73,7 +74,7 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
    * of what a scholarship searcher actually asks. Every answer below comes from
    * a recorded field or says plainly that the value is not recorded.
    */
-  const level = s.level === 'state' ? 'state government' : 'central government';
+  const level = s.level === 'state' ? 'state government' : s.level === 'private' ? 'private' : 'central government';
   const faqs = [
     {
       question: `What is ${s.name}?`,
@@ -137,7 +138,7 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
       <div className="max-w-3xl">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary-50 text-primary">
-            {s.level === 'state' ? 'State Govt' : 'Central Govt'}
+            {s.level === 'state' ? 'State government' : s.level === 'private' ? 'Private' : 'Central government'}
           </span>
           {s.deadline ? (
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-red/10 text-brand-red">
@@ -165,6 +166,8 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <article className="lg:col-span-2">
+          <ScholarshipDetails s={s} part="glance" />
+
           {s.benefitSummary && (
             <section className="mb-6">
               <h2 className="heading-2 mb-2">What you get</h2>
@@ -220,6 +223,7 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
         </aside>
       </div>
 
+      <ScholarshipDetails s={s} part="similar" />
       <FAQ items={faqs} />
 
       <AdBanner format="horizontal" className="mt-10 mb-8" />

@@ -157,7 +157,7 @@ export default async function HomePage(): Promise<React.ReactElement> {
       cta: { href: '/scholarships', label: 'See scholarships' },
       panel: {
         caption: `Some of the ${counts.scholarships} scholarships listed`,
-        rows: topSch.map((x) => ({ label: x.name, value: x.amountMax ? `Up to ${inr(x.amountMax)}` : '' , sub: x.level === 'central' ? 'All India' : undefined })),
+        rows: topSch.map((x) => ({ label: x.name, value: x.amountMax ? `Up to ${inr(x.amountMax)}` : '' , sub: x.level === 'state' ? undefined : 'All India' })),
         foot: 'Amounts are the published maximum per year.',
       },
     },
