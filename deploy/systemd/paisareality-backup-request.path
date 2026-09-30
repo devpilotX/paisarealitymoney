@@ -1,0 +1,10 @@
+# n8n writes requests/backup-now when someone sends /backup to the Telegram bot.
+[Unit]
+Description=Watch for on-demand backup requests from n8n
+
+[Path]
+PathExists=/var/lib/paisareality-backup/requests/backup-now
+Unit=paisareality-backup-request.service
+
+[Install]
+WantedBy=multi-user.target

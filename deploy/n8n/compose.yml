@@ -1,0 +1,29 @@
+# n8n for paisareality.com, reachable at https://n8n.paisareality.com
+# Installed to /opt/n8n/compose.yml by deploy/vps/setup-n8n.sh.
+#
+# Host networking: n8n listens on 127.0.0.1:5678 only (N8N_LISTEN_ADDRESS), reaches
+# PostgreSQL on 127.0.0.1:5432, and the backup script reaches its webhook locally.
+# nginx is the only way in from outside.
+services:
+  n8n:
+    image: n8nio/n8n:2.41.4
+    container_name: n8n
+    restart: unless-stopped
+    network_mode: host
+    env_file: /etc/n8n/n8n.env
+    volumes:
+      - /var/lib/n8n:/home/node/.n8n
+      # Encrypted backups written by paisareality-backup, read-only for n8n.
+      - /var/lib/paisareality-backup/outbox:/home/node/.n8n-files/backups:ro
+      # n8n drops a file here to ask the host for a backup (Telegram /backup).
+      - /var/lib/paisareality-backup/requests:/home/node/.n8n-files/requests
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:5678/healthz || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "5" }

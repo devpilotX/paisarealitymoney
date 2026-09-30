@@ -1,0 +1,47 @@
+{
+  "id": "paisaErrorAlert1",
+  "name": "Alerts: workflow failure to Telegram",
+  "active": false,
+  "settings": { "executionOrder": "v1", "timezone": "Asia/Kolkata", "saveDataSuccessExecution": "all", "saveDataErrorExecution": "all" },
+  "nodes": [
+    {
+      "id": "b1a0c001-0000-4000-8000-000000000001",
+      "name": "Any workflow failed",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {}
+    },
+    {
+      "id": "b1a0c001-0000-4000-8000-000000000002",
+      "name": "Write the alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0],
+      "parameters": {
+        "jsCode": "const e = $json.execution || {};\nconst wf = $json.workflow || {};\nconst err = e.error || $json.trigger?.error || {};\nconst when = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });\nlet hint = '';\nconst msg = String(err.message || 'Unknown error');\nif (/google|drive|oauth|invalid_grant|401/i.test(msg) && /drive|google/i.test((e.lastNodeExecuted || '') + msg)) {\n  hint = '\\nLikely cause: the Google Drive connection is missing or expired. Open the credential \"Google Drive: backups\" in n8n and sign in again. The encrypted file still reached Telegram if this was the daily backup.';\n}\nconst lines = [\n  'WORKFLOW FAILED: ' + (wf.name || 'unknown'),\n  'Step: ' + (e.lastNodeExecuted || 'n/a'),\n  'Error: ' + msg.slice(0, 700),\n  'Time: ' + when + ' IST',\n];\nif (e.url) lines.push('Open: ' + e.url);\nreturn [{ json: { text: lines.join('\\n') + hint } }];"
+      }
+    },
+    {
+      "id": "b1a0c001-0000-4000-8000-000000000003",
+      "name": "Send to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [480, 0],
+      "parameters": {
+        "chatId": "__CHAT_ID__",
+        "text": "={{ $json.text }}",
+        "additionalFields": { "appendAttribution": false, "disable_web_page_preview": true }
+      },
+      "credentials": { "telegramApi": { "id": "paisaTelegramBot", "name": "Telegram: Paisareality_bot" } },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Any workflow failed": { "main": [[{ "node": "Write the alert", "type": "main", "index": 0 }]] },
+    "Write the alert": { "main": [[{ "node": "Send to Telegram", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {}
+}

@@ -1,0 +1,269 @@
+{
+  "id": "paisaBackupDrive",
+  "name": "Backup: upload to Google Drive and Telegram",
+  "active": false,
+  "settings": { "executionOrder": "v1", "timezone": "Asia/Kolkata", "errorWorkflow": "paisaErrorAlert1", "saveDataSuccessExecution": "all", "saveDataErrorExecution": "all" },
+  "nodes": [
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000001",
+      "name": "Backup finished on server",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "5d0c2f0e-7b1a-4c8e-9a51-6b1f3c2e9a01",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "paisa-backup",
+        "authentication": "headerAuth",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "credentials": { "httpHeaderAuth": { "id": "paisaBackupToken", "name": "Backup webhook token" } }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000002",
+      "name": "Check the report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0],
+      "parameters": {
+        "jsCode": "const b = $json.body || {};\nif (b.ok !== true) throw new Error('Server reported a failed backup: ' + JSON.stringify(b).slice(0, 300));\nif (!/^paisareality-backup-\\d{8}-\\d{6}\\.tar\\.gz\\.gpg$/.test(String(b.file || ''))) throw new Error('Unexpected backup file name: ' + b.file);\nconst size = Number(b.size) || 0;\nconst mb = (size / 1048576).toFixed(2) + ' MB';\nconst kind = b.kind || 'interval';\nconst c = b.counts || {};\nconst contents = `${c.users ?? '?'} users, ${c.blog_posts ?? '?'} articles, ${c.schemes ?? '?'} schemes, ${c.subscribers ?? '?'} subscribers, ${c.price_alerts ?? '?'} price alerts, ${c.contact_messages ?? '?'} contact messages`;\nconst when = new Date(b.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });\nreturn [{ json: {\n  file: b.file,\n  path: '/home/node/.n8n-files/backups/' + b.file,\n  size, mb, kind, when, contents,\n  release: b.release, sha256: b.sha256, seconds: b.seconds,\n  toTelegram: kind !== 'interval' && size < 49 * 1024 * 1024,\n  cutoff: new Date(Date.now() - 30 * 86400000).toISOString(),\n} }];"
+      }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000003",
+      "name": "Daily or manual only",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, -220],
+      "parameters": { "jsCode": "return $input.all().filter((i) => i.json.toTelegram);" }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000004",
+      "name": "Read backup for Telegram",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [660, -220],
+      "parameters": { "operation": "read", "fileSelector": "={{ $json.path }}", "options": {} }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000005",
+      "name": "Send file to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [880, -220],
+      "parameters": {
+        "operation": "sendDocument",
+        "chatId": "__CHAT_ID__",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "additionalFields": {
+          "appendAttribution": false,
+          "caption": "={{ 'Encrypted backup ' + $('Check the report').first().json.file + '\\n' + $('Check the report').first().json.mb + ', ' + $('Check the report').first().json.when + ' IST\\n' + $('Check the report').first().json.contents + '\\nOpens with the backup passphrase. Restore: deploy/vps/restore.sh' }}"
+        }
+      },
+      "credentials": { "telegramApi": { "id": "paisaTelegramBot", "name": "Telegram: Paisareality_bot" } },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 10000
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000006",
+      "name": "Find Drive folder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 120],
+      "parameters": {
+        "method": "GET",
+        "url": "https://www.googleapis.com/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "q", "value": "name = 'Paisa Reality Backups' and mimeType = 'application/vnd.google-apps.folder' and trashed = false" },
+            { "name": "fields", "value": "files(id,name)" }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": { "googleDriveOAuth2Api": { "id": "paisaGoogleDrive", "name": "Google Drive: backups" } },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000007",
+      "name": "Folder exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [660, 120],
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose", "version": 2 },
+          "conditions": [
+            {
+              "id": "6f0f1c1e-4b7d-4d7a-9a55-2c1f0e9b0a11",
+              "leftValue": "={{ ($json.files || []).length }}",
+              "rightValue": 0,
+              "operator": { "type": "number", "operation": "gt" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000008",
+      "name": "Create Drive folder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 240],
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{ \"name\": \"Paisa Reality Backups\", \"mimeType\": \"application/vnd.google-apps.folder\" }",
+        "options": {}
+      },
+      "credentials": { "googleDriveOAuth2Api": { "id": "paisaGoogleDrive", "name": "Google Drive: backups" } }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000009",
+      "name": "Folder id",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 120],
+      "parameters": { "jsCode": "const id = $json.files?.[0]?.id || $json.id;\nif (!id) throw new Error('Could not find or create the Drive folder');\nreturn [{ json: { folderId: id } }];" }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-00000000000a",
+      "name": "Read backup for Drive",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [1320, 120],
+      "parameters": { "operation": "read", "fileSelector": "={{ $('Check the report').first().json.path }}", "options": {} }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-00000000000b",
+      "name": "Upload to Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [1540, 120],
+      "parameters": {
+        "resource": "file",
+        "operation": "upload",
+        "inputDataFieldName": "data",
+        "name": "={{ $('Check the report').first().json.file }}",
+        "driveId": { "__rl": true, "mode": "list", "value": "My Drive" },
+        "folderId": { "__rl": true, "mode": "id", "value": "={{ $('Folder id').first().json.folderId }}" },
+        "options": {}
+      },
+      "credentials": { "googleDriveOAuth2Api": { "id": "paisaGoogleDrive", "name": "Google Drive: backups" } },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 15000
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-00000000000c",
+      "name": "Report text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1760, 0],
+      "parameters": {
+        "jsCode": "const r = $('Check the report').first().json;\nif (r.kind === 'interval') return [];\nconst id = $json.id;\nconst lines = [\n  'Backup saved to Google Drive' + (r.kind === 'manual' ? ' (requested from Telegram)' : ''),\n  r.file,\n  r.mb + ', made in ' + r.seconds + ' s at ' + r.when + ' IST',\n  'Contains: ' + r.contents,\n  'Live release: ' + r.release,\n];\nif (id) lines.push('Drive: https://drive.google.com/file/d/' + id + '/view');\nreturn [{ json: { text: lines.join('\\n') } }];"
+      }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-00000000000d",
+      "name": "Send report",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1980, 0],
+      "parameters": {
+        "chatId": "__CHAT_ID__",
+        "text": "={{ $json.text }}",
+        "additionalFields": { "appendAttribution": false, "disable_web_page_preview": true }
+      },
+      "credentials": { "telegramApi": { "id": "paisaTelegramBot", "name": "Telegram: Paisareality_bot" } },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-00000000000e",
+      "name": "List backups older than 30 days",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, 240],
+      "parameters": {
+        "method": "GET",
+        "url": "https://www.googleapis.com/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "q", "value": "={{ \"'\" + $('Folder id').first().json.folderId + \"' in parents and trashed = false and name contains 'paisareality-backup-' and createdTime < '\" + $('Check the report').first().json.cutoff + \"'\" }}" },
+            { "name": "fields", "value": "files(id,name,createdTime)" },
+            { "name": "pageSize", "value": "200" }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": { "googleDriveOAuth2Api": { "id": "paisaGoogleDrive", "name": "Google Drive: backups" } }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-00000000000f",
+      "name": "One item per old file",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1980, 240],
+      "parameters": { "jsCode": "const files = $json.files || [];\n// The backup just uploaded is always newer than the cutoff, so the folder is never emptied.\nif (files.length === 0) return [];\nreturn files.map((f) => ({ json: f }));" }
+    },
+    {
+      "id": "b2a0c002-0000-4000-8000-000000000010",
+      "name": "Delete old backup",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2200, 240],
+      "parameters": {
+        "method": "DELETE",
+        "url": "={{ 'https://www.googleapis.com/drive/v3/files/' + $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {}
+      },
+      "credentials": { "googleDriveOAuth2Api": { "id": "paisaGoogleDrive", "name": "Google Drive: backups" } }
+    }
+  ],
+  "connections": {
+    "Backup finished on server": { "main": [[{ "node": "Check the report", "type": "main", "index": 0 }]] },
+    "Check the report": { "main": [[
+      { "node": "Daily or manual only", "type": "main", "index": 0 },
+      { "node": "Find Drive folder", "type": "main", "index": 0 }
+    ]] },
+    "Daily or manual only": { "main": [[{ "node": "Read backup for Telegram", "type": "main", "index": 0 }]] },
+    "Read backup for Telegram": { "main": [[{ "node": "Send file to Telegram", "type": "main", "index": 0 }]] },
+    "Find Drive folder": { "main": [[{ "node": "Folder exists?", "type": "main", "index": 0 }]] },
+    "Folder exists?": { "main": [
+      [{ "node": "Folder id", "type": "main", "index": 0 }],
+      [{ "node": "Create Drive folder", "type": "main", "index": 0 }]
+    ] },
+    "Create Drive folder": { "main": [[{ "node": "Folder id", "type": "main", "index": 0 }]] },
+    "Folder id": { "main": [[{ "node": "Read backup for Drive", "type": "main", "index": 0 }]] },
+    "Read backup for Drive": { "main": [[{ "node": "Upload to Drive", "type": "main", "index": 0 }]] },
+    "Upload to Drive": { "main": [[
+      { "node": "Report text", "type": "main", "index": 0 },
+      { "node": "List backups older than 30 days", "type": "main", "index": 0 }
+    ]] },
+    "Report text": { "main": [[{ "node": "Send report", "type": "main", "index": 0 }]] },
+    "List backups older than 30 days": { "main": [[{ "node": "One item per old file", "type": "main", "index": 0 }]] },
+    "One item per old file": { "main": [[{ "node": "Delete old backup", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {}
+}

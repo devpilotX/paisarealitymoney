@@ -1,0 +1,6 @@
+[Unit]
+Description=Paisa Reality server watchdog
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/paisareality-watchdog

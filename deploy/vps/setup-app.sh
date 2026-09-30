@@ -60,14 +60,26 @@ install -m 644 "$SRC/deploy/systemd/paisareality-prices.timer" /etc/systemd/syst
 systemctl daemon-reload
 systemctl enable paisareality-prices.timer >/dev/null
 
-# Nightly database backup at 02:30.
-cat > /etc/cron.d/paisareality <<'CRON'
-SHELL=/bin/bash
-30 2 * * * postgres /usr/local/bin/paisareality-backup >> /var/log/paisareality/backup.log 2>&1
-CRON
-touch /var/log/paisareality/backup.log && chown postgres /var/log/paisareality/backup.log
-install -m 755 "$SRC/deploy/vps/backup-db.sh" /usr/local/bin/paisareality-backup
-install -d -o postgres -g postgres -m 700 /var/backups/paisareality
+# Backups every 6 hours plus on demand, and the 5-minute watchdog. Both need
+# /etc/paisareality/backup.env (Telegram token and chat id) to exist already.
+[ -f /etc/paisareality/backup.env ] || { echo "missing /etc/paisareality/backup.env"; exit 1; }
+chmod 600 /etc/paisareality/backup.env
+if [ ! -s /etc/paisareality/backup.key ]; then
+  # Generated once. Losing it makes every backup unreadable: keep a copy off this server.
+  openssl rand -base64 36 | tr -d '\n' > /etc/paisareality/backup.key
+fi
+chmod 600 /etc/paisareality/backup.key
+install -d -m 755 /var/lib/paisareality-backup /var/lib/paisareality-backup/outbox
+install -d -m 770 -o 1000 -g 1000 /var/lib/paisareality-backup/requests
+install -m 750 "$SRC/deploy/vps/backup.sh" /usr/local/bin/paisareality-backup
+install -m 750 "$SRC/deploy/vps/watchdog.sh" /usr/local/bin/paisareality-watchdog
+for u in paisareality-backup.service paisareality-backup.timer paisareality-backup-request.path \
+         paisareality-backup-request.service paisareality-watchdog.service paisareality-watchdog.timer; do
+  install -m 644 "$SRC/deploy/systemd/$u" /etc/systemd/system/
+done
+systemctl daemon-reload
+systemctl enable --now paisareality-backup.timer paisareality-backup-request.path paisareality-watchdog.timer >/dev/null
+rm -f /etc/cron.d/paisareality   # replaced by the timer above
 cat > /etc/logrotate.d/paisareality <<'ROT'
 /var/log/paisareality/*.log {
   weekly

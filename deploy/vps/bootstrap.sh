@@ -13,7 +13,7 @@ timedatectl set-timezone Asia/Kolkata
 apt-get update
 apt-get -y upgrade
 apt-get install -y ca-certificates curl gnupg git build-essential python3 nginx postgresql postgresql-contrib \
-  certbot python3-certbot-nginx fail2ban unattended-upgrades ufw
+  certbot python3-certbot-nginx fail2ban unattended-upgrades ufw jq gnupg docker.io docker-compose-v2
 
 # Node 24 LTS
 if ! command -v node >/dev/null || ! node -v | grep -q '^v24'; then

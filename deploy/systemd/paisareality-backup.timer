@@ -1,0 +1,11 @@
+# Four backups a day: 02:30, 08:30, 14:30, 20:30 IST. The 02:30 one also goes to Telegram.
+[Unit]
+Description=Run the Paisa Reality backup every 6 hours
+
+[Timer]
+OnCalendar=*-*-* 02,08,14,20:30:00
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target
