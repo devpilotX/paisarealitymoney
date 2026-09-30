@@ -37,7 +37,7 @@ export default function SubscribeForm({ tone = 'dark' }: { tone?: 'dark' | 'ligh
         id={id} type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)}
         placeholder="you@example.com"
         className={dark
-          ? 'flex-1 min-w-0 h-11 px-3.5 text-sm rounded-lg bg-white/10 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-white/60 focus:ring-2 focus:ring-white/20'
+          ? 'flex-1 min-w-0 h-11 px-3.5 text-sm rounded-lg bg-white/10 border border-white/15 text-white placeholder:text-white/65 focus:outline-none focus:border-white/60 focus:ring-2 focus:ring-white/20'
           : 'input-field flex-1 min-w-0'}
       />
       <button type="submit" disabled={status === 'loading'}

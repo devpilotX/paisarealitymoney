@@ -9,10 +9,13 @@ export default function SaveSchemeButton({ slug }: { slug: string }): React.Reac
 
   useEffect(() => {
     let alive = true;
-    fetch('/api/bookmarks', { cache: 'no-store' })
+    // Ask the session first so signed-out visitors never trigger a 401 in the console.
+    fetch('/api/auth/session', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((s: { signedIn?: boolean }) => (s.signedIn ? fetch('/api/bookmarks', { cache: 'no-store' }) : null))
       .then(async (r) => {
         if (!alive) return;
-        if (r.status === 401) { setState('out'); return; }
+        if (!r || r.status === 401) { setState('out'); return; }
         const d = (await r.json()) as { schemes?: Array<{ slug: string }> };
         setState(d.schemes?.some((s) => s.slug === slug) ? 'saved' : 'unsaved');
       })

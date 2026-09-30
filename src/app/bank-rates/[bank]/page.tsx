@@ -106,7 +106,7 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
     <div className="container-main py-6">
       <Breadcrumb items={[{ label: 'Bank Rates', href: '/bank-rates' }, { label: bank.name }]} />
 
-      <div className="flex items-start justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
         <div>
           <h1 className="heading-1 mb-2">{bank.name} Interest Rates</h1>
           <p className="text-sm text-muted-2">{typeLabel[bank.type] ?? bank.type}</p>
@@ -124,14 +124,14 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
       {/* FD Rates */}
       {fdRates.length > 0 && (
         <div className="my-8">
-          <BankRateTable title={`${bank.name} FD Rates`} rates={fdRates} rateLabel="FD Rate" />
+          <BankRateTable showBank={false} title={`${bank.name} FD Rates`} rates={fdRates} rateLabel="FD Rate" />
         </div>
       )}
 
       {/* Savings Rates */}
       {savingsRates.length > 0 && (
         <div className="my-8">
-          <BankRateTable title={`${bank.name} Savings Account Rate`} rates={savingsRates} showTenure={false} rateLabel="Savings Rate" />
+          <BankRateTable showBank={false} title={`${bank.name} Savings Account Rate`} rates={savingsRates} showTenure={false} rateLabel="Savings Rate" />
         </div>
       )}
 
@@ -140,14 +140,14 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
       {/* Home Loan Rates */}
       {homeLoanRates.length > 0 && (
         <div className="my-8">
-          <BankRateTable title={`${bank.name} Home Loan Rates`} rates={homeLoanRates} rateLabel="Home Loan Rate" />
+          <BankRateTable showBank={false} title={`${bank.name} Home Loan Rates`} rates={homeLoanRates} rateLabel="Home Loan Rate" />
         </div>
       )}
 
       {/* Personal Loan Rates */}
       {personalLoanRates.length > 0 && (
         <div className="my-8">
-          <BankRateTable title={`${bank.name} Personal Loan Rates`} rates={personalLoanRates} rateLabel="Personal Loan Rate" />
+          <BankRateTable showBank={false} title={`${bank.name} Personal Loan Rates`} rates={personalLoanRates} rateLabel="Personal Loan Rate" />
         </div>
       )}
 

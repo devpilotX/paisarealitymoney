@@ -74,7 +74,7 @@ export default function Footer(): React.ReactElement {
           </p>
           <div className="mt-6 max-w-md mx-auto">
             <SubscribeForm />
-            <p className="mt-2 text-xs text-white/40">One email a week. Unsubscribe with one click.</p>
+            <p className="mt-2 text-xs text-white/65">One email a week. Unsubscribe with one click.</p>
           </div>
         </div>
 
@@ -95,7 +95,7 @@ export default function Footer(): React.ReactElement {
           ))}
         </div>
 
-        <div className="mt-10 pt-8 border-t border-white/10 text-[13px] leading-relaxed text-white/45 max-w-4xl">
+        <div className="mt-10 pt-8 border-t border-white/10 text-[13px] leading-relaxed text-white/65 max-w-4xl">
           <p>
             Paisa Reality is an information service, not a bank, broker or SEBI-registered investment adviser.
             Prices are computed or collected from public sources and dated on every page. Scheme, scholarship and
@@ -104,7 +104,7 @@ export default function Footer(): React.ReactElement {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] text-white/45">
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] text-white/65">
           <p>&copy; {year} Paisa Reality. Made in India.</p>
           <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             {LEGAL.map((l) => (
