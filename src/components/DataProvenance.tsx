@@ -11,7 +11,7 @@ interface DataProvenanceProps {
 
 /**
  * One-line disclosure of where a price came from and when it was last
- * verified. Every price surface should render this — trust is the product.
+ * verified. Every price surface should render this, trust is the product.
  */
 export default function DataProvenance({ asOf, source, className = '' }: DataProvenanceProps): React.ReactElement {
   return (

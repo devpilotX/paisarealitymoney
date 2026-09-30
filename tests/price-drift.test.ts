@@ -1,5 +1,5 @@
 /**
- * Metal drift monitor — pure logic tests (no network).
+ * Metal drift monitor, pure logic tests (no network).
  * Run: npx ts-node --project tsconfig.scripts.json tests/price-drift.test.ts
  *
  * Fixtures copy the GoodReturns India markup shape (tags + rupee entities).

@@ -1,5 +1,5 @@
 /**
- * Smart Cash Flow & Budget Optimizer — test suite (24 cases)
+ * Smart Cash Flow & Budget Optimizer, test suite (24 cases)
  * Run: npx ts-node --project tsconfig.scripts.json tests/budget-optimizer.test.ts
  */
 

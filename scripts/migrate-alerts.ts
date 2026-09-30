@@ -1,5 +1,5 @@
 /**
- * Apply scripts/pg-alerts.sql — the price_alerts table for user price alerts.
+ * Apply scripts/pg-alerts.sql, the price_alerts table for user price alerts.
  *
  * Usage:  npm run db:migrate-alerts
  * Env:    DATABASE_URL, or PGHOST/PGPORT/PGUSER/PGPASSWORD/PGDATABASE (loaded

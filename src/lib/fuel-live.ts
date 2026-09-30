@@ -4,7 +4,7 @@
  * CarDekho publishes server-rendered state-wise petrol and diesel tables on a
  * single page, sourced from the OMCs' daily 6 AM revision. We fetch it once
  * per cron run, parse both tables, and sanity-check every value against our
- * verified baseline (±15%) so a markup change can never poison prices — any
+ * verified baseline (±15%) so a markup change can never poison prices, any
  * state that fails parsing or sanity simply falls back to the baseline, and
  * the existing staleness alert emails the admin if the live feed stays broken.
  *
@@ -68,7 +68,7 @@ export function filterSaneStates(
 }
 
 /**
- * Fetch and parse the live state tables. Returns null on any failure — but
+ * Fetch and parse the live state tables. Returns null on any failure, but
  * never silently: every fallback path logs its reason so pm2 logs show why
  * the site is on baseline instead of live data.
  */
@@ -78,7 +78,7 @@ export async function fetchLiveStateFuel(): Promise<LiveStateFuel | null> {
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 15000);
-    // Note: no `cache` option — Next 15+ fetch defaults to no-store, and the
+    // Note: no `cache` option, Next 15+ fetch defaults to no-store, and the
     // option is absent from the plain Node RequestInit type used by tests.
     const res = await fetch(url, {
       signal: controller.signal,
@@ -96,7 +96,7 @@ export async function fetchLiveStateFuel(): Promise<LiveStateFuel | null> {
     const petrol = filterSaneStates(rawPetrol, 'petrol');
     const diesel = filterSaneStates(rawDiesel, 'diesel');
 
-    // Require broad coverage — a half-parsed page is a red flag, not data.
+    // Require broad coverage, a half-parsed page is a red flag, not data.
     if (Object.keys(petrol).length < 15 || Object.keys(diesel).length < 15) {
       console.error(
         `fuel-live: coverage too low (parsed ${Object.keys(rawPetrol).length}/${Object.keys(rawDiesel).length}, sane ${Object.keys(petrol).length}/${Object.keys(diesel).length}, html ${html.length} bytes), falling back to baseline`

@@ -134,7 +134,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   // prices show up on the very next request instead of after a lazy regen.
   const revalidatedRoutes = revalidatePriceRoutes();
 
-  // Fresh prices are in — evaluate user price alerts against them.
+  // Fresh prices are in, evaluate user price alerts against them.
   const userAlerts = await checkPriceAlerts();
 
   const problems = collectAlerts(results);

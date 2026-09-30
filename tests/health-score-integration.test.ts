@@ -1,6 +1,6 @@
 /**
- * Financial Health Score — integration tests (no live DB; dependencies injected).
- * Imports LIBS only (relative paths) — the API route handlers that wrap these are verified by
+ * Financial Health Score, integration tests (no live DB; dependencies injected).
+ * Imports LIBS only (relative paths), the API route handlers that wrap these are verified by
  * `tsc` + `next build`; here we test the validation contract and the persistence/k-anonymity logic.
  * Run: npx ts-node --project tsconfig.scripts.json tests/health-score-integration.test.ts
  */

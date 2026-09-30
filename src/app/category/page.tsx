@@ -7,7 +7,7 @@ import { getSchemeDirectory } from '@/lib/matcher';
 
 /**
  * SEO: /category previously returned 404, leaving all 14 /category/[slug]
- * pages without a hub parent. Link equity and crawl depth fix — those pages
+ * pages without a hub parent. Link equity and crawl depth fix, those pages
  * are already indexed.
  */
 export const revalidate = 3600;

@@ -1,5 +1,5 @@
 /**
- * Price alerts — pure decision logic, no imports, no side effects.
+ * Price alerts, pure decision logic, no imports, no side effects.
  * Kept dependency-free so the unit tests (and any future worker) can use it
  * without touching the database or email layers.
  */

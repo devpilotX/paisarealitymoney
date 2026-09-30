@@ -1,10 +1,10 @@
 /**
- * Real Return Checker — the engine behind India's first purpose-built
+ * Real Return Checker, the engine behind India's first purpose-built
  * mis-selling exposer.
  *
  * Agents pitch money-back policies, endowment plans, and "double your money"
  * schemes using totals ("pay 6 lakh, get 14 lakh!"). The only honest measure
- * of such an offer is its internal rate of return (XIRR) — the single annual
+ * of such an offer is its internal rate of return (XIRR), the single annual
  * rate that makes all the cash flows balance. This module computes it exactly
  * and puts it next to boring benchmarks everyone understands (savings, FD,
  * PPF, inflation, index funds).
@@ -72,7 +72,7 @@ export interface RealReturnResult {
   irrPct: number | null;
   totalPaid: number;
   totalReceived: number;
-  /** totalReceived / totalPaid — the number agents quote. */
+  /** totalReceived / totalPaid, the number agents quote. */
   multiple: number;
   horizonYears: number;
   /** Years to double at this return (null when return <= 0). */

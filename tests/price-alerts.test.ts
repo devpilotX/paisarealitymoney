@@ -1,5 +1,5 @@
 /**
- * Price alerts — pure trigger/validation logic tests (no DB, no email).
+ * Price alerts, pure trigger/validation logic tests (no DB, no email).
  * Run: npx ts-node --project tsconfig.scripts.json tests/price-alerts.test.ts
  */
 

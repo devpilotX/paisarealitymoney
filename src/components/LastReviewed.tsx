@@ -10,7 +10,7 @@ interface LastReviewedProps {
 /**
  * "Last reviewed" stamp for YMYL content (guides, calculators, tax pages).
  * Update the date whenever the page's facts are re-verified, not on cosmetic
- * edits — the date is a promise, not a decoration.
+ * edits, the date is a promise, not a decoration.
  */
 export default function LastReviewed({ date, className = '' }: LastReviewedProps): React.ReactElement {
   return (

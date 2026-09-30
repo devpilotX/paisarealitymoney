@@ -4,7 +4,7 @@
  * Small savings rates are notified quarterly by the Ministry of Finance
  * (Department of Economic Affairs); RBI policy rates change at MPC meetings;
  * the EPF rate is declared yearly by the EPFO. Update this file when they
- * change and bump the as-of fields — the page displays them verbatim.
+ * change and bump the as-of fields, the page displays them verbatim.
  *
  * Verified 3 July 2026 against the 30 June 2026 DEA notification (unchanged
  * for the 9th straight quarter), the June 2026 MPC outcome, and the EPFO

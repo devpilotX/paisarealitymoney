@@ -1,5 +1,5 @@
 /**
- * Multi-Loan Debt Repayment Optimizer — test suite (24 cases)
+ * Multi-Loan Debt Repayment Optimizer, test suite (24 cases)
  * Run: npx ts-node --project tsconfig.scripts.json tests/debt-optimizer.test.ts
  */
 

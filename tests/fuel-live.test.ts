@@ -1,5 +1,5 @@
 /**
- * Live fuel feed — parser and sanity-filter tests (no network).
+ * Live fuel feed, parser and sanity-filter tests (no network).
  * Run: npx ts-node --project tsconfig.scripts.json tests/fuel-live.test.ts
  *
  * Fixture rows copy the real CarDekho markup shape observed on 3 Jul 2026.

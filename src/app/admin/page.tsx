@@ -465,7 +465,7 @@ function PricesTab({ onRefresh, actionLog }: { onRefresh: () => Promise<void>; a
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <h3 className="font-semibold text-gray-900 mb-1">Set a price override</h3>
         <p className="text-sm text-gray-500 mb-4">
-          When OMC prices change, enter the new value here — it overrides the baseline instantly, no deploy needed.
+          When OMC prices change, enter the new value here. It replaces the baseline straight away, with no deploy.
           Region is a city slug for fuel (e.g. <code className="bg-gray-100 px-1 rounded">delhi</code>) or a state name for fuel/LPG (e.g. <code className="bg-gray-100 px-1 rounded">Maharashtra</code>).
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 items-end">
@@ -510,7 +510,7 @@ function PricesTab({ onRefresh, actionLog }: { onRefresh: () => Promise<void>; a
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="p-5 pb-0"><h3 className="font-semibold text-gray-900">Active overrides ({overrides.length})</h3></div>
         {overrides.length === 0 ? (
-          <p className="p-5 text-sm text-gray-500">No overrides — the compiled baseline applies everywhere.</p>
+          <p className="p-5 text-sm text-gray-500">No overrides. The built-in baseline applies everywhere.</p>
         ) : (
           <table className="w-full text-sm mt-3">
             <thead className="bg-gray-50 border-b border-gray-200">

@@ -6,7 +6,7 @@ import { SCHEME_CATEGORIES } from '@/lib/constants';
 /**
  * SEO (internal linking): this page is a server component so the full scheme
  * directory renders as crawlable <a href> elements. The interactive finder is
- * unchanged — it is the same client component as before, extracted verbatim
+ * unchanged, it is the same client component as before, extracted verbatim
  * into ./SchemeFinderClient.
  *
  * Revalidate hourly: the scheme list changes rarely, and a static render keeps
@@ -26,7 +26,7 @@ export default async function SchemesPage(): Promise<React.ReactElement> {
   })).filter((group) => group.links.length > 0);
 
   // Schemes whose category is not in SCHEME_CATEGORIES must still be linked,
-  // otherwise they stay orphaned — which is the whole point of this block.
+  // otherwise they stay orphaned, which is the whole point of this block.
   const known = new Set<string>(SCHEME_CATEGORIES.map((c) => c.slug));
   const otherLinks = directory
     .filter((s) => !known.has(s.category))

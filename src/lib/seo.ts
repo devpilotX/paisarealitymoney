@@ -108,7 +108,7 @@ export function buildRecordTitle(name: string, opts: { canApplyOnline?: boolean;
 /**
  * Build a description that fits within DESCRIPTION_LIMIT. Appends a short
  * call to action only when it fits, so the CTA is either fully present or
- * fully absent — never cut in half.
+ * fully absent, never cut in half.
  */
 export function buildRecordDescription(summary: string | null | undefined, fallbackName: string): string {
   const cta = ' Check who qualifies and how to apply.';

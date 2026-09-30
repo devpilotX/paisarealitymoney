@@ -1,5 +1,5 @@
 /**
- * Length-aware metadata builders — pure logic tests (no DB, no network).
+ * Length-aware metadata builders, pure logic tests (no DB, no network).
  * Run: npx ts-node --project tsconfig.scripts.json tests/seo-metadata.test.ts
  *
  * Guards the two limits Google actually enforces: ~60 chars for a title and

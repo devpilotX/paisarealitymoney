@@ -121,7 +121,7 @@ export default function RealReturnClient(): React.ReactElement {
       <div className={`rounded-xl border-2 px-5 py-5 mt-8 ${style.box}`}>
         <div className="flex flex-wrap items-center gap-3 mb-2">
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${style.badge}`}>REAL ANNUAL RETURN</span>
-          <span className="text-3xl font-extrabold text-navy">{a.irrPct !== null ? `${a.irrPct}%` : '—'}</span>
+          <span className="text-3xl font-extrabold text-navy">{a.irrPct !== null ? `${a.irrPct}%` : 'n/a'}</span>
         </div>
         <h2 className="text-lg font-bold text-navy mb-1">{a.verdict.title}</h2>
         <p className="text-sm text-ink">{a.verdict.message}</p>
@@ -138,7 +138,7 @@ export default function RealReturnClient(): React.ReactElement {
             </div>
             <div className="card">
               <p className="text-sm text-muted mb-1">The math says</p>
-              <p className="text-2xl font-bold text-primary">{a.irrPct !== null ? `${a.irrPct}% / year` : '—'}</p>
+              <p className="text-2xl font-bold text-primary">{a.irrPct !== null ? `${a.irrPct}% / year` : 'n/a'}</p>
               <p className="text-xs text-muted-2 mt-1">{a.doublingYears !== null ? `Money doubles every ~${Math.round(a.doublingYears)} years at this rate` : 'This money never doubles'}</p>
             </div>
             <div className="card">
