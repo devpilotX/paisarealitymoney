@@ -26,7 +26,7 @@ export default function MethodologyPage(): React.ReactElement {
         <section>
           <h2 className="heading-2 mb-3">Gold and silver rates</h2>
           <p className="text-body mb-3">
-            Gold and silver prices refresh several times a day, from 6 AM to 7 PM IST, using the live international spot price (via gold-api.com)
+            Gold and silver prices refresh five times a day, between 6 AM and 6:30 PM IST, using the live international spot price (via gold-api.com)
             and the live USD to INR exchange rate (via frankfurter.dev). We convert to Indian landed cost like
             this:
           </p>
