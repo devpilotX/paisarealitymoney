@@ -73,12 +73,14 @@ install -d -m 755 /var/lib/paisareality-backup /var/lib/paisareality-backup/outb
 install -d -m 770 -o 1000 -g 1000 /var/lib/paisareality-backup/requests
 install -m 750 "$SRC/deploy/vps/backup.sh" /usr/local/bin/paisareality-backup
 install -m 750 "$SRC/deploy/vps/watchdog.sh" /usr/local/bin/paisareality-watchdog
+install -m 750 "$SRC/deploy/vps/restore-drill.sh" /usr/local/bin/paisareality-restore-drill
 for u in paisareality-backup.service paisareality-backup.timer paisareality-backup-request.path \
-         paisareality-backup-request.service paisareality-watchdog.service paisareality-watchdog.timer; do
+         paisareality-backup-request.service paisareality-watchdog.service paisareality-watchdog.timer \
+         paisareality-restore-drill.service paisareality-restore-drill.timer; do
   install -m 644 "$SRC/deploy/systemd/$u" /etc/systemd/system/
 done
 systemctl daemon-reload
-systemctl enable --now paisareality-backup.timer paisareality-backup-request.path paisareality-watchdog.timer >/dev/null
+systemctl enable --now paisareality-backup.timer paisareality-backup-request.path paisareality-watchdog.timer paisareality-restore-drill.timer >/dev/null
 rm -f /etc/cron.d/paisareality   # replaced by the timer above
 cat > /etc/logrotate.d/paisareality <<'ROT'
 /var/log/paisareality/*.log {

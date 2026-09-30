@@ -40,7 +40,7 @@ N8N_PROTOCOL=https
 N8N_PORT=5678
 N8N_LISTEN_ADDRESS=127.0.0.1
 N8N_EDITOR_BASE_URL=https://n8n.paisareality.com/
-WEBHOOK_URL=https://n8n.paisareality.com/
+N8N_WEBHOOK_URL=https://n8n.paisareality.com/
 N8N_PROXY_HOPS=1
 N8N_SECURE_COOKIE=true
 GENERIC_TIMEZONE=Asia/Kolkata
@@ -48,7 +48,7 @@ TZ=Asia/Kolkata
 N8N_DIAGNOSTICS_ENABLED=false
 N8N_PERSONALIZATION_ENABLED=false
 N8N_HIRING_BANNER_ENABLED=false
-N8N_RUNNERS_ENABLED=true
+N8N_RUNNERS_TASK_TIMEOUT=300
 N8N_BLOCK_ENV_ACCESS_IN_NODE=true
 N8N_RESTRICT_FILE_ACCESS_TO=/home/node/.n8n-files
 EXECUTIONS_DATA_PRUNE=true
@@ -126,7 +126,8 @@ curl -fsS -m 3 -o /dev/null http://127.0.0.1:5678/healthz || { docker logs --tai
 for i in $(seq 1 60); do curl -fsS -m 3 -o /dev/null http://127.0.0.1:5678/rest/settings && break; sleep 3; done
 
 # --- owner account ---------------------------------------------------------------
-if curl -fsS http://127.0.0.1:5678/rest/settings | jq -e '.data.userManagement.showSetupOnFirstLoad == true' >/dev/null; then
+# n8n starts with a placeholder owner that has no email; setting it up claims the instance.
+if sudo -u postgres psql -d n8n -qtAc 'SELECT 1 FROM "user" WHERE "roleSlug" = '"'global:owner'"' AND email IS NULL' | grep -q 1; then
   : "${N8N_OWNER_EMAIL:?set N8N_OWNER_EMAIL for the first run}" "${N8N_OWNER_PASSWORD:?set N8N_OWNER_PASSWORD for the first run}"
   jq -n --arg e "$N8N_OWNER_EMAIL" --arg p "$N8N_OWNER_PASSWORD" \
      '{email:$e, firstName:"Dipanshu", lastName:"Kumar", password:$p}' \

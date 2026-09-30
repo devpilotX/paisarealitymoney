@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly restore drill of the newest backup
+After=postgresql.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/paisareality-restore-drill --notify
+Nice=15
+StandardOutput=append:/var/log/paisareality/drill.log
+StandardError=append:/var/log/paisareality/drill.log
