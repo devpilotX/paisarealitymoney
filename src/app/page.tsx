@@ -11,7 +11,7 @@ import HeroCarousel, { type HeroSlide } from '@/components/HeroCarousel';
 export const metadata: Metadata = {
   title: 'Paisa Reality: Live Prices, Government Schemes & Money Tools',
   description:
-    'Daily gold, silver and fuel prices for 50 cities, government schemes, scholarships and startup grants you can check, and calculators that show the real maths.',
+    'Daily gold, silver and fuel prices for 50 cities, plus the government schemes, scholarships and startup grants you may qualify for, and honest calculators.',
   alternates: {
     canonical: 'https://paisareality.com',
     languages: { 'en-IN': 'https://paisareality.com', 'x-default': 'https://paisareality.com' },

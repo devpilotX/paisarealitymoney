@@ -22,63 +22,63 @@ interface SmartTool {
 const SMART_TOOLS: SmartTool[] = [
   {
     title: 'Real Return Checker',
-    description: '"Pay 50,000 a year, get 14 lakh!" But what does it ACTUALLY pay? Type in any policy or scheme pitch and see its true annual return vs FD, PPF, and inflation.',
+    description: '"Pay 50,000 a year, get 14 lakh." Type in any policy or savings pitch as it was sold to you and see the yearly return it really gives, next to FD, PPF and inflation.',
     href: '/calculators/real-return',
-    tag: 'Mis-selling shield',
+    tag: 'Insurance plans',
   },
   {
     title: 'Retirement Corpus and Withdrawal Optimizer',
-    description: 'How much corpus do you need to retire? What SIP gets you there? What is a safe withdrawal rate? Uses Monte Carlo simulation with 10,000 paths.',
+    description: 'How much you need to retire, the monthly SIP that gets you there, and how much you can safely withdraw each year. Tested against 10,000 possible market paths.',
     href: '/calculators/retirement-optimizer',
-    tag: 'Monte Carlo',
+    tag: 'Retirement',
   },
   {
     title: 'Home Loan Prepay vs Invest',
-    description: 'Should you prepay your home loan or invest the extra money? Gets you a risk-adjusted, after-tax answer with the probability of each path winning.',
+    description: 'Extra money each month: pay down the home loan or invest it? The answer after tax, with how often each choice comes out ahead.',
     href: '/calculators/prepay-vs-invest',
-    tag: 'Risk-adjusted',
+    tag: 'Home loans',
   },
   {
     title: 'Multi-Loan Debt Repayment Optimizer',
-    description: 'Got multiple loans? This finds the cheapest and fastest order to pay them off. Compares Avalanche vs Snowball, with tax awareness.',
+    description: 'Several loans at once? See which to clear first to pay the least interest, or to be debt-free soonest, including the tax benefit on home and education loans.',
     href: '/calculators/debt-optimizer',
-    tag: 'Tax-aware',
+    tag: 'Loans',
   },
   {
     title: 'Multi-Year Tax Regime Optimizer',
-    description: 'Old regime or new regime? This checks both across your entire career. Shows your crossover year and the best deduction mix each year.',
+    description: 'Old or new tax regime, worked out year by year as your salary and deductions change, so you see when switching makes sense.',
     href: '/calculators/lifecycle-tax-optimizer',
-    tag: 'Multi-year',
+    tag: 'Income tax',
   },
   {
     title: 'Smart Budget and Cash Flow Optimizer',
-    description: 'Goes beyond 50/30/20. Finds your real surplus, flags overspending, and checks if your savings goals are on track.',
+    description: 'Put in what comes in and goes out each month. See what is left, where spending runs high, and whether your savings goals are on track.',
     href: '/calculators/budget-optimizer',
-    tag: 'Adaptive',
+    tag: 'Monthly budget',
   },
   {
     title: 'Tax-Loss and Gain Harvesting Optimizer',
-    description: 'Which holdings should you sell before year-end to cut capital gains tax? Uses the 1.25 lakh LTCG exemption to save you money legally.',
+    description: 'Which shares or funds to sell before 31 March to use the Rs 1.25 lakh yearly exemption on long-term gains, and which losses to book against gains.',
     href: '/calculators/tax-harvesting',
-    tag: 'Capital gains',
+    tag: 'Shares and funds',
   },
   {
     title: 'Gold Allocation and Cost-Averaging Planner',
-    description: 'Gold historical returns, risk, and diversification benefit. SIP vs lump-sum comparison and tax on different gold instruments. Educational, not advice.',
+    description: 'How gold has done over the years, what a monthly or one-time purchase would have grown to, and how gold ETFs, bonds, coins and digital gold are taxed.',
     href: '/calculators/gold-planner',
-    tag: 'Educational',
+    tag: 'Gold',
   },
   {
     title: 'Government Scheme Benefit Maximizer',
     description: 'Total rupee benefit of every central scheme you qualify for. Overlapping schemes are counted once, with steps to claim each one.',
     href: '/calculators/scheme-maximizer',
-    tag: 'Quantified',
+    tag: 'Schemes',
   },
   {
     title: 'Salary Structure Optimizer',
-    description: 'The optimal CTC breakup to legally minimize your income tax. Compares old and new regime and shows exactly which components to change.',
+    description: 'See which salary components to ask for, such as NPS, meal cards or phone reimbursement, to lower your tax under the old and the new regime.',
     href: '/calculators/salary-optimizer',
-    tag: 'Tax saver',
+    tag: 'Salary',
   },
 ];
 
@@ -112,7 +112,7 @@ export default function SmartToolsPage(): React.ReactElement {
 
       <h1 className="heading-1 mb-2">Smart Tools</h1>
       <p className="text-body mb-8 max-w-2xl">
-        These go beyond basic calculators. Paisa Reality Smart Tools simulate thousands of scenarios so you can plan your retirement, debt, tax, and investments with real confidence. Free and private.
+        For the bigger decisions: retirement, loans, tax and investing. Each tool works through your own numbers and shows the reasoning, not just an answer. Everything runs in your browser, so nothing you type is stored.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">

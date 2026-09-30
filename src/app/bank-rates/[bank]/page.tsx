@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         ' 2026',
         '',
       ]),
-      description: `Check ${bank.name} FD rates, savings account rate, home loan rate, and personal loan rate. All rates updated regularly.`,
+      description: `Check ${bank.name} FD rates, savings account rate, home loan rate, and personal loan rate. Each rate shows the date it was checked.`,
       path: `/bank-rates/${bank.slug}`,
       keywords: [`${bank.name.toLowerCase()} fd rates`, `${bank.name.toLowerCase()} interest rates`, `${bank.name.toLowerCase()} home loan rate`],
     });

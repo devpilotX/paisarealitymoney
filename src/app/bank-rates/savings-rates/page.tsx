@@ -13,7 +13,7 @@ import RatesAsOf from '@/components/RatesAsOf';
 
 export const metadata = pageMetadata({
   title: 'Savings Account Interest Rates: Compare All Banks',
-  description: 'Compare savings account interest rates across 50+ Indian banks. Find which bank gives the highest savings rate.',
+  description: 'Compare savings account interest rates across 51 Indian banks. Find which bank gives the highest savings rate.',
   path: '/bank-rates/savings-rates',
   keywords: ['savings account interest rates', 'best savings account rate', 'highest savings rate india'],
 });

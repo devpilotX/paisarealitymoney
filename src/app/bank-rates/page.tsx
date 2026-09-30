@@ -11,7 +11,7 @@ import InArticleAd from '@/components/InArticleAd';
 
 export const metadata = pageMetadata({
   title: 'Bank Rates in India: Compare FD, Savings, Loan Rates',
-  description: 'Compare FD rates, savings account rates, home loan rates, and personal loan rates across 50+ Indian banks. Updated regularly.',
+  description: 'Compare FD rates, savings account rates, home loan rates, and personal loan rates across 51 Indian banks, each dated.',
   path: '/bank-rates',
   keywords: ['bank interest rates india', 'compare bank rates', 'fd savings loan rates', 'best bank rates india'],
 });
@@ -54,7 +54,7 @@ export default async function BankRatesPage(): Promise<React.ReactElement> {
     <div className="container-main py-6">
       <Breadcrumb items={[{ label: 'Bank Rates' }]} />
       <h1 className="heading-1 mb-3">Bank Rates in India</h1>
-      <p className="text-body mb-6">Compare rates across 50+ banks side by side so you pick the best deal. FD, savings, home loan, and personal loan rates updated regularly.</p>
+      <p className="text-body mb-6">FD, savings, home loan and personal loan rates for 51 banks side by side. Each rate shows the date we took it from the bank's own site; banks change rates often, so confirm with the bank before you book.</p>
 
       <AdBanner format="horizontal" />
 

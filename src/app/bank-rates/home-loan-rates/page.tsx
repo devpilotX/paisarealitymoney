@@ -13,7 +13,7 @@ import RatesAsOf from '@/components/RatesAsOf';
 
 export const metadata = pageMetadata({
   title: 'Home Loan Interest Rates: Compare All Banks 2026',
-  description: 'Compare home loan interest rates across 50+ banks. Find the lowest home loan rate. Updated regularly.',
+  description: 'Compare home loan interest rates across 51 banks. Find the lowest starting rate, with the date each was checked.',
   path: '/bank-rates/home-loan-rates',
   keywords: ['home loan interest rates', 'lowest home loan rate', 'home loan rates india 2026'],
 });
@@ -39,7 +39,7 @@ export default async function HomeLoanRatesPage(): Promise<React.ReactElement> {
   const tableRates = rates.map((r) => ({ bankName: r.bank_name, bankSlug: r.bank_slug, bankType: r.bank_type, tenure: r.tenure ?? 'Up to 30 years', generalRate: r.general_rate, seniorCitizenRate: r.senior_citizen_rate }));
   const otherLinks = [{ href: '/bank-rates/fd-rates', label: 'FD Rates' }, { href: '/bank-rates/personal-loan-rates', label: 'Personal Loan Rates' }, { href: '/calculators/home-loan', label: 'Home Loan Calculator' }, { href: '/calculators/emi', label: 'EMI Calculator' }];
 
-  const ldSchema = financialProductSchema({ name: 'Home Loan Interest Rates in India', description: 'Compare home loan interest rates across 50+ Indian banks and lenders.', path: '/bank-rates/home-loan-rates', category: 'MortgageLoan' });
+  const ldSchema = financialProductSchema({ name: 'Home Loan Interest Rates in India', description: 'Compare home loan interest rates across 51 Indian banks and lenders.', path: '/bank-rates/home-loan-rates', category: 'MortgageLoan' });
   return (
     <div className="container-main py-6">
       <script id="homeloanrates-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldSchema) }} />
