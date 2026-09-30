@@ -2,32 +2,66 @@
   "id": "paisaDailyReport",
   "name": "Bot: daily report and Telegram commands",
   "active": false,
-  "settings": { "executionOrder": "v1", "timezone": "Asia/Kolkata", "errorWorkflow": "paisaErrorAlert1", "saveDataSuccessExecution": "all", "saveDataErrorExecution": "all" },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "errorWorkflow": "paisaErrorAlert1",
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
   "nodes": [
     {
       "id": "b4a0c004-0000-4000-8000-000000000001",
       "name": "Every morning at 9",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [0, 0],
-      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "0 9 * * *" }] } }
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-000000000002",
       "name": "Message to the bot",
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
-      "position": [0, 320],
+      "position": [
+        0,
+        320
+      ],
       "webhookId": "8a3e5b2c-1d4f-4e6a-9b7c-2f0d1e3c4b52",
-      "parameters": { "updates": ["message"], "additionalFields": {} },
-      "credentials": { "telegramApi": { "id": "paisaTelegramBot", "name": "Telegram: Paisareality_bot" } }
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "paisaTelegramBot",
+          "name": "Telegram: Paisareality_bot"
+        }
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-000000000003",
       "name": "Owner only, read command",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [220, 320],
+      "position": [
+        220,
+        320
+      ],
       "parameters": {
         "jsCode": "// Messages from anyone except the owner's chat are dropped without a reply.\nconst m = $json.message;\nif (!m || String(m.chat?.id) !== '__CHAT_ID__') return [];\nconst cmd = String(m.text || '').trim().split(/\\s+/)[0].split('@')[0].toLowerCase();\nreturn [{ json: { cmd } }];"
       }
@@ -37,39 +71,69 @@
       "name": "Is /backup",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [440, 160],
-      "parameters": { "jsCode": "return $input.all().filter((i) => i.json.cmd === '/backup').map((i) => ({ json: { requestedAt: new Date().toISOString() } }));" }
+      "position": [
+        440,
+        160
+      ],
+      "parameters": {
+        "jsCode": "return $input.all().filter((i) => i.json.cmd === '/backup').map((i) => ({ json: { requestedAt: new Date().toISOString() } }));"
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-000000000005",
       "name": "Make request file",
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
-      "position": [660, 160],
-      "parameters": { "operation": "toText", "sourceProperty": "requestedAt", "options": { "fileName": "backup-now" } }
+      "position": [
+        660,
+        160
+      ],
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "requestedAt",
+        "options": {
+          "fileName": "backup-now"
+        }
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-000000000006",
       "name": "Ask server for a backup",
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
-      "position": [880, 160],
-      "parameters": { "operation": "write", "fileName": "/home/node/.n8n-files/requests/backup-now", "dataPropertyName": "data", "options": {} }
+      "position": [
+        880,
+        160
+      ],
+      "parameters": {
+        "operation": "write",
+        "fileName": "/home/node/.n8n-files/requests/backup-now",
+        "dataPropertyName": "data",
+        "options": {}
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-000000000007",
       "name": "Backup reply",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1100, 160],
-      "parameters": { "jsCode": "return [{ json: { text: 'Backup started. The encrypted file and the Drive link arrive here in about a minute.' } }];" }
+      "position": [
+        1100,
+        160
+      ],
+      "parameters": {
+        "jsCode": "return [{ json: { text: 'Backup started. The encrypted file and the Drive link arrive here in about a minute.' } }];"
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-000000000008",
       "name": "Is /help or unknown",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [440, 480],
+      "position": [
+        440,
+        480
+      ],
       "parameters": {
         "jsCode": "const known = ['/backup', '/status', '/report'];\nreturn $input.all().filter((i) => !known.includes(i.json.cmd)).map(() => ({ json: { text: [\n  'Paisa Reality bot. Commands:',\n  '/status  site health, last backup, price freshness and today\\'s numbers',\n  '/backup  make a full backup now and send it here and to Google Drive',\n  '/help    this list',\n  '',\n  'You also get: site-down and recovery alerts, a report every morning at 9, new contact messages and sign-ups, and an alert if any automation fails.',\n].join('\\n') } }));"
       }
@@ -79,54 +143,93 @@
       "name": "Is /status",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [440, 320],
-      "parameters": { "jsCode": "return $input.all().filter((i) => i.json.cmd === '/status' || i.json.cmd === '/report');" }
+      "position": [
+        440,
+        320
+      ],
+      "parameters": {
+        "jsCode": "return $input.all().filter((i) => i.json.cmd === '/status' || i.json.cmd === '/report');"
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-00000000000a",
       "name": "Site numbers",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
-      "position": [660, 0],
+      "position": [
+        660,
+        0
+      ],
       "parameters": {
         "operation": "executeQuery",
         "query": "SELECT\n  (SELECT count(*) FROM users)::int AS users,\n  (SELECT count(*) FROM users WHERE created_at > now() - interval '24 hours')::int AS users_24h,\n  (SELECT count(*) FROM subscribers WHERE status = 'active')::int AS subscribers,\n  (SELECT count(*) FROM subscribers WHERE created_at > now() - interval '24 hours')::int AS subscribers_24h,\n  (SELECT count(*) FROM price_alerts WHERE active)::int AS active_alerts,\n  (SELECT count(*) FROM contact_messages WHERE created_at > now() - interval '24 hours')::int AS messages_24h,\n  (SELECT count(*) FROM contact_messages WHERE NOT is_read)::int AS messages_unread,\n  (SELECT count(*) FROM blog_posts WHERE is_published)::int AS articles,\n  (SELECT count(*) FROM schemes WHERE is_active)::int AS schemes,\n  (SELECT max(created_at) FROM gold_prices) AS gold_written_at,\n  (SELECT max(price_date) FROM gold_prices)::text AS gold_date,\n  (SELECT min(data_as_of) FROM fuel_prices WHERE price_date = (SELECT max(price_date) FROM fuel_prices))::text AS fuel_as_of,\n  (SELECT min(data_as_of) FROM lpg_prices WHERE price_date = (SELECT max(price_date) FROM lpg_prices))::text AS lpg_as_of",
         "options": {}
       },
-      "credentials": { "postgres": { "id": "paisaPostgresRO1", "name": "Postgres: paisareality (read-only)" } }
+      "credentials": {
+        "postgres": {
+          "id": "paisaPostgresRO1",
+          "name": "Postgres: paisareality (read-only)"
+        }
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-00000000000b",
       "name": "Last backup status",
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
-      "position": [880, 0],
+      "position": [
+        880,
+        0
+      ],
       "onError": "continueRegularOutput",
       "alwaysOutputData": true,
-      "parameters": { "operation": "read", "fileSelector": "/home/node/.n8n-files/backups/status.json", "options": {} }
+      "parameters": {
+        "operation": "read",
+        "fileSelector": "/home/node/.n8n-files/backups/status.json",
+        "options": {}
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-00000000000c",
       "name": "Parse backup status",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
-      "position": [1100, 0],
+      "position": [
+        1100,
+        0
+      ],
       "onError": "continueRegularOutput",
       "alwaysOutputData": true,
-      "parameters": { "operation": "fromJson", "binaryPropertyName": "data", "options": {} }
+      "parameters": {
+        "operation": "fromJson",
+        "binaryPropertyName": "data",
+        "options": {}
+      }
     },
     {
       "id": "b4a0c004-0000-4000-8000-00000000000d",
       "name": "Site check",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1320, 0],
+      "position": [
+        1320,
+        0
+      ],
       "onError": "continueRegularOutput",
       "alwaysOutputData": true,
       "parameters": {
         "method": "GET",
         "url": "https://paisareality.com/api/prices/national",
-        "options": { "timeout": 20000, "response": { "response": { "fullResponse": true, "neverError": true, "responseFormat": "text" } } }
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          }
+        }
       }
     },
     {
@@ -134,7 +237,10 @@
       "name": "Compose report",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1540, 0],
+      "position": [
+        1540,
+        0
+      ],
       "parameters": {
         "jsCode": "const n = $('Site numbers').first().json;\nconst st = $('Parse backup status').first().json?.data || null;\nconst site = $('Site check').first().json || {};\nconst tz = 'Asia/Kolkata';\nconst today = new Date().toLocaleDateString('en-CA', { timeZone: tz });\nconst daysOld = (d) => d ? Math.floor((Date.parse(today) - Date.parse(String(d).slice(0, 10))) / 86400000) : null;\nconst fmt = (d, o) => new Date(d).toLocaleString('en-IN', { timeZone: tz, ...o });\nconst problems = [];\n\nconst code = Number(site.statusCode) || 0;\nconst siteLine = code === 200 ? 'up' : 'NOT OK (' + (code ? 'HTTP ' + code : (site.error?.message || 'no response')) + ')';\nif (code !== 200) problems.push('Website check failed');\n\nlet backupLine = 'none found';\nif (st && st.ok) {\n  const h = Math.round((Date.now() - Date.parse(st.created_at)) / 3600000);\n  backupLine = h + ' h ago, ' + (st.size / 1048576).toFixed(2) + ' MB';\n  if (h >= 8) problems.push('Last backup is ' + h + ' hours old');\n} else problems.push('No successful backup recorded');\n\nconst gAge = daysOld(n.gold_date);\nif (gAge === null || gAge > 0) problems.push('Gold and silver prices were not updated today');\nconst fAge = daysOld(n.fuel_as_of);\nif (fAge !== null && fAge > 14) problems.push('Fuel data is ' + fAge + ' days old (update src/lib/fuel-data.ts or add an admin override)');\nconst lAge = daysOld(n.lpg_as_of);\nif (lAge !== null && lAge > 40) problems.push('LPG data is ' + lAge + ' days old');\n\nconst head = problems.length ? 'NEEDS ATTENTION:\\n- ' + problems.join('\\n- ') : 'Everything looks fine.';\nconst lines = [\n  'Paisa Reality report, ' + fmt(Date.now(), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' IST',\n  '',\n  head,\n  '',\n  'Website: ' + siteLine,\n  'Last backup: ' + backupLine,\n  'Gold and silver: ' + (n.gold_written_at ? 'updated ' + fmt(n.gold_written_at, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'no data'),\n  'Fuel verified: ' + (n.fuel_as_of || 'no data') + ', LPG verified: ' + (n.lpg_as_of || 'no data'),\n  '',\n  'Users: ' + n.users + ' (+' + n.users_24h + ' in 24 h)',\n  'Newsletter subscribers: ' + n.subscribers + ' (+' + n.subscribers_24h + ' in 24 h)',\n  'Active price alerts: ' + n.active_alerts,\n  'Contact messages: ' + n.messages_24h + ' in 24 h, ' + n.messages_unread + ' unread',\n  'Articles published: ' + n.articles + ', schemes live: ' + n.schemes,\n];\nreturn [{ json: { text: lines.join('\\n') } }];"
       }
@@ -144,37 +250,195 @@
       "name": "Send to Telegram",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [1760, 160],
+      "position": [
+        1760,
+        160
+      ],
       "parameters": {
         "chatId": "__CHAT_ID__",
-        "text": "={{ $json.text }}",
-        "additionalFields": { "appendAttribution": false, "disable_web_page_preview": true }
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        }
       },
-      "credentials": { "telegramApi": { "id": "paisaTelegramBot", "name": "Telegram: Paisareality_bot" } },
+      "credentials": {
+        "telegramApi": {
+          "id": "paisaTelegramBot",
+          "name": "Telegram: Paisareality_bot"
+        }
+      },
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 5000
     }
   ],
   "connections": {
-    "Every morning at 9": { "main": [[{ "node": "Site numbers", "type": "main", "index": 0 }]] },
-    "Message to the bot": { "main": [[{ "node": "Owner only, read command", "type": "main", "index": 0 }]] },
-    "Owner only, read command": { "main": [[
-      { "node": "Is /backup", "type": "main", "index": 0 },
-      { "node": "Is /status", "type": "main", "index": 0 },
-      { "node": "Is /help or unknown", "type": "main", "index": 0 }
-    ]] },
-    "Is /backup": { "main": [[{ "node": "Make request file", "type": "main", "index": 0 }]] },
-    "Make request file": { "main": [[{ "node": "Ask server for a backup", "type": "main", "index": 0 }]] },
-    "Ask server for a backup": { "main": [[{ "node": "Backup reply", "type": "main", "index": 0 }]] },
-    "Backup reply": { "main": [[{ "node": "Send to Telegram", "type": "main", "index": 0 }]] },
-    "Is /status": { "main": [[{ "node": "Site numbers", "type": "main", "index": 0 }]] },
-    "Is /help or unknown": { "main": [[{ "node": "Send to Telegram", "type": "main", "index": 0 }]] },
-    "Site numbers": { "main": [[{ "node": "Last backup status", "type": "main", "index": 0 }]] },
-    "Last backup status": { "main": [[{ "node": "Parse backup status", "type": "main", "index": 0 }]] },
-    "Parse backup status": { "main": [[{ "node": "Site check", "type": "main", "index": 0 }]] },
-    "Site check": { "main": [[{ "node": "Compose report", "type": "main", "index": 0 }]] },
-    "Compose report": { "main": [[{ "node": "Send to Telegram", "type": "main", "index": 0 }]] }
+    "Every morning at 9": {
+      "main": [
+        [
+          {
+            "node": "Site numbers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message to the bot": {
+      "main": [
+        [
+          {
+            "node": "Owner only, read command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Owner only, read command": {
+      "main": [
+        [
+          {
+            "node": "Is /backup",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is /status",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is /help or unknown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is /backup": {
+      "main": [
+        [
+          {
+            "node": "Make request file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Make request file": {
+      "main": [
+        [
+          {
+            "node": "Ask server for a backup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask server for a backup": {
+      "main": [
+        [
+          {
+            "node": "Backup reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backup reply": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is /status": {
+      "main": [
+        [
+          {
+            "node": "Site numbers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is /help or unknown": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Site numbers": {
+      "main": [
+        [
+          {
+            "node": "Last backup status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Last backup status": {
+      "main": [
+        [
+          {
+            "node": "Parse backup status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse backup status": {
+      "main": [
+        [
+          {
+            "node": "Site check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Site check": {
+      "main": [
+        [
+          {
+            "node": "Compose report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose report": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
   "pinData": {}
 }

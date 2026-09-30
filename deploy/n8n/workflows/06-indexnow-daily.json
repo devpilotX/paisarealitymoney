@@ -2,26 +2,54 @@
   "id": "paisaIndexNowDay",
   "name": "SEO: submit today's changed pages to IndexNow",
   "active": false,
-  "settings": { "executionOrder": "v1", "timezone": "Asia/Kolkata", "errorWorkflow": "paisaErrorAlert1", "saveDataSuccessExecution": "all", "saveDataErrorExecution": "all" },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "errorWorkflow": "paisaErrorAlert1",
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
   "nodes": [
     {
       "id": "b6a0c006-0000-4000-8000-000000000001",
       "name": "Daily at 7:05",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [0, 0],
-      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "5 7 * * *" }] } }
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "5 7 * * *"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "b6a0c006-0000-4000-8000-000000000002",
       "name": "Fetch sitemap",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [220, 0],
+      "position": [
+        220,
+        0
+      ],
       "parameters": {
         "method": "GET",
         "url": "https://paisareality.com/sitemap.xml",
-        "options": { "timeout": 30000, "response": { "response": { "responseFormat": "text" } } }
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
       },
       "retryOnFail": true,
       "maxTries": 3,
@@ -32,7 +60,10 @@
       "name": "Pages changed today",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [440, 0],
+      "position": [
+        440,
+        0
+      ],
       "parameters": {
         "jsCode": "// Price pages refresh every morning, so this sends Bing (and ChatGPT search, which uses its index)\n// the fresh versions the same day instead of waiting for a recrawl.\nconst xml = String($json.data || '');\nconst today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });\nconst urls = [...xml.matchAll(/<loc>([^<]+)<\\/loc>\\s*<lastmod>([^<]+)<\\/lastmod>/g)]\n  .filter((m) => m[2].startsWith(today))\n  .map((m) => m[1]);\nif (urls.length === 0) return [];\nreturn [{ json: { count: urls.length, body: { host: 'paisareality.com', key: '8810a952e5b341dfd230c20bb6dc9f03', keyLocation: 'https://paisareality.com/8810a952e5b341dfd230c20bb6dc9f03.txt', urlList: urls.slice(0, 10000) } } }];"
       }
@@ -42,14 +73,25 @@
       "name": "Submit to IndexNow",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [660, 0],
+      "position": [
+        660,
+        0
+      ],
       "parameters": {
         "method": "POST",
         "url": "https://api.indexnow.org/indexnow",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ JSON.stringify($json.body) }}",
-        "options": { "timeout": 30000, "response": { "response": { "fullResponse": true, "responseFormat": "text" } } }
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "text"
+            }
+          }
+        }
       },
       "retryOnFail": true,
       "maxTries": 3,
@@ -57,9 +99,39 @@
     }
   ],
   "connections": {
-    "Daily at 7:05": { "main": [[{ "node": "Fetch sitemap", "type": "main", "index": 0 }]] },
-    "Fetch sitemap": { "main": [[{ "node": "Pages changed today", "type": "main", "index": 0 }]] },
-    "Pages changed today": { "main": [[{ "node": "Submit to IndexNow", "type": "main", "index": 0 }]] }
+    "Daily at 7:05": {
+      "main": [
+        [
+          {
+            "node": "Fetch sitemap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch sitemap": {
+      "main": [
+        [
+          {
+            "node": "Pages changed today",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pages changed today": {
+      "main": [
+        [
+          {
+            "node": "Submit to IndexNow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
   "pinData": {}
 }
