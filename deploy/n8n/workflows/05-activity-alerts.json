@@ -2,7 +2,7 @@
   "id": "paisaContactMsgs",
   "name": "Alerts: new contact messages and sign-ups",
   "active": false,
-  "settings": { "executionOrder": "v1", "timezone": "Asia/Kolkata", "errorWorkflow": "paisaErrorAlert1", "saveDataSuccessExecution": "none", "saveDataErrorExecution": "all" },
+  "settings": { "executionOrder": "v1", "timezone": "Asia/Kolkata", "errorWorkflow": "paisaErrorAlert1", "saveDataSuccessExecution": "all", "saveDataErrorExecution": "all" },
   "nodes": [
     {
       "id": "b5a0c005-0000-4000-8000-000000000001",

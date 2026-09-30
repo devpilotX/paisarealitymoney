@@ -192,7 +192,7 @@ same box. The server is set up once with `deploy/vps/bootstrap.sh` and
 | nginx | `deploy/nginx/`, installed to `/etc/nginx/` |
 | TLS | Let's Encrypt for all three hostnames, renewed by `certbot.timer` |
 | Price updates | `paisareality-prices.timer`, 06:15, 09:15, 12:15, 15:15, 18:15 IST; log in `/var/log/paisareality/cron.log` |
-| Database backups | nightly 02:30 to `/var/backups/paisareality/`, 14 days kept |
+| Backups | every 6 hours, encrypted, to Google Drive and Telegram (see below) |
 
 To ship a commit from your PC:
 
@@ -223,9 +223,44 @@ and banks. Real prices arrive with the first run of the price timer. Scheme and
 scholarship pages are statically generated, so a `meta_title` change in the database
 shows up after the next deploy.
 
-The backups sit on the same disk as the database, which protects against mistakes
-but not against losing the server. Copy `/var/backups/paisareality` somewhere else
-on a schedule.
+See Backups and disaster recovery below.
+## Backups and disaster recovery
+
+Everything needed to carry on from a brand-new VPS goes into one encrypted file:
+the site database (users, articles, schemes, prices, alerts, ads, email templates),
+n8n's database (workflows and credentials), PostgreSQL roles, `/etc/paisareality`,
+`/etc/n8n` with the n8n encryption key, the Let's Encrypt certificates, and the exact
+source of the live release. It is AES-256 encrypted with the passphrase in
+`/etc/paisareality/backup.key`, which is pinned in the Telegram bot chat and is not
+inside the backups.
+
+| What | When | Where it goes |
+|------|------|---------------|
+| Full backup (`deploy/vps/backup.sh`) | 02:30, 08:30, 14:30, 20:30 IST, and on `/backup` in Telegram | Google Drive folder "Paisa Reality Backups" (30 days kept), last 14 on the server; the 02:30 and manual ones also go to Telegram |
+| Restore drill (`deploy/vps/restore-drill.sh`) | Sundays 04:00 | Restores the newest backup into throwaway databases, compares row counts, reports to Telegram |
+| Watchdog (`deploy/vps/watchdog.sh`) | every 5 minutes | Telegram, when site, n8n, disk, memory or backup age goes wrong, and when it recovers |
+
+If n8n is down when a backup finishes, the server sends the file to Telegram itself.
+
+To rebuild on a new server, point the DNS records at it, copy the newest backup file
+over, and follow the three lines at the top of `deploy/vps/restore.sh`. It installs
+everything, restores both databases and the settings, rebuilds the release and starts n8n.
+
+## n8n
+
+`https://n8n.paisareality.com`, set up by `deploy/vps/setup-n8n.sh`. It runs in Docker
+on 127.0.0.1:5678 with its data in the local PostgreSQL. Workflows live in
+`deploy/n8n/workflows/` and are imported only if missing, so edits made in the editor
+are kept.
+
+| Workflow | Does |
+|----------|------|
+| Alerts: workflow failure to Telegram | error workflow for all the others |
+| Backup: upload to Google Drive and Telegram | receives each backup from the server, uploads it, prunes Drive after 30 days |
+| Monitor: website uptime every 5 minutes | alerts after two failed checks in a row, hourly while down, and on recovery |
+| Bot: daily report and Telegram commands | report at 09:00; `/status`, `/backup`, `/help` from the owner's chat only |
+| Alerts: new contact messages and sign-ups | every 10 minutes |
+| SEO: submit today's changed pages to IndexNow | 07:05 daily |
 ## Disclaimer
 
 Paisa Reality is an informational website, not a financial advisor. Verify details with official sources before making any financial decision.

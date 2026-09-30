@@ -2,7 +2,7 @@
   "id": "paisaUptimeCheck",
   "name": "Monitor: website uptime every 5 minutes",
   "active": false,
-  "settings": { "executionOrder": "v1", "timezone": "Asia/Kolkata", "errorWorkflow": "paisaErrorAlert1", "saveDataSuccessExecution": "none", "saveDataErrorExecution": "all" },
+  "settings": { "executionOrder": "v1", "timezone": "Asia/Kolkata", "errorWorkflow": "paisaErrorAlert1", "saveDataSuccessExecution": "all", "saveDataErrorExecution": "all" },
   "nodes": [
     {
       "id": "b3a0c003-0000-4000-8000-000000000001",
