@@ -39,15 +39,18 @@ export default function RateTicker(): React.ReactElement {
 
   useEffect(() => {
     let alive = true;
-    fetch('/api/ticker')
+    // Prices change up to five times a day; refetch every 10 minutes while the tab is open.
+    const load = (): void => { fetch('/api/ticker', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { items?: TickerItem[]; asOf?: string | null } | null) => {
         if (!alive || !d) return;
         setItems(d.items ?? []);
         setAsOf(d.asOf ?? null);
       })
-      .catch(() => setItems([]));
-    return () => { alive = false; };
+      .catch(() => setItems((prev) => prev ?? [])); };
+    load();
+    const t = setInterval(load, 10 * 60 * 1000);
+    return () => { alive = false; clearInterval(t); };
   }, []);
 
   const date = asOf

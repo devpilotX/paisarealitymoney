@@ -196,7 +196,8 @@ export default function Header(): React.ReactElement {
 
   return (
     <header className="sticky top-0 z-50">
-      <RateTicker />
+      {/* The homepage shows these rates in full just below, so the strip would only repeat them. */}
+      {pathname !== '/' && <RateTicker />}
       <div className={`bg-white/95 backdrop-blur border-b transition-shadow duration-200 ${scrolled ? 'border-line shadow-card' : 'border-line'}`}>
         <div className="container-main flex items-center justify-between h-16 gap-6">
           <Link href="/" className="flex items-center no-underline shrink-0" aria-label="Paisa Reality, home">

@@ -2,7 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import FAQ from '@/components/FAQ';
 import AdSlot from '@/components/AdSlot';
-import { getFeaturedSchemes, getHomeCounts, getHomeRates, type HomeRate } from '@/lib/home-data';
+import CommodityIcon from '@/components/CommodityIcon';
+import { getFeaturedSchemes, getHomeCounts, getHomeRates, getSchemeCategoryCounts, getTopScholarships, nextUpdateLabel, type HomeRate } from '@/lib/home-data';
+import { getGrants, formatAmount, FUNDING_LABEL } from '@/lib/grants';
+import HeroCarousel, { type HeroSlide } from '@/components/HeroCarousel';
 
 export const metadata: Metadata = {
   title: 'Paisa Reality: Live Prices, Government Schemes & Money Tools',
@@ -44,14 +47,22 @@ function istDate(iso: string | null): string {
   return new Date(`${iso.slice(0, 10)}T12:00:00+05:30`).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' });
 }
 
+function istTime(ts: string): string {
+  const d = new Date(ts);
+  const day = d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  const time = d.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
+  return day === today ? `today at ${time} IST` : `${istDate(day)}, ${time} IST`;
+}
+
 function RateCard({ rate }: { rate: HomeRate }): React.ReactElement {
   const decimals = rate.unit === 'per litre' ? 2 : 0;
   const c = rate.changePct;
   const flat = c === null || Math.abs(c) < 0.005;
   return (
     <Link href={rate.href} className="card card-link !p-5 group">
-      <div className="flex items-center justify-between">
-        <span className="text-[15px] font-medium text-muted">{rate.label}</span>
+      <div className="flex items-center justify-between gap-3">
+        <span className="flex items-center gap-3"><CommodityIcon kind={rate.kind} /><span className="text-[15px] font-medium text-ink">{rate.label}</span></span>
         {c !== null && (
           <span className={`text-[13px] font-medium tabular ${flat ? 'text-muted-2' : c > 0 ? 'text-green-700' : 'text-brand-red'}`}>
             {flat ? 'No change' : `${c > 0 ? '\u25B2' : '\u25BC'} ${Math.abs(c).toFixed(2)}%`}
@@ -94,88 +105,92 @@ const HOME_FAQS = [
     answer:
       'No. We never apply for you and never ask for money to apply. Government schemes and most scholarships are free to apply for on their official portals. If anyone asks you for a fee to get a scheme sanctioned, treat it as a scam.',
   },
-  {
-    question: 'What if I find a wrong number?',
-    answer:
-      'Tell us through the contact page with a link to the page. We check it against the source and aim to correct genuine errors within 48 hours.',
-  },
 ];
 
 export default async function HomePage(): Promise<React.ReactElement> {
-  const [counts, { asOf, rates }, schemes] = await Promise.all([getHomeCounts(), getHomeRates(), getFeaturedSchemes()]);
+  const [counts, { asOf, updatedAt, rates }, schemes, cats, topSch, grantList] = await Promise.all([
+    getHomeCounts(), getHomeRates(), getFeaturedSchemes(), getSchemeCategoryCounts(4), getTopScholarships(3), getGrants(),
+  ]);
+  const topGrants = [...grantList].sort((a, b) => (b.amountMaxInr ?? 0) - (a.amountMaxInr ?? 0)).filter((g) => g.fundingType !== 'in-kind').slice(0, 3);
 
-  const paths = [
+  const catLabel = (s: string): string => s.replace(/-/g, ' ').replace(/^./, (m) => m.toUpperCase());
+  const slides: HeroSlide[] = [
     {
-      title: 'Government schemes',
-      text: 'Answer a few questions and see the central and state schemes you are likely to qualify for, with the documents to keep ready.',
-      stat: counts.schemes ? `${counts.schemes} schemes` : null,
-      href: '/schemes',
-      cta: 'Find your schemes',
+      id: 'schemes',
+      title: 'Find the government schemes your family can claim.',
+      text: 'Answer a few questions about age, state, work and income. We check them against the published rules of every central and state scheme and show what fits, with the documents to keep ready.',
+      cta: { href: '/schemes', label: 'Find your schemes' },
+      panel: {
+        caption: `${counts.schemes} schemes, grouped by who they help`,
+        rows: cats.map((x) => ({ label: catLabel(x.category), value: `${x.n} schemes` })),
+        foot: 'Every scheme page links to its official portal.',
+      },
     },
     {
-      title: 'Scholarships',
-      text: 'Government and private scholarships by class, course, category and family income, with a reminder before the last date.',
-      stat: counts.scholarships ? `${counts.scholarships} scholarships` : null,
-      href: '/scholarships',
-      cta: 'See scholarships',
+      id: 'scholarships',
+      title: 'Scholarships that fit your class, course and family income.',
+      text: 'Government and private scholarships in one list, filtered for you, with a reminder email before the last date so a deadline never slips past.',
+      cta: { href: '/scholarships', label: 'See scholarships' },
+      panel: {
+        caption: `Some of the ${counts.scholarships} scholarships listed`,
+        rows: topSch.map((x) => ({ label: x.name, value: x.amountMax ? `Up to ${inr(x.amountMax)}` : '' , sub: x.level === 'central' ? 'All India' : undefined })),
+        foot: 'Amounts are the published maximum per year.',
+      },
     },
     {
-      title: 'Startup grants',
-      text: 'Grants, seed funds and accelerators open to Indian founders, with who qualifies, what they give and how to apply.',
-      stat: counts.grants ? `${counts.grants} open programmes` : null,
-      href: '/grants',
-      cta: 'Browse grants',
+      id: 'grants',
+      title: 'Startup grants and programmes open to Indian founders.',
+      text: 'Government seed funds, state idea grants and global accelerators, with how much you can get, whether they take equity and who qualifies. Closed or broken listings are removed automatically.',
+      cta: { href: '/grants', label: 'Browse startup grants' },
+      panel: {
+        caption: `${counts.grants} programmes checked on their official pages`,
+        rows: topGrants.map((g) => ({ label: g.name.replace(/\s*\(.*?\)\s*/g, ' ').trim(), value: formatAmount(g.amountMinInr, g.amountMaxInr) ?? 'Case by case', sub: FUNDING_LABEL[g.fundingType] })),
+        foot: 'Links are rechecked every day.',
+      },
     },
     {
-      title: 'Money Health Score',
-      text: 'A few minutes, no sign-up. A score out of 900 across savings, debt, insurance and retirement, with the next step for each.',
-      stat: 'Free, private',
-      href: '/score',
-      cta: 'Check your score',
+      id: 'real-return',
+      title: 'Before you sign that policy, check its real return.',
+      text: 'Insurance savings plans are sold on the total you get back. Type in the offer as it was pitched and see the one number the pitch leaves out: the yearly return.',
+      cta: { href: '/calculators/real-return', label: 'Check an offer' },
+      panel: {
+        caption: 'A typical pitch, worked out',
+        rows: [
+          { label: 'You pay', value: `${inr(50000)} a year`, sub: 'for 15 years' },
+          { label: 'You get', value: inr(1400000), sub: 'after 20 years' },
+          { label: 'Yearly return', value: '4.8%', sub: 'less than a 5-year post office deposit' },
+        ],
+        foot: 'Worked out with XIRR, the method banks and mutual funds use.',
+      },
     },
   ];
 
   return (
     <>
-      {/* Hero */}
-      <section className="border-b border-line">
-        <div className="container-main pt-16 pb-14 sm:pt-24 sm:pb-20 text-center">
-          <h1 className="display text-balance max-w-4xl mx-auto">
-            Money information you can check for yourself.
-          </h1>
-          <p className="mt-6 text-lg sm:text-xl text-muted max-w-2xl mx-auto leading-relaxed text-pretty">
-            Today&apos;s gold and fuel prices, the schemes, scholarships and grants you may qualify for, and
-            calculators that show the real maths. Every number is dated and sourced.
-          </p>
-          <div className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
-            <Link href="/schemes" className="btn-primary !px-6 !min-h-[48px]">
-              Find schemes for you <Arrow />
-            </Link>
-            <Link href="/gold-rate" className="btn-secondary !px-6 !min-h-[48px]">
-              See today&apos;s gold rate
-            </Link>
-          </div>
-          <ul className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted">
-            {counts.schemes > 0 && <li><strong className="text-ink font-semibold">{counts.schemes}</strong> government schemes</li>}
-            {counts.scholarships > 0 && <li><strong className="text-ink font-semibold">{counts.scholarships}</strong> scholarships</li>}
-            {counts.cities > 0 && <li>Prices in <strong className="text-ink font-semibold">{counts.cities}</strong> cities</li>}
-            <li>No sign-up needed</li>
-          </ul>
-        </div>
-      </section>
+      <HeroCarousel slides={slides} />
 
       {/* Today's rates */}
       {rates.length > 0 && (
         <section className="section-band">
           <div className="container-main py-14 sm:py-16">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
-              <div>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+              <div className="max-w-2xl">
                 <h2 className="section-title">Today&apos;s rates</h2>
-                <p className="mt-2 text-muted">
-                  {asOf ? `As of ${istDate(asOf)}. ` : ''}Gold and silver are India averages before GST and making charges.
+                <p className="mt-3 text-muted leading-relaxed">
+                  Gold and silver are averages of the 50 cities we track, before 3% GST and making charges. Fuel and LPG are
+                  the oil companies&apos; published Delhi rates. Pick a card for your own city.
                 </p>
               </div>
-              <Link href="/methodology" className="btn-link text-[15px] shrink-0">How we compute these <Arrow /></Link>
+              <div className="shrink-0 md:text-right text-sm">
+                <p className="inline-flex items-center gap-2 text-ink font-medium">
+                  <span className="relative flex h-2 w-2" aria-hidden="true">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-60 animate-ping" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-600" />
+                  </span>
+                  {updatedAt ? `Updated ${istTime(updatedAt)}` : asOf ? `As of ${istDate(asOf)}` : 'Live rates'}
+                </p>
+                <p className="mt-1 text-muted-2">Next update at {nextUpdateLabel()} &middot; <Link href="/methodology" className="link-internal">How we compute these</Link></p>
+              </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {rates.map((r) => <RateCard key={r.label} rate={r} />)}
@@ -184,61 +199,11 @@ export default async function HomePage(): Promise<React.ReactElement> {
         </section>
       )}
 
-      {/* Paths */}
-      <section className="section">
-        <div className="container-main">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="section-title">Start with what you need</h2>
-            <p className="section-lead mx-auto">Four places most people begin. Each one takes a few minutes and costs nothing.</p>
-          </div>
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5">
-            {paths.map((p) => (
-              <Link key={p.href} href={p.href} className="card card-link !p-7 flex flex-col group">
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-xl font-semibold tracking-[-0.01em]">{p.title}</h3>
-                  {p.stat && <span className="badge-soft shrink-0">{p.stat}</span>}
-                </div>
-                <p className="mt-3 text-muted leading-relaxed flex-1">{p.text}</p>
-                <span className="mt-6 inline-flex items-center gap-1.5 font-semibold text-navy">
-                  {p.cta} <Arrow className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <AdSlot placement="home-top" format="horizontal" className="container-main mb-4" />
-
-      {/* Real return spotlight */}
-      <section className="container-main pb-16 sm:pb-20">
-        <div className="rounded-2xl bg-navy-deep text-white px-6 py-12 sm:px-14 sm:py-16 grid lg:grid-cols-[1.2fr_1fr] gap-10 items-center">
-          <div>
-            <h2 className="text-white font-semibold tracking-[-0.025em] leading-[1.12] text-[30px] sm:text-[40px]">
-              Before you sign that policy, check its real return.
-            </h2>
-            <p className="mt-5 text-white/75 text-lg leading-relaxed max-w-xl">
-              Insurance savings plans are sold on the total you get back. Type in the offer exactly as the agent
-              pitched it and see the one number the pitch leaves out: the yearly return.
-            </p>
-            <Link href="/calculators/real-return" className="mt-8 inline-flex items-center gap-2 h-12 px-6 rounded-lg bg-white text-navy-deep font-semibold no-underline hover:bg-white/90 hover:text-navy-deep transition-colors">
-              Check an offer <Arrow />
-            </Link>
-          </div>
-          <div className="rounded-xl bg-white/[0.06] border border-white/10 p-6 sm:p-8">
-            <p className="text-white/60 text-sm">The pitch</p>
-            <p className="mt-1 text-xl font-medium">Pay {inr(50000)} a year for 15 years. Get {inr(1400000)} after 20.</p>
-            <div className="my-6 border-t border-white/10" />
-            <p className="text-white/60 text-sm">The yearly return</p>
-            <p className="mt-1 text-[44px] font-semibold tracking-[-0.03em] leading-none tabular">4.8%</p>
-            <p className="mt-3 text-sm text-white/60">Less than a 5-year post office deposit pays today.</p>
-          </div>
-        </div>
-      </section>
+      <AdSlot placement="home-top" format="horizontal" className="container-main my-6" />
 
       {/* Popular schemes */}
       {schemes.length > 0 && (
-        <section className="section-band">
+        <section>
           <div className="container-main py-16 sm:py-20">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-10">
               <div>
