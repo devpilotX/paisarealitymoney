@@ -3,7 +3,8 @@ import Link from 'next/link';
 import FAQ from '@/components/FAQ';
 import AdSlot from '@/components/AdSlot';
 import CommodityIcon from '@/components/CommodityIcon';
-import { getFeaturedSchemes, getHomeCounts, getHomeRates, getSchemeCategoryCounts, getTopScholarships, nextUpdateLabel, type HomeRate } from '@/lib/home-data';
+import CategoryIcon from '@/components/CategoryIcon';
+import { getFeaturedSchemes, getHomeCounts, getHomeRates, getSchemeCategoryCounts, getTopScholarships, type HomeRate } from '@/lib/home-data';
 import { getGrants, formatAmount, FUNDING_LABEL } from '@/lib/grants';
 import HeroCarousel, { type HeroSlide } from '@/components/HeroCarousel';
 
@@ -47,12 +48,11 @@ function istDate(iso: string | null): string {
   return new Date(`${iso.slice(0, 10)}T12:00:00+05:30`).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' });
 }
 
-function istTime(ts: string): string {
+function istStamp(ts: string): string {
   const d = new Date(ts);
-  const day = d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-  const time = d.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
-  return day === today ? `today at ${time} IST` : `${istDate(day)}, ${time} IST`;
+  const date = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
+  const time = d.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }).toUpperCase();
+  return `${date}, ${time} IST`;
 }
 
 function RateCard({ rate }: { rate: HomeRate }): React.ReactElement {
@@ -78,6 +78,26 @@ function RateCard({ rate }: { rate: HomeRate }): React.ReactElement {
     </Link>
   );
 }
+
+const WHO = [
+  { slug: 'agriculture', label: 'Farmers' },
+  { slug: 'women', label: 'Women and girls' },
+  { slug: 'education', label: 'Students' },
+  { slug: 'senior-citizen', label: 'Senior citizens' },
+  { slug: 'business', label: 'Small business' },
+  { slug: 'housing', label: 'Home buyers' },
+  { slug: 'healthcare', label: 'Health cover' },
+  { slug: 'employment', label: 'Job seekers' },
+  { slug: 'disability', label: 'People with disabilities' },
+  { slug: 'pension', label: 'Pensions' },
+];
+
+const GUIDES = [
+  { href: '/guides/old-vs-new-tax-regime', a: 'Old', b: 'New', title: 'Old or new tax regime', text: 'Which one leaves more of your salary with you this year.', tone: 'from-[#1C3A5E] to-[#2E5A8A]' },
+  { href: '/guides/sip-vs-fd', a: 'SIP', b: 'FD', title: 'SIP or fixed deposit', text: 'Growth against certainty, and how tax changes the answer.', tone: 'from-[#2C6E6E] to-[#3E8C8C]' },
+  { href: '/guides/ppf-vs-nps', a: 'PPF', b: 'NPS', title: 'PPF or NPS', text: 'Two long-term savings options compared on return, lock-in and tax.', tone: 'from-[#6A45A6] to-[#8763C2]' },
+  { href: '/guides/22k-vs-24k-gold', a: '22K', b: '24K', title: '22K or 24K gold', text: 'Which purity to buy for jewellery, and which to hold as savings.', tone: 'from-[#94670A] to-[#B8860B]' },
+];
 
 const HOME_FAQS = [
   {
@@ -109,11 +129,11 @@ const HOME_FAQS = [
 
 export default async function HomePage(): Promise<React.ReactElement> {
   const [counts, { asOf, updatedAt, rates }, schemes, cats, topSch, grantList] = await Promise.all([
-    getHomeCounts(), getHomeRates(), getFeaturedSchemes(), getSchemeCategoryCounts(4), getTopScholarships(3), getGrants(),
+    getHomeCounts(), getHomeRates(), getFeaturedSchemes(), getSchemeCategoryCounts(20), getTopScholarships(3), getGrants(),
   ]);
   const topGrants = [...grantList].sort((a, b) => (b.amountMaxInr ?? 0) - (a.amountMaxInr ?? 0)).filter((g) => g.fundingType !== 'in-kind').slice(0, 3);
 
-  const catLabel = (s: string): string => s.replace(/-/g, ' ').replace(/^./, (m) => m.toUpperCase());
+  const catCount = (slug: string): number => cats.find((x) => x.category === slug)?.n ?? 0;
   const slides: HeroSlide[] = [
     {
       id: 'schemes',
@@ -121,9 +141,13 @@ export default async function HomePage(): Promise<React.ReactElement> {
       text: 'Answer a few questions about age, state, work and income. We check them against the published rules of every central and state scheme and show what fits, with the documents to keep ready.',
       cta: { href: '/schemes', label: 'Find your schemes' },
       panel: {
-        caption: `${counts.schemes} schemes, grouped by who they help`,
-        rows: cats.map((x) => ({ label: catLabel(x.category), value: `${x.n} schemes` })),
-        foot: 'Every scheme page links to its official portal.',
+        caption: 'How it works',
+        rows: [
+          { label: '1. Answer a few questions', value: '2 minutes', sub: 'No sign-up, no documents' },
+          { label: '2. See what you qualify for', value: `${counts.schemes} schemes`, sub: 'Central and state' },
+          { label: '3. Apply on the official portal', value: 'Free', sub: 'We never charge or apply for you' },
+        ],
+        foot: 'The official rules are always the final word.',
       },
     },
     {
@@ -178,32 +202,54 @@ export default async function HomePage(): Promise<React.ReactElement> {
                 <h2 className="section-title">Today&apos;s rates</h2>
                 <p className="mt-3 text-muted leading-relaxed">
                   Gold and silver are averages of the 50 cities we track, before 3% GST and making charges. Fuel and LPG are
-                  the oil companies&apos; published Delhi rates. Pick a card for your own city.
+                  the oil companies&apos; published Delhi rates. Open any card for your city.
                 </p>
               </div>
-              <div className="shrink-0 md:text-right text-sm">
-                <p className="inline-flex items-center gap-2 text-ink font-medium">
-                  <span className="relative flex h-2 w-2" aria-hidden="true">
-                    <span className="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-60 animate-ping" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-600" />
-                  </span>
-                  {updatedAt ? `Updated ${istTime(updatedAt)}` : asOf ? `As of ${istDate(asOf)}` : 'Live rates'}
-                </p>
-                <p className="mt-1 text-muted-2">Next update at {nextUpdateLabel()} &middot; <Link href="/methodology" className="link-internal">How we compute these</Link></p>
-              </div>
+              {(updatedAt || asOf) && (
+                <p className="shrink-0 text-sm text-muted-2 tabular">As of {updatedAt ? istStamp(updatedAt) : istDate(asOf)}</p>
+              )}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {rates.map((r) => <RateCard key={r.label} rate={r} />)}
             </div>
+            <p className="mt-5 text-[13px] text-muted-2">
+              Sources: international spot price and USD/INR for metals; IOCL, BPCL and HPCL for fuel and LPG.{' '}
+              <Link href="/methodology" className="link-internal">Methodology</Link>
+            </p>
           </div>
         </section>
       )}
 
       <AdSlot placement="home-top" format="horizontal" className="container-main my-6" />
 
+      {/* Browse by who you are */}
+      {cats.length > 0 && (
+        <section>
+          <div className="container-main py-16 sm:py-20">
+            <div className="text-center max-w-2xl mx-auto">
+              <h2 className="section-title">Schemes for people like you</h2>
+              <p className="section-lead mx-auto">Start from who you are. Each list shows every central and state scheme in that group.</p>
+            </div>
+            <ul className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {WHO.filter((w) => catCount(w.slug) > 0).map((w) => (
+                <li key={w.slug}>
+                  <Link href={`/category/${w.slug}`} className="card card-link !p-5 h-full flex flex-col items-start gap-4 group">
+                    <CategoryIcon category={w.slug} />
+                    <span>
+                      <span className="block font-semibold text-ink group-hover:text-navy transition-colors">{w.label}</span>
+                      <span className="block mt-0.5 text-sm text-muted-2">{catCount(w.slug)} schemes</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
       {/* Popular schemes */}
       {schemes.length > 0 && (
-        <section>
+        <section className="section-band">
           <div className="container-main py-16 sm:py-20">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-10">
               <div>
@@ -215,8 +261,8 @@ export default async function HomePage(): Promise<React.ReactElement> {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {schemes.map((s) => (
                 <Link key={s.slug} href={`/schemes/${s.slug}`} className="card card-link !p-6 group flex flex-col">
-                  <span className="text-[13px] text-muted-2 capitalize">{s.category.replace(/-/g, ' ')}</span>
-                  <h3 className="mt-1.5 text-[17px] font-semibold leading-snug">{s.name}</h3>
+                  <span className="flex items-center gap-3"><CategoryIcon category={s.category} className="w-9 h-9" /><span className="text-[13px] text-muted-2 capitalize">{s.category.replace(/-/g, ' ')}</span></span>
+                  <h3 className="mt-4 text-[17px] font-semibold leading-snug">{s.name}</h3>
                   <p className="mt-2 text-[15px] text-muted leading-relaxed line-clamp-2 flex-1">{s.benefit}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-[15px] font-semibold text-navy">
                     Eligibility and how to apply <Arrow className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -232,7 +278,7 @@ export default async function HomePage(): Promise<React.ReactElement> {
       <section className="section">
         <div className="container-main">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="section-title">Why you can rely on what you read here</h2>
+            <h2 className="section-title">Why you can trust these numbers</h2>
           </div>
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 text-center">
             {[
@@ -265,38 +311,36 @@ export default async function HomePage(): Promise<React.ReactElement> {
         </div>
       </section>
 
-      {/* Calculators */}
-      <section className="border-t border-line">
-        <div className="container-main py-14">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      {/* Guides */}
+      <section className="section-band">
+        <div className="container-main py-16 sm:py-20">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-10">
             <div>
-              <h2 className="heading-2">Quick calculators</h2>
-              <p className="mt-2 text-muted">They run in your browser. Nothing you type leaves your device.</p>
+              <h2 className="section-title">Decide with the numbers in front of you</h2>
+              <p className="mt-2 text-muted">Plain-language comparisons for the choices people ask us about most.</p>
             </div>
-            <ul className="flex flex-wrap gap-2">
-              {[
-                ['/calculators/emi', 'EMI'],
-                ['/calculators/sip', 'SIP'],
-                ['/calculators/income-tax', 'Income tax'],
-                ['/calculators/fd', 'FD'],
-                ['/calculators/ppf', 'PPF'],
-                ['/calculators/home-loan', 'Home loan'],
-                ['/calculators/gratuity', 'Gratuity'],
-                ['/calculators/hra', 'HRA'],
-              ].map(([href, label]) => (
-                <li key={href}>
-                  <Link href={href!} className="inline-flex items-center h-10 px-4 rounded-full border border-line text-[15px] font-medium text-ink no-underline hover:border-navy hover:text-navy transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <Link href="/guides" className="btn-link text-[15px] shrink-0">All guides <Arrow /></Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {GUIDES.map((g) => (
+              <Link key={g.href} href={g.href} className="group rounded-xl border border-line bg-white overflow-hidden no-underline text-ink shadow-card hover:shadow-lift hover:-translate-y-0.5 transition-all duration-200">
+                <div className={`relative h-32 bg-gradient-to-br ${g.tone} flex items-center justify-center gap-4 text-white`}>
+                  <span className="text-[34px] font-semibold tracking-[-0.03em]">{g.a}</span>
+                  <span className="text-sm text-white/70">or</span>
+                  <span className="text-[34px] font-semibold tracking-[-0.03em]">{g.b}</span>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-semibold group-hover:text-navy transition-colors">{g.title}</h3>
+                  <p className="mt-1.5 text-[15px] text-muted leading-relaxed">{g.text}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="section-band">
+      <section>
         <div className="container-main py-16 sm:py-20 max-w-3xl">
           <FAQ items={HOME_FAQS} title="Common questions" />
         </div>
