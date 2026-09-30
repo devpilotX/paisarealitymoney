@@ -155,8 +155,9 @@ export default function Header(): React.ReactElement {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    fetch('/api/auth/session').then((r) => r.json()).then((d: { signedIn?: boolean }) => setSignedIn(Boolean(d.signedIn))).catch(() => setSignedIn(false));
-  }, []);
+    // Rechecked on every navigation, so the header flips straight after log in or log out.
+    fetch('/api/auth/session', { cache: 'no-store' }).then((r) => r.json()).then((d: { signedIn?: boolean }) => setSignedIn(Boolean(d.signedIn))).catch(() => setSignedIn(false));
+  }, [pathname]);
 
   useEffect(() => {
     const onScroll = (): void => setScrolled(window.scrollY > 8);
