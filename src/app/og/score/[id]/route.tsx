@@ -16,12 +16,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const s = await getPublicScoreById(id);
     if (s) { score = s.totalScore; band = s.band; strength = strengthLabel(s.pillarScores); fix = s.topActions[0]?.label ?? 'Build an emergency fund'; }
   } catch { /* fall through to a generic card */ }
-  const color = BAND_COLOR[band] ?? '#007A78';
+  const color = BAND_COLOR[band] ?? '#1C3A5E';
 
   return new ImageResponse(
     (
       <div style={{ width: '1200px', height: '630px', display: 'flex', flexDirection: 'column', background: '#ffffff', padding: '64px', fontFamily: 'sans-serif' }}>
-        <div style={{ display: 'flex', alignItems: 'center', color: '#007A78', fontSize: 34, fontWeight: 800 }}>Paisa Reality</div>
+        <div style={{ display: 'flex', alignItems: 'center', color: '#1C3A5E', fontSize: 34, fontWeight: 800 }}>Paisa Reality</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
           <div style={{ display: 'flex', fontSize: 30, color: '#6b7280' }}>Money Health Score</div>
           <div style={{ display: 'flex', fontSize: 200, fontWeight: 800, color, lineHeight: 1 }}>{score ?? '\u2014'}</div>

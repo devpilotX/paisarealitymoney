@@ -16,7 +16,7 @@ function arc(from: number, to: number, steps = 72): string {
 /** Render the score (300-900) as a CIBIL-style arc with the band label. */
 export default function ScoreGauge({ score, band }: { score: number; band: string }): React.ReactElement {
   const t = (Math.min(MAX, Math.max(MIN, score)) - MIN) / (MAX - MIN);
-  const color = BAND_COLOR[band] ?? '#007A78';
+  const color = BAND_COLOR[band] ?? '#1C3A5E';
   return (
     <div className="w-full max-w-[320px] mx-auto">
       <svg viewBox="0 0 280 188" className="w-full h-auto" role="img" aria-label={`Your Money Health Score is ${score} out of 900: ${band}.`}>

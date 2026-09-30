@@ -5,7 +5,7 @@ export const SITE_DESCRIPTION = 'Check today\'s gold rate, silver rate, petrol p
 
 export const ADSENSE_PUB_ID = 'pub-6484525483464374';
 
-export const ACCENT_COLOR = '#007A78';
+export const ACCENT_COLOR = '#1C3A5E';
 
 export const NAV_LINKS = [
   { href: '/score', label: 'Money Health Score', labelHi: 'वित्तीय सेहत स्कोर' },

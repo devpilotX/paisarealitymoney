@@ -24,7 +24,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         to: sub.email,
         subject,
         html,
-        replyTo: 'contact@paisareality.com',
+        replyTo: 'connect@paisareality.com',
         headers: unsubscribeHeaders(sub.unsubscribe_token),
       });
       const status = result.ok ? 'sent' : 'failed';

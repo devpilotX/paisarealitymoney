@@ -17,7 +17,7 @@ import {
 } from '@/lib/debt-optimizer';
 
 const STRATEGY_COLORS: Record<StrategyKey, string> = {
-  'tax-aware': '#007A78',
+  'tax-aware': '#1C3A5E',
   avalanche: '#d97706',
   snowball: '#6366f1',
   minimums: '#9ca3af',

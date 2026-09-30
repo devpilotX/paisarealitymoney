@@ -44,37 +44,34 @@ function htmlToText(html: string): string {
     .trim();
 }
 
-function emailLayout(content: string, preheader = ''): string {
+export function emailLayout(content: string, preheader = ''): string {
+  // Plain, table-based layout that renders the same in Gmail, Outlook and phone mail apps.
+  // Colours match the site: white card, navy ink, one navy button.
   const preheaderHtml = preheader
-    ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${escapeHtml(preheader)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>`
+    ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${escapeHtml(preheader)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>`
     : '';
   const footLink = (href: string, label: string): string =>
-    `<a href="${APP_URL}${href}" style="color:#007A78;text-decoration:none;font-size:12px;font-weight:600;">${label}</a>`;
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"></head>
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:'Segoe UI',Inter,system-ui,-apple-system,sans-serif;">
+    `<a href="${APP_URL}${href}" style="color:#4B5563;text-decoration:underline;font-size:13px;">${label}</a>`;
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"><title>Paisa Reality</title></head>
+<body style="margin:0;padding:0;background:#F3F4F6;font-family:Inter,'Segoe UI',system-ui,-apple-system,Helvetica,Arial,sans-serif;color:#111827;">
 ${preheaderHtml}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px 12px;"><tr><td align="center">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e5e7eb;">
-<tr><td style="background:linear-gradient(135deg,#007A78 0%,#005a58 100%);background-color:#007A78;padding:26px 28px;text-align:center;">
-<span style="display:inline-block;background:#ffffff;color:#007A78;font-size:15px;font-weight:800;border-radius:8px;padding:5px 10px;letter-spacing:0.3px;">&#8377;</span>
-<h1 style="color:#ffffff;font-size:23px;margin:10px 0 0;font-weight:800;letter-spacing:-0.3px;">Paisa Reality</h1>
-<p style="color:#b8e5e3;font-size:12.5px;margin:6px 0 0;letter-spacing:0.4px;">INDIA&rsquo;S ONE-STOP MONEY HUB</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F3F4F6;padding:32px 12px;"><tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+<tr><td style="padding:0 4px 16px;">
+<a href="${APP_URL}" style="text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:22px;color:#1C3A5E;">Paisa<span style="color:#A62822;">Reality</span></a>
 </td></tr>
-<tr><td style="padding:32px 28px;">${content}</td></tr>
-<tr><td style="background:#f9fafb;padding:20px 28px;border-top:1px solid #e5e7eb;text-align:center;">
-<p style="margin:0 0 10px;">
-${footLink('/gold-rate', 'Gold Rate')} &nbsp;&middot;&nbsp; ${footLink('/interest-rates', 'Interest Rates')} &nbsp;&middot;&nbsp; ${footLink('/calculators', 'Calculators')} &nbsp;&middot;&nbsp; ${footLink('/schemes', 'Schemes')} &nbsp;&middot;&nbsp; ${footLink('/score', 'Health Score')}
-</p>
-<p style="font-size:12px;color:#6b7280;margin:0;">Paisa Reality &middot; <a href="${APP_URL}" style="color:#6b7280;">paisareality.com</a></p>
-<p style="font-size:11px;color:#9ca3af;margin:6px 0 0;line-height:1.5;">Free financial information for India. Not investment advice. Verify with official sources before acting.<br>You received this email because of your account or activity on our website.</p>
+<tr><td style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;padding:32px 32px 28px;font-size:15px;line-height:1.6;color:#111827;">${content}</td></tr>
+<tr><td style="padding:20px 4px 0;text-align:left;">
+<p style="margin:0 0 10px;">${footLink('/gold-rate', 'Gold rate')} &nbsp; ${footLink('/schemes', 'Schemes')} &nbsp; ${footLink('/scholarships', 'Scholarships')} &nbsp; ${footLink('/dashboard', 'Your account')}</p>
+<p style="font-size:12px;color:#6B7280;margin:0;line-height:1.6;">Paisa Reality is an information service, not a financial adviser. Check figures with the official source before you act. You are receiving this because of your account or a request you made on paisareality.com.</p>
 </td></tr>
 </table>
 </td></tr></table>
 </body></html>`;
 }
 
-function btn(href: string, label: string): string {
-  return `<div style="text-align:center;padding:24px 0;"><a href="${href}" style="background:#007A78;color:#ffffff;padding:12px 32px;text-decoration:none;border-radius:8px;font-size:15px;font-weight:600;display:inline-block;">${label}</a></div>`;
+export function btn(href: string, label: string): string {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0;"><tr><td style="background:#1C3A5E;border-radius:8px;"><a href="${href}" style="display:inline-block;padding:12px 24px;color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600;">${label}</a></td></tr></table>`;
 }
 
 export function escapeHtml(text: string): string {
@@ -107,18 +104,15 @@ export async function sendEmail({ to, subject, html, replyTo, headers }: { to: s
 
 export async function sendWelcomeEmail(to: string, name: string): Promise<boolean> {
   const html = emailLayout(`
-    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">Welcome, ${escapeHtml(name)}!</h2>
-    <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Your Paisa Reality account is set up. Here is what you can use right away:</p>
-    <ul style="font-size:15px;color:#374151;line-height:2;padding-left:20px;margin:0 0 16px;">
-      <li>Gold, silver, petrol and diesel prices for 50 cities, and LPG for every state</li>
-      <li>10 Smart Tools that run Monte Carlo simulations in your browser</li>
-      <li>11 financial calculators (EMI, SIP, FD, tax, and more)</li>
-      <li>Government scheme finder matched to your profile</li>
-      <li>Bank rate comparison across 50+ banks</li>
-      <li>Free price alerts: an email when gold or silver hits your target</li>
-      <li>Money Health Score out of 900</li>
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">Welcome, ${escapeHtml(name)}!</h2>
+    <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Your Paisa Reality account is ready. It lets the site remember things for you:</p>
+    <ul style="font-size:15px;color:#374151;line-height:1.9;padding-left:20px;margin:0 0 16px;">
+      <li>Price alerts: an email when gold or silver in your city reaches the price you set</li>
+      <li>Saved schemes and an application tracker for everything you apply for</li>
+      <li>Your Money Health Score history, so you can see it change over time</li>
     </ul>
-    ${btn(`${APP_URL}/dashboard`, 'Go to Dashboard')}
+    <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Everything else on the site, from daily prices to the scheme, scholarship and grant finders, works with or without signing in.</p>
+    ${btn(`${APP_URL}/dashboard`, 'Open your dashboard')}
     <p style="font-size:13px;color:#6b7280;margin:0;">If you did not create this account, you can safely ignore this email.</p>
   `);
   const r = await sendEmail({ to, subject: 'Welcome to Paisa Reality', html });
@@ -128,9 +122,9 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<boolea
 export async function sendLoginAlertEmail(to: string, name: string): Promise<boolean> {
   const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
   const html = emailLayout(`
-    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">New login to your account</h2>
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">New login to your account</h2>
     <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Hey ${escapeHtml(name)}, someone just logged into your Paisa Reality account.</p>
-    <div style="background:#f3f4f6;border-radius:8px;padding:16px;margin:0 0 16px;">
+    <div style="background:#F7F8FA;border:1px solid #E5E7EB;border-radius:8px;padding:16px;margin:0 0 16px;">
       <p style="font-size:14px;color:#374151;margin:0;"><strong>Time:</strong> ${now} IST</p>
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.6;margin:0 0 16px;">If this was you, all good. If not, reset your password right away.</p>
@@ -143,20 +137,20 @@ export async function sendLoginAlertEmail(to: string, name: string): Promise<boo
 export async function sendPasswordReset(to: string, resetToken: string): Promise<boolean> {
   const resetLink = `${APP_URL}/reset-password?token=${resetToken}`;
   const html = emailLayout(`
-    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">Reset your password</h2>
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">Reset your password</h2>
     <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">You asked to reset your Paisa Reality password. Click below to set a new one:</p>
-    ${btn(resetLink, 'Reset Password')}
+    ${btn(resetLink, 'Choose a new password')}
     <p style="font-size:13px;color:#6b7280;margin:0 0 8px;">This link is valid for 1 hour.</p>
     <p style="font-size:13px;color:#6b7280;margin:0;">Did not request this? Just ignore this email. Your password stays the same.</p>
   `);
-  const r = await sendEmail({ to, subject: 'Reset Your Paisa Reality Password', html });
+  const r = await sendEmail({ to, subject: 'Reset your Paisa Reality password', html });
   return r.ok;
 }
 
 export async function sendContactNotification(name: string, email: string, message: string): Promise<boolean> {
   const html = emailLayout(`
-    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">New contact message</h2>
-    <div style="background:#f3f4f6;border-radius:8px;padding:16px;margin:0 0 16px;">
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">New contact message</h2>
+    <div style="background:#F7F8FA;border:1px solid #E5E7EB;border-radius:8px;padding:16px;margin:0 0 16px;">
       <p style="font-size:14px;color:#374151;margin:0 0 8px;"><strong>From:</strong> ${escapeHtml(name)}</p>
       <p style="font-size:14px;color:#374151;margin:0 0 8px;"><strong>Email:</strong> ${escapeHtml(email)}</p>
       <p style="font-size:14px;color:#374151;margin:0;"><strong>Message:</strong></p>
@@ -171,24 +165,24 @@ export async function sendContactNotification(name: string, email: string, messa
 export async function sendVerificationEmail(to: string, name: string, token: string): Promise<boolean> {
   const link = `${APP_URL}/api/auth/verify-email?token=${token}`;
   const html = emailLayout(`
-    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">Verify your email</h2>
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">Verify your email</h2>
     <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Hey ${escapeHtml(name)}, one quick step. Confirm your email by clicking below:</p>
     ${btn(link, 'Verify Email')}
     <p style="font-size:13px;color:#6b7280;margin:0 0 8px;">This link is valid for 24 hours.</p>
     <p style="font-size:13px;color:#6b7280;margin:0;">Did not create an account? You can safely ignore this.</p>
   `);
-  const r = await sendEmail({ to, subject: 'Verify your Paisa Reality email', html, replyTo: 'support@paisareality.com' });
+  const r = await sendEmail({ to, subject: 'Verify your Paisa Reality email', html, replyTo: 'connect@paisareality.com' });
   return r.ok;
 }
 
 export async function sendPasswordChangedEmail(to: string, name: string): Promise<boolean> {
   const html = emailLayout(`
-    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">Password changed</h2>
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">Password changed</h2>
     <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Hey ${escapeHtml(name)}, your Paisa Reality password was just changed.</p>
     <p style="font-size:14px;color:#374151;line-height:1.6;margin:0 0 16px;">If you did this, you are all set. If not, reset your password right now:</p>
     ${btn(`${APP_URL}/forgot-password`, 'Reset Password')}
   `);
-  const r = await sendEmail({ to, subject: 'Your Paisa Reality password was changed', html, replyTo: 'support@paisareality.com' });
+  const r = await sendEmail({ to, subject: 'Your Paisa Reality password was changed', html, replyTo: 'connect@paisareality.com' });
   return r.ok;
 }
 
@@ -201,9 +195,9 @@ export async function sendPriceAlertEmail(
   const fmt = (v: number): string => `Rs ${v.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
   const verb = details.direction === 'below' ? 'dropped to' : 'risen to';
   const html = emailLayout(`
-    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">Price alert: ${escapeHtml(details.commodityLabel)} in ${escapeHtml(details.cityName)}</h2>
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">Price alert: ${escapeHtml(details.commodityLabel)} in ${escapeHtml(details.cityName)}</h2>
     <p style="font-size:15px;color:#374151;line-height:1.6;margin:0 0 16px;">Hey ${escapeHtml(name)}, the price you were watching has ${verb} your target.</p>
-    <div style="background:#f3f4f6;border-radius:8px;padding:16px;margin:0 0 16px;">
+    <div style="background:#F7F8FA;border:1px solid #E5E7EB;border-radius:8px;padding:16px;margin:0 0 16px;">
       <p style="font-size:14px;color:#374151;margin:0 0 8px;"><strong>Current price:</strong> ${fmt(details.currentPrice)}</p>
       <p style="font-size:14px;color:#374151;margin:0;"><strong>Your target:</strong> ${details.direction === 'below' ? 'at or below' : 'at or above'} ${fmt(details.targetPrice)}</p>
     </div>
@@ -218,7 +212,7 @@ export async function sendPriceAlertEmail(
 export async function sendAdminAlert(subject: string, lines: string[]): Promise<boolean> {
   const items = lines.map((l) => `<li style="margin:0 0 6px;">${escapeHtml(l)}</li>`).join('');
   const html = emailLayout(`
-    <h2 style="font-size:20px;color:#111827;margin:0 0 12px;">${escapeHtml(subject)}</h2>
+    <h2 style="font-size:20px;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:600;">${escapeHtml(subject)}</h2>
     <ul style="font-size:14px;color:#374151;line-height:1.6;padding-left:20px;margin:0 0 16px;">${items}</ul>
     <p style="font-size:13px;color:#6b7280;margin:0;">Sent automatically by the Paisa Reality price cron.</p>
   `);
@@ -229,7 +223,7 @@ export async function sendAdminAlert(subject: string, lines: string[]): Promise<
 /** List-Unsubscribe headers for newsletter mail. Gmail and Yahoo require one-click unsubscribe for bulk senders. */
 export function unsubscribeHeaders(unsubscribeToken: string): Record<string, string> {
   return {
-    'List-Unsubscribe': `<${APP_URL}/api/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}>, <mailto:contact@paisareality.com?subject=unsubscribe>`,
+    'List-Unsubscribe': `<${APP_URL}/api/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}>, <mailto:connect@paisareality.com?subject=unsubscribe>`,
     'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
   };
 }

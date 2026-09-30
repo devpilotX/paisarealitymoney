@@ -37,7 +37,7 @@ export default function GoldPlannerClient(): React.ReactElement {
   const a = useMemo(() => analyzeGoldPlan(inputs), [inputs]);
 
   const series: TimelineSeries[] = useMemo(() => [
-    { label: 'SIP value', color: '#007A78', timeline: a.backtest.sipValuePath },
+    { label: 'SIP value', color: '#1C3A5E', timeline: a.backtest.sipValuePath },
     { label: 'Lump-sum value', color: '#d97706', timeline: a.backtest.lumpsumValuePath },
     { label: 'Amount invested', color: '#9ca3af', timeline: a.backtest.investedPath },
   ].filter((s) => s.timeline.some((v) => v > 0)), [a.backtest]);

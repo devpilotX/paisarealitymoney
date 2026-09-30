@@ -43,7 +43,7 @@ export default function LifecycleTaxOptimizerClient(): React.ReactElement {
       return out;
     };
     return [
-      { label: 'Optimal', color: '#007A78', timeline: cum('chosenTax') },
+      { label: 'Optimal', color: '#1C3A5E', timeline: cum('chosenTax') },
       { label: 'Always Old', color: '#d97706', timeline: cum('oldTax') },
       { label: 'Always New', color: '#6366f1', timeline: cum('newTax') },
     ];
