@@ -113,9 +113,14 @@ export default function RootLayout({
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': SITE_URL + '/#organization',
     name: SITE_NAME,
+    // The spellings people search for. Google reads these for brand queries.
+    alternateName: ['PaisaReality', 'Paisa Reality India', 'paisareality.com', '\u092A\u0948\u0938\u093E \u0930\u093F\u092F\u0932\u093F\u091F\u0940'],
     url: SITE_URL,
-    logo: { '@type': 'ImageObject', url: SITE_URL + '/paisa_reality_logo.png' },
+    // Google needs a logo of at least 112 x 112 px; the wordmark is only 107 px tall.
+    logo: { '@type': 'ImageObject', url: SITE_URL + '/icon-512.png', width: 512, height: 512 },
+    image: SITE_URL + '/icon-512.png',
     description:
       'Paisa Reality offers a free Money Health Score, smart financial calculators, live gold, silver, petrol and diesel rates, government scheme matching, and bank rate comparison for India.',
     areaServed: { '@type': 'Country', name: 'India' },
@@ -135,11 +140,12 @@ export default function RootLayout({
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': SITE_URL + '/#website',
     name: SITE_NAME,
-    alternateName: 'PaisaReality',
-    url: SITE_URL,
+    alternateName: ['PaisaReality', 'paisareality.com'],
+    url: SITE_URL + '/',
     inLanguage: ['en-IN', 'hi-IN'],
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@id': SITE_URL + '/#organization' },
   };
 
   return (
