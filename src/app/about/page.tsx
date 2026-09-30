@@ -26,28 +26,29 @@ export default function AboutPage(): React.ReactElement {
         <section className="mb-8">
           <h2 className="heading-2 mb-4">What you will find here</h2>
           <ul className="list-disc list-inside space-y-3 text-body">
-            <li><strong>Daily prices</strong> for gold, silver, petrol, diesel, and LPG across 50+ Indian cities, updated every day.</li>
-            <li><strong>Government scheme finder.</strong> Fill a short form and see which central and state schemes you likely qualify for.</li>
+            <li><strong>Daily prices</strong> for gold, silver, petrol and diesel in 50 cities, and LPG in every state, refreshed five times a day.</li>
+            <li><strong>Government scheme finder.</strong> Answer a short set of questions and see which central and state schemes you are likely to qualify for.</li>
+            <li><strong>Scholarships and startup grants.</strong> Government and private scholarships by class and income, and grants and programmes open to Indian founders, each checked on its official page.</li>
             <li><strong>Financial calculators.</strong> EMI, SIP, FD, PPF, income tax, home loan, plus advanced Smart Tools like retirement planning and debt optimization.</li>
-            <li><strong>Bank rate comparison.</strong> FD rates, savings account rates, home loan rates, and personal loan rates across 50+ banks, side by side.</li>
+            <li><strong>Bank rate comparison.</strong> FD, savings, home loan and personal loan rates for 51 banks side by side, each with the date it was checked.</li>
           </ul>
         </section>
 
         <section className="mb-8">
           <h2 className="heading-2 mb-4">Where the data comes from</h2>
           <ul className="list-disc list-inside space-y-2 text-body">
-            <li><strong>Gold and silver:</strong> Indian Bullion and Jewellers Association (IBJA) and commodity exchanges.</li>
-            <li><strong>Petrol and diesel:</strong> IOCL, BPCL, and HPCL daily price feeds.</li>
-            <li><strong>LPG:</strong> Oil marketing companies.</li>
-            <li><strong>Government schemes:</strong> myscheme.gov.in, ministry websites, official gazettes.</li>
-            <li><strong>Bank rates:</strong> Official bank websites and RBI publications.</li>
+            <li><strong>Gold and silver:</strong> computed from the international spot price and the USD to INR rate, with import duty and GST, then checked each day against published Indian dealer rates.</li>
+            <li><strong>Petrol and diesel:</strong> the rates Indian Oil, BPCL and HPCL publish each morning.</li>
+            <li><strong>LPG:</strong> the monthly cylinder rates the same oil companies publish.</li>
+            <li><strong>Schemes, scholarships and grants:</strong> ministry and state department websites and the official scheme portals, linked on every page.</li>
+            <li><strong>Bank rates:</strong> each bank&apos;s own website.</li>
           </ul>
         </section>
 
         <section className="mb-8">
           <h2 className="heading-2 mb-4">How we keep this free</h2>
           <p className="text-body">
-            Paisa Reality is free for everyone. We earn revenue through advertisements (Google AdSense) on the site. We do not charge users, sell data, or take commissions from any bank or scheme. Your trust matters more than a quick buck.
+            Everything on Paisa Reality is free to use. The site is paid for by ads through Google AdSense, and by an optional Premium plan for people who would rather not see them. We do not sell your data, and no bank, insurer or scheme pays us to be listed or ranked.
           </p>
         </section>
 

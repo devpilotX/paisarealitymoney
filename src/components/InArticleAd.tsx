@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { usePlan } from '@/lib/use-plan';
 import { adClientId } from './AdSenseScript';
 
 declare global {
@@ -17,6 +18,7 @@ export default function InArticleAd({
   const containerRef = useRef<HTMLDivElement>(null);
   const pushed = useRef(false);
   const [inView, setInView] = useState(false);
+  const plan = usePlan();
   const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
   const adSlot =
     process.env.NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT
@@ -53,7 +55,7 @@ export default function InArticleAd({
     }
   }, [inView, pubId, adSlot]);
 
-  if (!pubId || !adSlot) {
+  if (!pubId || !adSlot || plan === 'premium') {
     return null;
   }
 

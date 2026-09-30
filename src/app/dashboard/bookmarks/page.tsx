@@ -1,48 +1,71 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
-import SchemeCard from '@/components/SchemeCard';
+import CategoryIcon from '@/components/CategoryIcon';
 
-interface BookmarkedScheme {
-  id: number; slug: string; name: string; category: string;
-  level: string; benefit_summary: string; benefit_amount_max: number | null;
+interface Saved {
+  id: number; slug: string; name: string; category: string; level: string;
+  benefit_summary: string | null; saved_at: string;
 }
 
 export default function BookmarksPage(): React.ReactElement {
   const router = useRouter();
-  const [schemes] = useState<BookmarkedScheme[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [schemes, setSchemes] = useState<Saved[] | null>(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('/api/auth/me').then((r) => r.json())
-      .then((data: { success: boolean }) => { if (!data.success) router.push('/login'); })
-      .catch(() => router.push('/login'))
-      .finally(() => setLoading(false));
+    fetch('/api/bookmarks', { cache: 'no-store' })
+      .then(async (r) => {
+        if (r.status === 401) { router.push('/login?next=/dashboard/bookmarks'); return; }
+        const d = (await r.json()) as { success: boolean; schemes?: Saved[]; error?: string };
+        if (d.success) setSchemes(d.schemes ?? []); else setError(d.error ?? 'Could not load your saved schemes.');
+      })
+      .catch(() => setError('We could not reach the server. Try again in a moment.'));
   }, [router]);
 
-  if (loading) return <div className="container-main py-12 text-center"><p className="text-muted-2">Loading bookmarks...</p></div>;
+  const remove = async (slug: string): Promise<void> => {
+    const prev = schemes;
+    setSchemes((s) => s?.filter((x) => x.slug !== slug) ?? null);
+    const r = await fetch('/api/bookmarks', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug }) }).catch(() => null);
+    if (!r?.ok) setSchemes(prev);
+  };
 
   return (
-    <div className="container-main py-6">
-      <Breadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Saved Schemes' }]} />
-      <h1 className="heading-1 mb-6">Saved Schemes</h1>
-      {schemes.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="container-main py-8">
+      <Breadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Saved schemes' }]} />
+      <h1 className="heading-1 mt-4">Saved schemes</h1>
+      <p className="mt-3 text-muted">Schemes you saved from their pages. Remove one when you no longer need it.</p>
+
+      {error && <p role="alert" className="mt-8 callout-red">{error}</p>}
+      {!error && schemes === null && <p className="mt-10 text-muted-2">Loading your saved schemes</p>}
+
+      {schemes && schemes.length === 0 && (
+        <div className="mt-10 card-flat text-center py-14">
+          <p className="text-lg font-medium">Nothing saved yet</p>
+          <p className="mt-2 text-muted max-w-md mx-auto">Open any scheme and press Save scheme. It will appear here so you can come back to it.</p>
+          <Link href="/schemes" className="btn-primary mt-6">Find schemes for you</Link>
+        </div>
+      )}
+
+      {schemes && schemes.length > 0 && (
+        <ul className="mt-8 grid gap-3 md:grid-cols-2">
           {schemes.map((s) => (
-            <SchemeCard key={s.id} slug={s.slug} name={s.name} category={s.category} level={s.level} benefitSummary={s.benefit_summary} benefitAmountMax={s.benefit_amount_max} />
+            <li key={s.slug} className="card-flat !p-5 flex gap-4">
+              <CategoryIcon category={s.category} className="w-10 h-10" />
+              <div className="min-w-0 flex-1">
+                <Link href={`/schemes/${s.slug}`} className="font-semibold text-ink no-underline hover:text-navy">{s.name}</Link>
+                {s.benefit_summary && <p className="mt-1 text-[15px] text-muted line-clamp-2">{s.benefit_summary}</p>}
+                <div className="mt-3 flex gap-4 text-sm">
+                  <Link href={`/dashboard/tracker?add=${s.slug}`} className="link-internal">Track my application</Link>
+                  <button type="button" onClick={() => void remove(s.slug)} className="text-muted hover:text-brand-red">Remove</button>
+                </div>
+              </div>
+            </li>
           ))}
-        </div>
-      ) : (
-        <div className="text-center py-16">
-          <span className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-line bg-paper-2 text-navy mb-4">
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" /></svg>
-          </span>
-          <p className="font-serif text-lg font-bold text-navy mb-2">No saved schemes yet</p>
-          <p className="text-sm text-muted mb-6">When you find schemes you like, save them here for easy access.</p>
-          <a href="/schemes" className="btn-primary no-underline">Find Schemes</a>
-        </div>
+        </ul>
       )}
     </div>
   );
