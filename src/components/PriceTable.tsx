@@ -39,8 +39,10 @@ export default function PriceTable({
         </thead>
         <tbody>
           {rows.map((row, index) => {
-            const isPositive = row.change > 0;
-            const isNegative = row.change < 0;
+            const ch = Number(row.change) || 0;
+            const pct = Number(row.changePercent) || 0;
+            const isPositive = ch > 0.004;
+            const isNegative = ch < -0.004;
             const changeColor = isPositive
               ? 'price-up'
               : isNegative
@@ -63,7 +65,7 @@ export default function PriceTable({
                   {formatINR(row.price)}
                 </td>
                 <td className={`py-3 px-4 text-sm text-right font-medium ${changeColor}`}>
-                  {arrow} {row.change === 0 ? '-' : `${formatINR(Math.abs(row.change))} (${Math.abs(row.changePercent).toFixed(2)}%)`}
+                  {!isPositive && !isNegative ? 'No change' : <>{arrow} {formatINR(Math.abs(ch))} ({Math.abs(pct).toFixed(2)}%)</>}
                 </td>
               </tr>
             );
