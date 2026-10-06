@@ -15,14 +15,19 @@ Below is today's list of trending items gathered from Google Trends India, Googl
 1. is about Indian household money: income tax, GST that hits consumers, RBI rates and rules, bank
    deposits and loans, EPF, PPF, NPS, small savings, government schemes, gold, silver, fuel and LPG
    prices, insurance, UPI and payments, SEBI or mutual fund rules that change things for retail investors;
-2. is new (the last three days) and something people are searching for;
+2. is new (the last three days, or an official notice from the last ten days that people are still
+   searching for) and something people are searching for;
 3. is not already covered in the "recently published" list;
 4. can be confirmed from an official primary source (regulator, ministry, gazette, PIB, CBDT, EPFO, NPCI,
    an exchange or AMFI).
 
 Skip stock tips, share price predictions, crypto speculation, politics, celebrity news, exam results and
 answer keys, and anything you cannot confirm officially. If no item qualifies, look at the official feeds
-yourself for a fresh rule change or circular from the last seven days. If still nothing qualifies, return
+yourself for a fresh rule change or circular from the last ten days. If no news item qualifies, write a
+timely explainer instead: a rule, rate or deadline that applies this month and that you can confirm on
+an official page (a filing due date, the current quarter's small savings rates, a scheme's current
+limits, a policy meeting's date and what the current rate is). Never write about what a decision
+"might" be. If even that fails, return
 `{"skip": true, "reason": "..."}` and nothing else. A skipped day is better than a wrong article.
 
 ## Step 2: verify before you write
@@ -49,8 +54,13 @@ Follow the human-prose skill below exactly. In addition:
 - 1,000 to 1,600 words of Markdown. No level-1 heading (the page prints the title). At least four `##`
   sections with sentence-case headings that say what the section answers.
 - The first two sentences state the news: who decided what, when, and from when it applies.
-- Explain who is affected and who is not. Work through one example in rupees using the verified figures,
-  and show the arithmetic so a reader can check it.
+- Explain who is affected and who is not, in the words of the official text. Where the official page
+  refers to a list or schedule you have not fetched, fetch it or describe the group the way the page
+  does; do not guess.
+- When the story involves amounts (rates, limits, prices, tax), work through one example in rupees
+  using the verified figures and show the arithmetic. When it is about dates, deadlines or process
+  (a due date moved, a new form, a KYC rule), give a dated checklist instead. Do not force a rupee
+  example onto a story that has none.
 - A practical section on what a reader can do now, and what they do not need to do.
 - End with `## Questions people ask`: three or four `###` questions people actually type into Google,
   each answered in two to four plain sentences. No summary or conclusion section after it.

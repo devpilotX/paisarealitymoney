@@ -172,7 +172,7 @@ function composeProblem() {
   if (j.published === false) {
     text = ['The article was written but the site refused it:', ...(j.errors || []).map((e) => `- ${e}`), '', 'Nothing was published today.'].join('\n');
   } else if (j.skip) {
-    text = `No article today: ${j.reason}\n\nThe writer found no new money topic it could confirm from an official source. That is the safe outcome.`;
+    text = `No article today: ${String(j.reason).slice(0, 1500)}\n\nThe writer found no money topic it could confirm from an official source, so nothing was published. That is the safe outcome.`;
   } else if (j.review && j.ok === false) {
     text = ['No article today: the draft failed again after fixing the fact-check points.', j.reason || '', ...(j.problems || []).slice(0, 8).map((p) => `- ${p}`)].join('\n');
   } else {
