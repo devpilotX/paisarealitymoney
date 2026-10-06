@@ -202,6 +202,7 @@ const writerCall = (path, bodyExpr) => ({
 
 const nodes = [
   { id: id(1), name: 'Daily at 08:30', type: 'n8n-nodes-base.scheduleTrigger', typeVersion: 1.2, position: [0, 200], parameters: { rule: { interval: [{ field: 'cronExpression', expression: '30 8 * * *' }] } } },
+  { id: id(25), name: 'Run now', type: 'n8n-nodes-base.manualTrigger', typeVersion: 1, position: [0, 400], parameters: {} },
   http(2, 'Published today already?', [220, 200], { method: 'GET', url: `${SITE}/api/cron/articles`, authentication: 'genericCredentialType', genericAuthType: 'httpHeaderAuth', options: { timeout: 30000 } }, { credentials: CRON, retryOnFail: true, maxTries: 3, waitBetweenTries: 15000 }),
   code(3, 'List the feeds', [440, 200], listFeeds),
   http(4, 'Fetch feed', [660, 200], { method: 'GET', url: '={{ $json.url }}', sendHeaders: true, headerParameters: { parameters: [{ name: 'User-Agent', value: 'Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36' }] }, options: { timeout: 30000, response: { response: { responseFormat: 'text' } } } }, { onError: 'continueRegularOutput', retryOnFail: true, maxTries: 2, waitBetweenTries: 5000 }),
@@ -230,6 +231,7 @@ const nodes = [
 const link = (to) => ({ node: to, type: 'main', index: 0 });
 const connections = {
   'Daily at 08:30': { main: [[link('Published today already?')]] },
+  'Run now': { main: [[link('Published today already?')]] },
   'Published today already?': { main: [[link('List the feeds')]] },
   'List the feeds': { main: [[link('Fetch feed')]] },
   'Fetch feed': { main: [[link('Pick trending candidates')]] },

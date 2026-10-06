@@ -34,7 +34,7 @@ DEST="/opt/paisa-writer/releases/$STAMP"
 install -d -m 755 "$DEST/deploy" "$DEST/src/lib"
 cp -r "$SRC/deploy/writer" "$DEST/deploy/"
 cp "$SRC/src/lib/article-core.ts" "$DEST/src/lib/"
-printf '{ "private": true }\n' > "$DEST/package.json"
+printf '{ "private": true, "type": "module" }\n' > "$DEST/package.json"
 chmod -R a+rX "$DEST"
 ln -sfn "$DEST" /opt/paisa-writer/current.new && mv -Tf /opt/paisa-writer/current.new /opt/paisa-writer/current
 ls -1dt /opt/paisa-writer/releases/*/ | tail -n +4 | xargs -r rm -rf
