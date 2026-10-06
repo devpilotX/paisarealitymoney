@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateRequest, unauthorizedResponse } from '@/lib/auth';
 import { createOrder, isPremiumPlan, PLAN_PRICES_INR } from '@/lib/razorpay';
+import { PAYMENTS_ENABLED } from '@/lib/payments';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  // Paid plans are switched off: everything is free, and no order can be created.
+  if (!PAYMENTS_ENABLED) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
   const auth = authenticateRequest(request);
   if (!auth.authenticated) return unauthorizedResponse(auth.error);
 

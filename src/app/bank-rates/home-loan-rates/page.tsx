@@ -8,6 +8,7 @@ import BankRateTable from '@/components/BankRateTable';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ShareButton from '@/components/ShareButton';
 import RatesAsOf from '@/components/RatesAsOf';
 
@@ -47,7 +48,7 @@ export default async function HomeLoanRatesPage(): Promise<React.ReactElement> {
       <h1 className="heading-1 mb-3">Home Loan Interest Rates 2026</h1>
       <p className="text-body mb-2">Compare home loan rates across Indian banks. Sorted by lowest rate first. Click headers to re-sort.</p>
       <RatesAsOf rateType="home_loan" className="mb-6" />
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
       <div className="my-8"><BankRateTable title="Home Loan Rate Comparison" rates={tableRates} rateLabel="Home Loan Rate" /></div>
       <article className="max-w-3xl my-8">
         <h2 className="heading-2 mb-4">About Home Loan Rates in India</h2>

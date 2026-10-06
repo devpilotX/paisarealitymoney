@@ -48,7 +48,7 @@ export default function AboutPage(): React.ReactElement {
         <section className="mb-8">
           <h2 className="heading-2 mb-4">How we keep this free</h2>
           <p className="text-body">
-            Everything on Paisa Reality is free to use. The site is paid for by ads through Google AdSense, and by an optional Premium plan for people who would rather not see them. We do not sell your data, and no bank, insurer or scheme pays us to be listed or ranked.
+            Everything on Paisa Reality is free to use, with or without an account. The site is paid for by ads, through Google AdSense and a small number of clearly labelled sponsor slots. We do not sell your data, and no bank, insurer or scheme pays us to be listed or ranked.
           </p>
         </section>
 

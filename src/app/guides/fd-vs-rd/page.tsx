@@ -4,7 +4,7 @@ import { articleSchema } from '@/lib/schema';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
-import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import LastReviewed from '@/components/LastReviewed';
 
@@ -43,7 +43,7 @@ export default function Page(): React.ReactElement {
           FD and RD sound similar and both are safe bank deposits, but they fit different situations. The right one depends on whether you already have the money or you are saving it month by month. Here is the simple way to tell them apart.
         </p>
 
-        <AdBanner format="horizontal" className="mb-8" />
+        <AdSlot placement="guides-top" format="horizontal" className="mb-8" />
 
         <h2 className="heading-2 mb-3">Fixed deposit in one line</h2>
         <p className="text-body mb-4">

@@ -2,6 +2,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ShareButton from '@/components/ShareButton';
 import { pageMetadata } from '@/lib/seo';
 import GoldPlannerClient from './GoldPlannerClient';
@@ -97,7 +98,7 @@ export default function GoldPlannerPage(): React.ReactElement {
         Understand how gold fits in your portfolio. Historical data and educational allocation ranges to help you think clearly.
       </p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="calculators-top" format="horizontal" />
 
       <div className="my-8">
         <GoldPlannerClient />

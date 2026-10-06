@@ -12,6 +12,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import NextStep from '@/components/NextStep';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 import NationalRateHeadline from '@/components/NationalRateHeadline';
@@ -79,7 +80,7 @@ export default async function SilverRatePage(): Promise<React.ReactElement> {
         )}
       </p>
       <NationalRateHeadline metal="silver" snapshot={national} series={series} priceDate={priceDate} cityCount={50} />
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
       <div className="my-6"><CitySelector basePath="/silver-rate" placeholder="Search city for silver rate..." /></div>
 
       {prices.length > 0 && (

@@ -1,0 +1,30 @@
+[Unit]
+Description=Paisa Reality article writer (Kiro CLI, called by n8n on 127.0.0.1:5690)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=kirowriter
+Group=kirowriter
+WorkingDirectory=/var/lib/kirowriter
+Environment=HOME=/var/lib/kirowriter
+Environment=WRITER_PORT=5690
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node /opt/paisa-writer/current/deploy/writer/server.mjs
+Restart=on-failure
+RestartSec=10
+# The writer only needs the network and its own home directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/kirowriter
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryMax=1500M
+
+[Install]
+WantedBy=multi-user.target

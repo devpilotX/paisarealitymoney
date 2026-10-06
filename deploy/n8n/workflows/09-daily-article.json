@@ -1,0 +1,850 @@
+{
+  "id": "paisaDailyArticle1",
+  "name": "Content: daily verified article (Kiro writes, Nemotron checks, Telegram reports)",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "errorWorkflow": "paisaErrorAlert1",
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all",
+    "executionTimeout": -1
+  },
+  "nodes": [
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000001",
+      "name": "Daily at 08:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 8 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000002",
+      "name": "Published today already?",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://paisareality.com/api/cron/articles",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaCronSecret",
+          "name": "Site cron secret"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 15000
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000003",
+      "name": "List the feeds",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        200
+      ],
+      "parameters": {
+        "jsCode": "// Stop if today's article is already out (a manual re-run must not post twice).\nconst status = $json;\nif (Number(status.publishedToday) > 0) return [];\nconst recent = (status.recent || []).map((r) => r.title);\nconst gn = (q) => `https://news.google.com/rss/search?q=${encodeURIComponent(q)}+when:2d&hl=en-IN&gl=IN&ceid=IN:en`;\nconst feeds = [\n  ['Google Trends India', 'https://trends.google.com/trending/rss?geo=IN', 'trends'],\n  ['Google News: personal finance', gn('personal finance India OR income tax OR EPFO OR PPF OR NPS'), 'news'],\n  ['Google News: RBI, SEBI, banks', gn('RBI OR SEBI OR \"repo rate\" OR \"fixed deposit\" OR UPI'), 'news'],\n  ['Google News: GST, LPG, gold, fuel', gn('GST rate OR \"LPG price\" OR \"gold price\" OR \"petrol price\" OR \"small savings\"'), 'news'],\n  ['RBI press releases', 'https://www.rbi.org.in/pressreleases_rss.xml', 'official'],\n  ['RBI notifications', 'https://www.rbi.org.in/notifications_rss.xml', 'official'],\n  ['SEBI', 'https://www.sebi.gov.in/sebirss.xml', 'official'],\n  ['PIB Finance Ministry', 'https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3', 'official'],\n  ['Income Tax Department', 'https://www.incometax.gov.in/iec/foportal/rss.xml', 'official'],\n  ['ET Wealth', 'https://economictimes.indiatimes.com/wealth/rssfeeds/837555174.cms', 'news'],\n  ['Mint Money', 'https://www.livemint.com/rss/money', 'news'],\n  ['Business Standard Personal Finance', 'https://www.business-standard.com/rss/finance/personal-finance-10307.rss', 'news'],\n];\nreturn feeds.map(([name, url, kind]) => ({ json: { name, url, kind, recent } }));\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000004",
+      "name": "Fetch feed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000005",
+      "name": "Pick trending candidates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        200
+      ],
+      "parameters": {
+        "jsCode": "const feeds = $('List the feeds').all().map((i) => i.json);\nconst recent = feeds[0]?.recent || [];\nconst MONEY = /\\b(tax|itr|tds|gst|rbi|repo|sebi|mutual funds?|sip|epfo?|pf|ppf|nps|pension|fd|fixed deposits?|interest rates?|loans?|emi|credit cards?|upi|banks?|banking|gold|silver|petrol|diesel|lpg|cylinder|schemes?|yojana|subsidy|insurance|lic|irdai|aadhaar|pan|kyc|salary|da hike|pay commission|savings|senior citizens?|sukanya|kisan|budget|inflation|cibil|rupee|deposit|npci|demat|ipo rules|dividend tax|capital gains|hra|80c|pmay|atal)\\b/i;\nconst SKIP = /answer key|result|admit card|cricket|ipl|\\bmatch\\b|movie|box office|election|murder|weather|live score|horoscope|target price|stocks? to buy|crypto|bitcoin|sensex today|nifty today|share price/i;\nconst ROUTINE = /auction|vrrr|\\bvrr\\b|treasury bills?|money market operations|state government securities|\\bsdl\\b|lending facility|reserve money|weekly statistical|penalty on|imposes monetary penalty|cancels certificate|directions under section 35a|amalgamation|lapsed/i;\nconst decode = (s) => String(s || '').replace(/<!\\[CDATA\\[|\\]\\]>/g, '').replace(/&amp;/g, '&').replace(/&quot;/g, '\"').replace(/&#39;|&apos;/g, \"'\").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/<[^>]+>/g, '').replace(/\\s+/g, ' ').trim();\nconst tag = (x, t) => { const m = x.match(new RegExp(`<${t}[^>]*>([\\\\s\\\\S]*?)</${t}>`, 'i')); return m ? decode(m[1]) : ''; };\nconst words = (t) => new Set(t.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\\s+/).filter((w) => w.length > 3));\nconst recentSets = recent.map(words);\nconst similar = (t) => { const a = words(t); return recentSets.some((b) => { const inter = [...a].filter((w) => b.has(w)).length; return inter / Math.max(1, Math.min(a.size, b.size)) >= 0.6; }); };\nconst now = Date.now();\nconst out = [];\n$input.all().forEach((item, i) => {\n  const feed = feeds[i];\n  if (!feed) return;\n  const xml = String(item.json.data || '');\n  for (const raw of xml.split(/<item[\\s>]/i).slice(1, 60)) {\n    let title = tag(raw, 'title');\n    if (!title) continue;\n    const source = tag(raw, 'source') || feed.name;\n    if (feed.kind === 'news') title = title.replace(/\\s+-\\s+[^-]+$/, '');\n    const extra = feed.kind === 'trends' ? [...raw.matchAll(/<ht:news_item_title>([\\s\\S]*?)<\\/ht:news_item_title>/g)].map((m) => decode(m[1])).join(' | ') : '';\n    const hay = `${title} ${extra}`;\n    if (SKIP.test(hay) || (feed.kind === 'official' && ROUTINE.test(title))) continue;\n    const hits = (hay.match(new RegExp(MONEY.source, 'gi')) || []).length;\n    if (!hits && feed.kind !== 'official') continue;\n    const pub = Date.parse(tag(raw, 'pubDate'));\n    const ageH = Number.isFinite(pub) ? (now - pub) / 3600000 : 48;\n    if (ageH > (feed.kind === 'official' ? 96 : 60)) continue;\n    const traffic = tag(raw, 'ht:approx_traffic');\n    const trafficN = Number(traffic.replace(/[^0-9]/g, '')) * (/k/i.test(traffic) ? 1000 : 1) || 0;\n    let score = hits * 2 + (feed.kind === 'official' ? 3 : 0) + (ageH < 24 ? 2 : 0) + (trafficN ? Math.log10(trafficN) : 0);\n    if (similar(title)) score -= 10;\n    const url = feed.kind === 'trends' ? (raw.match(/<ht:news_item_url>([\\s\\S]*?)<\\/ht:news_item_url>/) || [])[1] || '' : tag(raw, 'link');\n    out.push({ title: extra ? `${title}: ${extra}`.slice(0, 300) : title, source, feed: feed.name, url: decode(url), published: Number.isFinite(pub) ? new Date(pub).toISOString().slice(0, 16).replace('T', ' ') + ' UTC' : '', traffic, score: Math.round(score * 10) / 10 });\n  }\n});\nconst seen = new Set();\nconst candidates = out.sort((a, b) => b.score - a.score).filter((c) => { const k = c.title.toLowerCase().slice(0, 60); if (seen.has(k) || c.score < 2) return false; seen.add(k); return true; }).slice(0, 30);\nconst feedsOk = $input.all().filter((i) => String(i.json.data || '').includes('<item')).length;\nreturn [{ json: { candidates, recent, feedsOk, feedsTotal: feeds.length } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000006",
+      "name": "Research and write (Kiro)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5690/write",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ candidates: $json.candidates, recent: $json.recent }) }}",
+        "options": {
+          "timeout": 4200000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaKiroApiKey",
+          "name": "Kiro API key"
+        }
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000007",
+      "name": "Written and checked?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1320,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b9a0c009-0000-4000-8000-000000000907",
+              "leftValue": "={{ $json.ok === true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000008",
+      "name": "Ask for an independent review",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        100
+      ],
+      "parameters": {
+        "jsCode": "const r = $json;\nconst a = r.article;\nconst evidence = (r.claims || []).map((c, i) => `${i + 1}. ${c.claim}\\n   source: ${c.source_url}\\n   quote from that page: \"${c.quote}\"`).join('\\n');\nconst system = 'You are a strict fact-check editor for an Indian personal finance website. You get an article and its evidence: exact quotes copied from the pages it cites (a script has already confirmed each quote is on its page). Check that every specific fact in the article (numbers, rates, dates, deadlines, eligibility rules, limits, names of schemes and bodies) is supported by the evidence, that the arithmetic in any worked example is correct, and that the article gives no personalised investment advice and no guarantees. Plain explanation that needs no source is fine. Reply with JSON only, no other text: {\"verdict\":\"pass\" or \"fail\",\"issues\":[{\"severity\":\"high\" or \"low\",\"text\":\"what is wrong and where\"}]}. Use high only for: a fact that contradicts the evidence, a specific figure or rule with no support in the evidence, wrong arithmetic, or advice or a guarantee. verdict is fail if any issue is high.';\nconst user = `ARTICLE TITLE: ${a.title}\\n\\nARTICLE:\\n${a.content}\\n\\nEVIDENCE:\\n${evidence}`;\nreturn [{ json: { ...r, reviewRequest: { model: 'nvidia/nemotron-3-ultra-550b-a55b:free', temperature: 0.1, max_tokens: 6000, messages: [{ role: 'system', content: system }, { role: 'user', content: user }] } } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000009",
+      "name": "Fact-check (Nemotron, OpenRouter)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1760,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "HTTP-Referer",
+              "value": "https://paisareality.com"
+            },
+            {
+              "name": "X-Title",
+              "value": "Paisa Reality fact-check"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.reviewRequest) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaOpenRouter",
+          "name": "OpenRouter API key"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 20000
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000010",
+      "name": "Read the verdict",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1980,
+        100
+      ],
+      "parameters": {
+        "jsCode": "const written = $('Research and write (Kiro)').first().json;\nconst res = $json;\nlet verdict = 'unavailable';\nlet issues = [];\nlet note = '';\nconst text = res?.choices?.[0]?.message?.content;\nif (typeof text === 'string') {\n  const s = text.replace(/<think>[\\s\\S]*?<\\/think>/g, '');\n  const m = s.match(/\\{[\\s\\S]*\\}/);\n  try {\n    const v = JSON.parse(m ? m[0] : s);\n    verdict = v.verdict === 'pass' ? 'pass' : v.verdict === 'fail' ? 'fail' : 'unavailable';\n    issues = Array.isArray(v.issues) ? v.issues.filter((x) => x && x.text).slice(0, 12) : [];\n  } catch { note = 'reviewer reply was not JSON'; }\n} else {\n  note = String(res?.error?.message || res?.error || 'no reply').slice(0, 200);\n}\nconst high = issues.filter((i) => i.severity === 'high');\nif (verdict === 'fail' && high.length === 0) verdict = 'pass';\nreturn [{ json: { ...written, review: { verdict, issues, high: high.length, note } } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000011",
+      "name": "Review passed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2200,
+        100
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b9a0c009-0000-4000-8000-000000000911",
+              "leftValue": "={{ $json.review.verdict !== 'fail' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000012",
+      "name": "Prepare the fixes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2420,
+        260
+      ],
+      "parameters": {
+        "jsCode": "const r = $json;\nconst draft = { ...r.article, claims: (r.claims || []).map((c) => ({ claim: c.claim, source_url: c.source_url, quote: c.quote })) };\nreturn [{ json: { draft, issues: r.review.issues.filter((i) => i.severity === 'high').map((i) => i.text) } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000013",
+      "name": "Revise with the review (Kiro)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2640,
+        260
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5690/revise",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ draft: $json.draft, issues: $json.issues }) }}",
+        "options": {
+          "timeout": 4200000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaKiroApiKey",
+          "name": "Kiro API key"
+        }
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000014",
+      "name": "Revision passed the checks?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2860,
+        260
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b9a0c009-0000-4000-8000-000000000914",
+              "leftValue": "={{ $json.ok === true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000015",
+      "name": "Mark as revised",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3080,
+        200
+      ],
+      "parameters": {
+        "jsCode": "return [{ json: { ...$json, revisedAfterReview: true } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000016",
+      "name": "Ready to publish",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3300,
+        100
+      ],
+      "parameters": {
+        "jsCode": "// Both routes arrive here: reviewed and passed, or revised after the review.\nconst j = $json;\nconst revised = Boolean(j.revisedAfterReview);\nconst review = revised ? $('Read the verdict').first().json.review : j.review;\nreturn [{ json: { article: j.article, summary: j.summary, sources: j.sources, report: j.report, review, revised, reviseReport: revised ? j.report : null } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000017",
+      "name": "Publish on the site",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3520,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://paisareality.com/api/cron/articles",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.article) }}",
+        "options": {
+          "timeout": 60000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "paisaCronSecret",
+          "name": "Site cron secret"
+        }
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000018",
+      "name": "After publish",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3740,
+        100
+      ],
+      "parameters": {
+        "jsCode": "const pkg = $('Ready to publish').first().json;\nconst res = $json;\nconst body = typeof res.body === 'string' ? (() => { try { return JSON.parse(res.body); } catch { return {}; } })() : (res.body || {});\nif (!body.success) return [{ json: { published: false, status: res.statusCode, errors: body.errors || [String(res.body || '').slice(0, 300)], pkg } }];\nreturn [{ json: { published: true, url: body.url, slug: body.slug, pkg, indexnow: { host: 'paisareality.com', key: '8810a952e5b341dfd230c20bb6dc9f03', keyLocation: 'https://paisareality.com/8810a952e5b341dfd230c20bb6dc9f03.txt', urlList: [body.url, 'https://paisareality.com/newsletter', 'https://paisareality.com/sitemap.xml'] } } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000019",
+      "name": "Published?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3960,
+        100
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b9a0c009-0000-4000-8000-000000000919",
+              "leftValue": "={{ $json.published === true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000020",
+      "name": "Submit to IndexNow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4180,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.indexnow.org/indexnow",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.indexnow) }}",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000021",
+      "name": "Compose the announcement",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4400,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const p = $('After publish').first().json;\nconst s = p.pkg.summary || {};\nconst rv = p.pkg.review || {};\nconst idx = Number($json.statusCode) || 0;\nconst first = $('Research and write (Kiro)').first().json.report || {};\nconst credits = (Number(first.credits) || 0) + (p.pkg.revised ? Number(p.pkg.report?.credits) || 0 : 0);\nconst minutes = Math.round(((Number(first.seconds) || 0) + (p.pkg.revised ? Number(p.pkg.report?.seconds) || 0 : 0)) / 60);\nconst lines = [\n  \"Today's article is live:\",\n  p.pkg.article.title,\n  p.url,\n  '',\n  `Facts checked on their sources: ${s.claimsVerified}/${s.claimsTotal} (${s.officialClaimsVerified} on official pages), ${s.sources} sources (${s.officialSources} official)`,\n  `Style check: ${s.detector?.high ?? 0} high, ${s.detector?.medium ?? 0} medium findings; about ${s.words} words`,\n  `Independent review (Nemotron): ${rv.verdict}${p.pkg.revised ? ', then revised to fix its points' : ''}${rv.note ? ` (${rv.note})` : ''}`,\n  `IndexNow (Bing, Yandex): ${idx >= 200 && idx < 300 ? 'accepted' : `failed (HTTP ${idx})`}`,\n  `Kiro: ${p.pkg.report?.model || '?'}, ${credits.toFixed(1)} credits, ${(first.attempts?.length || 1) + (p.pkg.revised ? p.pkg.report?.attempts?.length || 1 : 0)} draft(s), ${minutes} min`,\n  '',\n  'Edit or unpublish it in the admin dashboard if anything needs changing.',\n];\nreturn [{ json: { text: lines.join('\\n') } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000022",
+      "name": "Telegram: article published",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4620,
+        0
+      ],
+      "parameters": {
+        "chatId": "__CHAT_ID__",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "paisaTelegramBot",
+          "name": "Telegram: Paisareality_bot"
+        }
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000023",
+      "name": "Compose the problem report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3740,
+        420
+      ],
+      "parameters": {
+        "jsCode": "const j = $json;\nlet text;\nif (j.published === false) {\n  text = ['The article was written but the site refused it:', ...(j.errors || []).map((e) => `- ${e}`), '', 'Nothing was published today.'].join('\\n');\n} else if (j.skip) {\n  text = `No article today: ${j.reason}\\n\\nThe writer found no new money topic it could confirm from an official source. That is the safe outcome.`;\n} else if (j.review && j.ok === false) {\n  text = ['No article today: the draft failed again after fixing the fact-check points.', j.reason || '', ...(j.problems || []).slice(0, 8).map((p) => `- ${p}`)].join('\\n');\n} else {\n  const hint = /key rejected|malformed Kiro/i.test(String(j.reason)) ? '\\n\\nUpdate the key in n8n: Credentials > \"Kiro API key\" > Value.' : '';\n  text = ['No article today:', String(j.reason || 'unknown error'), ...(j.problems || []).slice(0, 8).map((p) => `- ${p}`)].join('\\n') + hint;\n}\nreturn [{ json: { text } }];\n"
+      }
+    },
+    {
+      "id": "b9a0c009-0000-4000-8000-000000000024",
+      "name": "Telegram: no article today",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3960,
+        420
+      ],
+      "parameters": {
+        "chatId": "__CHAT_ID__",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "paisaTelegramBot",
+          "name": "Telegram: Paisareality_bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily at 08:30": {
+      "main": [
+        [
+          {
+            "node": "Published today already?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Published today already?": {
+      "main": [
+        [
+          {
+            "node": "List the feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List the feeds": {
+      "main": [
+        [
+          {
+            "node": "Fetch feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch feed": {
+      "main": [
+        [
+          {
+            "node": "Pick trending candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick trending candidates": {
+      "main": [
+        [
+          {
+            "node": "Research and write (Kiro)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research and write (Kiro)": {
+      "main": [
+        [
+          {
+            "node": "Written and checked?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Written and checked?": {
+      "main": [
+        [
+          {
+            "node": "Ask for an independent review",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compose the problem report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask for an independent review": {
+      "main": [
+        [
+          {
+            "node": "Fact-check (Nemotron, OpenRouter)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fact-check (Nemotron, OpenRouter)": {
+      "main": [
+        [
+          {
+            "node": "Read the verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the verdict": {
+      "main": [
+        [
+          {
+            "node": "Review passed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Review passed?": {
+      "main": [
+        [
+          {
+            "node": "Ready to publish",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare the fixes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare the fixes": {
+      "main": [
+        [
+          {
+            "node": "Revise with the review (Kiro)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revise with the review (Kiro)": {
+      "main": [
+        [
+          {
+            "node": "Revision passed the checks?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revision passed the checks?": {
+      "main": [
+        [
+          {
+            "node": "Mark as revised",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compose the problem report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as revised": {
+      "main": [
+        [
+          {
+            "node": "Ready to publish",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ready to publish": {
+      "main": [
+        [
+          {
+            "node": "Publish on the site",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish on the site": {
+      "main": [
+        [
+          {
+            "node": "After publish",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "After publish": {
+      "main": [
+        [
+          {
+            "node": "Published?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Published?": {
+      "main": [
+        [
+          {
+            "node": "Submit to IndexNow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compose the problem report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit to IndexNow": {
+      "main": [
+        [
+          {
+            "node": "Compose the announcement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose the announcement": {
+      "main": [
+        [
+          {
+            "node": "Telegram: article published",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose the problem report": {
+      "main": [
+        [
+          {
+            "node": "Telegram: no article today",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}

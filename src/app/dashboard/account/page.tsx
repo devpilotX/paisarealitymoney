@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { PAYMENTS_ENABLED } from '@/lib/payments';
 
 interface UserData {
   id: number; name: string; email: string; plan: string;
@@ -147,7 +148,9 @@ function AccountContent(): React.ReactElement {
       <div className="card">
         <h2 className="text-lg font-semibold mb-4">Account Info</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-          <div><span className="text-muted-2">Plan:</span> <span className="font-medium">{user.plan === 'premium' ? 'Premium' : 'Free'}</span></div>
+          {PAYMENTS_ENABLED && (
+            <div><span className="text-muted-2">Plan:</span> <span className="font-medium">{user.plan === 'premium' ? 'Premium' : 'Free'}</span></div>
+          )}
           <div><span className="text-muted-2">Member since:</span> <span className="font-medium">{user.created_at ? new Date(user.created_at).toLocaleDateString('en-IN') : 'N/A'}</span></div>
           <div><span className="text-muted-2">Last login:</span> <span className="font-medium">{user.last_login_at ? new Date(user.last_login_at).toLocaleString('en-IN') : 'N/A'}</span></div>
         </div>

@@ -7,6 +7,7 @@ import BankCard from '@/components/BankCard';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 
 export const metadata = pageMetadata({
@@ -56,7 +57,7 @@ export default async function BankRatesPage(): Promise<React.ReactElement> {
       <h1 className="heading-1 mb-3">Bank Rates in India</h1>
       <p className="text-body mb-6">FD, savings, home loan and personal loan rates for 51 banks side by side. Each rate shows the date we took it from the bank's own site; banks change rates often, so confirm with the bank before you book.</p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       <InternalLinks title="Compare by Rate Type" links={rateLinks} columns={2} />
 

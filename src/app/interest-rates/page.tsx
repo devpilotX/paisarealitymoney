@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 import LastReviewed from '@/components/LastReviewed';
@@ -100,7 +101,7 @@ export default function InterestRatesPage(): React.ReactElement {
         <Link href="/methodology" className="underline hover:text-brand-red">How we verify data</Link>
       </p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       <div className="overflow-x-auto my-8">
         <h2 className="heading-2 mb-4">Small savings scheme rates: {SMALL_SAVINGS_QUARTER}</h2>

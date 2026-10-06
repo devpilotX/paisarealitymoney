@@ -18,6 +18,7 @@ import InternalLinks from '@/components/InternalLinks';
 import NextStep from '@/components/NextStep';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 
 interface PageProps {
@@ -138,7 +139,7 @@ export default async function GoldRateCityPage({ params }: PageProps): Promise<R
         <span className="text-muted-2"> and we will email you when gold in {city.name} hits your target.</span>
       </p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       {/* Today's Prices */}
       {today && (

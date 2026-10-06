@@ -11,6 +11,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import RatesAsOf from '@/components/RatesAsOf';
 
@@ -119,7 +120,7 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
         )}
       </div>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       {/* FD Rates */}
       {fdRates.length > 0 && (

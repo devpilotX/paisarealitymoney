@@ -6,6 +6,21 @@ export const ADMIN_JWT_AUDIENCE = 'paisareality-admin';
 export const ADMIN_JWT_ISSUER = 'paisareality';
 export const ADMIN_SESSION_SECONDS = 60 * 60 * 12;
 
+/** True when the admin login requires an authenticator code (ADMIN_TOTP_SECRET is set). */
+export function adminTotpRequired(): boolean {
+  return Boolean(process.env.ADMIN_TOTP_SECRET && process.env.ADMIN_TOTP_SECRET.trim());
+}
+
+/**
+ * Pure check of a decoded admin token, for tests. Once two-factor login is on, a token
+ * issued without the second factor (for example one minted before 2FA was enabled) is refused.
+ */
+export function adminClaimsValid(decoded: { role?: string; mfa?: boolean }, totpRequired: boolean): boolean {
+  if (decoded.role !== 'admin') return false;
+  if (totpRequired && decoded.mfa !== true) return false;
+  return true;
+}
+
 export async function verifyAdmin(): Promise<boolean> {
   try {
     const cookieStore = await cookies();
@@ -20,8 +35,8 @@ export async function verifyAdmin(): Promise<boolean> {
       algorithms: ['HS256'],
       audience: ADMIN_JWT_AUDIENCE,
       issuer: ADMIN_JWT_ISSUER,
-    }) as { role?: string };
-    return decoded.role === 'admin';
+    }) as { role?: string; mfa?: boolean };
+    return adminClaimsValid(decoded, adminTotpRequired());
   } catch {
     return false;
   }

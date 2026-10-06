@@ -38,6 +38,9 @@ export default function AdminPage(): React.ReactElement {
   const [checking, setChecking] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [code, setCode] = useState('');
+  const [totpRequired, setTotpRequired] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
   const [error, setError] = useState('');
   const [posts, setPosts] = useState<BlogPostSummary[]>([]);
   const [loading, setLoading] = useState(false);
@@ -66,6 +69,10 @@ export default function AdminPage(): React.ReactElement {
   }, []);
 
   useEffect(() => {
+    fetch('/api/admin/auth')
+      .then((r) => r.json() as Promise<{ totpRequired?: boolean }>)
+      .then((d) => setTotpRequired(Boolean(d.totpRequired)))
+      .catch(() => {});
     void loadPosts().then((ok) => {
       setLoggedIn(ok);
       setChecking(false);
@@ -75,16 +82,30 @@ export default function AdminPage(): React.ReactElement {
 
   const handleLogin = useCallback(async () => {
     setError('');
-    const res = await fetch('/api/admin/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) { setError('Invalid credentials'); return; }
-    setLoggedIn(true);
-    await loadPosts();
-    void loadStats();
-  }, [email, loadPosts, loadStats, password]);
+    setSigningIn(true);
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, code }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setError(res.status === 429 ? 'Too many attempts. Wait 15 minutes and try again.' : data.error || 'Invalid credentials');
+        setCode('');
+        return;
+      }
+      setLoggedIn(true);
+      setPassword('');
+      setCode('');
+      await loadPosts();
+      void loadStats();
+    } catch {
+      setError('Network error. Try again.');
+    } finally {
+      setSigningIn(false);
+    }
+  }, [code, email, loadPosts, loadStats, password]);
 
   const handleDelete = useCallback(async (id: number) => {
     if (!window.confirm('Delete this post?')) return;
@@ -122,27 +143,60 @@ export default function AdminPage(): React.ReactElement {
             <h1 className="text-2xl font-bold text-gray-900">Admin</h1>
             <p className="text-sm text-gray-500 mt-1">Paisa Reality Dashboard</p>
           </div>
-          {error && <p className="text-red-600 text-sm mb-4 text-center bg-red-50 p-2 rounded">{error}</p>}
-          <div className="space-y-4">
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 text-sm focus:border-primary focus:outline-none"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') void handleLogin(); }}
-              className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 text-sm focus:border-primary focus:outline-none"
-            />
-            <button onClick={() => void handleLogin()} className="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-800 transition-colors">
-              Login
+          {error && <p role="alert" className="text-red-600 text-sm mb-4 text-center bg-red-50 p-2 rounded">{error}</p>}
+          <form
+            className="space-y-4"
+            onSubmit={(e) => { e.preventDefault(); void handleLogin(); }}
+          >
+            <label className="block">
+              <span className="sr-only">Email</span>
+              <input
+                type="email"
+                placeholder="Email"
+                autoComplete="username"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 text-sm focus:border-primary focus:outline-none"
+              />
+            </label>
+            <label className="block">
+              <span className="sr-only">Password</span>
+              <input
+                type="password"
+                placeholder="Password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 text-sm focus:border-primary focus:outline-none"
+              />
+            </label>
+            {totpRequired && (
+              <label className="block">
+                <span className="block text-xs text-gray-500 mb-1">6-digit code from Google Authenticator</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  autoComplete="one-time-code"
+                  placeholder="123456"
+                  required
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 text-sm tracking-[0.3em] text-center font-mono focus:border-primary focus:outline-none"
+                />
+              </label>
+            )}
+            <button
+              type="submit"
+              disabled={signingIn}
+              className="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-800 transition-colors disabled:opacity-60"
+            >
+              {signingIn ? 'Signing in...' : 'Login'}
             </button>
-          </div>
+          </form>
         </div>
       </div>
     );
@@ -480,19 +534,19 @@ function PricesTab({ onRefresh, actionLog }: { onRefresh: () => Promise<void>; a
           </label>
           {commodity === 'fuel' ? (
             <>
-              <label className="text-xs text-gray-500">Petrol ₹/L
+              <label className="text-xs text-gray-500">Petrol â‚¹/L
                 <input type="number" step="0.01" value={petrol} onChange={(e) => setPetrol(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
               </label>
-              <label className="text-xs text-gray-500">Diesel ₹/L
+              <label className="text-xs text-gray-500">Diesel â‚¹/L
                 <input type="number" step="0.01" value={diesel} onChange={(e) => setDiesel(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
               </label>
             </>
           ) : (
             <>
-              <label className="text-xs text-gray-500">Domestic 14.2kg ₹
+              <label className="text-xs text-gray-500">Domestic 14.2kg â‚¹
                 <input type="number" step="0.5" value={domestic} onChange={(e) => setDomestic(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
               </label>
-              <label className="text-xs text-gray-500">Commercial 19kg ₹
+              <label className="text-xs text-gray-500">Commercial 19kg â‚¹
                 <input type="number" step="0.5" value={commercial} onChange={(e) => setCommercial(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
               </label>
             </>
@@ -528,7 +582,7 @@ function PricesTab({ onRefresh, actionLog }: { onRefresh: () => Promise<void>; a
                   <td className="px-4 py-2 text-gray-700">{o.commodity}</td>
                   <td className="px-4 py-2 font-medium text-gray-900">{o.region_key}</td>
                   <td className="px-4 py-2 text-gray-600">
-                    {Object.entries(o.payload).filter(([, v]) => v != null).map(([k, v]) => `${k}: ₹${v}`).join(', ')}
+                    {Object.entries(o.payload).filter(([, v]) => v != null).map(([k, v]) => `${k}: â‚¹${v}`).join(', ')}
                   </td>
                   <td className="px-4 py-2 text-gray-500 hidden sm:table-cell">{o.as_of}</td>
                   <td className="px-4 py-2 text-right">

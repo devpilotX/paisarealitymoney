@@ -34,6 +34,8 @@ export interface MonetizationEnv {
   NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT?: string;
   RAZORPAY_KEY_ID?: string;
   RAZORPAY_KEY_SECRET?: string;
+  /** True while paid plans are switched off on purpose (NEXT_PUBLIC_PAYMENTS_ENABLED is not "true"). */
+  PAYMENTS_DISABLED?: boolean;
   NODE_ENV?: string;
 }
 
@@ -50,6 +52,8 @@ export interface MonetizationStatus {
     configured: boolean;
     /** 'live', 'test' or 'unknown'. A test key cannot collect real money. */
     mode: 'live' | 'test' | 'unknown';
+    /** Paid plans are switched off on purpose, so missing keys are not a problem. */
+    disabled: boolean;
   };
   issues: MonetizationIssue[];
   /** True when at least one path can actually earn. */
@@ -88,7 +92,10 @@ export function monetizationStatus(env: MonetizationEnv): MonetizationStatus {
     });
   }
 
-  if (!razorpayConfigured) {
+  const paymentsDisabled = env.PAYMENTS_DISABLED === true;
+  if (paymentsDisabled) {
+    // Nothing to report: the site is free by choice, and checkout is switched off.
+  } else if (!razorpayConfigured) {
     issues.push({
       area: 'razorpay',
       severity: 'warning',
@@ -109,9 +116,9 @@ export function monetizationStatus(env: MonetizationEnv): MonetizationStatus {
 
   return {
     adsense: { libraryLoads, manualUnitsWork, pubIdSet, slotsSet: slots.length },
-    razorpay: { configured: razorpayConfigured, mode },
+    razorpay: { configured: razorpayConfigured, mode, disabled: paymentsDisabled },
     issues,
-    canEarn: libraryLoads || (razorpayConfigured && mode === 'live'),
+    canEarn: libraryLoads || (!paymentsDisabled && razorpayConfigured && mode === 'live'),
   };
 }
 
@@ -121,7 +128,7 @@ export function formatMonetizationReport(status: MonetizationStatus): string {
   lines.push(
     `[monetization] adsense: library ${status.adsense.libraryLoads ? 'loads' : 'DISABLED'}, ` +
       `manual units ${status.adsense.manualUnitsWork ? 'active' : 'inactive'} (${status.adsense.slotsSet} slot ids), ` +
-      `razorpay: ${status.razorpay.configured ? status.razorpay.mode : 'not configured'}`,
+      `razorpay: ${status.razorpay.disabled ? 'switched off (everything is free)' : status.razorpay.configured ? status.razorpay.mode : 'not configured'}`,
   );
   for (const issue of status.issues) {
     lines.push(`[monetization] ${issue.severity.toUpperCase()} ${issue.area}: ${issue.message}`);

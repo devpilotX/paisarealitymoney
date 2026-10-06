@@ -12,6 +12,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import NextStep from '@/components/NextStep';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 import NationalRateHeadline from '@/components/NationalRateHeadline';
@@ -119,7 +120,7 @@ export default async function GoldRatePage(): Promise<React.ReactElement> {
 
       <NationalRateHeadline metal="gold" snapshot={national} series={series} priceDate={priceDate} cityCount={50} />
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       <div className="my-6">
         <CitySelector basePath="/gold-rate" placeholder="Search for your city..." />

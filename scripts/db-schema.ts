@@ -30,6 +30,7 @@ const SCHEMA_FILES = [
   'scripts/pg-ads.sql',
   'scripts/pg-grants.sql',
   'scripts/pg-link-health.sql',
+  'scripts/pg-articles.sql',
 ];
 
 async function main(): Promise<void> {

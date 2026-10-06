@@ -1,5 +1,6 @@
 import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
+import { PAYMENTS_ENABLED } from '@/lib/payments';
 
 export const metadata = pageMetadata({
   title: 'Privacy Policy: How We Handle Your Data',
@@ -68,7 +69,9 @@ export default function PrivacyPage(): React.ReactElement {
               <li><strong>Amazon Web Services (Mumbai region):</strong> hosts the website and its database.</li>
               <li><strong>Cloudflare:</strong> delivers pages and protects the site from attacks. It sees your IP address and the pages you request.</li>
               <li><strong>Hostinger:</strong> sends our emails, so it handles your email address and the message content.</li>
-              <li><strong>Razorpay:</strong> processes premium plan payments. Card and UPI details go to Razorpay directly; we never see or store them.</li>
+              {PAYMENTS_ENABLED && (
+                <li><strong>Razorpay:</strong> processes premium plan payments. Card and UPI details go to Razorpay directly; we never see or store them.</li>
+              )}
               <li><strong>Google:</strong> Analytics for aggregated usage, AdSense for ads, and Gemini for the Yojana Mitra assistant when you type a question into it. Do not type personal identifiers such as Aadhaar or bank numbers into the assistant.</li>
             </ul>
           </section>

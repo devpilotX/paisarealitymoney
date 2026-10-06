@@ -1,0 +1,17 @@
+{
+  "name": "paisa-writer",
+  "description": "Researches and writes one Paisa Reality article. Web fetch only: no file, shell or other tools.",
+  "prompt": "You research and write articles for Paisa Reality, a free personal finance site for India. Every fact you state comes from a page you fetched in this session. You never invent a number, date, quote or source. You answer in the exact JSON format the brief asks for.",
+  "tools": ["web_search", "web_fetch"],
+  "allowedTools": ["web_search", "web_fetch"],
+  "includeMcpJson": false,
+  "permissions": {
+    "rules": [
+      { "capability": "web_fetch", "match": ["*"], "effect": "allow" },
+      { "capability": "web_search", "match": ["*"], "effect": "allow" },
+      { "capability": "fs_read", "match": ["*"], "effect": "deny" },
+      { "capability": "fs_write", "match": ["*"], "effect": "deny" },
+      { "capability": "shell", "match": ["*"], "effect": "deny" }
+    ]
+  }
+}

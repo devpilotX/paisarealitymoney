@@ -2,6 +2,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ShareButton from '@/components/ShareButton';
 import { pageMetadata } from '@/lib/seo';
 import PrepayVsInvestClient from './PrepayVsInvestClient';
@@ -101,7 +102,7 @@ export default function PrepayVsInvestPage(): React.ReactElement {
         Should you prepay your loan or invest that money? This tool simulates both paths and shows which one likely puts you ahead.
       </p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="calculators-top" format="horizontal" />
 
       <div className="my-8">
         <PrepayVsInvestClient />

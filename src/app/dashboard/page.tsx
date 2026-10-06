@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
+import { PAYMENTS_ENABLED } from '@/lib/payments';
 
 interface UserData {
   id: number; name: string; email: string; plan: string;
@@ -61,14 +62,19 @@ export default function DashboardPage(): React.ReactElement {
         <div>
           <h1 className="heading-1 mb-1">Welcome, {user.name}</h1>
           <p className="text-sm text-muted-2">
-            {user.email} | Plan:{' '}
-            {user.plan === 'premium'
-              ? <span className="badge-soft">Premium</span>
-              : <span className="font-medium text-navy">Free</span>}
+            {user.email}
+            {PAYMENTS_ENABLED && (
+              <>
+                {' '}| Plan:{' '}
+                {user.plan === 'premium'
+                  ? <span className="badge-soft">Premium</span>
+                  : <span className="font-medium text-navy">Free</span>}
+              </>
+            )}
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {user.plan === 'free' && (
+          {PAYMENTS_ENABLED && user.plan === 'free' && (
             <Link href="/pricing" className="btn-primary no-underline text-sm">Upgrade</Link>
           )}
           <button onClick={logout} className="text-sm text-brand-red hover:underline">Logout</button>

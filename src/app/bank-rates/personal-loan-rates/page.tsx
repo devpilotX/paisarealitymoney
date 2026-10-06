@@ -8,6 +8,7 @@ import BankRateTable from '@/components/BankRateTable';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ShareButton from '@/components/ShareButton';
 import RatesAsOf from '@/components/RatesAsOf';
 
@@ -47,7 +48,7 @@ export default async function PersonalLoanRatesPage(): Promise<React.ReactElemen
       <h1 className="heading-1 mb-3">Personal Loan Interest Rates</h1>
       <p className="text-body mb-2">Compare personal loan rates. Rates depend on your credit score, income, and employer.</p>
       <RatesAsOf rateType="personal_loan" className="mb-6" />
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
       <div className="my-8"><BankRateTable title="Personal Loan Rate Comparison" rates={tableRates} rateLabel="Personal Loan Rate" /></div>
       <article className="max-w-3xl my-8">
         <h2 className="heading-2 mb-4">About Personal Loan Rates</h2>

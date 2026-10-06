@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import { pageMetadata } from '@/lib/seo';
 import { formatNumber } from '@/lib/constants';
@@ -144,7 +145,7 @@ export default async function ScholarshipsPage({
         </p>
       </div>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="schemes-top" format="horizontal" />
 
       {/* Eligibility form */}
       <form method="get" action="/scholarships" className="card grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 my-8">

@@ -8,6 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 import DataProvenance from '@/components/DataProvenance';
@@ -66,7 +67,7 @@ export default async function LpgPricePage(): Promise<React.ReactElement> {
       <h1 className="heading-1 mb-2">LPG Gas Cylinder Price Today in India</h1>
       <p className="text-body mb-2">State-wise LPG cylinder rates as of {priceDate}. Prices revised monthly.</p>
       {prices[0] && <DataProvenance asOf={prices[0].data_as_of ?? prices[0].price_date} source={prices[0].source ?? 'OMC published rates'} className="mb-6" />}
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       {prices.length > 0 && (
         <div className="overflow-x-auto my-8">

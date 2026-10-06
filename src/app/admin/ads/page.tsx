@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { AD_PLACEMENTS, AD_TYPES, type AdType } from '@/lib/ads-constants';
+import { AD_PLACEMENTS, AD_TYPES, adState, type AdType, type AdState } from '@/lib/ads-constants';
 import type { AdCreative } from '@/lib/ads';
 
 interface FormState {
@@ -26,10 +26,29 @@ const EMPTY: FormState = {
   priority: '0', active: true, startsAt: '', endsAt: '',
 };
 
+/** DB timestamptz text ("2026-10-06 04:30:00+00") -> value for <input type="datetime-local"> in the browser's time zone. */
 function toLocalInput(value: string | null): string {
   if (!value) return '';
-  return value.replace(' ', 'T').slice(0, 16);
+  const t = Date.parse(value.replace(' ', 'T').replace(/([+-]\d\d)$/, '$1:00'));
+  if (!Number.isFinite(t)) return '';
+  const d = new Date(t);
+  const p = (n: number): string => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
 }
+
+/** datetime-local value (browser time zone, IST for us) -> absolute ISO instant for the API. */
+function fromLocalInput(value: string): string | null {
+  if (!value) return null;
+  const t = new Date(value).getTime();
+  return Number.isFinite(t) ? new Date(t).toISOString() : null;
+}
+
+const STATE_STYLE: Record<AdState, string> = {
+  live: 'bg-green-100 text-green-700',
+  scheduled: 'bg-blue-100 text-blue-700',
+  expired: 'bg-amber-100 text-amber-800',
+  off: 'bg-gray-100 text-gray-600',
+};
 
 export default function AdminAdsPage(): React.ReactElement {
   const [ads, setAds] = useState<AdCreative[]>([]);
@@ -79,8 +98,8 @@ export default function AdminAdsPage(): React.ReactElement {
     const payload = {
       ...form,
       priority: Number(form.priority) || 0,
-      startsAt: form.startsAt || null,
-      endsAt: form.endsAt || null,
+      startsAt: fromLocalInput(form.startsAt),
+      endsAt: fromLocalInput(form.endsAt),
     };
     const url = editingId == null ? '/api/admin/ads' : `/api/admin/ads/${editingId}`;
     const method = editingId == null ? 'POST' : 'PUT';
@@ -98,7 +117,8 @@ export default function AdminAdsPage(): React.ReactElement {
   }, [editingId, form, load]);
 
   const remove = useCallback(async (id: number): Promise<void> => {
-    await fetch(`/api/admin/ads/${id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/admin/ads/${id}`, { method: 'DELETE' });
+    if (!res.ok) setMsg('Could not delete the ad.');
     setConfirmId(null);
     await load();
   }, [load]);
@@ -190,14 +210,27 @@ export default function AdminAdsPage(): React.ReactElement {
                 <input value={form.altText} onChange={(e) => set('altText', e.target.value)} className="input-field" placeholder="Sponsor name and offer" />
               </label>
               <label className="block">
-                <span className="block text-sm font-medium text-gray-700 mb-1">Starts at (optional)</span>
+                <span className="block text-sm font-medium text-gray-700 mb-1">Starts at (optional, your local time)</span>
                 <input type="datetime-local" value={form.startsAt} onChange={(e) => set('startsAt', e.target.value)} className="input-field" />
               </label>
               <label className="block">
-                <span className="block text-sm font-medium text-gray-700 mb-1">Ends at (optional)</span>
+                <span className="block text-sm font-medium text-gray-700 mb-1">Ends at (optional, your local time)</span>
                 <input type="datetime-local" value={form.endsAt} onChange={(e) => set('endsAt', e.target.value)} className="input-field" />
               </label>
             </div>
+
+            {(form.type === 'image' && form.imageUrl) || (form.type === 'video' && form.videoUrl) ? (
+              <div>
+                <span className="block text-sm font-medium text-gray-700 mb-1">Preview</span>
+                <div className="border border-dashed border-gray-300 rounded-lg p-3 bg-gray-50 max-w-xl">
+                  <span className="block text-[11px] text-gray-500 mb-1">Advertisement</span>
+                  {form.type === 'image'
+                    // eslint-disable-next-line @next/next/no-img-element
+                    ? <img src={form.imageUrl} alt={form.altText || form.name} className="w-full h-auto rounded" />
+                    : <video src={form.videoUrl} className="w-full h-auto rounded" muted loop autoPlay playsInline aria-label={form.altText || form.name} />}
+                </div>
+              </div>
+            ) : null}
 
             <label className="flex items-center gap-2">
               <input type="checkbox" checked={form.active} onChange={(e) => set('active', e.target.checked)} className="w-5 h-5" />
@@ -232,18 +265,24 @@ export default function AdminAdsPage(): React.ReactElement {
                 </tr>
               </thead>
               <tbody>
-                {ads.map((a) => (
+                {ads.map((a) => {
+                  const state = adState(a);
+                  const placementLabel = AD_PLACEMENTS.find((p) => p.value === a.placement)?.label ?? `${a.placement} (not shown anywhere)`;
+                  return (
                   <tr key={a.id} className="border-b border-gray-100">
-                    <td className="px-4 py-3 font-medium text-gray-900">{a.name}</td>
-                    <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{a.placement}</td>
+                    <td className="px-4 py-3 font-medium text-gray-900">{a.name}<span className="block text-xs text-gray-500 font-normal">priority {a.priority}</span></td>
+                    <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{placementLabel}</td>
                     <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{a.type}</td>
                     <td className="px-4 py-3">
-                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${a.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                        {a.active ? 'Active' : 'Off'}
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${STATE_STYLE[state]}`}>
+                        {state === 'live' ? 'Live' : state === 'scheduled' ? 'Scheduled' : state === 'expired' ? 'Ended' : 'Off'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-600 hidden md:table-cell">{a.impressions}</td>
-                    <td className="px-4 py-3 text-right text-gray-600 hidden md:table-cell">{a.clicks}</td>
+                    <td className="px-4 py-3 text-right text-gray-600 hidden md:table-cell">{a.impressions.toLocaleString('en-IN')}</td>
+                    <td className="px-4 py-3 text-right text-gray-600 hidden md:table-cell">
+                      {a.clicks.toLocaleString('en-IN')}
+                      <span className="block text-xs text-gray-500">{a.impressions > 0 ? `${((a.clicks / a.impressions) * 100).toFixed(2)}% CTR` : '-'}</span>
+                    </td>
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button onClick={() => startEdit(a)} className="text-primary hover:underline mr-3">Edit</button>
                       {confirmId === a.id ? (
@@ -253,7 +292,8 @@ export default function AdminAdsPage(): React.ReactElement {
                       )}
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           )}

@@ -4,6 +4,7 @@ import { ALL_INDIAN_STATES } from '@/lib/cities';
 import { SCHEME_CATEGORIES } from '@/lib/constants';
 import { query } from '@/lib/db';
 import { getAllPostsAsync } from '@/lib/blog';
+import { PAYMENTS_ENABLED } from '@/lib/payments';
 import { resolveLastModified, TEMPLATE_UPDATED } from '@/lib/sitemap-dates';
 import type { QueryResultRow } from 'pg';
 
@@ -106,7 +107,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/guides/fd-vs-rd`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/guides/22k-vs-24k-gold`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     // Content + legal
-    { url: `${BASE_URL}/pricing`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    ...(PAYMENTS_ENABLED ? [{ url: `${BASE_URL}/pricing`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.4 }] : []),
     { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${BASE_URL}/interest-rates`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },

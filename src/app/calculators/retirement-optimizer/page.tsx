@@ -2,6 +2,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ShareButton from '@/components/ShareButton';
 import { pageMetadata } from '@/lib/seo';
 import RetirementOptimizerClient from './RetirementOptimizerClient';
@@ -102,7 +103,7 @@ export default function RetirementOptimizerPage(): React.ReactElement {
         Find out how much you need to retire and whether you are on track. Runs thousands of simulations to show you real probabilities, not just one guess.
       </p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="calculators-top" format="horizontal" />
 
       <div className="my-8">
         <RetirementOptimizerClient />
