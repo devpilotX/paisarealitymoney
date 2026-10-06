@@ -19,6 +19,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const wrap = await publishWeeklyWrap();
     if (!wrap) return NextResponse.json({ success: true, skipped: 'not enough price history for a full week' });
+    revalidatePath('/');
     revalidatePath('/newsletter');
     revalidatePath(`/newsletter/${wrap.slug}`);
     revalidatePath('/sitemap.xml');

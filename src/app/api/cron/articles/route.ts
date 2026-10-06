@@ -67,6 +67,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       [slug, a.title, a.description, a.content, a.category, JSON.stringify(a.tags), estimateReadTime(a.content),
         a.metaTitle, a.metaDescription, JSON.stringify(a.sources), a.topicKey],
     );
+    revalidatePath('/');
     revalidatePath('/newsletter');
     revalidatePath(`/newsletter/${slug}`);
     revalidatePath('/sitemap.xml');

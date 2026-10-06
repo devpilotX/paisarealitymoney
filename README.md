@@ -72,6 +72,7 @@ Set these in `.env`. Only the variable names are listed here. Never commit real 
 | `NEXT_PUBLIC_ADSENSE_DEFAULT_SLOT` | Default ad unit id. Blank disables every `<AdBanner>` placement |
 | `NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT` | In-article ad unit id. Blank disables in-article placements |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console verification token |
+| `OPENROUTER_API_KEY` | Yojana Mitra assistant: OpenRouter key (free Nemotron models). `OPENROUTER_ASSISTANT_MODEL` pins another model. Falls back to `GEMINI_API_KEY`, then to guided replies |
 
 Every `NEXT_PUBLIC_*` value is inlined at **build time**, so changing one needs a
 rebuild, not just a restart. See [Monetization](#monetization) before assuming ads

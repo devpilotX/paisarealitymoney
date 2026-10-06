@@ -7,6 +7,8 @@ import CategoryIcon from '@/components/CategoryIcon';
 import { getFeaturedSchemes, getHomeCounts, getHomeRates, getSchemeCategoryCounts, getTopScholarships, type HomeRate } from '@/lib/home-data';
 import { getGrants, formatAmount, FUNDING_LABEL } from '@/lib/grants';
 import HeroCarousel, { type HeroSlide } from '@/components/HeroCarousel';
+import ArticleCard from '@/components/ArticleCard';
+import { getAllPostsAsync } from '@/lib/blog';
 
 export const metadata: Metadata = {
   title: 'Paisa Reality: Live Prices, Government Schemes & Money Tools',
@@ -128,9 +130,11 @@ const HOME_FAQS = [
 ];
 
 export default async function HomePage(): Promise<React.ReactElement> {
-  const [counts, { asOf, updatedAt, rates }, schemes, cats, topSch, grantList] = await Promise.all([
+  const [counts, { asOf, updatedAt, rates }, schemes, cats, topSch, grantList, allPosts] = await Promise.all([
     getHomeCounts(), getHomeRates(), getFeaturedSchemes(), getSchemeCategoryCounts(20), getTopScholarships(3), getGrants(),
+    getAllPostsAsync(true).catch(() => []),
   ]);
+  const latestPosts = allPosts.slice(0, 3);
   const topGrants = [...grantList].sort((a, b) => (b.amountMaxInr ?? 0) - (a.amountMaxInr ?? 0)).filter((g) => g.fundingType !== 'in-kind').slice(0, 3);
 
   const catCount = (slug: string): number => cats.find((x) => x.category === slug)?.n ?? 0;
@@ -347,6 +351,26 @@ export default async function HomePage(): Promise<React.ReactElement> {
       </section>
 
       <AdSlot placement="home-mid" format="horizontal" className="container-main my-8" />
+
+      {/* Latest articles: the three newest, refreshed whenever one is published (revalidate + publish hook). */}
+      {latestPosts.length > 0 && (
+        <section className="section-band" aria-labelledby="latest-articles">
+          <div className="container-main py-16 sm:py-20">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-10">
+              <div>
+                <h2 id="latest-articles" className="section-title">Latest from the newsletter</h2>
+                <p className="mt-2 text-muted">A new money story every morning, every fact checked against the official source.</p>
+              </div>
+              <Link href="/newsletter" className="btn-link text-[15px] shrink-0">All articles <Arrow /></Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {latestPosts.map((post) => (
+                <ArticleCard key={post.slug} post={post} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }

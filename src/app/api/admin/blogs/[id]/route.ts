@@ -14,7 +14,8 @@ function parseId(raw: string): number | null {
 }
 
 function refresh(...slugs: string[]): void {
-  revalidatePath('/newsletter');
+  revalidatePath('/');
+    revalidatePath('/newsletter');
   revalidatePath('/sitemap.xml');
   for (const s of slugs) revalidatePath(`/newsletter/${s}`);
 }

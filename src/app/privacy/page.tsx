@@ -72,7 +72,8 @@ export default function PrivacyPage(): React.ReactElement {
               {PAYMENTS_ENABLED && (
                 <li><strong>Razorpay:</strong> processes premium plan payments. Card and UPI details go to Razorpay directly; we never see or store them.</li>
               )}
-              <li><strong>Google:</strong> Analytics for aggregated usage, AdSense for ads, and Gemini for the Yojana Mitra assistant when you type a question into it. Do not type personal identifiers such as Aadhaar or bank numbers into the assistant.</li>
+              <li><strong>Google:</strong> Analytics for aggregated usage and AdSense for ads.</li>
+              <li><strong>OpenRouter (with NVIDIA Nemotron models):</strong> answers questions you type into the Yojana Mitra assistant; Google Gemini is a backup. Only your question and the last few messages of that chat are sent. Do not type personal identifiers such as Aadhaar or bank numbers into the assistant.</li>
             </ul>
           </section>
 
