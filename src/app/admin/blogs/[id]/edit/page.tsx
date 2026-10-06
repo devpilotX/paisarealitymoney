@@ -27,6 +27,8 @@ interface BlogPostResponse {
     metaTitle: string | null;
     metaDescription: string | null;
     isPublished: boolean;
+    slug: string;
+    sources: Array<{ title: string; url: string }>;
   };
   error?: string;
 }
@@ -39,6 +41,8 @@ export default function EditBlogPage({
   const { id } = use(params);
   const router = useRouter();
   const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [sources, setSources] = useState('');
   const [description, setDescription] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [content, setContent] = useState('');
@@ -57,6 +61,8 @@ export default function EditBlogPage({
       .then((data) => {
         if (data.post) {
           setTitle(data.post.title);
+          setSlug(data.post.slug);
+          setSources((data.post.sources || []).map((s) => `${s.title} | ${s.url}`).join('\n'));
           setDescription(data.post.description);
           setCoverImage(data.post.coverImage || '');
           setContent(data.post.content);
@@ -86,6 +92,15 @@ export default function EditBlogPage({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title,
+          slug,
+          sources: sources
+            .split('\n')
+            .map((line) => line.trim())
+            .filter(Boolean)
+            .map((line) => {
+              const i = line.lastIndexOf('|');
+              return i === -1 ? { title: '', url: line } : { title: line.slice(0, i).trim(), url: line.slice(i + 1).trim() };
+            }),
           description,
           content,
           category,
@@ -122,6 +137,8 @@ export default function EditBlogPage({
     metaDescription,
     metaTitle,
     router,
+    slug,
+    sources,
     tags,
     title,
   ]);
@@ -144,6 +161,19 @@ export default function EditBlogPage({
               onChange={(event) => setTitle(event.target.value)}
               className="input-field"
             />
+          </div>
+
+          <div>
+            <label htmlFor="post-slug" className="block text-sm font-medium mb-2">URL slug</label>
+            <input
+              id="post-slug"
+              value={slug}
+              onChange={(event) => setSlug(event.target.value.toLowerCase())}
+              className="input-field font-mono text-sm"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              paisareality.com/newsletter/{slug}. Editing the title keeps this URL. Change it only if you must: the old link stops working.
+            </p>
           </div>
 
           <div>
@@ -196,6 +226,17 @@ export default function EditBlogPage({
               value={content}
               onChange={(event) => setContent(event.target.value)}
               className="input-field h-96 font-mono text-sm"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="post-sources" className="block text-sm font-medium mb-2">Sources (one per line: Title | https://url)</label>
+            <textarea
+              id="post-sources"
+              value={sources}
+              onChange={(event) => setSources(event.target.value)}
+              className="input-field h-28 font-mono text-xs"
+              placeholder="RBI press release | https://www.rbi.org.in/..."
             />
           </div>
 

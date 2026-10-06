@@ -17,6 +17,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import DataProvenance from '@/components/DataProvenance';
 
@@ -77,7 +78,7 @@ export default async function PetrolPriceCityPage({ params }: PageProps): Promis
       <h1 className="heading-1 mb-2">Petrol Price in {city.name} Today</h1>
       <p className="text-body mb-2">Current petrol and diesel rates in {city.name}, {city.state}.{today ? ` Updated: ${formatDate(today.price_date)}.` : ''}</p>
       {today && <DataProvenance asOf={today.data_as_of ?? today.price_date} source={today.source ?? 'OMC published rates'} className="mb-6" />}
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       {today && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">

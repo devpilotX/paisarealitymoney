@@ -30,6 +30,8 @@ const nextConfig = {
     return [
       { source: '/blog', destination: '/newsletter', statusCode: 301 },
       { source: '/blog/:slug', destination: '/newsletter/:slug', statusCode: 301 },
+      // Paid plans are switched off (src/lib/payments.ts): the pricing page goes to /about.
+      ...(process.env.NEXT_PUBLIC_PAYMENTS_ENABLED === 'true' ? [] : [{ source: '/pricing', destination: '/about', permanent: false }]),
       ...schemeAliases,
     ]
   },

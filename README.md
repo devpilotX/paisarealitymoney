@@ -13,10 +13,11 @@ Live: https://paisareality.com
 - Bank Rate Comparison: fixed deposit, savings, home loan, and personal loan rates across many banks.
 - Money Health Score: a single score out of 900 across eight financial pillars, with guidance to improve it.
 - Guides: plain-language comparison articles for everyday money decisions, including old vs new tax regime, SIP vs FD, PPF vs NPS, FD vs RD, and 22K vs 24K gold.
-- Price Alerts: logged-in users set one-shot gold/silver targets per city; the daily cron emails them when a target is hit (free plan 3 active alerts, premium 15).
+- Price Alerts: logged-in users set one-shot gold/silver targets per city; the daily cron emails them when a target is hit (15 active alerts per account; the site is free while payments are switched off).
 - Interest Rates hub: quarterly small savings rates (PPF, SSY, SCSS, NSC, KVP, post office deposits), RBI policy rates, and the EPF rate with tax notes, at `/interest-rates`.
-- Newsletter: simple personal finance articles and price updates.
-- Admin Dashboard: content and site management, served only on the admin subdomain and protected by JWT auth.
+- Daily articles: every morning an n8n workflow picks a trending money topic, has Kiro research it on official sources and write it, checks every quoted fact on its source page, has Nemotron review it, publishes it at `/newsletter/<slug>` with sources and schema.org markup, pings IndexNow and reports to Telegram. See [Daily articles](#daily-articles).
+- Newsletter: the article archive plus the weekly price post.
+- Admin Dashboard: content and site management, served only on the admin subdomain and protected by a password plus a Google Authenticator code (TOTP).
 - Data integrity: fuel/LPG baselines carry an as-of date and source, admins can override any price via `/api/admin/prices/overrides` without a deploy, and the daily cron emails the admin if data goes stale or an update fails. Methodology is public at `/methodology`, editorial standards at `/editorial-policy`.
 
 ## Tech stack
@@ -28,7 +29,7 @@ Live: https://paisareality.com
 | Styling | Tailwind CSS 3 |
 | Database | PostgreSQL |
 | Auth | JWT and bcrypt |
-| Payments | Razorpay |
+| Payments | Razorpay (switched off: `NEXT_PUBLIC_PAYMENTS_ENABLED`) |
 | Email | SMTP via nodemailer (Hostinger mail) |
 | PDF | @react-pdf/renderer |
 | Content | marked and sanitize-html |
@@ -56,6 +57,8 @@ Set these in `.env`. Only the variable names are listed here. Never commit real 
 | `NEXT_PUBLIC_SITE_URL` | Public site URL used by the client |
 | `ADMIN_EMAIL` | Admin login email |
 | `ADMIN_PASSWORD` | Admin login password (login fails closed if unset) |
+| `ADMIN_TOTP_SECRET` | Base32 secret for the admin's authenticator app. When set, login also needs the 6-digit code |
+| `NEXT_PUBLIC_PAYMENTS_ENABLED` | `true` brings back the pricing page, upgrade buttons and checkout. Unset means everything is free (build-time value) |
 | `JWT_SECRET` | Secret for signing admin and auth tokens |
 | `AUTH_SECRET` | Secret for user session handling |
 | `CRON_SECRET` | Shared secret to protect cron endpoints |
@@ -128,7 +131,40 @@ deploy/                Deployment configuration (Nginx)
 
 ## Admin
 
-The admin dashboard is served only on the admin subdomain (`admin.paisareality.com`). On the main domain, any `/admin` request returns 404. Admin authentication reads `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the environment; if the password is not set, login fails closed.
+The admin dashboard is served only on the admin subdomain (`admin.paisareality.com`). On the main domain, any `/admin` request returns 404. On the admin subdomain, public files (favicon, manifest) are served and public pages redirect to the main site.
+
+Login needs `ADMIN_EMAIL`, `ADMIN_PASSWORD` and, when `ADMIN_TOTP_SECRET` is set, the current 6-digit code from Google Authenticator (RFC 6238, 30 s, one step of clock drift allowed, a code is accepted once). If the password is not set, login fails closed. Sessions last 12 hours; a session issued before 2FA was switched on is refused.
+
+To create or replace the authenticator secret on the server (it signs every admin out):
+
+```bash
+SECRET=$(node -e "const c=require('crypto').randomBytes(20);const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';let b=0,v=0,o='';for(const x of c){v=(v<<8)|x;b+=8;while(b>=5){o+=A[(v>>>(b-5))&31];b-=5}}console.log(o)")
+sudo sed -i '/^ADMIN_TOTP_SECRET=/d' /etc/paisareality/paisareality.env
+echo "ADMIN_TOTP_SECRET=$SECRET" | sudo tee -a /etc/paisareality/paisareality.env >/dev/null
+sudo -u paisa pm2 restart paisareality --update-env
+```
+
+Then add it in Google Authenticator: "+" > "Enter a setup key", account `admin@paisareality`, key `$SECRET`, type "Time based".
+
+In the dashboard:
+
+- Articles: create, edit, unpublish and delete. Editing a title keeps the URL; the URL changes only when the slug field is edited. Saving refreshes the live page, the newsletter list and the sitemap at once. Each article has an editable sources list that is shown under it and marked up as schema.org citations.
+- Ads (`/ads`): image, video or HTML creatives per placement, with priority, a start and end time in your local time, live/scheduled/ended status, impressions, clicks and CTR. Placements are only the ones a page actually renders, URLs must be https, and the highest-priority live creative wins; with none, the slot falls back to AdSense.
+
+## Daily articles
+
+Workflow `deploy/n8n/workflows/09-daily-article.json` (built by `node deploy/n8n/build-daily-article.mjs`; CI fails if the two differ) runs at 08:30 IST:
+
+1. Skips the day if a daily article is already out, so a manual re-run never posts twice.
+2. Reads Google Trends India, three Google News searches, RBI, SEBI, PIB, the Income Tax Department, ET Wealth, Mint and Business Standard, and keeps recent money stories that are not already covered.
+3. Calls the writer service (`deploy/writer`, `paisareality-writer.service` on 127.0.0.1:5690, user `kirowriter`). It runs Kiro CLI headless with the `paisa-writer` agent, which can only fetch web pages, using the best model available (`claude-opus-5.5`, falling back to `claude-opus-5` and `claude-sonnet-5.5`). The brief (`deploy/writer/brief.md`) and the `human-prose` and `deep-research` skills are in the prompt.
+4. Checks the draft three ways and sends any problem back for up to two rewrites: the site's publishing rules (`src/lib/article-core.ts`), the human-prose detector at `--strict`, and a fetch of every source to confirm that each quoted fact is really on that page (HTML and PDF). Nothing is published with an unverified claim.
+5. Sends the article and its evidence to `nvidia/nemotron-3-ultra-550b-a55b:free` on OpenRouter for an independent fact-check. Any serious point goes back to Kiro for one more revision, and the full checks run again.
+6. Publishes through `POST /api/cron/articles` (Bearer `CRON_SECRET`), which enforces the same rules and refuses a topic covered in the last 30 days, then submits the URL to IndexNow and posts a report to Telegram. A day with no safe topic is reported to Telegram instead.
+
+Keys live only in n8n credentials. To rotate the Kiro key every 15 days or month: n8n > Credentials > "Kiro API key" > Value, paste the new `ksk_...` key, Save. The OpenRouter key is the "OpenRouter API key" credential (value `Bearer sk-or-...`). A rejected key is reported to Telegram by name.
+
+Install or update the writer with `sudo bash deploy/vps/setup-writer.sh` from a release directory.
 
 ## Monetization
 
@@ -154,7 +190,8 @@ slot id being present, which meant the bundler eliminated the AdSense script as
 dead code and Auto ads could not work either. The gate now depends on the
 publisher id alone. `/ads.txt` is already correct and must stay served.
 
-**2. Razorpay premium.** Requires live keys. A `rzp_test_` key produces a working
+**2. Razorpay premium.** Switched off for now: with `NEXT_PUBLIC_PAYMENTS_ENABLED` unset the
+site is entirely free and the audit does not warn about Razorpay. When it is turned back on, it requires live keys. A `rzp_test_` key produces a working
 checkout that collects nothing, which is reported as a startup blocker.
 
 **3. Self-hosted ad manager.** Create creatives at `/admin/ads` with a schedule and
@@ -261,6 +298,7 @@ are kept.
 | Bot: daily report and Telegram commands | report at 09:00; `/status`, `/backup`, `/help` from the owner's chat only |
 | Alerts: new contact messages and sign-ups | every 10 minutes |
 | SEO: submit today's changed pages to IndexNow | 07:05 daily |
+| Content: daily verified article | 08:30 daily, see [Daily articles](#daily-articles) |
 ## Disclaimer
 
 Paisa Reality is an informational website, not a financial advisor. Verify details with official sources before making any financial decision.

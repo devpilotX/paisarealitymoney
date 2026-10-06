@@ -2,6 +2,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ShareButton from '@/components/ShareButton';
 import { pageMetadata } from '@/lib/seo';
 import LifecycleTaxOptimizerClient from './LifecycleTaxOptimizerClient';
@@ -101,7 +102,7 @@ export default function LifecycleTaxOptimizerPage(): React.ReactElement {
         Compare old vs new tax regime for your exact income. See which one saves you more after all deductions.
       </p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="calculators-top" format="horizontal" />
 
       <div className="my-8">
         <LifecycleTaxOptimizerClient />

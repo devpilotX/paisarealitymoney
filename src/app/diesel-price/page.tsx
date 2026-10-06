@@ -11,6 +11,7 @@ import CitySelector from '@/components/CitySelector';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 import DataProvenance from '@/components/DataProvenance';
@@ -64,7 +65,7 @@ export default async function DieselPricePage(): Promise<React.ReactElement> {
       <h1 className="heading-1 mb-2">Diesel Price Today in India</h1>
       <p className="text-body mb-2">City-wise diesel rates for {priceDate}. Verify with oil company apps or fuel pumps before purchase.</p>
       {prices[0] && <DataProvenance asOf={prices[0].data_as_of ?? prices[0].price_date} source={prices[0].source ?? 'OMC published rates'} className="mb-6" />}
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
       <div className="my-6"><CitySelector basePath="/diesel-price" placeholder="Search city for diesel price..." /></div>
 
       {prices.length > 0 && (

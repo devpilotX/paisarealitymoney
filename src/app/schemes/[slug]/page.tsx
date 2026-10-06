@@ -14,6 +14,7 @@ import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 
 interface PageProps { params: Promise<{ slug: string }>; }
@@ -297,7 +298,7 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
         <h1 className="heading-1 mb-4">{scheme.name}</h1>
         {scheme.name_hi && <p className="text-lg text-muted-2 mb-4">{scheme.name_hi}</p>}
 
-        <AdBanner format="horizontal" />
+        <AdSlot placement="schemes-top" format="horizontal" />
 
         {/* Benefit Summary Card */}
         <div className="bg-primary-50 rounded-lg p-6 my-6">

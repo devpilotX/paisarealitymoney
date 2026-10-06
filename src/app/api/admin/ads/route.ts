@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { verifyAdmin } from '@/lib/admin-auth';
-import { getAllAds, createAd, AD_TYPES, type AdType } from '@/lib/ads';
-
-function str(v: unknown): string | null {
-  return typeof v === 'string' && v.trim() ? v.trim() : null;
-}
+import { getAllAds, createAd } from '@/lib/ads';
+import { validateAd } from '@/lib/ads-constants';
 
 export async function GET(): Promise<NextResponse> {
   if (!(await verifyAdmin())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -15,29 +13,14 @@ export async function GET(): Promise<NextResponse> {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!(await verifyAdmin())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
-    const b = (await request.json()) as Record<string, unknown>;
-    const name = str(b.name);
-    const placement = str(b.placement);
-    if (!name || !placement) {
-      return NextResponse.json({ error: 'Name and placement are required' }, { status: 400 });
-    }
-    const type: AdType = (AD_TYPES as readonly string[]).includes(String(b.type)) ? (b.type as AdType) : 'image';
-    const id = await createAd({
-      name,
-      placement,
-      type,
-      imageUrl: str(b.imageUrl),
-      videoUrl: str(b.videoUrl),
-      html: str(b.html),
-      linkUrl: str(b.linkUrl),
-      altText: str(b.altText),
-      active: b.active === undefined ? true : Boolean(b.active),
-      priority: Number.isFinite(Number(b.priority)) ? Number(b.priority) : 0,
-      startsAt: str(b.startsAt),
-      endsAt: str(b.endsAt),
-    });
+    const v = validateAd((await request.json()) as Record<string, unknown>);
+    if (!v.ok) return NextResponse.json({ error: v.error }, { status: 400 });
+    const id = await createAd(v.value);
+    // Pages are statically cached; refresh them so the new creative appears without a deploy.
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true, id });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Failed to create ad' }, { status: 500 });
+    console.error('ad create failed:', error instanceof Error ? error.message : error);
+    return NextResponse.json({ error: 'Failed to create ad' }, { status: 500 });
   }
 }

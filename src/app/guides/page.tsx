@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 import InternalLinks from '@/components/InternalLinks';
-import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 
 export const metadata = pageMetadata({
   title: 'Money Guides India: Compare and Decide',
@@ -69,7 +69,7 @@ export default function GuidesHubPage(): React.ReactElement {
           published sources as the rest of the site, and each guide shows when it was last checked.
         </p>
       </div>
-      <AdBanner format="horizontal" className="mb-8" />
+      <AdSlot placement="guides-top" format="horizontal" className="mb-8" />
 
       <div className="max-w-3xl">
         <h2 className="heading-2 mb-4">Read the guide, then run your numbers</h2>

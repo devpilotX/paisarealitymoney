@@ -4,7 +4,7 @@ import { articleSchema } from '@/lib/schema';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
-import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import LastReviewed from '@/components/LastReviewed';
 
@@ -43,7 +43,7 @@ export default function Page(): React.ReactElement {
           Every year the same question comes up at tax time. Should you go with the old regime or the new one. The honest answer is that it depends on how many deductions you claim. Let us break it down in plain words so you can pick the one that puts more money back in your pocket.
         </p>
 
-        <AdBanner format="horizontal" className="mb-8" />
+        <AdSlot placement="guides-top" format="horizontal" className="mb-8" />
 
         <h2 className="heading-2 mb-3">The simple difference</h2>
         <p className="text-body mb-4">

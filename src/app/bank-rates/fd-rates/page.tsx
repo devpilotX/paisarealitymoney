@@ -8,6 +8,7 @@ import BankRateTable from '@/components/BankRateTable';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import ShareButton from '@/components/ShareButton';
 import RatesAsOf from '@/components/RatesAsOf';
@@ -63,7 +64,7 @@ export default async function FDRatesPage(): Promise<React.ReactElement> {
       <h1 className="heading-1 mb-3">Fixed Deposit (FD) Interest Rates 2026</h1>
       <p className="text-body mb-2">Compare FD rates across 51 Indian banks. Click column headers to sort. Senior citizen rates included.</p>
       <RatesAsOf rateType="fd" className="mb-6" />
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       <div className="my-8">
         <BankRateTable title="FD Rate Comparison" rates={tableRates} rateLabel="FD Rate" />

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ScholarshipReminderForm from '@/components/ScholarshipReminderForm';
 import { pageMetadata, buildRecordTitle, buildRecordDescription } from '@/lib/seo';
 import FAQ from '@/components/FAQ';
@@ -162,7 +163,7 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
         )}
       </div>
 
-      <AdBanner format="horizontal" className="my-8" />
+      <AdSlot placement="schemes-top" format="horizontal" className="my-8" />
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <article className="lg:col-span-2">

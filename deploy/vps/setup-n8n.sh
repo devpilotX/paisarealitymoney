@@ -157,6 +157,16 @@ exists credentials_entity paisaGoogleDrive || add_cred "$(jq -n --arg i "${GOOGL
 CRON_SECRET_VALUE="$(sed -n 's/^CRON_SECRET=//p' /etc/paisareality/paisareality.env | tr -d '"')"
 exists credentials_entity paisaCronSecret || add_cred "$(jq -n --arg v "Bearer $CRON_SECRET_VALUE" \
   '{id:"paisaCronSecret", name:"Site cron secret", type:"httpHeaderAuth", data:{name:"Authorization", value:$v}}')"
+# Keys for the daily article workflow. Needed only the first time; after that they are
+# changed in the n8n editor (Credentials > "Kiro API key" / "OpenRouter API key").
+if ! exists credentials_entity paisaKiroApiKey; then
+  : "${KIRO_API_KEY:?set KIRO_API_KEY for the first run (the daily article workflow needs it)}"
+  add_cred "$(jq -n --arg v "$KIRO_API_KEY" '{id:"paisaKiroApiKey", name:"Kiro API key", type:"httpHeaderAuth", data:{name:"X-Kiro-Api-Key", value:$v}}')"
+fi
+if ! exists credentials_entity paisaOpenRouter; then
+  : "${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY for the first run (the article fact-check uses it)}"
+  add_cred "$(jq -n --arg v "Bearer $OPENROUTER_API_KEY" '{id:"paisaOpenRouter", name:"OpenRouter API key", type:"httpHeaderAuth", data:{name:"Authorization", value:$v}}')"
+fi
 if [ "$(jq length <<<"$creds")" -gt 0 ]; then
   printf '%s' "$creds" > "$IMP/credentials.json"; chown 1000:1000 "$IMP/credentials.json"
   docker exec -u node n8n n8n import:credentials --input=/home/node/.n8n/import/credentials.json

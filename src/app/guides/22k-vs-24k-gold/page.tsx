@@ -4,7 +4,7 @@ import { articleSchema } from '@/lib/schema';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
-import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import LastReviewed from '@/components/LastReviewed';
 
@@ -43,7 +43,7 @@ export default function Page(): React.ReactElement {
           When you go to buy gold you will hear 22 carat and 24 carat thrown around, and the prices are different. So what is the real difference and which one should you buy. It comes down to purity and what you plan to do with the gold. Here is the plain version.
         </p>
 
-        <AdBanner format="horizontal" className="mb-8" />
+        <AdSlot placement="guides-top" format="horizontal" className="mb-8" />
 
         <h2 className="heading-2 mb-3">24K gold in one line</h2>
         <p className="text-body mb-4">

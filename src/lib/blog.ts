@@ -1,4 +1,5 @@
 import { query } from '@/lib/db';
+import { parseSources, type ArticleSource } from '@/lib/article-core';
 import type { QueryResultRow } from 'pg';
 
 export interface BlogPost {
@@ -15,6 +16,7 @@ export interface BlogPost {
   isPublished: boolean;
   metaTitle: string | null;
   metaDescription: string | null;
+  sources: ArticleSource[];
   date: string;
   createdAt: string;
   updatedAt: string;
@@ -34,6 +36,7 @@ interface BlogRow extends QueryResultRow {
   is_published: boolean;
   meta_title: string | null;
   meta_description: string | null;
+  sources?: unknown;
   published_at: string | Date | null;
   created_at: string | Date;
   updated_at: string | Date;
@@ -71,6 +74,7 @@ function rowToPost(row: BlogRow): BlogPost {
     coverImage: row.cover_image, author: row.author, readTime: row.read_time,
     isPublished: row.is_published, metaTitle: row.meta_title,
     metaDescription: row.meta_description,
+    sources: parseSources(row.sources),
     date: toDateString(row.published_at) || createdAt, createdAt,
     updatedAt: toDateString(row.updated_at),
   };

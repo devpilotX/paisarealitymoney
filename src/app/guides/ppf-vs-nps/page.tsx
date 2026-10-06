@@ -4,7 +4,7 @@ import { articleSchema } from '@/lib/schema';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
-import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import LastReviewed from '@/components/LastReviewed';
 
@@ -43,7 +43,7 @@ export default function Page(): React.ReactElement {
           Both PPF and NPS are popular ways to save for the long term and both give tax benefits. But they work very differently. One is fully safe and fixed, the other is market linked with a chance of higher returns. Here is how to think about it.
         </p>
 
-        <AdBanner format="horizontal" className="mb-8" />
+        <AdSlot placement="guides-top" format="horizontal" className="mb-8" />
 
         <h2 className="heading-2 mb-3">PPF in one line</h2>
         <p className="text-body mb-4">

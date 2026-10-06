@@ -18,6 +18,7 @@ import InternalLinks from '@/components/InternalLinks';
 import NextStep from '@/components/NextStep';
 import ShareButton from '@/components/ShareButton';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 
 interface PageProps { params: Promise<{ city: string }>; }
@@ -79,7 +80,7 @@ export default async function SilverRateCityPage({ params }: PageProps): Promise
       <Breadcrumb items={[{ label: 'Silver Rate', href: '/silver-rate' }, { label: city.name }]} />
       <h1 className="heading-1 mb-2">Silver Rate in {city.name} Today</h1>
       <p className="text-body mb-6">Latest available silver prices in {city.name}, {city.state}.{today ? ` Updated: ${formatDate(today.price_date)}.` : ''}</p>
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
 
       {today && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">

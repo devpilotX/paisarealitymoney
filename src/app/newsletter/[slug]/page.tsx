@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShareButton from '@/components/ShareButton';
+import AdSlot from '@/components/AdSlot';
 import { getAllPostsAsync, getPostBySlugAsync } from '@/lib/blog';
 import { formatDate } from '@/lib/constants';
 import { marked } from 'marked';
@@ -39,14 +40,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: post.description,
       url,
       siteName: 'Paisa Reality',
+      locale: 'en_IN',
+      ...(post.tags.length ? { tags: post.tags } : {}),
       images: post.coverImage ? [{ url: post.coverImage }] : undefined,
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.title,
-      description: post.description,
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.description,
       images: post.coverImage ? [post.coverImage] : undefined,
     },
+    ...(post.tags.length ? { keywords: post.tags } : {}),
   };
 }
 
@@ -89,6 +93,8 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
 
   const rawHtml = await marked.parse(post.content, { breaks: true, gfm: true });
   const htmlContent = sanitizePostHtml(rawHtml);
+  // Show "Updated" only for a real edit, not the seconds between insert and publish.
+  const updated = Date.parse(post.updatedAt) - Date.parse(post.date) > 6 * 3600 * 1000;
   const related = (await getAllPostsAsync(true).catch(() => []))
     .filter((relatedPost) => relatedPost.slug !== post.slug)
     .slice(0, 4);
@@ -98,8 +104,13 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    ...(post.coverImage ? { image: [post.coverImage] } : {}),
-    author: { '@type': 'Organization', name: 'Paisa Reality', url: 'https://paisareality.com' },
+    image: [post.coverImage || `https://paisareality.com/newsletter/${post.slug}/opengraph-image`],
+    inLanguage: 'en-IN',
+    isAccessibleForFree: true,
+    articleSection: post.category,
+    ...(post.tags.length ? { keywords: post.tags.join(', ') } : {}),
+    ...(post.sources.length ? { citation: post.sources.map((s) => ({ '@type': 'CreativeWork', name: s.title, url: s.url })) } : {}),
+    author: { '@type': 'Organization', name: 'Paisa Reality', url: 'https://paisareality.com/about' },
     datePublished: post.date,
     dateModified: post.updatedAt,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://paisareality.com/newsletter/${post.slug}` },
@@ -125,12 +136,30 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
         <h1 className="heading-1 mb-4">{post.title}</h1>
         <p className="text-sm text-muted-2 mb-8">
           {formatDate(post.date)} - {post.readTime} - By {post.author}
+          {updated && <> - Updated {formatDate(post.updatedAt)}</>}
         </p>
         {post.coverImage && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={post.coverImage} alt={post.title} className="w-full h-auto rounded-[6px] border border-line mb-8" />
         )}
         <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+        {post.sources.length > 0 && (
+          <section className="mt-10 pt-6 border-t" aria-labelledby="sources-heading">
+            <h2 id="sources-heading" className="heading-3 mb-3">Sources</h2>
+            <ol className="list-decimal pl-6 space-y-1 text-sm text-body">
+              {post.sources.map((s) => (
+                <li key={s.url}>
+                  <a href={s.url} target="_blank" rel="noopener noreferrer" className="link-internal break-words">{s.title}</a>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-4 text-[13px] text-muted-2">
+              Figures and rules were checked against these sources on {formatDate(post.date)}. This article explains how
+              things work and is not personal financial advice. See our <a href="/editorial-policy" className="link-internal">editorial policy</a>.
+            </p>
+          </section>
+        )}
+        <AdSlot placement="article-inline" format="horizontal" className="mt-8" />
         <div className="mt-8 pt-6 border-t">
           <ShareButton url={`/newsletter/${post.slug}`} title={post.title} />
         </div>

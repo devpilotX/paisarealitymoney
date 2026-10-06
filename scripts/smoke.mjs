@@ -1,6 +1,6 @@
 // End-to-end smoke test against a running server. Node 18+ (global fetch), no dependencies.
 // Usage: node scripts/smoke.mjs http://localhost:3100 [--admin-host admin.localhost]
-// Reads ADMIN_EMAIL, ADMIN_PASSWORD, CRON_SECRET, RAZORPAY_WEBHOOK_SECRET from the environment.
+// Reads ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_TOTP_SECRET, CRON_SECRET, RAZORPAY_WEBHOOK_SECRET from the environment.
 // Creates one throwaway user (smoke+<timestamp>@example.test) and deletes it at the end.
 import crypto from 'crypto';
 import http from 'http';
@@ -41,6 +41,14 @@ function req(path, { method = 'GET', body, headers = {}, cookie, host } = {}) {
     if (payload !== undefined) r.write(payload);
     r.end();
   });
+}
+// RFC 6238 code for the admin login when ADMIN_TOTP_SECRET is set (same as src/lib/totp.ts).
+function totpNow(secret) {
+  const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; let bits = 0; let v = 0; const out = [];
+  for (const ch of secret.toUpperCase().replace(/[\s=-]/g, '')) { v = (v << 5) | A.indexOf(ch); bits += 5; if (bits >= 8) { out.push((v >>> (bits - 8)) & 255); bits -= 8; } }
+  const msg = Buffer.alloc(8); msg.writeBigUInt64BE(BigInt(Math.floor(Date.now() / 30000)));
+  const mac = crypto.createHmac('sha1', Buffer.from(out)).update(msg).digest(); const o = mac[19] & 15;
+  return String((((mac[o] & 127) << 24) | (mac[o + 1] << 16) | (mac[o + 2] << 8) | mac[o + 3]) % 1e6).padStart(6, '0');
 }
 const cookieFrom = (sc) => sc.map((c) => c.split(';')[0]).filter((c) => !/=$/.test(c)).join('; ');
 
@@ -106,7 +114,12 @@ if (ADMIN_HOST && env.ADMIN_EMAIL && env.ADMIN_PASSWORD) {
   { const r = await req('/', { host: ADMIN_HOST }); ok(r.status === 200, `admin host serves the dashboard (${r.status})`); }
   { const r = await req('/api/admin/stats', { host: ADMIN_HOST }); ok(r.status === 401, 'admin API needs a session'); }
   { const r = await req('/api/admin/auth', { method: 'POST', host: ADMIN_HOST, body: { email: env.ADMIN_EMAIL, password: 'wrong' } }); ok(r.status === 401, 'wrong admin password rejected'); }
-  const r = await req('/api/admin/auth', { method: 'POST', host: ADMIN_HOST, body: { email: env.ADMIN_EMAIL, password: env.ADMIN_PASSWORD } });
+  { const r = await req('/api/admin/auth', { host: ADMIN_HOST }); ok(r.status === 200 && r.json?.totpRequired === Boolean(env.ADMIN_TOTP_SECRET), `login form knows whether 2FA is on (${r.json?.totpRequired})`); }
+  if (env.ADMIN_TOTP_SECRET) {
+    const x = await req('/api/admin/auth', { method: 'POST', host: ADMIN_HOST, body: { email: env.ADMIN_EMAIL, password: env.ADMIN_PASSWORD, code: '000000' } });
+    ok(x.status === 401, 'right password with a wrong authenticator code is refused');
+  }
+  const r = await req('/api/admin/auth', { method: 'POST', host: ADMIN_HOST, body: { email: env.ADMIN_EMAIL, password: env.ADMIN_PASSWORD, code: env.ADMIN_TOTP_SECRET ? totpNow(env.ADMIN_TOTP_SECRET) : undefined } });
   ok(r.json?.success, 'admin login');
   const ac = cookieFrom(r.setCookie);
   for (const p of ['/api/admin/stats', '/api/admin/messages', '/api/admin/emails', '/api/admin/emails/templates', '/api/admin/blogs', '/api/admin/ads', '/api/admin/prices/overrides']) {

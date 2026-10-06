@@ -94,6 +94,16 @@ test('the report names the problem areas', () => {
   assert(/adsense/i.test(report), 'report mentions AdSense');
 });
 
+test('payments switched off on purpose: no Razorpay warning, ads still audited', () => {
+  const s = monetizationStatus({ NEXT_PUBLIC_ADSENSE_PUB_ID: '6484525483464374', PAYMENTS_DISABLED: true });
+  assert(s.razorpay.disabled, 'Razorpay is reported as switched off');
+  assert(!s.issues.some((i) => i.area === 'razorpay'), 'missing Razorpay keys are not an issue while payments are off');
+  assert(s.issues.some((i) => i.area === 'adsense'), 'the AdSense slot warning is still raised');
+  assert(/switched off/.test(formatMonetizationReport(s)), 'the report says payments are switched off');
+  const t = monetizationStatus({ RAZORPAY_KEY_ID: LIVE, RAZORPAY_KEY_SECRET: 'secret', PAYMENTS_DISABLED: true });
+  assert(t.canEarn === false, 'a live key does not count as earning while checkout is off');
+});
+
 console.log(`\n================================================`);
 console.log(`Results: ${passed} passed, ${failed} failed, ${passed + failed} total`);
 if (failed > 0) process.exit(1);

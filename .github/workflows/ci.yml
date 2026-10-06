@@ -30,6 +30,16 @@ jobs:
         run: npm run typecheck
       - name: Unit tests
         run: npm test
+      - name: Article writer tests (quote matching, detector, publish rules)
+        run: node --test deploy/writer/lib.test.mjs
+      - name: Daily article workflow JSON matches its builder
+        run: |
+          node deploy/n8n/build-daily-article.mjs
+          git diff --exit-code deploy/n8n/workflows/09-daily-article.json
+      - name: Every n8n workflow is valid JSON
+        run: for f in deploy/n8n/workflows/*.json; do node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" || exit 1; done
+      - name: Shell scripts parse
+        run: for f in deploy/vps/*.sh; do bash -n "$f" || exit 1; done
 
   build:
     runs-on: ubuntu-latest
@@ -73,7 +83,16 @@ jobs:
         run: |
           npx next start -p 3100 &
           for i in $(seq 1 30); do curl -fsS -o /dev/null http://127.0.0.1:3100/api/prices/national && break; sleep 2; done
-          for p in / /schemes /schemes/pm-kisan /grants /scholarships /bank-rates/sbi /state/kerala /sitemap.xml /robots.txt /llms.txt; do
+          for p in / /schemes /schemes/pm-kisan /grants /scholarships /bank-rates/sbi /state/kerala /sitemap.xml /robots.txt /llms.txt /newsletter /about; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:3100$p")
             echo "$code $p"; [ "$code" = 200 ] || exit 1
           done
+          # Payments are off: the pricing page redirects and checkout is gone.
+          code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3100/pricing); echo "$code /pricing"; [ "$code" = 307 ] || [ "$code" = 308 ] || exit 1
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3100/api/payment/create); echo "$code /api/payment/create"; [ "$code" = 404 ] || exit 1
+          # The article publishing API refuses a missing secret and a bad article.
+          code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3100/api/cron/articles); [ "$code" = 401 ] || exit 1
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H "Authorization: Bearer $CRON_SECRET" -H 'Content-Type: application/json' -d '{"title":"x"}' http://127.0.0.1:3100/api/cron/articles); echo "$code bad article"; [ "$code" = 400 ] || exit 1
+          # Admin host: public files are served, public pages go to the main site.
+          code=$(curl -s -o /dev/null -w '%{http_code}' -H 'Host: admin.localhost' http://127.0.0.1:3100/manifest.json); echo "$code admin /manifest.json"; [ "$code" = 200 ] || exit 1
+          code=$(curl -s -o /dev/null -w '%{http_code}' -H 'Host: admin.localhost' http://127.0.0.1:3100/privacy); echo "$code admin /privacy"; [ "$code" = 308 ] || exit 1

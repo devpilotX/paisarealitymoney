@@ -8,6 +8,7 @@ import BankRateTable from '@/components/BankRateTable';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ShareButton from '@/components/ShareButton';
 import RatesAsOf from '@/components/RatesAsOf';
 
@@ -47,7 +48,7 @@ export default async function SavingsRatesPage(): Promise<React.ReactElement> {
       <h1 className="heading-1 mb-3">Savings Account Interest Rates</h1>
       <p className="text-body mb-2">Compare savings account rates across Indian banks. Higher rates available with small finance banks and digital banks.</p>
       <RatesAsOf rateType="savings" className="mb-6" />
-      <AdBanner format="horizontal" />
+      <AdSlot placement="prices-top" format="horizontal" />
       <div className="my-8"><BankRateTable title="Savings Account Rate Comparison" rates={tableRates} showTenure={false} rateLabel="Savings Rate" /></div>
       <article className="max-w-3xl my-8">
         <h2 className="heading-2 mb-4">About Savings Account Rates</h2>

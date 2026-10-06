@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
@@ -60,7 +61,7 @@ export default function CalculatorsPage(): React.ReactElement {
         Our calculators give you real answers for the money questions you face every day. EMI, SIP, tax, loans, and more. Free, instant, no signup needed.
       </p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="calculators-top" format="horizontal" />
 
       <section className="my-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

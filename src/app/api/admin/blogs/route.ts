@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { execute } from '@/lib/db';
 import { verifyAdmin } from '@/lib/admin-auth';
 import { estimateReadTime, generateUniqueSlug, getAllPostsAsync } from '@/lib/blog';
@@ -36,11 +37,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         slug, body.title, body.description, body.content,
         body.category || 'finance', JSON.stringify(body.tags ?? []),
         body.coverImage || null, readTime, body.isPublished ?? false,
-        body.metaTitle || body.title.slice(0, 70),
-        body.metaDescription || body.description.slice(0, 160), publishedAt,
+        body.metaTitle || body.title.slice(0, 60),
+        body.metaDescription || body.description.slice(0, 155), publishedAt,
       ]
     );
 
+    if (body.isPublished) { revalidatePath('/newsletter'); revalidatePath(`/newsletter/${slug}`); revalidatePath('/sitemap.xml'); }
     return NextResponse.json({ success: true, id: result.rows[0]?.id, slug });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Failed to create post' }, { status: 500 });

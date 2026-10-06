@@ -2,6 +2,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
 import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import ShareButton from '@/components/ShareButton';
 import { pageMetadata } from '@/lib/seo';
 import BudgetOptimizerClient from './BudgetOptimizerClient';
@@ -96,7 +97,7 @@ export default function BudgetOptimizerPage(): React.ReactElement {
         Get a realistic budget split for your income. Covers needs, wants, savings, and emergency fund in one view.
       </p>
 
-      <AdBanner format="horizontal" />
+      <AdSlot placement="calculators-top" format="horizontal" />
 
       <div className="my-8">
         <BudgetOptimizerClient />

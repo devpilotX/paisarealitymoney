@@ -71,8 +71,8 @@ export default function EditorialPolicyPage(): React.ReactElement {
         <section>
           <h2 className="heading-2 mb-3">How the site makes money</h2>
           <p className="text-body">
-            Everything on Paisa Reality is free to use. The site earns from advertising (Google AdSense) and an
-            optional Premium plan that removes ads and allows more price alerts. Ads are clearly
+            Everything on Paisa Reality is free to use. The site earns from advertising: Google AdSense and
+            sponsor slots we sell directly, each marked &quot;Advertisement&quot;. Ads are clearly
             distinguishable from content and never influence what a comparison table or guide says.
           </p>
         </section>

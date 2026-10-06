@@ -20,6 +20,7 @@ export async function register(): Promise<void> {
       NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT: process.env.NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT,
       RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID,
       RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
+      PAYMENTS_DISABLED: process.env.NEXT_PUBLIC_PAYMENTS_ENABLED !== 'true',
       NODE_ENV: process.env.NODE_ENV,
     });
     const report = formatMonetizationReport(status);

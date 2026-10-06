@@ -13,6 +13,9 @@ import type { NextRequest } from 'next/server';
  */
 
 const ADMIN_HOST_PREFIX = 'admin.';
+/** Top-level sections of the dashboard (src/app/admin/<section>). */
+const ADMIN_SECTIONS = new Set(['ads', 'blogs', 'emails', 'messages']);
+const MAIN_SITE = 'https://paisareality.com';
 
 function isAdminPath(pathname: string): boolean {
   return (
@@ -53,18 +56,26 @@ export function middleware(request: NextRequest): NextResponse {
   }
 
   if (isAdminHost) {
-    // Route the admin subdomain into the /admin section of the app.
     const passThrough =
       pathname.startsWith('/admin') ||
       pathname.startsWith('/api/') ||
       pathname.startsWith('/_next');
+    if (passThrough) return NextResponse.next();
 
-    if (!passThrough) {
+    // Files in /public (favicon, manifest, icons) are served as they are.
+    if (/\.[a-z0-9]{2,5}$/i.test(pathname)) return NextResponse.next();
+
+    // The dashboard root and its sections are routed into /admin.
+    const section = pathname.split('/')[1] ?? '';
+    if (pathname === '/' || ADMIN_SECTIONS.has(section)) {
       const url = request.nextUrl.clone();
       url.pathname = pathname === '/' ? '/admin' : `/admin${pathname}`;
       return NextResponse.rewrite(url);
     }
-    return NextResponse.next();
+
+    // Anything else is a public page (a footer link, a prefetch): send it to the main site
+    // instead of answering 404 from the admin host.
+    return NextResponse.redirect(new URL(`${pathname}${request.nextUrl.search}`, MAIN_SITE), 308);
   }
 
   // Main domain: the admin area is not available here.

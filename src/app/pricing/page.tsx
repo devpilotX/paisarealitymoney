@@ -1,15 +1,18 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import PricingActions from '@/components/PricingActions';
 import { pageMetadata } from '@/lib/seo';
 import { ALERT_LIMITS } from '@/lib/price-alerts-core';
 import { PLAN_PRICES_INR } from '@/lib/razorpay';
+import { PAYMENTS_ENABLED } from '@/lib/payments';
 
 export const metadata = pageMetadata({
   title: 'Pricing: Free, With an Optional Ad-Free Plan',
   description: 'Everything on Paisa Reality is free. Premium removes ads and raises the price alert limit. One-time payment through Razorpay, no auto-renewal.',
   path: '/pricing',
+  noindex: !PAYMENTS_ENABLED,
 });
 
 const FREE = [
@@ -36,6 +39,8 @@ const FAQS = [
 ];
 
 export default function PricingPage(): React.ReactElement {
+  // Paid plans are off for now and everything is free, so the page sends people to /about.
+  if (!PAYMENTS_ENABLED) redirect('/about');
   return (
     <div className="container-main py-8">
       <Breadcrumb items={[{ label: 'Pricing' }]} />

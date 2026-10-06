@@ -4,7 +4,7 @@ import { articleSchema } from '@/lib/schema';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import InternalLinks from '@/components/InternalLinks';
-import AdBanner from '@/components/AdBanner';
+import AdSlot from '@/components/AdSlot';
 import InArticleAd from '@/components/InArticleAd';
 import LastReviewed from '@/components/LastReviewed';
 
@@ -43,7 +43,7 @@ export default function Page(): React.ReactElement {
           This is one of the most common money questions in India. Should you start a SIP in mutual funds or just put your money in a fixed deposit. Both are good, but they are good for different reasons. Here is the simple version so you can decide.
         </p>
 
-        <AdBanner format="horizontal" className="mb-8" />
+        <AdSlot placement="guides-top" format="horizontal" className="mb-8" />
 
         <h2 className="heading-2 mb-3">FD in one line</h2>
         <p className="text-body mb-4">
