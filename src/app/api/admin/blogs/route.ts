@@ -42,7 +42,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       ]
     );
 
-    if (body.isPublished) { revalidatePath('/newsletter'); revalidatePath(`/newsletter/${slug}`); revalidatePath('/sitemap.xml'); }
+    if (body.isPublished) { revalidatePath('/');
+    revalidatePath('/newsletter'); revalidatePath(`/newsletter/${slug}`); revalidatePath('/sitemap.xml'); }
     return NextResponse.json({ success: true, id: result.rows[0]?.id, slug });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Failed to create post' }, { status: 500 });

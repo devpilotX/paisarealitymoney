@@ -43,10 +43,11 @@ const COLUMNS: Array<{ title: string; links: FooterLink[] }> = [
   {
     title: 'Company',
     links: [
+      { href: '/newsletter', label: 'Daily articles' },
+      { href: '/guides', label: 'Guides' },
       { href: '/about', label: 'About us' },
       { href: '/methodology', label: 'How we check our data' },
       { href: '/editorial-policy', label: 'Editorial policy' },
-      { href: '/guides', label: 'Guides' },
       { href: '/contact', label: 'Contact' },
     ],
   },

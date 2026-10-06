@@ -104,7 +104,20 @@ const NAV: NavItem[] = [
       },
     ],
   },
-  { label: 'Guides', href: '/guides' },
+  {
+    label: 'Learn',
+    href: '/newsletter',
+    match: ['/newsletter', '/guides'],
+    groups: [
+      {
+        title: 'Read',
+        links: [
+          { href: '/newsletter', label: 'Daily articles', note: 'Money news checked against official sources' },
+          { href: '/guides', label: 'Guides', note: 'Old vs new regime, SIP vs FD and more' },
+        ],
+      },
+    ],
+  },
 ];
 
 function isActive(item: NavItem, pathname: string): boolean {

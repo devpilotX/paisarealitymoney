@@ -88,6 +88,8 @@ jobs:
             echo "$code $p"; [ "$code" = 200 ] || exit 1
           done
           # Payments are off: the pricing page redirects and checkout is gone.
+          curl -s http://127.0.0.1:3100/ | grep -q 'href="/newsletter"' || { echo "home page has no newsletter link"; exit 1; }
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{"message":"gold rate today"}' http://127.0.0.1:3100/api/assistant); echo "$code /api/assistant"; [ "$code" = 200 ] || exit 1
           code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3100/pricing); echo "$code /pricing"; [ "$code" = 307 ] || [ "$code" = 308 ] || exit 1
           code=$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3100/api/payment/create); echo "$code /api/payment/create"; [ "$code" = 404 ] || exit 1
           # The article publishing API refuses a missing secret and a bad article.

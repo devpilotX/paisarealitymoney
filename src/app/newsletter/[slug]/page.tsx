@@ -4,6 +4,8 @@ import sanitizeHtml from 'sanitize-html';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShareButton from '@/components/ShareButton';
 import AdSlot from '@/components/AdSlot';
+import ArticleCard from '@/components/ArticleCard';
+import { articleImage, articleImageUrl, CATEGORY_LABELS } from '@/lib/article-image';
 import { getAllPostsAsync, getPostBySlugAsync } from '@/lib/blog';
 import { formatDate } from '@/lib/constants';
 import { marked } from 'marked';
@@ -42,13 +44,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: 'Paisa Reality',
       locale: 'en_IN',
       ...(post.tags.length ? { tags: post.tags } : {}),
-      images: post.coverImage ? [{ url: post.coverImage }] : undefined,
+      images: [{ url: articleImageUrl(post), width: 1200, height: 630, alt: post.title }],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.metaTitle || post.title,
       description: post.metaDescription || post.description,
-      images: post.coverImage ? [post.coverImage] : undefined,
+      images: [articleImageUrl(post)],
     },
     ...(post.tags.length ? { keywords: post.tags } : {}),
   };
@@ -104,7 +106,7 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    image: [post.coverImage || `https://paisareality.com/newsletter/${post.slug}/opengraph-image`],
+    image: [articleImageUrl(post)],
     inLanguage: 'en-IN',
     isAccessibleForFree: true,
     articleSection: post.category,
@@ -131,17 +133,22 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
       <Breadcrumb items={[{ label: 'Newsletter', href: '/newsletter' }, { label: post.title }]} />
       <article className="max-w-3xl mx-auto">
         <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-4">
-          {post.category}
+          {CATEGORY_LABELS[post.category] ?? post.category}
         </span>
         <h1 className="heading-1 mb-4">{post.title}</h1>
         <p className="text-sm text-muted-2 mb-8">
           {formatDate(post.date)} - {post.readTime} - By {post.author}
           {updated && <> - Updated {formatDate(post.updatedAt)}</>}
         </p>
-        {post.coverImage && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={post.coverImage} alt={post.title} className="w-full h-auto rounded-[6px] border border-line mb-8" />
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={articleImage(post)}
+          alt={post.coverImage ? post.title : ''}
+          width={1200}
+          height={630}
+          fetchPriority="high"
+          className="w-full h-auto aspect-[1200/630] object-cover rounded-[6px] border border-line mb-8 bg-[#0c4a47]"
+        />
         <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: htmlContent }} />
         {post.sources.length > 0 && (
           <section className="mt-10 pt-6 border-t" aria-labelledby="sources-heading">
@@ -166,19 +173,14 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
       </article>
 
       {related.length > 0 && (
-        <div className="mt-12 max-w-3xl mx-auto">
-          <h2 className="heading-3 mb-6">More Articles</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {related.map((relatedPost) => (
-              <a key={relatedPost.slug} href={`/newsletter/${relatedPost.slug}`} className="card hover:shadow-md">
-                <h3 className="font-medium text-primary">{relatedPost.title}</h3>
-                <p className="text-sm text-muted-2 mt-1">
-                  {formatDate(relatedPost.date)} - {relatedPost.readTime}
-                </p>
-              </a>
+        <section className="mt-14" aria-labelledby="more-heading">
+          <h2 id="more-heading" className="heading-3 mb-6">More articles</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {related.slice(0, 3).map((relatedPost) => (
+              <ArticleCard key={relatedPost.slug} post={relatedPost} />
             ))}
           </div>
-        </div>
+        </section>
       )}
     </div>
   );
