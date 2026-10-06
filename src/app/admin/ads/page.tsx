@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import ImageUploadField from '@/components/admin/ImageUploadField';
 import { AD_PLACEMENTS, AD_TYPES, adState, type AdType, type AdState } from '@/lib/ads-constants';
 import type { AdCreative } from '@/lib/ads';
 
@@ -182,10 +183,12 @@ export default function AdminAdsPage(): React.ReactElement {
             </div>
 
             {form.type === 'image' && (
-              <label className="block">
-                <span className="block text-sm font-medium text-gray-700 mb-1">Image URL</span>
-                <input value={form.imageUrl} onChange={(e) => set('imageUrl', e.target.value)} className="input-field" placeholder="https://.../banner.png" />
-              </label>
+              <ImageUploadField
+                label="Image"
+                value={form.imageUrl}
+                onChange={(url) => set('imageUrl', url)}
+                placeholder="https://.../banner.png, or upload a file"
+              />
             )}
             {form.type === 'video' && (
               <label className="block">

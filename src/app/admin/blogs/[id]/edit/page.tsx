@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { use, useCallback, useEffect, useState } from 'react';
+import ImageUploadField from '@/components/admin/ImageUploadField';
 
 const CATEGORIES = [
   'finance',
@@ -185,15 +186,12 @@ export default function EditBlogPage({
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Cover image URL (thumbnail)</label>
-            <input
-              value={coverImage}
-              onChange={(event) => setCoverImage(event.target.value)}
-              className="input-field"
-              placeholder="https://.../cover.jpg"
-            />
-          </div>
+          <ImageUploadField
+            label="Cover image (thumbnail)"
+            value={coverImage}
+            onChange={setCoverImage}
+            placeholder="https://.../cover.jpg"
+          />
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
