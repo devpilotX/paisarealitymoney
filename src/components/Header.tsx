@@ -213,7 +213,7 @@ export default function Header(): React.ReactElement {
       {pathname !== '/' && <RateTicker />}
       <div className={`bg-white/95 backdrop-blur border-b transition-shadow duration-200 ${scrolled ? 'border-line shadow-card' : 'border-line'}`}>
         <div className="container-main flex items-center justify-between h-16 gap-6">
-          <Link href="/" className="flex items-center no-underline shrink-0" aria-label="Paisa Reality, home">
+          <Link href="/" className="flex items-center min-h-[44px] no-underline shrink-0" aria-label="Paisa Reality, home">
             <span className="font-display font-bold text-[23px] leading-none tracking-[0.2px] text-navy">
               Paisa<span className="text-brand-red">Reality</span>
             </span>

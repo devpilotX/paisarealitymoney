@@ -65,7 +65,7 @@ export default function RateTicker(): React.ReactElement {
           <Link
             key={item.label}
             href={item.href}
-            className="shrink-0 inline-flex items-center gap-2 no-underline text-white/90 hover:text-white tabular"
+            className="shrink-0 inline-flex items-center gap-2 h-full no-underline text-white/90 hover:text-white tabular"
           >
             <span className="text-white/60">{item.label}</span>
             <span className="font-semibold">{formatValue(item)}</span>

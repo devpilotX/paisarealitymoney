@@ -1,6 +1,6 @@
 'use client';
 
-import Script from 'next/script';
+import { useEffect } from 'react';
 import { usePlan } from '@/lib/use-plan';
 
 const PUB_ID = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID ?? '';
@@ -24,13 +24,28 @@ export function adClientId(pubId: string): string {
  *
  * strategy="lazyOnload" already keeps it off the critical path.
  */
-export default function AdSenseScript(): React.ReactElement | null {
+export default function AdSenseScript(): null {
   // Premium members get the site without ads, so the library is never loaded for them.
   const plan = usePlan();
-  if (!PUB_ID || plan === 'unknown' || plan === 'premium') {
-    return null;
-  }
-  const src =
-    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + adClientId(PUB_ID);
-  return <Script async src={src} crossOrigin="anonymous" strategy="lazyOnload" />;
+  const enabled = Boolean(PUB_ID) && plan !== 'unknown' && plan !== 'premium';
+
+  // Injected by hand rather than through next/script: AdSense logs "AdSense head
+  // tag doesn't support data-nscript attribute" for next/script tags. Timing
+  // matches lazyOnload: after window load, when the browser is idle.
+  useEffect(() => {
+    if (!enabled || document.querySelector('script[src*="adsbygoogle.js"]')) return;
+    const inject = (): void => {
+      const s = document.createElement('script');
+      s.async = true;
+      s.crossOrigin = 'anonymous';
+      s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + adClientId(PUB_ID);
+      document.head.appendChild(s);
+    };
+    const idle = (): void => { ('requestIdleCallback' in window) ? window.requestIdleCallback(inject) : setTimeout(inject, 1); };
+    if (document.readyState === 'complete') { idle(); return; }
+    window.addEventListener('load', idle, { once: true });
+    return () => window.removeEventListener('load', idle);
+  }, [enabled]);
+
+  return null;
 }

@@ -23,7 +23,7 @@ export default function PriceTable({
 }: PriceTableProps): React.ReactElement {
   return (
     <div className="overflow-x-auto">
-      <h3 className="heading-3 mb-4">{title}</h3>
+      <h2 className="heading-3 mb-4">{title}</h2>
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-paper-2 border-b border-line">
