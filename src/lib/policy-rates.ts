@@ -9,8 +9,8 @@
  * Small savings re-verified 30 September 2026 against the DEA notification of that date (all rates
  * unchanged for Oct-Dec 2026, the tenth quarter in a row). Earlier: verified 3 July 2026 against the 30 June 2026 DEA notification (unchanged
  * for the 9th straight quarter), the June 2026 MPC outcome, and the EPFO
- * circular of 1 July 2026. RBI block re-checked 30 September 2026 against the
- * 5 August 2026 MPC outcome (all rates unchanged).
+ * circular of 1 July 2026. RBI block updated 11 October 2026 for the 7 October
+ * 2026 MPC outcome (repo +25 bps to 5.50%, stance calibrated tightening).
  */
 
 export const SMALL_SAVINGS_QUARTER = 'October to December 2026 (Q3 FY 2026-27)';
@@ -119,20 +119,22 @@ export interface PolicyRate {
   note: string;
 }
 
-// 3 to 5 August 2026 MPC held every rate and kept the neutral stance.
-export const RBI_RATES_AS_OF = '2026-08-05';
-export const RBI_NEXT_MPC = '5 to 7 October 2026';
+// 5 to 7 October 2026 MPC (63rd meeting): repo raised 25 bps to 5.50%, the first
+// hike since February 2023; stance changed from neutral to calibrated tightening
+// (4-2 vote on stance, unanimous on the rate). Next meeting 2 to 4 December 2026.
+export const RBI_RATES_AS_OF = '2026-10-07';
+export const RBI_NEXT_MPC = '2 to 4 December 2026';
 /** Last day of that meeting; the daily health report asks for a recheck after it. */
-export const RBI_NEXT_MPC_ENDS = '2026-10-07';
+export const RBI_NEXT_MPC_ENDS = '2026-12-04';
 
 export const RBI_RATES: PolicyRate[] = [
-  { name: 'Repo rate', ratePct: 5.25, note: 'The rate banks borrow at from RBI; home loan EBLR rates track this' },
-  { name: 'Standing Deposit Facility (SDF)', ratePct: 5.0, note: 'Floor of the policy corridor' },
-  { name: 'Marginal Standing Facility (MSF)', ratePct: 5.5, note: 'Ceiling of the policy corridor' },
-  { name: 'Bank Rate', ratePct: 5.5, note: 'Aligned with MSF' },
+  { name: 'Repo rate', ratePct: 5.5, note: 'The rate banks borrow at from RBI; home loan EBLR rates track this' },
+  { name: 'Standing Deposit Facility (SDF)', ratePct: 5.25, note: 'Floor of the policy corridor' },
+  { name: 'Marginal Standing Facility (MSF)', ratePct: 5.75, note: 'Ceiling of the policy corridor' },
+  { name: 'Bank Rate', ratePct: 5.75, note: 'Aligned with MSF' },
 ];
 
-export const RBI_STANCE = 'Neutral';
+export const RBI_STANCE = 'Calibrated tightening';
 
 export const EPF_RATE_PCT = 8.25;
 export const EPF_RATE_YEAR = 'FY 2025-26';
