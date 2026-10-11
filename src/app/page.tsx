@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://paisareality.com',
     languages: { 'en-IN': 'https://paisareality.com', 'x-default': 'https://paisareality.com' },
+    types: { 'application/rss+xml': [{ url: 'https://paisareality.com/feed.xml', title: 'Paisa Reality newsletter' }] },
   },
   openGraph: {
     title: 'Paisa Reality | Honest numbers for everyday money decisions',

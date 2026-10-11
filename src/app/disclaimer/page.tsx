@@ -1,5 +1,6 @@
 import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
+import EmailLink from '@/components/EmailLink';
 
 export const metadata = pageMetadata({
   title: 'Disclaimer: Information Only, Not Financial Advice',
@@ -56,7 +57,7 @@ export default function DisclaimerPage(): React.ReactElement {
 
           <section>
             <h2 className="heading-2 mb-2">Contact</h2>
-            <p>If you find incorrect information or have questions about this disclaimer, write to us at <a href="mailto:connect@paisareality.com" className="link-internal">connect@paisareality.com</a>.</p>
+            <p>If you find incorrect information or have questions about this disclaimer, write to us at <EmailLink className="link-internal" />.</p>
           </section>
         </div>
       </article>

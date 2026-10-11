@@ -83,7 +83,7 @@ jobs:
         run: |
           npx next start -p 3100 &
           for i in $(seq 1 30); do curl -fsS -o /dev/null http://127.0.0.1:3100/api/prices/national && break; sleep 2; done
-          for p in / /schemes /schemes/pm-kisan /grants /scholarships /bank-rates/sbi /state/kerala /sitemap.xml /robots.txt /llms.txt /newsletter /about; do
+          for p in / /schemes /schemes/pm-kisan /grants /scholarships /bank-rates/sbi /state/kerala /sitemap.xml /robots.txt /llms.txt /feed.xml /news-sitemap.xml /newsletter /about; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:3100$p")
             echo "$code $p"; [ "$code" = 200 ] || exit 1
           done

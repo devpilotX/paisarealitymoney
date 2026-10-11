@@ -1,6 +1,7 @@
 import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 import { PAYMENTS_ENABLED } from '@/lib/payments';
+import EmailLink from '@/components/EmailLink';
 
 export const metadata = pageMetadata({
   title: 'Privacy Policy: How We Handle Your Data',
@@ -109,7 +110,7 @@ export default function PrivacyPage(): React.ReactElement {
 
           <section>
             <h2 className="heading-2 mb-2">Contact and grievances</h2>
-            <p>Questions about your privacy, a request to see or delete your data, or a complaint? Email our grievance contact at <a href="mailto:connect@paisareality.com" className="link-internal">connect@paisareality.com</a>. We acknowledge every request within 72 hours and resolve it within 30 days. If you are not satisfied with our answer, you can complain to the Data Protection Board of India.</p>
+            <p>Questions about your privacy, a request to see or delete your data, or a complaint? Email our grievance contact at <EmailLink className="link-internal" />. We acknowledge every request within 72 hours and resolve it within 30 days. If you are not satisfied with our answer, you can complain to the Data Protection Board of India.</p>
           </section>
         </div>
       </article>

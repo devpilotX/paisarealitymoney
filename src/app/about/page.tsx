@@ -2,6 +2,7 @@ import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
+import EmailLink from '@/components/EmailLink';
 
 export const metadata = pageMetadata({
   title: 'About Us: Who We Are and How We Work',
@@ -62,7 +63,7 @@ export default function AboutPage(): React.ReactElement {
         <section className="mb-8">
           <h2 className="heading-2 mb-4">Say hello</h2>
           <p className="text-body">
-            Found an error? Have a suggestion? Just want to chat? Visit the <Link href="/contact" className="link-internal">Contact page</Link> or email us at <a href="mailto:connect@paisareality.com" className="link-internal">connect@paisareality.com</a>. We read every message.
+            Found an error? Have a suggestion? Just want to chat? Visit the <Link href="/contact" className="link-internal">Contact page</Link> or email us at <EmailLink className="link-internal" />. We read every message.
           </p>
         </section>
 
