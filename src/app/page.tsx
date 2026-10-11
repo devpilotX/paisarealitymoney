@@ -5,13 +5,13 @@ import AdSlot from '@/components/AdSlot';
 import CommodityIcon from '@/components/CommodityIcon';
 import CategoryIcon from '@/components/CategoryIcon';
 import { getFeaturedSchemes, getHomeCounts, getHomeRates, getSchemeCategoryCounts, getTopScholarships, type HomeRate } from '@/lib/home-data';
-import { getGrants, formatAmount, FUNDING_LABEL } from '@/lib/grants';
+import { getGrants, formatAmount } from '@/lib/grants';
 import HeroCarousel, { type HeroSlide } from '@/components/HeroCarousel';
 import ArticleCard from '@/components/ArticleCard';
 import { getAllPostsAsync } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Paisa Reality: Live Prices, Government Schemes & Money Tools',
+  title: 'Paisa Reality | Live Prices, Govt Schemes & Money Tools',
   description:
     'Daily gold, silver and fuel prices for 50 cities, plus the government schemes, scholarships and startup grants you may qualify for, and honest calculators.',
   alternates: {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     languages: { 'en-IN': 'https://paisareality.com', 'x-default': 'https://paisareality.com' },
   },
   openGraph: {
-    title: 'Paisa Reality: honest numbers for everyday money decisions',
+    title: 'Paisa Reality | Honest numbers for everyday money decisions',
     description: 'Daily prices, government schemes, scholarships, startup grants and money tools for India. Free, dated and sourced.',
     url: 'https://paisareality.com',
     siteName: 'Paisa Reality',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Paisa Reality: honest numbers for everyday money decisions',
+    title: 'Paisa Reality | Honest numbers for everyday money decisions',
     description: 'Daily prices, government schemes, scholarships, startup grants and money tools for India.',
   },
 };
@@ -135,61 +135,90 @@ export default async function HomePage(): Promise<React.ReactElement> {
     getAllPostsAsync(true).catch(() => []),
   ]);
   const latestPosts = allPosts.slice(0, 3);
-  const topGrants = [...grantList].sort((a, b) => (b.amountMaxInr ?? 0) - (a.amountMaxInr ?? 0)).filter((g) => g.fundingType !== 'in-kind').slice(0, 3);
 
   const catCount = (slug: string): number => cats.find((x) => x.category === slug)?.n ?? 0;
+  const rate = (kind: HomeRate['kind']): HomeRate | undefined => rates.find((r) => r.kind === kind);
+  const priceStats = ([['gold24', 'Gold 24K, per gram'], ['silver', 'Silver, per kg'], ['petrol', 'Petrol in Delhi, per litre']] as const)
+    .flatMap(([kind, label]) => {
+      const r = rate(kind);
+      return r ? [{ value: inr(r.value, r.unit === 'per litre' ? 2 : 0), label }] : [];
+    });
+  const topScholarshipAmount = topSch.reduce((m, x) => Math.max(m, x.amountMax ?? 0), 0);
+  // The headline amount is the largest grant that takes no equity: an equity cheque is an investment, not a grant.
+  const topGrant = grantList.filter((g) => g.fundingType === 'non-dilutive' && g.amountMaxInr)
+    .sort((a, b) => (b.amountMaxInr ?? 0) - (a.amountMaxInr ?? 0))[0];
+  const topGrantAmount = topGrant ? formatAmount(null, topGrant.amountMaxInr) : null;
+
   const slides: HeroSlide[] = [
     {
       id: 'schemes',
+      image: '/home/schemes.webp',
       title: 'Find the government schemes your family can claim.',
       text: 'Answer a few questions about age, state, work and income. We check them against the published rules of every central and state scheme and show what fits, with the documents to keep ready.',
       cta: { href: '/schemes', label: 'Find your schemes' },
-      panel: {
-        caption: 'How it works',
-        rows: [
-          { label: '1. Answer a few questions', value: '2 minutes', sub: 'No sign-up, no documents' },
-          { label: '2. See what you qualify for', value: `${counts.schemes} schemes`, sub: 'Central and state' },
-          { label: '3. Apply on the official portal', value: 'Free', sub: 'We never charge or apply for you' },
-        ],
-        foot: 'The official rules are always the final word.',
-      },
+      stats: [
+        { value: `${counts.schemes}`, label: 'central and state schemes' },
+        { value: '2 min', label: 'to check, no sign-up' },
+        { value: 'Free', label: 'we never charge or apply for you' },
+      ],
+    },
+    {
+      id: 'prices',
+      image: '/home/prices.webp',
+      title: 'Today\u2019s gold, silver, petrol and LPG prices, with a date on every one.',
+      text: 'Rates for 50 Indian cities, refreshed through the day, each showing when it was verified and where it came from.',
+      cta: { href: '/gold-rate', label: 'See today\u2019s prices' },
+      stats: priceStats,
+      note: priceStats.length > 0 ? 'Gold and silver: 50-city average, before GST and making charges.' : undefined,
     },
     {
       id: 'scholarships',
+      image: '/home/scholarships.webp',
       title: 'Scholarships that fit your class, course and family income.',
       text: 'Government and private scholarships in one list, filtered for you, with a reminder email before the last date so a deadline never slips past.',
       cta: { href: '/scholarships', label: 'See scholarships' },
-      panel: {
-        caption: `Some of the ${counts.scholarships} scholarships listed`,
-        rows: topSch.map((x) => ({ label: x.name, value: x.amountMax ? `Up to ${inr(x.amountMax)}` : '' , sub: x.level === 'state' ? undefined : 'All India' })),
-        foot: 'Amounts are the published maximum per year.',
-      },
+      stats: [
+        { value: `${counts.scholarships}`, label: 'scholarships listed' },
+        ...(topScholarshipAmount > 0 ? [{ value: inr(topScholarshipAmount), label: 'largest yearly award shown' }] : []),
+        { value: 'Reminder', label: 'by email before the last date' },
+      ],
     },
     {
       id: 'grants',
+      image: '/home/grants.webp',
       title: 'Startup grants and programmes open to Indian founders.',
       text: 'Government seed funds, state idea grants and global accelerators, with how much you can get, whether they take equity and who qualifies. Closed or broken listings are removed automatically.',
       cta: { href: '/grants', label: 'Browse startup grants' },
-      panel: {
-        caption: `${counts.grants} programmes checked on their official pages`,
-        rows: topGrants.map((g) => ({ label: g.name.replace(/\s*\(.*?\)\s*/g, ' ').trim(), value: formatAmount(g.amountMinInr, g.amountMaxInr) ?? 'Case by case', sub: FUNDING_LABEL[g.fundingType] })),
-        foot: 'Links are rechecked every day.',
-      },
+      stats: [
+        { value: `${counts.grants}`, label: 'programmes checked' },
+        ...(topGrantAmount ? [{ value: topGrantAmount.replace(/^Up to /, ''), label: 'largest grant, no equity taken' }] : []),
+        { value: 'Daily', label: 'official links rechecked' },
+      ],
     },
     {
       id: 'real-return',
+      image: '/home/real-return.webp',
       title: 'Before you sign that policy, check its real return.',
       text: 'Insurance savings plans are sold on the total you get back. Type in the offer as it was pitched and see the one number the pitch leaves out: the yearly return.',
       cta: { href: '/calculators/real-return', label: 'Check an offer' },
-      panel: {
-        caption: 'A typical pitch, worked out',
-        rows: [
-          { label: 'You pay', value: `${inr(50000)} a year`, sub: 'for 15 years' },
-          { label: 'You get', value: inr(1400000), sub: 'after 20 years' },
-          { label: 'Yearly return', value: '4.8%', sub: 'less than a 5-year post office deposit' },
-        ],
-        foot: 'Worked out with XIRR, the method banks and mutual funds use.',
-      },
+      stats: [
+        { value: inr(50000), label: 'paid every year for 15 years' },
+        { value: '\u20B914 lakh', label: 'paid back after 20 years' },
+        { value: '4.8%', label: 'the real yearly return' },
+      ],
+      note: 'A typical pitch, worked out with XIRR, the method banks and mutual funds use.',
+    },
+    {
+      id: 'assistant',
+      image: '/home/assistant.webp',
+      title: 'Not sure where to start? Ask Yojana Mitra.',
+      text: 'Tell our assistant what you need in plain words and it points you to the right scheme, calculator or price page. It explains; it never sells.',
+      cta: { href: '/schemes', label: 'Ask Yojana Mitra', action: 'open-assistant' },
+      stats: [
+        { value: 'Free', label: 'no sign-up needed' },
+        { value: `${counts.schemes}`, label: 'schemes it can point you to' },
+        { value: '20', label: 'calculators and tools' },
+      ],
     },
   ];
 

@@ -1,39 +1,36 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { OPEN_ASSISTANT_EVENT } from '@/lib/events';
 
 export interface HeroSlide {
   id: string;
   title: string;
   text: string;
-  cta: { href: string; label: string };
-  panel: {
-    caption: string;
-    rows: Array<{ label: string; value: string; sub?: string }>;
-    foot: string;
-  };
+  /** `action: 'open-assistant'` renders a button that opens Yojana Mitra instead of a link. */
+  cta: { href: string; label: string; action?: 'open-assistant' };
+  /** Artwork is 1376x768 with the subject on the right and a dark left side for the text. */
+  image: string;
+  stats: Array<{ value: string; label: string }>;
+  note?: string;
 }
 
 const INTERVAL_MS = 7000;
 
-/** Slow, drifting line art in the brand colours. Pure SVG, no images to load. */
-function Lines(): React.ReactElement {
-  const paths = Array.from({ length: 14 }, (_, i) => {
-    const y = 40 + i * 22;
-    return `M-50 ${y} C 200 ${y - 120 + i * 6}, 420 ${y + 140 - i * 8}, 900 ${y - 40}`;
-  });
-  const colours = ['#E0B84A', '#F28B82', '#7FA3CC', '#FFFFFF'];
+function ArrowIcon(): React.ReactElement {
   return (
-    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <g className="hero-lines" fill="none" strokeWidth="1.4">
-        {paths.map((d, i) => (
-          <path key={d} d={d} stroke={colours[i % colours.length]} strokeOpacity={0.18 + (i % 4) * 0.06} />
-        ))}
-      </g>
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
     </svg>
   );
 }
+
+const CTA_CLASS =
+  'mt-7 inline-flex items-center gap-2 h-12 px-6 rounded-lg bg-white text-navy-deep font-semibold no-underline ' +
+  'hover:bg-white/90 hover:text-navy-deep transition-colors focus-visible:outline focus-visible:outline-2 ' +
+  'focus-visible:outline-offset-2 focus-visible:outline-white';
 
 export default function HeroCarousel({ slides }: { slides: HeroSlide[] }): React.ReactElement {
   const [i, setI] = useState(0);
@@ -44,8 +41,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }): React
   const go = useCallback((k: number) => setI(((k % n) + n) % n), [n]);
 
   useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) setPaused(true);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setPaused(true);
   }, []);
 
   useEffect(() => {
@@ -54,8 +50,6 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }): React
     return () => clearInterval(t);
   }, [paused, n]);
 
-  const s = slides[i]!;
-
   return (
     <section
       className="container-main pt-6 sm:pt-8 pb-12 sm:pb-16"
@@ -63,37 +57,75 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }): React
       aria-label="What Paisa Reality does"
       onMouseEnter={() => { hover.current = true; }}
       onMouseLeave={() => { hover.current = false; }}
+      onFocusCapture={() => { hover.current = true; }}
+      onBlurCapture={() => { hover.current = false; }}
     >
       <div className="relative overflow-hidden rounded-2xl bg-navy-deep text-white">
-        <Lines />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-deep via-navy-deep/85 to-navy-deep/20" aria-hidden="true" />
-        <div className="relative grid lg:grid-cols-[1.15fr_1fr] gap-10 items-center px-6 py-12 sm:px-12 sm:py-16 min-h-[460px]">
-          <div key={s.id} className="hero-fade" aria-live={paused ? 'polite' : 'off'}>
-            <h1 className="text-white font-semibold tracking-[-0.03em] leading-[1.06] text-balance" style={{ fontSize: 'clamp(34px, 4.6vw, 56px)' }}>
-              {s.title}
-            </h1>
-            <p className="mt-5 text-lg text-white/75 leading-relaxed max-w-xl text-pretty">{s.text}</p>
-            <Link href={s.cta.href} className="mt-8 inline-flex items-center gap-2 h-12 px-6 rounded-lg bg-white text-navy-deep font-semibold no-underline hover:bg-white/90 hover:text-navy-deep transition-colors">
-              {s.cta.label}
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" /></svg>
-            </Link>
-          </div>
+        {/*
+          Artwork. On phones it is a 3:2 banner above the text, cropped toward the
+          subject on the right; from lg up it fills the card behind the text.
+          All slides are stacked and cross-faded, so switching never reflows.
+        */}
+        <div className="relative aspect-[3/2] sm:aspect-[16/9] lg:absolute lg:inset-0 lg:aspect-auto" aria-hidden="true">
+          {slides.map((x, k) => (
+            <Image
+              key={x.id}
+              src={x.image}
+              alt=""
+              fill
+              priority={k === 0}
+              sizes="(min-width: 1280px) 1232px, 100vw"
+              className={`object-cover object-[88%_50%] lg:object-right transition-opacity duration-700 ease-out ${k === i ? 'opacity-100' : 'opacity-0'}`}
+            />
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-deep via-navy-deep/10 to-transparent lg:bg-gradient-to-r lg:from-navy-deep lg:via-navy-deep/70 lg:to-transparent" />
+        </div>
 
-          <div key={`${s.id}-panel`} className="hero-fade rounded-xl bg-white/[0.07] border border-white/10 backdrop-blur-sm p-6 sm:p-7">
-            <p className="text-sm text-white/60">{s.panel.caption}</p>
-            <ul className="mt-4 divide-y divide-white/10">
-              {s.panel.rows.map((r) => (
-                <li key={r.label} className="py-3.5 flex items-baseline justify-between gap-4">
-                  <span className="text-white/85">{r.label}</span>
-                  <span className="text-right">
-                    <span className="block text-lg font-semibold tabular">{r.value}</span>
-                    {r.sub && <span className="block text-[13px] text-white/50">{r.sub}</span>}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 text-[13px] text-white/50">{s.panel.foot}</p>
-          </div>
+        {/* Every slide's text shares one grid cell, so the card is always as tall as the longest slide. */}
+        <div className="relative grid px-6 pt-2 pb-8 sm:px-12 sm:pt-4 lg:py-16 lg:min-h-[500px] lg:items-center">
+          {slides.map((x, k) => {
+            const active = k === i;
+            const Heading = active ? 'h1' : 'p';
+            return (
+              <div
+                key={x.id}
+                className={`[grid-area:1/1] lg:max-w-[48%] transition-opacity duration-500 ${active ? 'opacity-100' : 'opacity-0 invisible'}`}
+                aria-hidden={!active}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${k + 1} of ${n}`}
+              >
+                <Heading className="text-white font-semibold tracking-[-0.03em] leading-[1.08] text-balance" style={{ fontSize: 'clamp(30px, 4vw, 50px)' }}>
+                  {x.title}
+                </Heading>
+                <p className="mt-4 text-base sm:text-lg text-white/75 leading-relaxed text-pretty">{x.text}</p>
+
+                {x.cta.action === 'open-assistant' ? (
+                  <button type="button" className={CTA_CLASS} tabIndex={active ? 0 : -1}
+                    onClick={() => window.dispatchEvent(new Event(OPEN_ASSISTANT_EVENT))}>
+                    {x.cta.label} <ArrowIcon />
+                  </button>
+                ) : (
+                  <Link href={x.cta.href} className={CTA_CLASS} tabIndex={active ? 0 : -1}>
+                    {x.cta.label} <ArrowIcon />
+                  </Link>
+                )}
+
+                {x.stats.length > 0 && (
+                  <dl className="mt-8 grid grid-cols-3 gap-4 max-w-lg border-t border-white/15 pt-5">
+                    {x.stats.map((st) => (
+                      <div key={st.label}>
+                        <dt className="sr-only">{st.label}</dt>
+                        <dd className="text-lg sm:text-xl font-semibold tabular leading-tight">{st.value}</dd>
+                        <dd className="mt-1 text-[13px] leading-snug text-white/60">{st.label}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                {x.note && <p className="mt-4 text-[13px] text-white/50">{x.note}</p>}
+              </div>
+            );
+          })}
         </div>
 
         {n > 1 && (
@@ -105,7 +137,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }): React
                 {paused ? <path d="M7 4.5v15l12-7.5z" /> : <path d="M6 4h4v16H6zM14 4h4v16h-4z" />}
               </svg>
             </button>
-            <div className="flex items-center gap-2" role="group" aria-label="Choose a slide">
+            <div className="flex items-center gap-1" role="group" aria-label="Choose a slide">
               {slides.map((x, k) => (
                 <button key={x.id} type="button" onClick={() => go(k)} aria-label={`Slide ${k + 1} of ${n}`} aria-current={k === i}
                   className="group h-9 px-1 flex items-center">

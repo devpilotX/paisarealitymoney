@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { QUICK_PROMPTS } from '@/lib/assistant-knowledge';
+import { OPEN_ASSISTANT_EVENT } from '@/lib/events';
 
 interface ChatLink { label: string; href: string; }
 interface Msg { role: 'user' | 'assistant'; content: string; links?: ChatLink[]; }
@@ -23,6 +24,13 @@ export default function YojanaMitra(): React.ReactElement {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, open]);
+
+  // Lets other elements (the home hero) open the assistant without sharing state.
+  useEffect(() => {
+    const openIt = (): void => setOpen(true);
+    window.addEventListener(OPEN_ASSISTANT_EVENT, openIt);
+    return () => window.removeEventListener(OPEN_ASSISTANT_EVENT, openIt);
+  }, []);
 
   const send = useCallback(
     async (text: string): Promise<void> => {
