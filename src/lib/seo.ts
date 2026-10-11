@@ -58,6 +58,26 @@ export const TITLE_LIMIT = 60;
 /** Longest meta description Google will reliably display. */
 export const DESCRIPTION_LIMIT = 155;
 
+/** Brand suffix for inner pages, the "Page | Brand" convention. */
+export const BRAND_SUFFIX = ` | ${SITE_NAME}`;
+
+/**
+ * Append " | Paisa Reality" when the whole title still fits TITLE_LIMIT.
+ * The descriptive part always wins: a title that is already long keeps its
+ * keywords and goes without the brand (Google shows the site name above the
+ * result anyway). Titles that already name the brand are left alone.
+ */
+export function brandTitle(title: string): string {
+  const t = title.trim();
+  if (!t || t.includes(SITE_NAME)) return t;
+  return t.length + BRAND_SUFFIX.length <= TITLE_LIMIT ? `${t}${BRAND_SUFFIX}` : t;
+}
+
+/** Brand the document title of a Metadata object; OpenGraph keeps the bare title, since og:site_name carries the brand. */
+export function brandMetadata<T extends Metadata>(meta: T): T {
+  return typeof meta.title === 'string' ? { ...meta, title: brandTitle(meta.title) } : meta;
+}
+
 /**
  * Pick the first suffix that keeps the whole title within TITLE_LIMIT, and
  * fall back to the bare base rather than clipping it. Pass suffixes in
@@ -150,7 +170,7 @@ export function pageMetadata({
   const url = absoluteUrl(path);
 
   const meta: Metadata = {
-    title,
+    title: brandTitle(title),
     description,
     alternates: { canonical: url },
     openGraph: {

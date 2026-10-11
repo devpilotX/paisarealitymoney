@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { pageMetadata, fitTitle } from '@/lib/seo';
+import { pageMetadata, fitTitle, brandMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -26,7 +26,7 @@ interface RateRow extends QueryResultRow {
   senior_citizen_rate: number | null; effective_date: string | null;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+async function buildMetadata({ params }: PageProps): Promise<Metadata> {
   const { bank: bankSlug } = await params;
   try {
     const rows = await query<BankRow>('SELECT name, slug FROM banks WHERE slug = $1 LIMIT 1', [bankSlug]);
@@ -172,4 +172,9 @@ export default async function BankDetailPage({ params }: PageProps): Promise<Rea
       <AdBanner format="horizontal" className="mt-8" />
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

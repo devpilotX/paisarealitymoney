@@ -62,7 +62,7 @@ export default async function SavingsRatesPage(): Promise<React.ReactElement> {
         { question: 'Are high-interest savings accounts safe?', answer: 'Deposits in scheduled banks, including small finance banks, are insured up to Rs 5 lakh per depositor by DICGC. For larger balances, you can spread money across banks or move surplus into FDs.' },
         { question: 'Should I keep extra money in savings or an FD?', answer: 'Keep only emergency and short-term money in savings for instant access. Money you will not need for months usually earns more in an FD. Some banks offer a sweep facility that auto-moves surplus into FDs.' },
       ]} />
-      <ShareButton url="/bank-rates/savings-rates" title="Savings Rates - Paisa Reality" />
+      <ShareButton url="/bank-rates/savings-rates" title="Savings Rates | Paisa Reality" />
       <InternalLinks title="Related" links={otherLinks} columns={3} />
       <AdBanner format="horizontal" className="mt-8" />
     </div>

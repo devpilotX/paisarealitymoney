@@ -83,7 +83,7 @@ export default function InflationCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">The key is to start investing early. Even small monthly SIPs of Rs 2,000-5,000 can grow into substantial wealth over 15-20 years through the power of compounding, helping you stay ahead of inflation.</p>
       </article>
 
-      <ShareButton url="/calculators/inflation" title="Inflation Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/inflation" title="Inflation Calculator | Paisa Reality" />
       <InternalLinks title="Other Calculators" links={calcLinks} columns={2} />
       <FAQ items={INFLATION_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

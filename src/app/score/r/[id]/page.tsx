@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { brandMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ScoreGauge from '@/components/score/ScoreGauge';
@@ -7,7 +8,7 @@ import { getPublicScoreById } from '@/lib/db/score-repo';
 import { shareText } from '@/lib/health-score/share';
 import { SITE_URL } from '@/lib/constants';
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+async function buildMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const s = await getPublicScoreById(id).catch(() => null);
   const title = s ? `Money Health Score: ${s.totalScore}/900 (${s.band})` : 'Money Health Score';
@@ -52,4 +53,9 @@ export default async function PublicScorePage({ params }: { params: Promise<{ id
       </div>
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

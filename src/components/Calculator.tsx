@@ -67,23 +67,30 @@ export function CalcSlider({
   min: number; max: number; step?: number;
   prefix?: string; suffix?: string; displayValue?: string;
 }): React.ReactElement {
+  // One currency symbol site-wide: results print ₹, so the slider does too.
+  const pre = prefix?.trim() === 'Rs' ? '\u20B9' : (prefix ?? '');
+  // "1 years" -> "1 year" on the value and the range ends.
+  const fmt = (v: number): string => {
+    const suf = suffix && v === 1 ? suffix.replace(/(year|month|day)s\b/, '$1') : (suffix ?? '');
+    return `${pre}${v.toLocaleString('en-IN')}${suf}`;
+  };
+  const shown = displayValue ?? fmt(value);
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
         <label htmlFor={id} className="text-sm font-medium text-ink">{label}</label>
-        <span className="text-sm font-bold text-navy">
-          {displayValue ?? `${prefix ?? ''}${value.toLocaleString('en-IN')}${suffix ?? ''}`}
-        </span>
+        <span className="text-sm font-bold text-navy tabular" aria-hidden="true">{shown}</span>
       </div>
       <input
         id={id} type="range" value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
         min={min} max={max} step={step}
+        aria-valuetext={shown}
         className="w-full h-2 bg-line/50 rounded-lg appearance-none cursor-pointer accent-navy"
       />
-      <div className="flex justify-between text-xs text-muted-2 mt-1">
-        <span>{prefix ?? ''}{min.toLocaleString('en-IN')}{suffix ?? ''}</span>
-        <span>{prefix ?? ''}{max.toLocaleString('en-IN')}{suffix ?? ''}</span>
+      <div className="flex justify-between text-xs text-muted-2 mt-1" aria-hidden="true">
+        <span>{fmt(min)}</span>
+        <span>{fmt(max)}</span>
       </div>
     </div>
   );

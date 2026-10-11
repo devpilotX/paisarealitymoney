@@ -13,8 +13,9 @@ export default function CookieConsent(): React.ReactElement | null {
     try {
       const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
       if (!consent) {
-        const timer = setTimeout(() => setIsVisible(true), 1500);
-        return () => clearTimeout(timer);
+        // Shown as soon as the page is interactive. A delayed reveal made this
+        // paragraph the Largest Contentful Paint on mobile (measured ~4 s).
+        setIsVisible(true);
       }
     } catch (error) {
       console.error('Failed to read cookie consent:', error);
@@ -50,7 +51,7 @@ export default function CookieConsent(): React.ReactElement | null {
 
   return (
     <div
-      className="fixed z-50 bottom-4 left-4 right-4 sm:right-auto sm:max-w-[420px] bg-white border border-line rounded-xl shadow-lift p-5"
+      className="fixed z-[60] bottom-[88px] sm:bottom-4 left-4 right-4 sm:right-auto sm:max-w-[420px] bg-white border border-line rounded-xl shadow-lift p-5"
       role="dialog"
       aria-label="Cookie choices"
     >

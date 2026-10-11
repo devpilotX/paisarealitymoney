@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { pageMetadata, fitTitle, currentYearIST } from '@/lib/seo';
+import { pageMetadata, fitTitle, currentYearIST, brandMetadata } from '@/lib/seo';
 import { ALL_INDIAN_STATES } from '@/lib/cities';
 import { getStateProfile, type StateScheme } from '@/lib/state-profile';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -21,7 +21,7 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return ALL_INDIAN_STATES.map((s) => ({ slug: toSlug(s) }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+async function buildMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const state = fromSlug(slug);
   if (!state) return { title: 'State not found', robots: { index: false } };
@@ -202,4 +202,9 @@ export default async function StatePage({ params }: PageProps): Promise<React.Re
       </section>
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

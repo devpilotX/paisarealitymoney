@@ -3,7 +3,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import HistoryClient from './HistoryClient';
 
 export const metadata: Metadata = {
-  title: 'Your Money Health Score History',
+  title: 'Your Money Health Score History | Paisa Reality',
   description: 'Track how your Money Health Score changes over time across all eight pillars.',
   robots: { index: false }, // private, per-user
 };

@@ -187,7 +187,7 @@ export default function SalaryOptimizerPage(): React.ReactElement {
         </p>
       </div>
 
-      <ShareButton url="/calculators/salary-optimizer" title="Salary Structure Optimizer - Paisa Reality" />
+      <ShareButton url="/calculators/salary-optimizer" title="Salary Structure Optimizer | Paisa Reality" />
       <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={OPTIMIZER_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

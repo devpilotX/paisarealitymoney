@@ -52,7 +52,7 @@ export default function PriceChart({
   if (!chartData || data.length === 0) {
     return (
       <div className="card">
-        <h3 className="heading-3 mb-4">{title}</h3>
+        <h2 className="heading-3 mb-4">{title}</h2>
         <p className="text-center py-8 text-muted-2">Not enough data for chart.</p>
       </div>
     );
@@ -63,7 +63,7 @@ export default function PriceChart({
 
   return (
     <div className="card">
-      <h3 className="heading-3 mb-4">{title}</h3>
+      <h2 className="heading-3 mb-4">{title}</h2>
       <div className="overflow-x-auto">
         <svg
           viewBox={`0 0 ${chartWidth} ${chartHeight + 20}`}

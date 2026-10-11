@@ -82,7 +82,7 @@ export default function SIPCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">Starting SIP early makes a massive difference due to compounding. Rs 5,000/month for 30 years at 12% grows to Rs 1.76 crore. But starting just 10 years later, the same SIP for 20 years gives only Rs 49.96 lakh. The extra 10 years of compounding adds over Rs 1.26 crore.</p>
       </article>
 
-      <ShareButton url="/calculators/sip" title="SIP Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/sip" title="SIP Calculator | Paisa Reality" />
       <InternalLinks title="Other Calculators" links={calcLinks} columns={2} />
       <FAQ items={SIP_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

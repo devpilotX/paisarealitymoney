@@ -72,9 +72,9 @@ export default function CalculatorsPage(): React.ReactElement {
                   {ICONS[calc.icon]}
                 </svg>
               </span>
-              <h3 className="font-serif text-lg font-bold text-navy mb-2 group-hover:text-brand-red transition-colors duration-200">
+              <h2 className="font-serif text-lg font-bold text-navy mb-2 group-hover:text-brand-red transition-colors duration-200">
                 {calc.title}
-              </h3>
+              </h2>
               <p className="text-sm text-muted">{calc.description}</p>
             </Link>
           ))}

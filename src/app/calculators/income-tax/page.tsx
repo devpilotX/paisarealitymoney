@@ -100,7 +100,7 @@ export default function IncomeTaxCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">Note: This calculator provides an estimate. Actual tax may vary based on surcharge (for income above Rs 50 lakh), specific exemptions, and other factors. Consult a tax professional for accurate filing.</p>
       </article>
 
-      <ShareButton url="/calculators/income-tax" title="Income Tax Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/income-tax" title="Income Tax Calculator | Paisa Reality" />
       <InternalLinks title="Other Calculators" links={calcLinks} columns={2} />
       <FAQ items={TAX_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

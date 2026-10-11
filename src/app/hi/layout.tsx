@@ -6,5 +6,6 @@ export const metadata: Metadata = {
 };
 
 export default function HiLayout({ children }: { children: React.ReactNode }): React.ReactElement {
-  return <>{children}</>;
+  // lang="hi" so screen readers switch to a Hindi voice and browsers pick Devanagari fonts and hyphenation.
+  return <div lang="hi">{children}</div>;
 }

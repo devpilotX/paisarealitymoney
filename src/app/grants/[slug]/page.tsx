@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
-import { pageMetadata, fitTitle, buildRecordDescription, absoluteUrl, currentYearIST } from '@/lib/seo';
+import { pageMetadata, fitTitle, buildRecordDescription, absoluteUrl, currentYearIST, brandMetadata } from '@/lib/seo';
 import {
   getGrantBySlug, getGrantSlugs, getGrants, formatAmount, daysLeft,
   KIND_LABEL, FUNDING_LABEL, STAGE_LABEL, STATUS_LABEL, type Grant,
@@ -18,7 +18,7 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return (await getGrantSlugs()).map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const g = await getGrantBySlug(slug);
   if (!g) return { title: 'Programme not found', robots: { index: false } };
@@ -216,4 +216,9 @@ export default async function GrantPage({ params }: Props): Promise<React.ReactE
       )}
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

@@ -142,11 +142,11 @@ export default function RealReturnPage(): React.ReactElement {
             </thead>
             <tbody>
               {[
-                ['Endowment, Rs 50,000 a year for 20 years', 'Rs 10,00,000', 'Rs 18,00,000', '1.80x', '5.31%', 'Rs 22,19,429', 'Rs 4,19,429'],
-                ['Endowment, Rs 1,00,000 a year for 15, held 25', 'Rs 15,00,000', 'Rs 25,00,000', '1.67x', '2.84%', 'Rs 53,85,261', 'Rs 28,85,261'],
-                ['Money-back, Rs 40,000 a year for 20 years', 'Rs 8,00,000', 'Rs 11,00,000', '1.38x', '4.12%', 'Rs 17,75,544', 'Rs 6,75,544'],
-                ['ULIP style, Rs 1,20,000 a year for 10, held 15', 'Rs 12,00,000', 'Rs 22,00,000', '1.83x', '5.81%', 'Rs 25,14,006', 'Rs 3,14,006'],
-                ['Single premium, Rs 5,00,000 doubling in 12 years', 'Rs 5,00,000', 'Rs 10,00,000', '2.00x', '5.95%', 'Rs 11,38,790', 'Rs 1,38,790'],
+                ['Endowment, ₹50,000 a year for 20 years', '₹10,00,000', '₹18,00,000', '1.80x', '5.31%', '₹22,19,429', '₹4,19,429'],
+                ['Endowment, ₹1,00,000 a year for 15, held 25', '₹15,00,000', '₹25,00,000', '1.67x', '2.84%', '₹53,85,261', '₹28,85,261'],
+                ['Money-back, ₹40,000 a year for 20 years', '₹8,00,000', '₹11,00,000', '1.38x', '4.12%', '₹17,75,544', '₹6,75,544'],
+                ['ULIP style, ₹1,20,000 a year for 10, held 15', '₹12,00,000', '₹22,00,000', '1.83x', '5.81%', '₹25,14,006', '₹3,14,006'],
+                ['Single premium, ₹5,00,000 doubling in 12 years', '₹5,00,000', '₹10,00,000', '2.00x', '5.95%', '₹11,38,790', '₹1,38,790'],
               ].map((row) => (
                 <tr key={row[0]} className="border-b border-line align-top">
                   {row.map((cell, i) => (
@@ -164,7 +164,7 @@ export default function RealReturnPage(): React.ReactElement {
           fourth column, which looks generous, while the annual return sits between 2.84% and 5.95%. The
           &quot;double your money in 12 years&quot; pitch works out to 5.95% a year. The 15-year paying plan held
           for 25 years returns 2.84%, which is worse than a savings account, and the same payments into PPF would
-          have reached about Rs 53.85 lakh instead of Rs 25 lakh.
+          have reached about ₹53.85 lakh instead of ₹25 lakh.
         </p>
         <p>
           One caveat matters, and it is not a defence of these products. An endowment policy also carries life

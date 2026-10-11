@@ -11,6 +11,9 @@
 import {
   buildRecordTitle,
   buildRecordDescription,
+  brandTitle,
+  brandMetadata,
+  BRAND_SUFFIX,
   TITLE_LIMIT,
   DESCRIPTION_LIMIT,
 } from '../src/lib/seo';
@@ -150,6 +153,22 @@ test('buildRecordDescription: null or blank summary falls back to the name', () 
 test('buildRecordDescription: collapses stray whitespace from database text', () => {
   const d = buildRecordDescription('Monthly   pension\n\nfor  farmers.', 'Scheme');
   assert(!/\s{2,}/.test(d), `no double spaces or newlines remain (got "${d}")`);
+});
+
+test('brandTitle: appends " | Paisa Reality" only when the result fits', () => {
+  assert(brandTitle('EMI Calculator') === 'EMI Calculator | Paisa Reality', 'short title is branded');
+  const edge = 'x'.repeat(TITLE_LIMIT - BRAND_SUFFIX.length);
+  assert(brandTitle(edge) === `${edge}${BRAND_SUFFIX}`, `title of ${edge.length} lands exactly on ${TITLE_LIMIT}`);
+  const over = `${edge}y`;
+  assert(brandTitle(over) === over, 'one char longer keeps its keywords and drops the brand');
+  assert(brandTitle('Log In | Paisa Reality') === 'Log In | Paisa Reality', 'never brands twice');
+  assert(brandTitle(buildRecordTitle(SHORT)) === buildRecordTitle(SHORT), 'record ladder output that fills the space is untouched');
+});
+
+test('brandMetadata: brands the document title, leaves non-string titles alone', () => {
+  assert(brandMetadata({ title: 'Bank Not Found' }).title === 'Bank Not Found | Paisa Reality', 'string title branded');
+  const abs = { title: { absolute: 'X' } };
+  assert(brandMetadata(abs).title === abs.title, 'object title passes through');
 });
 
 console.log(`\n================================================`);

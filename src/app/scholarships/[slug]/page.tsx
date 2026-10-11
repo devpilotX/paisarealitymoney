@@ -4,7 +4,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 import AdSlot from '@/components/AdSlot';
 import ScholarshipReminderForm from '@/components/ScholarshipReminderForm';
-import { pageMetadata, buildRecordTitle, buildRecordDescription } from '@/lib/seo';
+import { pageMetadata, buildRecordTitle, buildRecordDescription, brandMetadata } from '@/lib/seo';
 import FAQ from '@/components/FAQ';
 import { deadlineAnswer, deadlineQuestion, hasDeadline } from '@/lib/deadlines';
 import { formatNumber } from '@/lib/constants';
@@ -43,7 +43,7 @@ async function load(slug: string): Promise<Scholarship | null> {
   }
 }
 
-export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
+async function buildMetadata({ params }: RouteParams): Promise<Metadata> {
   const { slug } = await params;
   const s = await load(slug);
   if (!s) {
@@ -230,4 +230,9 @@ export default async function ScholarshipDetailPage({ params }: RouteParams): Pr
       <AdBanner format="horizontal" className="mt-10 mb-8" />
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: RouteParams): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

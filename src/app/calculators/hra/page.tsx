@@ -100,7 +100,7 @@ export default function HRACalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">Note: HRA exemption is available only under the old tax regime. If you opt for the new tax regime, you cannot claim HRA exemption. Use our Income Tax Calculator to compare which regime is better for you.</p>
       </article>
 
-      <ShareButton url="/calculators/hra" title="HRA Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/hra" title="HRA Calculator | Paisa Reality" />
       <InternalLinks title="Other Calculators" links={calcLinks} columns={2} />
       <FAQ items={HRA_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

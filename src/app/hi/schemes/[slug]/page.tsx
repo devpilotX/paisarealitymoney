@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { brandMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
 import type { QueryResultRow } from 'pg';
@@ -19,7 +20,7 @@ interface SchemeRow extends QueryResultRow {
   how_to_apply: string | null; documents_required: string | null;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+async function buildMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   try {
     const rows = await query<SchemeRow>('SELECT name, name_hi, benefit_summary, slug FROM schemes WHERE slug = $1 LIMIT 1', [slug]);
@@ -87,4 +88,9 @@ export default async function HindiSchemeDetailPage({ params }: PageProps): Prom
       <AdBanner format="horizontal" className="mt-8" />
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

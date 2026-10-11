@@ -177,9 +177,9 @@ function EmailScore({ score, band, pillars }: { score: number; band: string; pil
 
   return (
     <form onSubmit={send} className="mt-4 flex flex-col gap-2">
-      <p className="text-sm text-muted">Email me my result:</p>
+      <label htmlFor="score-email" className="text-sm text-muted">Email me my result:</label>
       <div className="flex gap-2">
-        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
+        <input id="score-email" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
           className="flex-1 px-3 py-2 text-sm border border-line rounded-lg focus:border-primary focus:outline-none" />
         <button type="submit" disabled={status === 'sending'} className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-800 disabled:opacity-60">
           {status === 'sending' ? '...' : 'Send'}

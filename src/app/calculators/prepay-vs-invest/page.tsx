@@ -170,7 +170,7 @@ export default function PrepayVsInvestPage(): React.ReactElement {
         </p>
       </article>
 
-      <ShareButton url="/calculators/prepay-vs-invest" title="Home Loan Prepay vs Invest Optimizer - Paisa Reality" />
+      <ShareButton url="/calculators/prepay-vs-invest" title="Home Loan Prepay vs Invest Optimizer | Paisa Reality" />
       <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

@@ -126,7 +126,7 @@ export default function EMICalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">Choose a longer tenure to reduce monthly EMI (but you will pay more interest overall). Make a larger down payment to reduce the loan amount. Compare interest rates across multiple banks before choosing. Consider prepaying when you have extra funds to save on interest.</p>
       </article>
 
-      <ShareButton url="/calculators/emi" title="EMI Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/emi" title="EMI Calculator | Paisa Reality" />
       <InternalLinks title="Other Calculators" links={calcLinks} columns={2} />
       <FAQ items={EMI_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

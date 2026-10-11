@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { pageMetadata } from '@/lib/seo';
+import { pageMetadata, brandMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
@@ -32,7 +32,7 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
   return CITIES.map((c) => ({ city: c.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+async function buildMetadata({ params }: PageProps): Promise<Metadata> {
   const { city: citySlug } = await params;
   const city = getCityBySlug(citySlug);
   if (!city) return { title: 'City Not Found', robots: { index: false } };
@@ -150,4 +150,9 @@ export default async function SilverRateCityPage({ params }: PageProps): Promise
       <AdBanner format="horizontal" className="mt-8" />
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

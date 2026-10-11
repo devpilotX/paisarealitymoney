@@ -62,7 +62,7 @@ export default async function HomeLoanRatesPage(): Promise<React.ReactElement> {
         { question: 'Can I reduce my home loan interest rate?', answer: 'You can ask your bank to lower your spread, improve your credit score, or transfer the balance to a cheaper lender. Even a 0.25% cut can save lakhs over a long tenure.' },
         { question: 'What charges apply on a home loan besides interest?', answer: 'Common charges include a processing fee (around 0.5% to 1%), legal and valuation fees, and stamp duty on the mortgage. Prepayment of floating-rate home loans is usually free of charge.' },
       ]} />
-      <ShareButton url="/bank-rates/home-loan-rates" title="Home Loan Rates - Paisa Reality" />
+      <ShareButton url="/bank-rates/home-loan-rates" title="Home Loan Rates | Paisa Reality" />
       <InternalLinks title="Related" links={otherLinks} columns={2} />
       <AdBanner format="horizontal" className="mt-8" />
     </div>

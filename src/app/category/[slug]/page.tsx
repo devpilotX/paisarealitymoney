@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { brandMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import { getSchemesByCategory } from '@/lib/matcher';
 import type { MatchedScheme } from '@/lib/matcher';
@@ -16,7 +17,7 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return SCHEME_CATEGORIES.map((cat) => ({ slug: cat.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+async function buildMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const category = SCHEME_CATEGORIES.find((c) => c.slug === slug);
   if (!category) return { title: 'Category Not Found' };
@@ -100,4 +101,9 @@ export default async function CategoryPage({ params }: PageProps): Promise<React
       <AdBanner format="horizontal" className="mt-8" />
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

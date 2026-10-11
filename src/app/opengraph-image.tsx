@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'Paisa Reality: Free Money Health Score and Smart Financial Tools for India';
+export const alt = 'Paisa Reality | Free Money Health Score and Smart Financial Tools for India';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

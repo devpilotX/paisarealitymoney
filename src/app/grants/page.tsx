@@ -93,6 +93,7 @@ export default async function GrantsPage(): Promise<React.ReactElement> {
       </header>
 
       <div className="mt-10">
+        <h2 className="sr-only">All programmes</h2>
         <GrantsExplorer grants={cards} />
       </div>
 
