@@ -32,7 +32,7 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: '*', allow: '/', disallow: PRIVATE_PATHS },
       { userAgent: AI_CRAWLERS, allow: ['/', '/llms.txt', '/llms-full.txt'], disallow: PRIVATE_PATHS },
     ],
-    sitemap: 'https://paisareality.com/sitemap.xml',
+    sitemap: ['https://paisareality.com/sitemap.xml', 'https://paisareality.com/news-sitemap.xml'],
     host: 'https://paisareality.com',
   };
 }
