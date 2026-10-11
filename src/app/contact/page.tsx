@@ -2,6 +2,7 @@ import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdBanner from '@/components/AdBanner';
 import ContactForm from '@/components/ContactForm';
+import EmailLink from '@/components/EmailLink';
 
 export const metadata = pageMetadata({
   title: 'Contact Us: Questions and Corrections',
@@ -26,9 +27,7 @@ export default function ContactPage(): React.ReactElement {
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
             </span>
             <h2 className="text-sm font-semibold text-navy mb-1">Email</h2>
-            <a href="mailto:connect@paisareality.com" className="text-sm text-navy hover:text-brand-red break-all">
-              connect@paisareality.com
-            </a>
+            <EmailLink className="text-sm text-navy hover:text-brand-red break-all" />
           </div>
           <div className="p-5 rounded-[5px] border border-line text-center">
             <span className="inline-flex items-center justify-center w-10 h-10 rounded-[5px] border border-line bg-paper-2 text-navy mb-3">

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import EmailLink from '@/components/EmailLink';
 
 const SUBJECT_OPTIONS = [
   'Data correction (wrong price, rate, or scheme info)',
@@ -145,7 +146,7 @@ export default function ContactForm(): React.ReactElement {
       </div>
 
       <p className="text-xs text-muted-2 mt-2">
-        Or email us directly at <a href="mailto:connect@paisareality.com" className="text-navy font-medium hover:text-brand-red">connect@paisareality.com</a>
+        Or email us directly at <EmailLink className="text-navy font-medium hover:text-brand-red" />
       </p>
     </form>
   );

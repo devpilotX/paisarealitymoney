@@ -1,5 +1,6 @@
 import { pageMetadata } from '@/lib/seo';
 import Breadcrumb from '@/components/Breadcrumb';
+import EmailLink from '@/components/EmailLink';
 
 export const metadata = pageMetadata({
   title: 'Terms of Service: Using Paisa Reality',
@@ -76,7 +77,7 @@ export default function TermsPage(): React.ReactElement {
 
           <section>
             <h2 className="heading-2 mb-2">Contact</h2>
-            <p>Questions about these terms? Email us at <a href="mailto:connect@paisareality.com" className="link-internal">connect@paisareality.com</a>.</p>
+            <p>Questions about these terms? Email us at <EmailLink className="link-internal" />.</p>
           </section>
         </div>
       </article>
