@@ -157,7 +157,7 @@ export default function BudgetOptimizerPage(): React.ReactElement {
         </p>
       </article>
 
-      <ShareButton url="/calculators/budget-optimizer" title="Smart Cash Flow & Budget Optimizer - Paisa Reality" />
+      <ShareButton url="/calculators/budget-optimizer" title="Smart Cash Flow & Budget Optimizer | Paisa Reality" />
       <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { brandMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -21,7 +22,7 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return posts.map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+async function buildMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlugAsync(slug).catch(() => null);
 
@@ -184,4 +185,9 @@ export default async function NewsletterPostPage({ params }: PageProps): Promise
       )}
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

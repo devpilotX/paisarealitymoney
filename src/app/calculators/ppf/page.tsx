@@ -246,7 +246,7 @@ export default function PPFCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">PPF is governed by the Public Provident Fund Scheme, 2019. The interest rate is notified every quarter by the Ministry of Finance, Department of Economic Affairs. You can verify the current rules and rate with the <a href="https://www.nsiindia.gov.in/" target="_blank" rel="noopener noreferrer nofollow" className="link-internal">National Savings Institute</a> and open or manage an account at <Link href="/interest-rates" className="link-internal">India Post or your bank</Link>. This page is informational and updates the rate as the government revises it.</p>
       </article>
 
-      <ShareButton url="/calculators/ppf" title="PPF Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/ppf" title="PPF Calculator | Paisa Reality" />
       <InternalLinks title="Other Calculators" links={calcLinks} columns={2} />
       <FAQ items={PPF_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

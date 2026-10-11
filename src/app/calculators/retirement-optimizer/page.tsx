@@ -172,7 +172,7 @@ export default function RetirementOptimizerPage(): React.ReactElement {
         </p>
       </article>
 
-      <ShareButton url="/calculators/retirement-optimizer" title="Retirement Corpus & Withdrawal Optimizer - Paisa Reality" />
+      <ShareButton url="/calculators/retirement-optimizer" title="Retirement Corpus & Withdrawal Optimizer | Paisa Reality" />
       <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={RETIREMENT_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

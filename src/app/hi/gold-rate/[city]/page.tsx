@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { brandMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { query } from '@/lib/db';
@@ -21,7 +22,7 @@ export async function generateStaticParams(): Promise<Array<{ city: string }>> {
   return METRO_CITIES.concat(METRO_CITIES).slice(0, 20).map((c) => ({ city: c.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+async function buildMetadata({ params }: PageProps): Promise<Metadata> {
   const { city: citySlug } = await params;
   const city = getCityBySlug(citySlug);
   if (!city) return { title: 'शहर नहीं मिला' };
@@ -82,4 +83,9 @@ export default async function HindiGoldCityPage({ params }: PageProps): Promise<
       <AdBanner format="horizontal" className="mt-8" />
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

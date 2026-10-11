@@ -166,7 +166,7 @@ export default function LifecycleTaxOptimizerPage(): React.ReactElement {
         </p>
       </article>
 
-      <ShareButton url="/calculators/lifecycle-tax-optimizer" title="Multi-Year Tax Regime & Investment Optimizer - Paisa Reality" />
+      <ShareButton url="/calculators/lifecycle-tax-optimizer" title="Multi-Year Tax Regime & Investment Optimizer | Paisa Reality" />
       <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

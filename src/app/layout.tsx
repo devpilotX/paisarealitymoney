@@ -21,7 +21,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Paisa Reality: Free Money Health Score and Smart Tools',
+    default: 'Paisa Reality | Free Money Health Score and Smart Tools',
     template: '%s',
   },
   description:
@@ -70,13 +70,13 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
+    title: 'Paisa Reality | Money Health Score and Smart Financial Tools',
     description:
       'Check your free Money Health Score, use 10 smart tools for retirement, debt, and tax planning, and track live rates, schemes, and bank rates in India.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Paisa Reality: Money Health Score and Smart Financial Tools',
+    title: 'Paisa Reality | Money Health Score and Smart Financial Tools',
     description:
       'Check your free Money Health Score and use 10 smart tools for retirement, debt, and tax planning. Plus live rates, schemes, and bank rates.',
   },

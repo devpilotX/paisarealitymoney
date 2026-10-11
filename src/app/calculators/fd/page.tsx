@@ -101,7 +101,7 @@ export default function FDCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">A cumulative FD reinvests the interest and pays it all at maturity, which is what this calculator shows. A non-cumulative FD pays interest out monthly or quarterly, which suits retirees who want a regular income, but the final value is slightly lower because the interest is not compounded. Always compare the latest FD rates across banks before you book.</p>
       </article>
 
-      <ShareButton url="/calculators/fd" title="FD Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/fd" title="FD Calculator | Paisa Reality" />
       <InternalLinks title="Related" links={calcLinks} columns={2} />
       <FAQ items={FD_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

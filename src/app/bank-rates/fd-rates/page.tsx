@@ -78,7 +78,7 @@ export default async function FDRatesPage(): Promise<React.ReactElement> {
         <p className="text-body mb-4">Senior citizens get a premium of 0.25% to 0.75% over regular FD rates at most banks. Some banks also offer special FD schemes for women, government employees, or for specific tenures with higher rates.</p>
       </article>
 
-      <ShareButton url="/bank-rates/fd-rates" title="FD Rates Comparison - Paisa Reality" />
+      <ShareButton url="/bank-rates/fd-rates" title="FD Rates Comparison | Paisa Reality" />
       <InternalLinks title="Related" links={otherLinks} columns={2} />
       <FAQ items={FD_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { query } from '@/lib/db';
-import { buildRecordTitle, buildRecordDescription, SOCIAL_IMAGE } from '@/lib/seo';
+import { buildRecordTitle, buildRecordDescription, SOCIAL_IMAGE, brandMetadata } from '@/lib/seo';
 import { deadlineAnswer, deadlineLine, deadlineQuestion } from '@/lib/deadlines';
 import { parseJsonArray as parseJsonArrayShared } from '@/lib/json-array';
 import type { QueryResultRow } from 'pg';
@@ -81,7 +81,7 @@ function buildEligibilitySummary(scheme: SchemeDetailRow): string {
   return parts.length > 0 ? `${parts.join('. ')}.` : 'Eligibility depends on the official scheme guidelines.';
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+async function buildMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   try {
     const rows = await query<SchemeDetailRow>(`SELECT slug, name, name_hi, category, benefit_summary, apply_url, meta_title, meta_description
@@ -429,4 +429,9 @@ export default async function SchemeDetailPage({ params }: PageProps): Promise<R
       <AdBanner format="horizontal" className="mt-8" />
     </div>
   );
+}
+
+/** Adds " | Paisa Reality" to the title when it still fits 60 chars. */
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  return brandMetadata(await buildMetadata(props));
 }

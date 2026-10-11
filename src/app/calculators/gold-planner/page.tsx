@@ -157,7 +157,7 @@ export default function GoldPlannerPage(): React.ReactElement {
         </p>
       </article>
 
-      <ShareButton url="/calculators/gold-planner" title="Gold Allocation & Cost-Averaging Explainer - Paisa Reality" />
+      <ShareButton url="/calculators/gold-planner" title="Gold Allocation & Cost-Averaging Explainer | Paisa Reality" />
       <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

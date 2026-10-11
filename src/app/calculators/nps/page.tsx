@@ -99,7 +99,7 @@ export default function NPSCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">NPS and PPF are both strong retirement tools but work differently. NPS is market-linked with equity exposure, so it can deliver higher long-term returns, but the outcome is not guaranteed and you must convert at least 40% of the corpus into an annuity at 60. PPF gives a fixed, fully tax-free return over a 15 year term with complete capital safety. If you want growth and the extra tax break, NPS fits; if you want certainty, PPF fits, and many people use both. Our PPF vs NPS guide compares them side by side.</p>
       </article>
 
-      <ShareButton url="/calculators/nps" title="NPS Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/nps" title="NPS Calculator | Paisa Reality" />
       <InternalLinks title="Other Calculators" links={calcLinks} columns={2} />
       <FAQ items={NPS_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

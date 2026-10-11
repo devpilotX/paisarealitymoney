@@ -166,7 +166,7 @@ export default function DebtOptimizerPage(): React.ReactElement {
         </p>
       </article>
 
-      <ShareButton url="/calculators/debt-optimizer" title="Multi-Loan Debt Repayment Optimizer - Paisa Reality" />
+      <ShareButton url="/calculators/debt-optimizer" title="Multi-Loan Debt Repayment Optimizer | Paisa Reality" />
       <InternalLinks title="Related Smart Tools" links={calcLinks} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

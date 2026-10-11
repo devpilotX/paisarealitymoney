@@ -81,7 +81,7 @@ export default function GratuityCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">Years of service are rounded to the nearest whole number. If you have worked 4 years and 7 months, it counts as 5 years. But 4 years and 5 months counts as 4 years (since the months are less than 6). You need at least 5 years of service to be eligible for gratuity.</p>
       </article>
 
-      <ShareButton url="/calculators/gratuity" title="Gratuity Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/gratuity" title="Gratuity Calculator | Paisa Reality" />
       <InternalLinks title="Other Calculators" links={calcLinks} columns={2} />
       <FAQ items={GRATUITY_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

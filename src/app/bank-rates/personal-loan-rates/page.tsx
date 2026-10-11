@@ -62,7 +62,7 @@ export default async function PersonalLoanRatesPage(): Promise<React.ReactElemen
         { question: 'What fees apply on a personal loan?', answer: 'Expect a processing fee of about 1% to 3% of the loan amount, and sometimes prepayment or foreclosure charges. Read the terms so you know the true cost beyond the headline rate.' },
         { question: 'How can I get a lower personal loan rate?', answer: 'Improve your credit score, reduce existing debt, apply with a steady income and employer, and compare offers across banks. A pre-approved offer from your salary-account bank is often cheaper.' },
       ]} />
-      <ShareButton url="/bank-rates/personal-loan-rates" title="Personal Loan Rates - Paisa Reality" />
+      <ShareButton url="/bank-rates/personal-loan-rates" title="Personal Loan Rates | Paisa Reality" />
       <InternalLinks title="Related" links={otherLinks} columns={3} />
       <AdBanner format="horizontal" className="mt-8" />
     </div>

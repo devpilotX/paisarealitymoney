@@ -109,7 +109,7 @@ export default function HomeLoanCalculatorPage(): React.ReactElement {
         <p className="text-body mb-4">Because interest is the largest part of your early EMIs, small changes save a lot. A bigger down payment shrinks both the loan and the interest. A shorter tenure raises the EMI but cuts total interest sharply. Regular part-prepayments, especially in the first ten years, go straight against the principal. And if another lender offers a materially lower rate, a balance transfer can help, as long as the fees are lower than the interest you save. Use the Prepay vs Invest tool to check whether prepaying or investing that money leaves you better off.</p>
       </article>
 
-      <ShareButton url="/calculators/home-loan" title="Home Loan Calculator - Paisa Reality" />
+      <ShareButton url="/calculators/home-loan" title="Home Loan Calculator | Paisa Reality" />
       <InternalLinks title="Related" links={calcLinks} columns={2} />
       <FAQ items={HL_FAQS} />
       <AdBanner format="horizontal" className="mt-8" />

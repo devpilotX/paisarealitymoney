@@ -152,7 +152,7 @@ export default function SchemeMaximizerPage(): React.ReactElement {
         </p>
       </article>
 
-      <ShareButton url="/calculators/scheme-maximizer" title="Government Scheme Benefit Maximizer - Paisa Reality" />
+      <ShareButton url="/calculators/scheme-maximizer" title="Government Scheme Benefit Maximizer | Paisa Reality" />
       <InternalLinks title="Related Smart Tools" links={links} columns={2} />
       <FAQ items={FAQS} />
       <AdBanner format="horizontal" className="mt-8" />
